@@ -1,0 +1,7 @@
+# Keep experimental input bytes and historical machine output unchanged.
+experiments/pangram-preface/** -text
+preface.txt -text
+preface.tex -text
+experiments/pangram-preface/scores.csv whitespace=cr-at-eol
+experiments/pangram-preface/preview/*.aux whitespace=-blank-at-eol,-blank-at-eof
+experiments/pangram-preface/preview/*.log whitespace=-blank-at-eol,-blank-at-eof
