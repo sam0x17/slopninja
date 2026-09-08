@@ -23,6 +23,10 @@ These are single observations per input. They do not establish repeated success,
 
 The profiles also contradict a simple passive-voice rule: Codex lowered the passive-sentence rate in every training pair. Read [the matched pilot report](docs/matched-pilot.md), [public dataset catalog](docs/public-datasets.md), and [model-card implications](docs/model-card-notes.md).
 
+A subsequent controlled screen produced one complete abstract revision at **0% AI plus assisted on three fresh confirmation scans**, against 100% for its baseline. One minimal relative-clause edit repeatedly reduced another input from 72.31% to 36.61%. Other edits failed or worsened scores. See [all controlled edit results](docs/controlled-edits.md), including preservation findings and the limits of these reused training examples.
+
+The first fixed-prompt development evaluation produced **no new passes**: two already-zero inputs stayed at zero, while two flagged inputs worsened, consistently over three repeats each. Independent assistant review found no material information loss. [Development results](docs/fixed-process-results.md) explain why the successful training edits do not yet provide a reliable rewriting process.
+
 ## Build and run
 
 ```sh
@@ -73,6 +77,15 @@ target/release/unslop collect experiments/matched-pilot-v1/prompts.jsonl \
 These commands consume model usage. Completed invocations resume from captured records; uncertain or rejected invocations require inspection before another submission. The harness invokes each CLI once; internal retries remain under CLI control and are recorded when exposed. Model switches and tool use are rejected. Codex's JSON stream does not report a resolved model, so its identity is explicitly `requested:gpt-6-astra`. Claude records the model reported in assistant messages. CLI system instructions remain part of the experimental conditions.
 
 Direct API providers `openai` and `anthropic` also work with environment credentials and explicit model IDs. See [corpus design](docs/corpus.md).
+
+For a fixed editing process, `edit-prompts` selects an explicit split from model corpora and combines each immediate model text with a frozen instruction file. It excludes earlier human-reference prompts and detector data from generation context:
+
+```sh
+target/release/unslop edit-prompts data/matched-pilot-v1/codex.jsonl \
+  data/matched-pilot-v1/claude-opus.jsonl \
+  --instructions experiments/edit-process-v1/instructions.txt --split dev \
+  --out data/edit-process-v1/prompts.jsonl
+```
 
 ## Profiles and exact perturbations
 

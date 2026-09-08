@@ -168,6 +168,16 @@ enum Commands {
         #[arg(long)]
         out: PathBuf,
     },
+    EditPrompts {
+        #[arg(required = true, num_args = 1..)]
+        sources: Vec<PathBuf>,
+        #[arg(long)]
+        instructions: PathBuf,
+        #[arg(long)]
+        split: String,
+        #[arg(long)]
+        out: PathBuf,
+    },
     FinewebSample {
         #[arg(long, default_value = "data/public-datasets/fineweb-2021-43-pilot")]
         out: PathBuf,
@@ -283,6 +293,14 @@ fn execute(c: Cli) -> Result<Value> {
         }
         Commands::RewritePrompts { human, out } => {
             return collection::make_rewrite_prompts(&human, &out);
+        }
+        Commands::EditPrompts {
+            sources,
+            instructions,
+            split,
+            out,
+        } => {
+            return collection::make_edit_prompts(&sources, &instructions, &split, &out);
         }
         Commands::ScoreCorpus {
             jsonl,

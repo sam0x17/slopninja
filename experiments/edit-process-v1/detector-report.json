@@ -1,0 +1,654 @@
+[
+  {
+    "id": "edit-29e5ab6f1cc7f953d654492dafc7661d070fb7b10a74d3cadd39b4b7ed293e31",
+    "source_corpus": "codex-rewrites-v1",
+    "group_id": "doi:10.1371/journal.pone.0188551",
+    "source_sha256": "d5660ce4b4af7134dd525cff0fe4ae1d6a3c2f719671f89b3ed3bd5935024403",
+    "candidate_sha256": "362ca4b96e8ad7cb45b63c9ba1daa10ecad839153524a8c3f7409e14325a5c6a",
+    "repeats_per_arm": 3,
+    "request_budget": 6,
+    "baseline_combined": {
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "values": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "candidate_combined": {
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "values": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "candidate_detector_passed": true,
+    "quality_passed": false,
+    "study": {
+      "baseline": {
+        "all_groups_observed_success": true,
+        "comparison": "strictly_less_than",
+        "duplicate_records_ignored": 0,
+        "groups": [
+          {
+            "ai_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "ai_only_observed_success": true,
+            "ai_plus_assisted_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "detector": "pangram",
+            "full_document": true,
+            "model": "pangram-4",
+            "normalization_observed": true,
+            "observed_success": true,
+            "repeat_count": 3,
+            "sha256": "d5660ce4b4af7134dd525cff0fe4ae1d6a3c2f719671f89b3ed3bd5935024403",
+            "sufficient_repeats": true,
+            "task_ids": [
+              "8d855837-9111-4271-8909-5fd36f3f288a",
+              "b544a5c0-ca99-4483-bdc6-88d40f689300",
+              "98881aa3-8677-4703-afde-a3033bd82da3"
+            ],
+            "version": "4.0"
+          }
+        ],
+        "interpretation": "These are repeated observations of particular inputs. They do not establish reliability on unseen documents or determine a text's authorship.",
+        "min_repeats": 3,
+        "record_count": 3,
+        "reliability_established": false,
+        "threshold": 0.1,
+        "unique_runs": 3
+      },
+      "candidate": {
+        "all_groups_observed_success": true,
+        "comparison": "strictly_less_than",
+        "duplicate_records_ignored": 0,
+        "groups": [
+          {
+            "ai_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "ai_only_observed_success": true,
+            "ai_plus_assisted_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "detector": "pangram",
+            "full_document": true,
+            "model": "pangram-4",
+            "normalization_observed": true,
+            "observed_success": true,
+            "repeat_count": 3,
+            "sha256": "362ca4b96e8ad7cb45b63c9ba1daa10ecad839153524a8c3f7409e14325a5c6a",
+            "sufficient_repeats": true,
+            "task_ids": [
+              "739caf5d-4f70-495a-8ae9-eacd113f8583",
+              "c4a20e91-153a-4498-91f0-108d39102eb2",
+              "eab7f4c8-41c3-4720-9d2b-2432b8b1a759"
+            ],
+            "version": "4.0"
+          }
+        ],
+        "interpretation": "These are repeated observations of particular inputs. They do not establish reliability on unseen documents or determine a text's authorship.",
+        "min_repeats": 3,
+        "record_count": 3,
+        "reliability_established": false,
+        "threshold": 0.1,
+        "unique_runs": 3
+      },
+      "interpretation": "Passing this document requires all quality checks and every repeated candidate score below threshold. Estimate general reliability separately on untouched source-group holdouts across domains, generators, and detectors.",
+      "observed_success": false,
+      "paired_deltas": [
+        {
+          "candidate_minus_baseline_ai_plus_assisted": {
+            "max": 0.0,
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "values": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "detector": "pangram",
+          "model": "pangram-4",
+          "version": "4.0"
+        }
+      ],
+      "quality_audit": {},
+      "quality_passed": false,
+      "reliability_established": false,
+      "sufficient_repeats": true
+    }
+  },
+  {
+    "id": "edit-33b9cd9f06773fd45aface95d89907c9cc6c15bfc3c4364be3025f6427e95747",
+    "source_corpus": "codex-rewrites-v1",
+    "group_id": "doi:10.1371/journal.pone.0186226",
+    "source_sha256": "a386986cf0ea8375dd13586bead6e07defdfacfe5245dd992ab00fe7aeedc707",
+    "candidate_sha256": "62bec139062c35ef9e7edf5533282e3c3f6e478b61e3f380fc930c4bcc00dabc",
+    "repeats_per_arm": 3,
+    "request_budget": 6,
+    "baseline_combined": {
+      "max": 0.17297980189323425,
+      "mean": 0.17297980189323425,
+      "median": 0.17297980189323425,
+      "min": 0.17297980189323425,
+      "values": [
+        0.17297980189323425,
+        0.17297980189323425,
+        0.17297980189323425
+      ]
+    },
+    "candidate_combined": {
+      "max": 0.6504672765731812,
+      "mean": 0.6504672765731812,
+      "median": 0.6504672765731812,
+      "min": 0.6504672765731812,
+      "values": [
+        0.6504672765731812,
+        0.6504672765731812,
+        0.6504672765731812
+      ]
+    },
+    "candidate_detector_passed": false,
+    "quality_passed": false,
+    "study": {
+      "baseline": {
+        "all_groups_observed_success": false,
+        "comparison": "strictly_less_than",
+        "duplicate_records_ignored": 0,
+        "groups": [
+          {
+            "ai_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "ai_only_observed_success": true,
+            "ai_plus_assisted_fraction": {
+              "max": 0.17297980189323425,
+              "mean": 0.17297980189323425,
+              "median": 0.17297980189323425,
+              "min": 0.17297980189323425,
+              "values": [
+                0.17297980189323425,
+                0.17297980189323425,
+                0.17297980189323425
+              ]
+            },
+            "detector": "pangram",
+            "full_document": true,
+            "model": "pangram-4",
+            "normalization_observed": false,
+            "observed_success": false,
+            "repeat_count": 3,
+            "sha256": "a386986cf0ea8375dd13586bead6e07defdfacfe5245dd992ab00fe7aeedc707",
+            "sufficient_repeats": true,
+            "task_ids": [
+              "8cd8fdbb-2b97-4c7d-afb5-bec89a07e040",
+              "0c5f2e4a-e610-4823-aa38-e5c1b31c43a2",
+              "bf5a1500-baac-4b1a-b3a7-0196c69c2862"
+            ],
+            "version": "4.0"
+          }
+        ],
+        "interpretation": "These are repeated observations of particular inputs. They do not establish reliability on unseen documents or determine a text's authorship.",
+        "min_repeats": 3,
+        "record_count": 3,
+        "reliability_established": false,
+        "threshold": 0.1,
+        "unique_runs": 3
+      },
+      "candidate": {
+        "all_groups_observed_success": false,
+        "comparison": "strictly_less_than",
+        "duplicate_records_ignored": 0,
+        "groups": [
+          {
+            "ai_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "ai_only_observed_success": true,
+            "ai_plus_assisted_fraction": {
+              "max": 0.6504672765731812,
+              "mean": 0.6504672765731812,
+              "median": 0.6504672765731812,
+              "min": 0.6504672765731812,
+              "values": [
+                0.6504672765731812,
+                0.6504672765731812,
+                0.6504672765731812
+              ]
+            },
+            "detector": "pangram",
+            "full_document": true,
+            "model": "pangram-4",
+            "normalization_observed": false,
+            "observed_success": false,
+            "repeat_count": 3,
+            "sha256": "62bec139062c35ef9e7edf5533282e3c3f6e478b61e3f380fc930c4bcc00dabc",
+            "sufficient_repeats": true,
+            "task_ids": [
+              "ff3c3e77-fbd9-4e99-952b-c66c79b0c4fe",
+              "3948550d-a544-472a-8840-6a6bd5a6194d",
+              "24707f90-3b8d-41b3-8f84-859798c6c129"
+            ],
+            "version": "4.0"
+          }
+        ],
+        "interpretation": "These are repeated observations of particular inputs. They do not establish reliability on unseen documents or determine a text's authorship.",
+        "min_repeats": 3,
+        "record_count": 3,
+        "reliability_established": false,
+        "threshold": 0.1,
+        "unique_runs": 3
+      },
+      "interpretation": "Passing this document requires all quality checks and every repeated candidate score below threshold. Estimate general reliability separately on untouched source-group holdouts across domains, generators, and detectors.",
+      "observed_success": false,
+      "paired_deltas": [
+        {
+          "candidate_minus_baseline_ai_plus_assisted": {
+            "max": 0.4774874746799469,
+            "mean": 0.4774874746799469,
+            "median": 0.4774874746799469,
+            "min": 0.4774874746799469,
+            "values": [
+              0.4774874746799469,
+              0.4774874746799469,
+              0.4774874746799469
+            ]
+          },
+          "detector": "pangram",
+          "model": "pangram-4",
+          "version": "4.0"
+        }
+      ],
+      "quality_audit": {},
+      "quality_passed": false,
+      "reliability_established": false,
+      "sufficient_repeats": true
+    }
+  },
+  {
+    "id": "edit-659dc698f5c5f5403088b1ea5d9b6275a72e3b4adc66e05787db5590264dbe6a",
+    "source_corpus": "claude-opus-rewrites-v1",
+    "group_id": "doi:10.1371/journal.pone.0188551",
+    "source_sha256": "069b134ad8ae28688e90f1a70adc68ec82035f8f859a14a7f75a63b367a62963",
+    "candidate_sha256": "449df3a9fa81ae71ed9b06e5705defe44c4656f2595f7f3e4465077652833234",
+    "repeats_per_arm": 3,
+    "request_budget": 6,
+    "baseline_combined": {
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "values": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "candidate_combined": {
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "values": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "candidate_detector_passed": true,
+    "quality_passed": false,
+    "study": {
+      "baseline": {
+        "all_groups_observed_success": true,
+        "comparison": "strictly_less_than",
+        "duplicate_records_ignored": 0,
+        "groups": [
+          {
+            "ai_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "ai_only_observed_success": true,
+            "ai_plus_assisted_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "detector": "pangram",
+            "full_document": true,
+            "model": "pangram-4",
+            "normalization_observed": true,
+            "observed_success": true,
+            "repeat_count": 3,
+            "sha256": "069b134ad8ae28688e90f1a70adc68ec82035f8f859a14a7f75a63b367a62963",
+            "sufficient_repeats": true,
+            "task_ids": [
+              "1eb1c893-dbd5-42aa-90bd-1ee7bff32af5",
+              "9189aca6-7f7d-49ad-abac-1d5921960638",
+              "cae8eabf-30e5-4160-89f5-859184bb92c9"
+            ],
+            "version": "4.0"
+          }
+        ],
+        "interpretation": "These are repeated observations of particular inputs. They do not establish reliability on unseen documents or determine a text's authorship.",
+        "min_repeats": 3,
+        "record_count": 3,
+        "reliability_established": false,
+        "threshold": 0.1,
+        "unique_runs": 3
+      },
+      "candidate": {
+        "all_groups_observed_success": true,
+        "comparison": "strictly_less_than",
+        "duplicate_records_ignored": 0,
+        "groups": [
+          {
+            "ai_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "ai_only_observed_success": true,
+            "ai_plus_assisted_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "detector": "pangram",
+            "full_document": true,
+            "model": "pangram-4",
+            "normalization_observed": true,
+            "observed_success": true,
+            "repeat_count": 3,
+            "sha256": "449df3a9fa81ae71ed9b06e5705defe44c4656f2595f7f3e4465077652833234",
+            "sufficient_repeats": true,
+            "task_ids": [
+              "d53db779-8d5b-497b-a66f-8de2c9364616",
+              "b14b8e31-ba9f-4b98-92f2-06b14429a06a",
+              "d94c4012-8571-486b-9b73-e95b8582e171"
+            ],
+            "version": "4.0"
+          }
+        ],
+        "interpretation": "These are repeated observations of particular inputs. They do not establish reliability on unseen documents or determine a text's authorship.",
+        "min_repeats": 3,
+        "record_count": 3,
+        "reliability_established": false,
+        "threshold": 0.1,
+        "unique_runs": 3
+      },
+      "interpretation": "Passing this document requires all quality checks and every repeated candidate score below threshold. Estimate general reliability separately on untouched source-group holdouts across domains, generators, and detectors.",
+      "observed_success": false,
+      "paired_deltas": [
+        {
+          "candidate_minus_baseline_ai_plus_assisted": {
+            "max": 0.0,
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "values": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "detector": "pangram",
+          "model": "pangram-4",
+          "version": "4.0"
+        }
+      ],
+      "quality_audit": {},
+      "quality_passed": false,
+      "reliability_established": false,
+      "sufficient_repeats": true
+    }
+  },
+  {
+    "id": "edit-69368e26b4140ef04825b3c618ca84c9d4d234d77e2ad9c8a8f9cd94814b355b",
+    "source_corpus": "claude-opus-rewrites-v1",
+    "group_id": "doi:10.1371/journal.pone.0186226",
+    "source_sha256": "f5081bb711a199ac9b580e0aebb79236897c14ad2cf244de3570172a02f49295",
+    "candidate_sha256": "a9cef15c3753cf23355e0148867e69e3a6e4e4118fbecd5248c94ef845416d44",
+    "repeats_per_arm": 3,
+    "request_budget": 6,
+    "baseline_combined": {
+      "max": 0.7084089517593384,
+      "mean": 0.7084089517593384,
+      "median": 0.7084089517593384,
+      "min": 0.7084089517593384,
+      "values": [
+        0.7084089517593384,
+        0.7084089517593384,
+        0.7084089517593384
+      ]
+    },
+    "candidate_combined": {
+      "max": 0.7956730723381042,
+      "mean": 0.7956730723381042,
+      "median": 0.7956730723381042,
+      "min": 0.7956730723381042,
+      "values": [
+        0.7956730723381042,
+        0.7956730723381042,
+        0.7956730723381042
+      ]
+    },
+    "candidate_detector_passed": false,
+    "quality_passed": false,
+    "study": {
+      "baseline": {
+        "all_groups_observed_success": false,
+        "comparison": "strictly_less_than",
+        "duplicate_records_ignored": 0,
+        "groups": [
+          {
+            "ai_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "ai_only_observed_success": true,
+            "ai_plus_assisted_fraction": {
+              "max": 0.7084089517593384,
+              "mean": 0.7084089517593384,
+              "median": 0.7084089517593384,
+              "min": 0.7084089517593384,
+              "values": [
+                0.7084089517593384,
+                0.7084089517593384,
+                0.7084089517593384
+              ]
+            },
+            "detector": "pangram",
+            "full_document": true,
+            "model": "pangram-4",
+            "normalization_observed": false,
+            "observed_success": false,
+            "repeat_count": 3,
+            "sha256": "f5081bb711a199ac9b580e0aebb79236897c14ad2cf244de3570172a02f49295",
+            "sufficient_repeats": true,
+            "task_ids": [
+              "701d52fd-32e4-4b26-8d12-7b869fe0ace4",
+              "055ac1ab-c309-4690-8f8c-9477538cd5dc",
+              "6cb88492-1f38-4f3b-9497-a838267e6bff"
+            ],
+            "version": "4.0"
+          }
+        ],
+        "interpretation": "These are repeated observations of particular inputs. They do not establish reliability on unseen documents or determine a text's authorship.",
+        "min_repeats": 3,
+        "record_count": 3,
+        "reliability_established": false,
+        "threshold": 0.1,
+        "unique_runs": 3
+      },
+      "candidate": {
+        "all_groups_observed_success": false,
+        "comparison": "strictly_less_than",
+        "duplicate_records_ignored": 0,
+        "groups": [
+          {
+            "ai_fraction": {
+              "max": 0.0,
+              "mean": 0.0,
+              "median": 0.0,
+              "min": 0.0,
+              "values": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            "ai_only_observed_success": true,
+            "ai_plus_assisted_fraction": {
+              "max": 0.7956730723381042,
+              "mean": 0.7956730723381042,
+              "median": 0.7956730723381042,
+              "min": 0.7956730723381042,
+              "values": [
+                0.7956730723381042,
+                0.7956730723381042,
+                0.7956730723381042
+              ]
+            },
+            "detector": "pangram",
+            "full_document": true,
+            "model": "pangram-4",
+            "normalization_observed": false,
+            "observed_success": false,
+            "repeat_count": 3,
+            "sha256": "a9cef15c3753cf23355e0148867e69e3a6e4e4118fbecd5248c94ef845416d44",
+            "sufficient_repeats": true,
+            "task_ids": [
+              "4ae42e42-3ce0-4f67-9dfb-3f8c0d9d3fc7",
+              "f37fe949-1fc5-45d9-88ca-9f4acdc1a64a",
+              "cec8b140-87f9-4bc3-a7ec-de39f0f85472"
+            ],
+            "version": "4.0"
+          }
+        ],
+        "interpretation": "These are repeated observations of particular inputs. They do not establish reliability on unseen documents or determine a text's authorship.",
+        "min_repeats": 3,
+        "record_count": 3,
+        "reliability_established": false,
+        "threshold": 0.1,
+        "unique_runs": 3
+      },
+      "interpretation": "Passing this document requires all quality checks and every repeated candidate score below threshold. Estimate general reliability separately on untouched source-group holdouts across domains, generators, and detectors.",
+      "observed_success": false,
+      "paired_deltas": [
+        {
+          "candidate_minus_baseline_ai_plus_assisted": {
+            "max": 0.08726412057876587,
+            "mean": 0.08726412057876587,
+            "median": 0.08726412057876587,
+            "min": 0.08726412057876587,
+            "values": [
+              0.08726412057876587,
+              0.08726412057876587,
+              0.08726412057876587
+            ]
+          },
+          "detector": "pangram",
+          "model": "pangram-4",
+          "version": "4.0"
+        }
+      ],
+      "quality_audit": {},
+      "quality_passed": false,
+      "reliability_established": false,
+      "sufficient_repeats": true
+    }
+  }
+]

@@ -6,7 +6,7 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     fs,
     io::Write,
-    path::Path,
+    path::{Path, PathBuf},
     process::{Command, Stdio},
     thread,
     time::{Duration, Instant},
@@ -541,9 +541,247 @@ pub fn make_rewrite_prompts(human_path: &Path, out: &Path) -> Result<Value> {
     Ok(json!({"prompts":docs.len(),"path":out,"regime":"source-conditioned-rewrite"}))
 }
 
+/// Freeze one process prompt per selected model source, excluding source prompt metadata.
+pub fn make_edit_prompts(
+    source_paths: &[PathBuf],
+    instructions: &Path,
+    split: &str,
+    out: &Path,
+) -> Result<Value> {
+    ensure!(
+        !source_paths.is_empty(),
+        "At least one model source file is required"
+    );
+    ensure!(
+        ["train", "dev", "test", "exploratory"].contains(&split),
+        "An explicit valid split is required"
+    );
+    let instructions_text = read(instructions)?;
+    ensure!(
+        !instructions_text.trim().is_empty(),
+        "Explicit nonempty process instructions are required"
+    );
+    let instructions_sha256 = digest(&instructions_text);
+    let mut prompts = BTreeMap::new();
+    for source_path in source_paths {
+        let input = read(source_path)?;
+        let input_sha256 = digest(&input);
+        for (index, line) in input.lines().enumerate() {
+            if line.trim().is_empty() {
+                continue;
+            }
+            let doc: Value = serde_json::from_str(line)
+                .with_context(|| format!("{} record {}", source_path.display(), index + 1))?;
+            // Other splits are parsed as JSON but their text and metadata are unused.
+            if doc["split"] != split {
+                continue;
+            }
+            ensure!(
+                doc["source_kind"] == "model",
+                "Edit sources must have model provenance"
+            );
+            for field in [
+                "corpus", "group_id", "text", "provider", "model", "domain", "register",
+            ] {
+                ensure!(
+                    doc[field]
+                        .as_str()
+                        .is_some_and(|value| !value.trim().is_empty()),
+                    "Selected model source requires nonempty {field}"
+                );
+            }
+            let corpus = doc["corpus"].as_str().unwrap();
+            let group = doc["group_id"].as_str().unwrap();
+            let text = doc["text"].as_str().unwrap();
+            let source_sha256 = digest(text);
+            let id_material = serde_json::to_string(&json!([corpus, group, source_sha256]))?;
+            let id = format!("edit-{}", digest(&id_material));
+            let requested = [
+                doc.get("model_requested"),
+                doc["metadata"].get("model_requested"),
+            ]
+            .into_iter()
+            .flatten()
+            .find(|value| value.as_str().is_some_and(|model| !model.trim().is_empty()))
+            .cloned()
+            .unwrap_or(Value::Null);
+            let prompt = json!({
+                "id":id,
+                "prompt":format!("{instructions_text}\n\nSOURCE TEXT:\n{text}"),
+                "domain":doc["domain"],"register":doc["register"],"group_id":group,"split":split,
+                "generation_regime":"fixed-process-model-text-edit",
+                "source_corpus":corpus,"source_sha256":source_sha256,
+                "instructions_sha256":instructions_sha256,
+                "metadata":{
+                    "source_key":[corpus,group],"source_provider":doc["provider"],
+                    "source_model":doc["model"],"source_model_requested":requested,
+                    "source_sha256":source_sha256,"source_input_sha256":input_sha256,
+                },
+            });
+            ensure!(
+                prompts
+                    .insert((corpus.to_string(), group.to_string()), prompt)
+                    .is_none(),
+                "Duplicate source corpus/group key: {corpus} / {group}"
+            );
+        }
+    }
+    ensure!(
+        !prompts.is_empty(),
+        "No model sources in selected split {split}"
+    );
+    let prompts: Vec<Value> = prompts.into_values().collect();
+    let cached = out.exists();
+    if cached {
+        ensure!(
+            read_jsonl(out)? == prompts,
+            "Frozen edit prompts differ from these inputs; refusing to overwrite {}",
+            out.display()
+        );
+    } else {
+        let parent = out
+            .parent()
+            .filter(|path| !path.as_os_str().is_empty())
+            .unwrap_or(Path::new("."));
+        fs::create_dir_all(parent)?;
+        let mut temp = tempfile::NamedTempFile::new_in(parent)?;
+        for prompt in &prompts {
+            serde_json::to_writer(&mut temp, prompt)?;
+            temp.write_all(b"\n")?;
+        }
+        temp.as_file().sync_all()?;
+        // A concurrent creator must not replace an already frozen prompt file.
+        temp.persist_noclobber(out)?;
+    }
+    Ok(json!({
+        "prompts":prompts.len(),"path":out,"split":split,"cached":cached,
+        "instructions_sha256":instructions_sha256,"regime":"fixed-process-model-text-edit",
+    }))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn edit_source(corpus: &str, split: &str) -> Value {
+        json!({"text":"  Model prose retains its exact spacing.\n", "corpus":corpus,
+            "source_kind":"model", "provider":"fixture", "model":"requested:example-v1",
+            "model_requested":"example-v1", "domain":"science", "register":"abstract",
+            "group_id":"shared-group", "split":split,
+            "metadata":{"model_requested":"example-v1", "prompt_record":{"prompt":"SECRET_ORIGINAL_HUMAN_TEXT"},
+                "source_metadata":{"human_text":"SECRET_ORIGINAL_HUMAN_TEXT"},"detector_output":"SECRET_DETECTOR_OUTPUT"}})
+    }
+
+    #[test]
+    fn edit_prompts_distinguish_same_group_across_corpora_and_freeze_inputs() {
+        let directory = tempfile::tempdir().unwrap();
+        let sources = directory.path().join("sources.jsonl");
+        let instructions = directory.path().join("instructions.txt");
+        let out = directory.path().join("prompts.jsonl");
+        let mut second_source = edit_source("model-b", "dev");
+        second_source["model_requested"] = Value::Null;
+        fs::write(
+            &sources,
+            format!("{}\n{}\n", edit_source("model-a", "dev"), second_source),
+        )
+        .unwrap();
+        fs::write(&instructions, "Preserve all claims.\n").unwrap();
+        let result =
+            make_edit_prompts(std::slice::from_ref(&sources), &instructions, "dev", &out).unwrap();
+        assert_eq!(result["prompts"], 2);
+        assert_eq!(result["cached"], false);
+        let prompts = load_prompts(&out).unwrap();
+        assert_ne!(prompts[0]["id"], prompts[1]["id"]);
+        assert_eq!(prompts[0]["group_id"], prompts[1]["group_id"]);
+        assert_eq!(
+            prompts[0]["prompt"],
+            "Preserve all claims.\n\n\nSOURCE TEXT:\n  Model prose retains its exact spacing.\n"
+        );
+        assert_eq!(
+            prompts[0]["source_sha256"],
+            digest("  Model prose retains its exact spacing.\n")
+        );
+        assert_eq!(
+            prompts[0]["instructions_sha256"],
+            digest("Preserve all claims.\n")
+        );
+        assert_eq!(
+            prompts[0]["metadata"]["source_model_requested"],
+            "example-v1"
+        );
+        assert_eq!(
+            prompts[1]["metadata"]["source_model_requested"],
+            "example-v1"
+        );
+        let original_bytes = fs::read(&out).unwrap();
+        assert_eq!(
+            make_edit_prompts(std::slice::from_ref(&sources), &instructions, "dev", &out).unwrap()
+                ["cached"],
+            true
+        );
+        assert_eq!(fs::read(&out).unwrap(), original_bytes);
+        fs::write(&instructions, "Different instructions.").unwrap();
+        assert!(
+            make_edit_prompts(std::slice::from_ref(&sources), &instructions, "dev", &out)
+                .unwrap_err()
+                .to_string()
+                .contains("refusing to overwrite")
+        );
+        assert_eq!(fs::read(&out).unwrap(), original_bytes);
+    }
+
+    #[test]
+    fn edit_prompts_filter_splits_reject_humans_and_never_copy_source_prompts() {
+        let directory = tempfile::tempdir().unwrap();
+        let sources = directory.path().join("sources.jsonl");
+        let instructions = directory.path().join("instructions.txt");
+        let out = directory.path().join("prompts.jsonl");
+        let selected = edit_source("model-a", "dev");
+        let heldout = json!({"split":"test","source_kind":"human","text":"SECRET_HELDOUT_TEXT","metadata":"not an object"});
+        fs::write(&sources, format!("{selected}\n{heldout}\n")).unwrap();
+        fs::write(&instructions, "Preserve all claims.").unwrap();
+        make_edit_prompts(std::slice::from_ref(&sources), &instructions, "dev", &out).unwrap();
+        let output = read(&out).unwrap();
+        for secret in [
+            "SECRET_ORIGINAL_HUMAN_TEXT",
+            "SECRET_HELDOUT_TEXT",
+            "SECRET_DETECTOR_OUTPUT",
+            "source_metadata",
+        ] {
+            assert!(!output.contains(secret));
+        }
+        assert_eq!(load_prompts(&out).unwrap().len(), 1);
+        let mut human = selected.clone();
+        human["source_kind"] = json!("human");
+        fs::write(&sources, format!("{human}\n")).unwrap();
+        let other_out = directory.path().join("other.jsonl");
+        assert!(
+            make_edit_prompts(
+                std::slice::from_ref(&sources),
+                &instructions,
+                "dev",
+                &other_out
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("model provenance")
+        );
+        assert!(!other_out.exists());
+        fs::write(&sources, format!("{selected}\n{selected}\n")).unwrap();
+        assert!(
+            make_edit_prompts(
+                std::slice::from_ref(&sources),
+                &instructions,
+                "dev",
+                &other_out
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("Duplicate source corpus/group")
+        );
+        assert!(!other_out.exists());
+    }
+
     #[test]
     fn codex_identity_is_not_fabricated() {
         let events = vec![
