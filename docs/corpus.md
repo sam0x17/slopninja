@@ -27,6 +27,8 @@ Store enough provenance to reconstruct a sample:
 
 A product name such as Codex is insufficient model provenance. For a CLI-produced sample, record the product/version, resolved model if exposed, all applicable prompts and instructions, tool use, and context. If those details are unavailable, mark them unknown and keep that corpus separate from direct API generations. Direct API and interactive coding-agent outputs answer different questions.
 
+Record documented provider watermark deployment separately from observed model identity and detector scores. Anthropic now documents text watermarking for specific models; older sample status may remain unknown. See [watermark provenance](watermark-provenance.md). Keep original generation records intact and avoid treating a low Pangram score as a watermark test.
+
 ## Matched comparisons
 
 Start with a balanced set of writing assignments covering the domains and registers in which the editor should work. Give each model the same assignment and approximate length target. Sample several independent completions per assignment. Record sampling and reasoning settings, and do not silently replace an unsupported setting or unavailable model with another one.

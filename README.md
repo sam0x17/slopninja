@@ -27,6 +27,10 @@ A subsequent controlled screen produced one complete abstract revision at **0% A
 
 The first fixed-prompt development evaluation produced **no new passes**: two already-zero inputs stayed at zero, while two flagged inputs worsened, consistently over three repeats each. Independent assistant review found no material information loss. [Development results](docs/fixed-process-results.md) explain why the successful training edits do not yet provide a reliable rewriting process.
 
+Retesting the editing method on the preface also produced no improvement. The existing copy scored **27.90%** in a fresh scan; four preservation-reviewed revisions scored **44.33% to 69.11%**. The selected preface remains unchanged. [Preface results](docs/preface-edit-v2.md) retain all five observations, the claim review, and grammatical comparisons.
+
+Provider watermarks need separate provenance. Anthropic documents text watermarking for specific current models, but Pangram scores do not establish watermark presence or removal. See [the verified coverage and limits](docs/watermark-provenance.md).
+
 ## Build and run
 
 ```sh
