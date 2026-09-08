@@ -4,7 +4,7 @@ We want to find editing choices that improve prose and preserve its meaning whil
 
 ## What exists now
 
-The collector supports one explicitly selected OpenAI or Anthropic model per call. There is no default model, no automatic fallback, and no automatic retry of paid requests. The six prompts in `examples/prompts.jsonl` are original collection inputs covering five source groups. They are a small exercise of the workflow, not a representative benchmark or human reference corpus. At initial setup, generation API credentials were unavailable, so no live provider generations were collected.
+The Rust collector supports explicit OpenAI/Anthropic API models and installed Codex/Claude CLIs. Direct API calls are not retried. The harness invokes each CLI once, records its events, and rejects model switches; the CLI can perform internal retries. The six prompts in `examples/prompts.jsonl` are small workflow examples, not a benchmark. Real source-conditioned model outputs and a human reference now exist; see [the matched pilot](matched-pilot.md). [Public dataset loaders](public-datasets.md) provide a separate path to scale.
 
 The earlier 130 Pangram analyses in `experiments/pangram-preface` belong to **one source family**. They include repeated detector calls, fragments, and many closely related edits. Their generation provenance is insufficient for a clean per-model comparison. Use them to study detector repeatability and perturbations; do not count them as 130 independent texts or label them retrospectively as a particular frontier model.
 
@@ -20,7 +20,7 @@ Store enough provenance to reconstruct a sample:
 | --- | --- |
 | `text` | Exact generated or source text, including whitespace |
 | `corpus`, `source_kind` | Collection label and model, human, or unknown origin |
-| `provider`, `model`, `model_requested` | API provider, returned model ID, and requested ID |
+| `provider`, `model`, `model_requested` | API/CLI provider, observed model ID (or explicitly unreported requested marker), and requested ID |
 | `domain`, `register` | Subject area and intended writing style |
 | `group_id`, `split` | Source family and preassigned evaluation partition |
 | `metadata` | Prompt, request settings, dates, IDs, usage, raw response, and hashes |
@@ -49,13 +49,13 @@ These distances describe our measured features. They are neither calibrated prob
 
 ## Provider behavior
 
-`collect_one(prompt, provider, model, corpus, ...)` returns a document ready for JSONL ingestion. `load_prompts(path)` validates the full manifest, rejects duplicate IDs, and checks that one group does not appear in different splits before any generation begins. Use `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in the process environment. Anthropic keys spanning multiple workspaces may also require `ANTHROPIC_WORKSPACE_ID`; that requirement follows the [official authentication overview](https://platform.claude.com/docs/en/api/overview).
+Rust's `collection::collect_batch` writes attributed corpus JSONL and keeps per-invocation records. `load_prompts` validates the full manifest, rejects duplicate IDs, and checks that one group does not appear in different splits before generation begins. Direct APIs use `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in the environment; the CLI adapters reuse existing sign-ins. Anthropic keys spanning multiple workspaces may also require `ANTHROPIC_WORKSPACE_ID`, as described in the [official authentication overview](https://platform.claude.com/docs/en/api/overview).
 
 OpenAI requests use the Responses API with `store: false`. The collector reads assistant text from completed message items and rejects incomplete output and explicit refusals; the API can return multiple kinds of output items. See the [official OpenAI Responses reference](https://developers.openai.com/api/reference/cli/resources/responses/methods/create).
 
 Anthropic requests use the Messages API and require a natural `end_turn`. The collector excludes thinking blocks from corpus text and rejects truncated, refused, tool-directed, and interrupted output. These distinctions follow the [Messages reference](https://platform.claude.com/docs/en/api/messages/create) and [stop-reason documentation](https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons). The request includes the documented [API version header](https://platform.claude.com/docs/en/api/versioning).
 
-On failure, `CollectionError.record` contains the attempt's available provenance and any returned response. Persist it outside the accepted corpus. Keep refusals and failures in the denominator when reporting collection success; silently replacing them would bias the sample. Request headers and API keys are never included in stored provenance. A connection failure may occur after billing, so inspect the attempt before deciding whether to issue another paid request.
+On failure, the collection directory retains the request record and error, captured CLI events, or any decoded API response received before sample validation. Keep refusals and failures in the denominator when reporting collection success; silently replacing them would bias the sample. Request headers and API keys are excluded from stored API provenance. A connection failure may occur after billing, so an uncertain or rejected invocation requires inspection before another submission.
 
 ## Testing editing hypotheses
 

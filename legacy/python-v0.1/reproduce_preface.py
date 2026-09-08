@@ -8,7 +8,7 @@ from unslop.experiments import compare_features
 from unslop.features import extract
 from unslop.store import digest
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 ARCHIVE = ROOT / "experiments/pangram-preface"
 
 

@@ -22,21 +22,22 @@ See the [current API reference](https://docs.pangram.com/api-reference/ai-detect
 
 The adapter submits asynchronously:
 
-```python
-import json
-from pathlib import Path
-from unslop.evaluation import PangramClient
+```rust
+use unslop::{evaluation::PangramClient, util::write_json};
+use std::path::Path;
 
-client = PangramClient()  # PANGRAM_API_KEY is read from the environment.
-# Read bytes first: Path.read_text() can normalize CRLF to LF.
-text = Path("candidate.txt").read_bytes().decode("utf-8")
-record = client.submit(text, model="pangram-4")
-path = Path(f"{record['task_id']}.json")
-path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
-# The persisted task ID allows this step to resume without another submission.
-record["result"] = client.poll(record["task_id"])
-path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
+fn inspect_existing_task(task_id: &str) -> anyhow::Result<()> {
+    let client = PangramClient::new()?; // PANGRAM_API_KEY
+    let result = client.poll(task_id, 600.0)?;
+    write_json(Path::new("data/task-result.json"), &result)?;
+    Ok(())
+}
 ```
+
+Use the Rust CLI's `study` or `score` command for submission. They persist an
+intent before the paid request and a task ID before polling. Re-running an
+uncertain slot cannot silently issue another request. Rust UTF-8 file reads
+preserve CRLF bytes.
 
 Call `client.models()` to inspect the account's current selectors. Availability
 can differ between accounts; `default` can move to a different model. Use an
@@ -45,9 +46,9 @@ explicit selector and keep the returned version, as described in the
 
 POST requests are never automatically retried. If a POST response is lost, a
 task might have been created and charged even though no ID was received. A GET
-timeout leaves the saved ID available for resumption. `PangramTimeout` preserves
-`task_id` and `last_response`; `PangramTaskFailed` preserves `task_id` and `result`.
-The caller should save failure responses too. No public dashboard link is requested.
+timeout leaves the saved ID available for resumption. The Rust adapter returns
+`PangramFailure` with task ID and response metadata; the workflows persist it.
+No public dashboard link is requested.
 
 ## Repeated full-document comparisons
 

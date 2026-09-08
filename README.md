@@ -1,96 +1,106 @@
 # unslop
 
-A local research process for making prose easier to read while preserving its arguments, details, qualifications, and intended tone. The detector target is **less than 10% on every repeated full-document check**, with preservation and readability reviewed separately.
+Research toward an adversarial Bittensor subnet for text revision: make writing easier to read while preserving its arguments, details, qualifications, and intended tone, with less than 10% AI-generated **plus AI-assisted** content on repeated detector checks.
 
-This is a working profiling and experiment toolkit. It is not a trained rewriting model, and reliable performance below 10% has not been demonstrated.
+The runtime is **Rust**. Python is confined to spaCy parsing and its grammatical annotations. The project contains corpus collection, SQLite profiles, paired feature analysis, detector experiments, and an offline miner/validator contract. It does not yet contain a trained rewriting model or demonstrate reliable performance below 10%.
 
-## What is here
+## Current data and findings
 
-- SQLite word counts, total words, document counts, and source-family counts, with exact provider/model provenance for new corpora.
-- Sparse lexical and grammatical vectors: word ngrams, lemmas, POS sequences, dependency patterns, and sentence constructions.
-- Smoothed frequency contrasts with raw evidence counts. These identify editing hypotheses, not a detector's hidden coordinates.
-- Explicit single-word perturbations, before/after feature inspection, and resumable Pangram studies with bounded request counts.
-- OpenAI and Anthropic corpus collectors with configurable model IDs and matched writing prompts.
-- The entire preface experiment: source copy, revisions, 130 detector records, fidelity review, and rendered preview.
+- 12 licensed scientific abstracts published in 2018, matched with 12 Codex rewrites and 12 Claude Opus rewrites. Source groups were assigned to 8 training, 2 development, and 2 test groups before generation.
+- 100 FineWeb documents captured in 2021: 93,458 whitespace words from 94 source hosts, with pinned revision and response hashes. This is a deterministic first-row pilot, not a representative random sample or verified human-authorship ground truth.
+- Eight additional Claude Fable outputs and a rejected model-fallback invocation are retained separately. They do not enter the complete matched comparison.
+- The earlier preface experiment remains intact: 120 distinct inputs and 130 Pangram requests from one source family.
 
-`unslop/` is an independent Git repository ignored by the parent `fix-slop` repository. The former parent-level `preface.tex`, `preface.txt`, and `experiments/` now live here. Historical absolute paths inside result records describe where the original requests were made; submitted text and hashes remain unchanged.
+The first detector pass used only the eight training sources per complete cohort:
 
-## Setup
+| Corpus | Inputs | Mean AI + assisted fraction | Inputs below 10% |
+| --- | ---: | ---: | ---: |
+| Human originals | 8 | 0% | 8 |
+| Codex rewrites | 8 | 36.39% | 3 |
+| Claude Opus rewrites | 8 | 72.44% | 1 |
 
-Python 3.12 was used for the recorded grammar analysis. The lexical toolkit needs no runtime dependencies.
+These are single observations per input. They do not establish repeated success, fidelity, readability, or generalization. All Codex inputs scored 0% AI-generated, but five were detected as AI-assisted. The combined gate matters.
+
+The profiles also contradict a simple passive-voice rule: Codex lowered the passive-sentence rate in every training pair. Read [the matched pilot report](docs/matched-pilot.md), [public dataset catalog](docs/public-datasets.md), and [model-card implications](docs/model-card-notes.md).
+
+## Build and run
+
+```sh
+cargo build --release
+target/release/unslop --help
+```
+
+Only grammatical extraction needs Python:
 
 ```sh
 python3.12 -m venv .venv
-.venv/bin/python -m pip install -e '.[grammar]'
-.venv/bin/python -m spacy download en_core_web_sm
-.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python -m pip install -r requirements-grammar.lock
+target/release/unslop features preface.txt --grammar
 ```
 
-The initial environment used spaCy 3.8.16 and `en_core_web_sm` 3.8.0. Every extraction records tokenizer, Unicode, parser, model, and rule versions; comparisons reject mixed versions. `requirements-grammar.lock` records this working environment for reproduction on compatible platforms.
-
-## Inspect the existing experiment
+The recorded environment used Rust 1.98.1, Python 3.12, spaCy 3.8.16, and `en_core_web_sm` 3.8.0. Keep `Cargo.lock` and the grammar lockfile for reproduction. Rust and historical Python extractors have separate identities; incompatible versions are never silently pooled. `--python` selects another parser interpreter.
 
 ```sh
-.venv/bin/unslop init
-.venv/bin/unslop import-pangram experiments/pangram-preface/results --grammar
-.venv/bin/unslop status
-.venv/bin/unslop profile --corpus preface-experiments --split exploratory --family word
-.venv/bin/unslop runs --corpus preface-experiments
-.venv/bin/python scripts/reproduce_preface.py
+cargo fmt --check
+cargo test
+cargo clippy --all-targets -- -D warnings
 ```
 
-The import contains 120 distinct submitted texts and 130 requests from **one underlying preface**. Exact duplicates do not inflate word counts; repeated detector calls remain separate observations. The corpus is marked `experimental` and `exploratory`, with unverified generator provenance. It is not a Codex or Claude frequency baseline. Some historical inputs are raw LaTeX and others are rendered prose; use this archive for experiments, not a pooled prose reference.
+Tests make no paid calls. The grammar integration test uses the installed local parser when `.venv` exists. The former Python CLI is archived in [legacy/python-v0.1](legacy/python-v0.1/README.md); new work uses Rust.
 
-The database defaults to `data/unslop.sqlite3`. Derived databases and live output belong in ignored `data/`; checked-in scripts recreate the archived analysis. SQLite views `word_counts` and `corpus_totals` expose the requested word/occurrence/total structure. Document-level tables retain enough detail to filter, deduplicate, and investigate concentrated counts.
-
-## Build comparable reference corpora
-
-Use JSONL documents with `text`, `corpus`, `source_kind`, `domain`, `register`, `group_id`, and `split`. Model documents also require `provider` and the exact returned `model`. Preserve source URLs, licenses, dates, prompts, and other provenance in `metadata`. See [corpus design](docs/corpus.md).
+## Reproduce corpus collection
 
 ```sh
-.venv/bin/unslop ingest data/human-reference.jsonl --grammar
-.venv/bin/unslop collect examples/prompts.jsonl --provider openai \
-  --model "$UNSLOP_OPENAI_MODEL" --corpus openai-pilot \
-  --out data/openai-pilot.jsonl --max-requests 6
-.venv/bin/unslop collect examples/prompts.jsonl --provider anthropic \
-  --model "$UNSLOP_ANTHROPIC_MODEL" --corpus anthropic-pilot \
-  --out data/anthropic-pilot.jsonl --max-requests 6
-.venv/bin/unslop ingest data/openai-pilot.jsonl --grammar
+target/release/unslop human-pilot
+target/release/unslop fineweb-sample --rows 100
+target/release/unslop ingest data/matched-pilot-v1/human.jsonl --grammar
+target/release/unslop ingest data/public-datasets/fineweb-2021-43-pilot/human.jsonl --grammar
 ```
 
-Set explicit model IDs and provider API credentials in the environment. The initial setup found the Pangram credential but no OpenAI or Anthropic API credentials, so no live model corpus was generated. The sample prompts exercise the pipeline; they do not constitute a sufficiently sized benchmark or a human reference.
+Source manifests retain dates, authors, URLs, licenses, extraction rules, and hashes. FineWeb's database license does not replace rights in its source pages. Public corpora help with scale; topic/register matching and provenance still matter.
+
+The pilot prompts request **source-conditioned rewrites**, not writing from scratch. To collect outputs using existing CLI sign-ins:
 
 ```sh
-.venv/bin/unslop compare --left openai-pilot --right human-reference \
-  --domain software --register technical-review --family word
-.venv/bin/unslop analyze data/paragraph.txt --reference human-reference \
-  --domain software --register technical-review --grammar --family construction
+target/release/unslop collect experiments/matched-pilot-v1/prompts.jsonl \
+  --provider codex-cli --model gpt-6-astra --corpus codex-rewrites-v1 \
+  --out data/matched-pilot-v1/codex.jsonl --max-requests 12
+target/release/unslop collect experiments/matched-pilot-v1/prompts.jsonl \
+  --provider claude-cli --model claude-opus-5 --corpus claude-opus-rewrites-v1 \
+  --out data/matched-pilot-v1/claude-opus.jsonl --max-requests 12
 ```
 
-Keep source groups in one of `train`, `dev`, `test`, or `exploratory`; the database rejects exact-text or source-group leakage between splits. Profiles default to training data. Analysis excludes a known input's source family from its reference; pass `--group-id` for a new variant whose family is known. Compare domain/register strata separately and balance their sample sizes before interpreting pooled results.
+These commands consume model usage. Completed invocations resume from captured records; uncertain or rejected invocations require inspection before another submission. The harness invokes each CLI once; internal retries remain under CLI control and are recorded when exposed. Model switches and tool use are rejected. Codex's JSON stream does not report a resolved model, so its identity is explicitly `requested:gpt-6-astra`. Claude records the model reported in assistant messages. CLI system instructions remain part of the experimental conditions.
 
-## Test an edit
+Direct API providers `openai` and `anthropic` also work with environment credentials and explicit model IDs. See [corpus design](docs/corpus.md).
+
+## Profiles and exact perturbations
 
 ```sh
-.venv/bin/unslop perturb experiments/pangram-preface/sections/part_c/03.txt \
-  --old accordingly --new thus --out data/closing-thus.txt
-.venv/bin/unslop inspect-pair experiments/pangram-preface/sections/part_c/03.txt \
-  data/closing-thus.txt --grammar
+target/release/unslop ingest data/matched-pilot-v1/codex.jsonl --grammar
+target/release/unslop ingest data/matched-pilot-v1/claude-opus.jsonl --grammar
+target/release/unslop pilot-report --models codex-rewrites-v1 claude-opus-rewrites-v1
+target/release/unslop profile --corpus codex-rewrites-v1 --family word
+target/release/unslop perturb experiments/pangram-preface/sections/part_c/03.txt \
+  --old accordingly --new thus --out data/candidate.txt
+target/release/unslop inspect-pair experiments/pangram-preface/sections/part_c/03.txt \
+  data/candidate.txt --grammar
 ```
 
-`perturb` changes one exact whole-word occurrence and writes an edit manifest with offsets and hashes. For a sentence restructuring, save a separate candidate and inspect the pair. Review the diff against the argument before scoring.
+SQLite defaults to `data/unslop.sqlite3`. The `word_counts` and `corpus_totals` views expose word occurrences and total opportunities. Per-document counts retain source groups for paired analysis and uncertainty. Profiles default to training data; exact-text and source-group leakage between splits is rejected. See [statistical conventions](docs/statistics.md).
+
+## Detector experiments and subnet contract
 
 ```sh
-.venv/bin/unslop study data/original.txt data/candidate.txt \
+target/release/unslop study data/original.txt data/candidate.txt \
   --out data/studies/example --repeats 3 --max-requests 6 --full-document
+target/release/unslop score-corpus data/matched-pilot-v1/codex.jsonl \
+  --out data/matched-pilot-v1/scores/codex --max-requests 8
+target/release/unslop attach-scores --corpus codex-rewrites-v1 data/matched-pilot-v1/scores/codex
 ```
 
-This command submits paid Pangram requests using `PANGRAM_API_KEY`. It alternates the order of baseline and candidate across repeat blocks, saves task IDs before polling, and resumes completed or pending requests. Use `--section` for fragment experiments. Invalid inputs and insufficient request budgets fail before submission. An uncertain submission remains recorded and cannot silently be submitted again; recover its task ID before resuming. Do not run two writers against the same study directory.
+Pangram commands use `PANGRAM_API_KEY` and make paid requests. Inputs, model versions, task IDs, and complete results are retained. Request budgets and cached records are checked before submission; uncertain submissions cannot silently be submitted again. Use `--section` for fragment experiments. A passing full-document study requires at least three repeats and a human audit bound to exact source/candidate hashes. See [the audit template](examples/quality-audit.json) and [evaluation protocol](docs/evaluation.md).
 
-The strict gate uses `fraction_ai + fraction_ai_assisted < 0.10` and reports both fractions separately. It requires at least three repeats and a human review of readability, argumentation, detail, and tone to accept a full-document candidate. Copy [the audit template](examples/quality-audit.json), fill in the exact source/candidate hashes and your review, then pass `--audit`. Without a completed review the report remains unaccepted, even if scores are low. See [evaluation details](docs/evaluation.md).
+The Rust subnet contract checks challenge/submission bindings and computes an offline reference reward after quality and detector gates. It does not establish network authentication, replay protection, cumulative budget enforcement, or an economical automated quality judge. [The subnet design](docs/subnet.md) describes those requirements and the route to a Rust validator implementation.
 
-## Research direction
-
-The first useful test is whether lexical features predict score changes on new source families. Next compare grammar-only and combined features, then use the results to rank faithful edit candidates. Keep editing budgets fixed and evaluate a frozen process on untouched sources. The current preface results support context-sensitive experiments, not a universal list of forbidden words.
-
-Read [the measured pilot](docs/pilot.md), [statistical conventions](docs/statistics.md), and [the possible Bittensor contract](docs/subnet.md). A subnet would need a reliable quality evaluator before detector scores could serve as rewards.
+`unslop` is an independent local Git repo ignored by its parent `fix-slop` repo. Corpora, API responses, and derived databases stay in ignored `data/`; manifests, code, and reports are tracked. The preface copies and all earlier adversarial work live here.
