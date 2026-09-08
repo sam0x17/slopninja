@@ -226,6 +226,66 @@ enum Commands {
         #[arg(long)]
         grammar: bool,
     },
+    /// Fit an author and register profile from declared writing samples.
+    StyleFit {
+        samples: PathBuf,
+        #[arg(long)]
+        author: String,
+        #[arg(long)]
+        register: String,
+        #[arg(long)]
+        out: PathBuf,
+        #[arg(long)]
+        grammar: bool,
+    },
+    /// Measure a text against a frozen author profile and optional controls.
+    StyleCompare {
+        profile: PathBuf,
+        text: PathBuf,
+        #[arg(long)]
+        target: Option<PathBuf>,
+        #[arg(long)]
+        out: Option<PathBuf>,
+    },
+    /// Set explicit accessibility proxies and rhetorical editing instructions.
+    StyleControls {
+        profile: PathBuf,
+        #[arg(long, default_value_t = 0.0, allow_hyphen_values = true)]
+        accessibility: f64,
+        #[arg(long, default_value_t = 0.0, allow_hyphen_values = true)]
+        rhetorical_strength: f64,
+        #[arg(long)]
+        lexicon_weight: Option<f64>,
+        #[arg(long)]
+        out: PathBuf,
+    },
+    /// Prepare bounded LLM proposals without making model calls.
+    StylePlan {
+        profile: PathBuf,
+        source: PathBuf,
+        #[arg(long)]
+        target: Option<PathBuf>,
+        #[arg(long)]
+        out: PathBuf,
+        #[arg(long, default_value_t = 3)]
+        candidates: usize,
+        #[arg(long, default_value_t = 0.15)]
+        max_edit_ratio: f64,
+    },
+    /// Remeasure proposals; recommend only improvements with an exact review.
+    StyleRank {
+        profile: PathBuf,
+        source: PathBuf,
+        candidates: PathBuf,
+        #[arg(long)]
+        target: Option<PathBuf>,
+        #[arg(long)]
+        reviews: Option<PathBuf>,
+        #[arg(long)]
+        out: PathBuf,
+        #[arg(long, default_value_t = 0.15)]
+        max_edit_ratio: f64,
+    },
 }
 fn prof(
     db: &rusqlite::Connection,
@@ -246,6 +306,83 @@ fn prof(
 }
 fn execute(c: Cli) -> Result<Value> {
     match c.command {
+        Commands::StyleFit {
+            samples,
+            author,
+            register,
+            out,
+            grammar,
+        } => {
+            return unslop::style_workflows::fit(
+                &samples, &author, &register, &out, grammar, &c.python,
+            );
+        }
+        Commands::StyleCompare {
+            profile,
+            text,
+            target,
+            out,
+        } => {
+            let report =
+                unslop::style_workflows::compare(&profile, &text, target.as_deref(), &c.python)?;
+            if let Some(path) = out {
+                unslop::style_workflows::save_report(&path, &report)?;
+            }
+            return Ok(report);
+        }
+        Commands::StyleControls {
+            profile,
+            accessibility,
+            rhetorical_strength,
+            lexicon_weight,
+            out,
+        } => {
+            return unslop::style_workflows::controls(
+                &profile,
+                accessibility,
+                rhetorical_strength,
+                lexicon_weight,
+                &out,
+            );
+        }
+        Commands::StylePlan {
+            profile,
+            source,
+            target,
+            out,
+            candidates,
+            max_edit_ratio,
+        } => {
+            return unslop::style_workflows::plan(
+                &profile,
+                &source,
+                target.as_deref(),
+                &out,
+                candidates,
+                max_edit_ratio,
+                &c.python,
+            );
+        }
+        Commands::StyleRank {
+            profile,
+            source,
+            candidates,
+            target,
+            reviews,
+            out,
+            max_edit_ratio,
+        } => {
+            return unslop::style_workflows::rank(unslop::style_workflows::RankOptions {
+                profile: &profile,
+                source: &source,
+                candidates: &candidates,
+                target: target.as_deref(),
+                reviews: reviews.as_deref(),
+                out: &out,
+                max_edit_ratio,
+                python: &c.python,
+            });
+        }
         Commands::Collect {
             prompts,
             provider,

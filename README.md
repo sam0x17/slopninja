@@ -4,6 +4,14 @@ Research toward an adversarial Bittensor subnet for text revision: make writing 
 
 The runtime is **Rust**. Python is confined to spaCy parsing and its grammatical annotations. The project contains corpus collection, SQLite profiles, paired feature analysis, detector experiments, and an offline miner/validator contract. It does not yet contain a trained rewriting model or demonstrate reliable performance below 10%.
 
+The current direction is **author-conditioned editing**: fit a measured style
+profile from the writer's own samples, ask an LLM for small changes toward that
+profile, and remeasure the proposals before an independent preservation review.
+The Rust prototype includes author/register profiles, grammatical and lexical
+coordinates, target controls, prompt generation and candidate ranking. Read
+[the implementation and runnable workflow](docs/style-space.md) and
+[the research and grammar specification](docs/style-research.md).
+
 ## Current data and findings
 
 - 12 licensed scientific abstracts published in 2018, matched with 12 Codex rewrites and 12 Claude Opus rewrites. Source groups were assigned to 8 training, 2 development, and 2 test groups before generation.
