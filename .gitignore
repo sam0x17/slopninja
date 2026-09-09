@@ -9,3 +9,11 @@ target/
 .env.*
 data/
 !data/.gitkeep
+
+# Preface source and derived local experiments were removed from Git history.
+preface.tex
+preface.txt
+/experiments/pangram-preface/
+/experiments/preface-edit-v2/
+/experiments/preface-profile/
+/docs/pilot.md
