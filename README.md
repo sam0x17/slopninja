@@ -316,6 +316,11 @@ The [three-task mechanism proposal](docs/subnet-mechanisms.md) defines separate
 competitions for author/origin detection, author transformation and writing
 improvement, with reusable word/grammar representations and independent quality
 review. It maps those tasks onto two proposed on-chain mechanisms.
+The [private model plan](docs/miner-models-and-data.md) specifies starter
+classifiers and editing adapters, with a [training-source plan](docs/miner-training-sources.md)
+covering Global Voices, PLOS and consented writing. Miners keep their weights
+and can earn customer fees through [asynchronous inference](docs/paid-inference.md)
+with proposed on-chain job settlement and private execution.
 Pangram is the required external benchmark. The [API funding and verification
 design](docs/pangram-oracle.md) separates the cost of independent measurement
 from the remaining trust in Pangram and human quality judgments.

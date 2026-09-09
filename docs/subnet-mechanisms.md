@@ -10,6 +10,12 @@ for a stated audience. Miners can improve the grammar and word representation,
 the task models, or the editing process. The existing model supplies a baseline;
 we do not need to perfect it before testing these incentives.
 
+Miners keep their trained models private and serve authenticated task requests.
+The [model and data plan](miner-models-and-data.md) defines starter architectures
+and training records; the [paid inference proposal](paid-inference.md) adds
+customer jobs with on-chain settlement. Emissions reward observed performance,
+while customers pay separately for service. No weight publication is required.
+
 Pangram is the required external benchmark for origin detection and detector
 evasion. Compare detectors against documented production histories alongside
 Pangram, and measure evasion against Pangram itself. The [API verification and
@@ -79,13 +85,13 @@ different-author/similar-topic challenges, and hold out generation families.
 Known hard human examples are essential to prevent an always-AI classifier
 from winning against a pool dominated by generator submissions.
 
-Miners should submit a versioned representation artifact and task head. A small
-interface is sufficient: `encode(text)`, `profile(samples)` and task prediction.
-Expose named word/grammar features where used, including denominators and
-missingness. Learned embeddings can also be submitted. Validators execute the
-committed artifact under resource limits and retain its outputs, making the
-representation usable downstream. Reward measured performance rather than
-dimension count or the miner's own interpretation of its coordinates.
+Miners serve a versioned author/origin prediction interface. They can retain
+`encode(text)` and `profile(samples)` internally, including proprietary grammar
+features and learned embeddings. Our public starter implementation exposes named
+features, denominators and missingness for reproducibility; competitors need not
+publish their implementation. Validators authenticate responses and score them
+against held-out labels. A declared model version does not prove which private
+weights ran. Reward measured performance rather than dimension count.
 
 ## 2. Author transformation and detector evasion
 
@@ -169,8 +175,9 @@ flowchart LR
     V --> Q
 ```
 
-Use previous-round snapshots in a crossed evaluation schedule. Freeze miner
-artifacts and detector eligibility before releasing private challenges. Qualify
+Use previous-round service versions in a crossed evaluation schedule. Freeze
+offers and detector eligibility before releasing private challenges; a private
+service's claimed model version is not execution attestation. Qualify
 detectors on independent human/model data first, and retain Pangram as the
 required external benchmark so colluding miners cannot define the whole
 opposition. Sample supplementary opponents independently of the submitting miner, cap each
@@ -179,15 +186,16 @@ These controls reduce gaming opportunities; they do not prove collusion absent.
 
 Successful quality-preserving revisions become hard examples for a later
 detection round with their original production labels. Keep some examples
-private for evaluation and release a disjoint training set later. Do not use
+private for evaluation and release a disjoint training set later, where benchmark
+output terms permit it. Customer jobs need separate opt-in for such reuse. Do not use
 the same examples for immediate public feedback and purportedly unseen tests.
 Maintain human examples and fixed baselines alongside the adversarial pool.
 
 One final candidate per assignment is enough for the first tournament. Allow
 public development feedback, but provide no per-item hidden-judge feedback
 during scoring. A hosted miner's self-declared detector-query count is not
-enforceable; execute artifacts under validator-controlled limits, or
-limit claims to observed service requests. Evaluate cost and latency as separate
+enforceable. Limit claims to observed service requests, quoted price and delivery
+deadlines. Evaluate cost and latency as separate
 service constraints before including them in payouts.
 
 ## Combining rewards and handling failures
@@ -213,9 +221,11 @@ weights, or a predeclared whole-assignment exclusion policy.
 
 The existing [Rust contract](../src/subnet.rs) binds a revision to a challenge
 and computes an offline detector/quality reward. It does not yet implement
-these task pools, artifact execution, authentication, replay protection or
+these task pools, private serving, replay protection or
 cumulative accounting. Its [documentation](subnet.md) remains the description
 of current behavior; this proposal does not silently change that contract.
+The separate [receipt prototype](receipt-envelope.md) implements envelope
+signatures and encryption, with trusted assignments still supplied by its caller.
 
 ## Readiness and the next experiment
 
