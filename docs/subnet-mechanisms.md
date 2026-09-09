@@ -4,6 +4,13 @@ Status: design proposal, 2026-09-09. We have enough evidence to define an
 offline competition. Paid validation still needs a suitable private benchmark,
 measured judge reliability and an authenticated challenge ledger.
 
+The [whitepaper PDF](../whitepaper/slopninja.pdf)
+([LaTeX source](../whitepaper/main.tex)) is the current overall design. The scoring
+and audit access below apply to subnet-owned benchmarks. Customer inference
+inputs are encrypted only for their assigned miner; a customer may separately
+send evidence to a specific validator. Those disclosures do not authorize
+general validator access or automatic benchmark reuse.
+
 The subnet should develop three capabilities: recognizing authors and production
 histories, transforming text toward a requested voice, and improving writing
 for a stated audience. Miners can improve the grammar and word representation,

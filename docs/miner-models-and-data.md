@@ -7,25 +7,56 @@ buy [asynchronous inference](paid-inference.md). Publishing a winning model is
 optional. This replaces the earlier proposal to execute submitted miner
 artifacts on validators.
 
+The [whitepaper PDF](../whitepaper/slopninja.pdf)
+([LaTeX source](../whitepaper/main.tex)) is the canonical design draft. Customer
+sources, references, profiles and briefs are encrypted only for the assigned
+miner, besides the customer's own access. Results return encrypted to the
+customer. The protocol grants validators, auditors, customer-service operators
+and external providers no automatic access to either. A new miner requires a
+new customer-signed assignment and customer-created envelope.
+
+A customer may separately disclose selected evidence to one explicitly chosen
+validator using a customer-signed packet encrypted to that validator's
+authenticated key. The packet binds the job, review context and scope and
+contains the relevant evidence and commitment openings. It grants no standing
+access or permission to broadcast, and the miner does not rewrap it. Partial
+or redacted evidence may not open the original commitment or establish fidelity
+of the whole job. See [optional inspection](paid-inference.md#optional-customer-directed-inspection).
+
 We should provide a reproducible starter implementation and permitted training
 data, then let miners change either. The subnet evaluates service outputs;
 it cannot establish private training effort, model ownership or architecture
-from those outputs. A miner can improve a grammar, train a network, combine
-models or buy another service, subject to its advertised customer terms.
+from those outputs. A miner can improve a grammar, train a network or combine
+local models. Confidential customer jobs require execution on the assigned
+miner's hardware; forwarding content to another miner or hosted API is outside
+that policy. Encryption and private weights cannot prevent the assigned miner
+from leaking plaintext it receives.
 
 ## Three task interfaces
 
 | Task | Private starter model | Inputs | Outputs |
 | --- | --- | --- | --- |
 | Author and origin detection | Full sparse word/grammar metric baseline; compare a 149M text encoder with author and origin heads | Query, optional reference gallery, versioned origin-label definition | Author probabilities, origin probabilities, calibrated abstention |
-| Author transformation and detector evasion | 8B decoder with a style adapter, deterministic edit proposals and candidate selection | Source, target writing samples, style changes, preservation brief, evasion mode | Exact revision or abstention; private evidence and required detector reports |
+| Author transformation and detector evasion | 8B decoder with a style adapter, deterministic edit proposals and candidate selection | Source, target writing samples, style changes, preservation brief, evasion mode | Exact revision or abstention; detector reports only for authorized benchmark tasks |
 | Writing improvement | The same decoder base with a separate editorial adapter and preference scorer | Source, audience, purpose, tone, allowed edits and preservation brief | Exact revision or unchanged text, with private change notes |
 
 These are three functional models; miners need not maintain three independent
 foundation models. Sharing a base between editing adapters reduces the starting
-cost. Independent validator judges remain outside all three miner interfaces.
+cost. Independent validator judges evaluate benchmark-owned tasks under their
+authorized access rules. Customer evidence reaches a chosen validator only
+through a separate customer-directed disclosure.
 The current [two-mechanism mapping](subnet-mechanisms.md) remains: detection in
 mechanism 0, separately scored transformation and quality pools in mechanism 1.
+
+Paid inference has its own market in subnet alpha. Miners publish signed total
+quotes for bounded jobs, with capacity, expiry and delivery terms; customers
+choose on quality, deadline and price. Reservation locks the quote and terms,
+while future offers can change with demand and competition. There is no
+owner-set base price or global utilization parameter. Quote discovery exposes
+no input plaintext to bidders. The [alpha settlement adapter](paid-inference.md#offer-and-job-lifecycle)
+must still be implemented and tested: allowances alone do not fund a job,
+service price and network/transfer fees remain distinct, and no alpha ERC-20
+interface is assumed. Customer revenue stays separate from benchmark emissions.
 
 For concrete starting checkpoints, compare
 [ModernBERT-base](https://huggingface.co/answerdotai/ModernBERT-base), a 149M
@@ -91,7 +122,10 @@ small candidates and explicit checks; an LLM can propose broader changes.
 
 The author distance helps choose candidates but cannot approve them. Our modal
 experiments already showed that changing a claim can improve author proximity.
-Use independent preservation checks before ranking style and Pangram outcomes.
+Use independent preservation checks before ranking style and Pangram outcomes
+on authorized benchmark tasks. Confidential customer jobs use local checks and
+the customer's review, with no automatic submission to Pangram or external
+judges. A customer can separately provide evidence to a chosen validator.
 Rhetorical strength and accessibility are requested controls, with examples
 and ratings in training, rather than assumed directions in the author space.
 
@@ -102,17 +136,22 @@ including fluent but unnecessary edits and already-good originals. Keep
 accessibility, argument force and tone as separate labels; shortening alone is
 not a quality target. Retain uncertain and tied reader judgments.
 
-The miner's preference scorer can rank its own candidates. Validators use
-different frozen judges and reader audits. A miner must not score itself for
-payment. The quality task does not require a Pangram improvement unless the
-customer explicitly adds detector measurement as a second task.
+The miner's preference scorer can rank its own candidates. Benchmark validators
+use different frozen judges and reader audits; a miner cannot award itself
+emissions. Confidential customer payment follows acknowledgment and the agreed
+timeout policy. A chosen validator's inspection can be advisory; its signed
+opinion affects escrow only if both parties accepted that validator's authority
+and dispute terms before accepting the job. Choosing a reviewer cannot change
+deadlines or redirect funds. External detector measurement requires a separately
+customer-initiated disclosure flow outside the default private job.
 
 ## Training material to provide
 
 Use four distinct pools: a common training release, a public development set,
 private evaluation sources, and per-customer reference writing. Miners may add
-their own permitted data. Customer text and profiles are private inference
-inputs by default, with a separate opt-in for training or benchmark reuse.
+their own permitted data. Buying an inference job authorizes no training or
+benchmark reuse of its text, references, profiles, brief or result. Any expanded
+access or reuse requires a separate customer-initiated authorization and delivery.
 
 The local [Blog Authorship Corpus](https://u.cs.biu.ac.il/~koppel/BlogCorpus.htm)
 permits noncommercial research. Keep it and its fitted models in local research;
@@ -164,20 +203,23 @@ draft retained the information needed to reconstruct it. Otherwise the target
 teaches the model to invent missing details. Synthetic pairs and real writer
 edits remain distinct in sampling and reporting.
 
-For adversarial training, preserve failed edits, unchanged controls and good
-human writing alongside successful revisions. Retire evaluation material before
-releasing it for training, and only release samples with permission. Miners
-retain proprietary customer outputs; sharing those cannot be an entry condition.
+For adversarial training on authorized benchmark material, preserve failed
+edits, unchanged controls and good human writing alongside successful revisions.
+Retire evaluation material before releasing it for training, and only release
+samples with permission. Sharing customer outputs cannot be an entry condition
+or required training contribution.
 Commissioned benchmark output terms should explicitly permit later use by
 detector miners, while the public leaderboard discloses only aggregates.
 
 Pangram's [model card](https://www.pangram.com/research/model-card/pangram-4)
-says it does not train on customer API data. Its reports still reveal submitted
-outputs to the provider and authorized auditors. Keeping weights private blocks
-direct downloads, but cannot prevent black-box study through purchased jobs or
-leaked examples. A supported agreement must cover subnet report retrieval and
-any proposed reuse of detector labels for training; an accessible endpoint
-alone supplies no such license.
+says it does not train on customer API data. That does not make submissions
+private from Pangram: the provider sees submitted text, and report readers may
+see it too. Use it for authorized benchmark-owned text. Confidential customer
+sources and outputs cannot be submitted or exposed through public reports.
+Keeping weights private blocks direct downloads but cannot prevent black-box
+study through purchased jobs or leaked examples. A supported agreement must
+cover benchmark report retrieval and any proposed reuse of detector labels;
+an accessible endpoint alone supplies no such license.
 [Service terms](https://www.pangram.com/terms-of-service).
 
 ## What to build next

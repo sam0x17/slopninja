@@ -1,0 +1,44 @@
+\section{Development and launch
+criteria}\label{development-and-launch-criteria}
+
+First, run a local tournament with 24 rights-cleared tasks across the
+three interfaces. Evaluate detection on known-label author and origin
+tasks against fixed probabilistic baselines. For editing tasks, compare
+unchanged text, deterministic edits, and one general editor under the
+same briefs. Have two blinded readers assess
+preservation and preference, including intentional omissions,
+uncertainty changes, and padding. Freeze the scoring policy before
+comparison and publish aggregate agreement, coverage, cost, and failure
+cases.
+
+In parallel, use synthetic jobs and test funds to verify assigned-miner
+encryption, customer-only result delivery, key substitution rejection,
+replay prevention, expiry, acknowledgment, and exactly one settlement.
+Exercise miner outage, wrong keys, unacknowledged consumed results, and
+attempted automatic reassignment. Neither a validator nor a gateway
+should have a decryption path. Measure encrypted payload sizes and chain
+costs before enabling on-chain transport. No real customer text is
+needed for that pilot.
+
+Use the writer pilot to establish acquisition and review costs. Refit
+public starter models only on data cleared for the intended release.
+Evaluate author and origin models on new sources, then train editing
+adapters after enough reviewed pairs exist. Reward scaling requires
+demonstrated judge reliability and preservation performance, with
+uncertainty reported on unseen sources.
+
+Before a live subnet launch, resolve the supported Pangram
+retrieval/billing integration, key and assignment registry, replay
+ledger, audit quorum and sample sizes, empty-pool weight policy, and
+mechanism allocations. Before paid customer launch, separately establish
+acceptable nonpayment losses, retention terms, encrypted delivery
+reliability, and alpha escrow behavior under finality and timeouts.
+Verify quote expiry, capacity reservations, exact alpha accounting,
+release and refund permissions, and fee handling. These
+decisions must be concrete protocol parameters or measured acceptance
+criteria before funds depend on them.
+
+The next deliverable is a small reproducible tournament and private-job
+pilot, followed by revised parameters based on observed failures and
+reader judgments. The whitepaper remains a design draft until those
+results support deployment.

@@ -1,0 +1,75 @@
+\section{Model interfaces and starter
+architectures}\label{model-interfaces-and-starter-architectures}
+
+The three interfaces define compatible jobs and outputs. Miners may
+change their internal architectures, grammatical representations, search
+methods, and training data without changing those interfaces. Sharing a
+foundation model between tasks is permitted. Publishing a winning model
+is optional.
+
+\subsection{Author and origin
+detection}\label{author-and-origin-detection}
+
+An author task supplies a query and reference works for a gallery of
+candidate authors. The response contains probabilities over the supplied
+author IDs. The starter compares full sparse word/grammar profiles; a
+learned text encoder with an author embedding head is the next
+architectural comparison. Reference prototypes support new customer
+authors without fitting a permanent classifier for each identity.
+Unknown-author rejection requires a separate calibrated output and
+withheld-author evaluation.
+
+An origin task returns probabilities over documented production
+histories: human-only, model-only, and mixed human/model work. The
+production record includes revision order and assistance type. A
+model-to-model rewrite remains model-only under this initial label
+scheme. Pangram supplies a comparison, not the training label. The
+proposed encoder uses a separate origin head; author similarity must not
+be substituted for provenance.
+
+ModernBERT-base~\cite{modernbert},
+a 149M encoder, is a concrete starter candidate. Selection must compare
+it with the existing metric on new authors, topics, and registers. The
+subnet does not require that checkpoint or assume it will win.
+
+\subsection{Author transformation and detector
+evasion}\label{author-transformation-and-detector-evasion}
+
+Inputs are the source, independent target-author samples, requested
+style changes, and a preservation brief. The task declares author
+matching, detector evasion, or both. The miner returns exact revised
+text or an abstention.
+
+The proposed starter is an 8B decoder, initially
+Qwen3-8B~\cite{qwen}, with a style
+adapter and a candidate-selection process. Named word and grammar
+deviations can condition the first version. A learned profile prefix is
+a later comparison, contingent on better results for unseen authors.
+Deterministic Rust edit rules can propose small changes; the decoder can
+propose broader restructuring.
+
+Train first on reviewed source/reference/brief/revision tuples. Then
+learn preferences among candidates that pass preservation review.
+Include originals, failed rewrites, copied reference passages, and
+fluent meaning-breaking edits as controls. A miner's own style score may
+guide its search, but cannot approve its output for benchmark rewards.
+
+\subsection{Writing improvement}\label{writing-improvement}
+
+This task supplies an audience, purpose, tone, and allowed changes. The
+miner returns an improved revision or leaves suitable text unchanged.
+The starter shares the decoder base with transformation and uses a
+separate editorial adapter and preference scorer when the tasks'
+requested behavior conflicts.
+
+Training preferences distinguish clarity, accessibility, organization,
+rhetorical force, and tone. A lower reading level or shorter text is
+useful only when the brief calls for it. Reviewer ties and disagreement
+remain in the data. Validators use independent judges and reader audits;
+a miner cannot determine its own payment by scoring its revision.
+
+Pangram is not part of the writing-improvement reward. Future
+comparisons of 4B, 8B, and 32B editing models should use fidelity,
+reader preference, and cost per accepted revision. All checkpoint
+licenses and revisions must be pinned before a training release. The
+named starters are proposals, not trained subnet products.

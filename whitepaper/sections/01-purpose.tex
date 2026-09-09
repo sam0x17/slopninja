@@ -1,0 +1,37 @@
+\section{Purpose and scope}\label{purpose-and-scope}
+
+A useful writing model should retain a writer's argument while allowing
+changes to expression. The same person may want a passage closer to
+their own voice, more accessible to a general audience, or more forceful
+without becoming less accurate. An authorship model can help describe
+those differences. A detector can measure one aspect of how the result
+is classified. Neither measurement alone establishes that the revision
+is good.
+
+The subnet therefore evaluates three tasks separately:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Identify authors and documented human/model production histories.
+\item
+  Transform writing toward a requested voice, optionally reducing
+  detection by Pangram, while preserving the source's meaning and
+  intended tone.
+\item
+  Improve writing for an explicit audience and editorial purpose.
+\end{enumerate}
+
+The evasion target is a reported AI-generated \textbf{plus AI-assisted}
+fraction strictly below 10\%, with preservation and quality requirements
+satisfied. Reaching zero is a desirable measured outcome, not a promise
+of this design. A model-origin text retains that recorded origin after a
+successful rewrite. Detector evasion does not change its production
+history.
+
+The initial scope is English prose, document-level author/origin
+predictions, and bounded asynchronous editing jobs. Span-level origin
+labels, multilingual rewards, and arbitrary-length manuscripts need
+their own validated datasets. There is no requirement for token
+streaming or interactive latency.

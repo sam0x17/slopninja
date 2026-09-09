@@ -105,7 +105,13 @@ every observation: fraction_ai + fraction_ai_assisted < threshold <= 0.10
 every required quality attestation: true
 ```
 
-Neither a detector's headline nor the best result from many attempts is the objective. Store every task, including failures and timeouts, in the authoritative query ledger. Failed or malformed records cause an error rather than a passing score. Retrying, excluding observations, or evaluating additional candidates must follow the frozen round policy.
+The offline scorer uses every supplied observation; failed or malformed records
+cause an error rather than a passing score. Its query-cap fields describe this
+legacy contract. The current [whitepaper](../whitepaper/main.tex) instead permits
+additional miner-paid attempts before commitment and scores the selected,
+committed reports. It requires neither disclosure of all private attempts nor
+fresh validator-paid inference. Adapting the offline contract to that report
+commitment policy remains implementation work.
 
 The quality audit contains these bindings and literal boolean attestations:
 

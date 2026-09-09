@@ -1,0 +1,76 @@
+\Needspace{16\baselineskip}
+\section{Training data and evaluation
+separation}\label{training-data-and-evaluation-separation}
+
+The data program needs three linked tables, with different supervision:
+
+\par\medskip\noindent
+\begin{tabularx}{\linewidth}{@{}LLL@{}}
+\toprule
+Table & Records & Supervision \\
+\midrule
+Authorship & Multiple independent works per writer & Identity, date,
+genre, work family, provenance strength \\
+Production & Original writing, generations, and revision chains &
+Recorded workflow, parent links, generator version, assistance order \\
+Revision preferences & Sources, briefs, candidate edits, and reviews &
+Preservation, target voice, editorial preference, ties \\
+\bottomrule
+\end{tabularx}
+\par\medskip
+
+Maintain distinct training, public development, private evaluation, and
+customer reference collections. Split authors before selecting
+vocabulary or fitting weights. Within evaluation authors, use
+independent earlier works as references and later works as queries. Keep
+every revision, translation, and excerpt of one source family in the
+same split. Hold out generator families and prompt families for origin
+evaluation. Match content, length, and genre across origins so that a
+detector cannot win by identifying the assignment format.
+
+Global Voices supplies a prospective pool of attributed modern prose
+under its default CC BY terms. Qualification must distinguish original
+writers, translators, shared accounts, and third-party material. PLOS
+articles can supply factual source material and citation constraints,
+while their coauthored nature makes them unsuitable as unqualified
+single-writer labels. Item-level rights and attribution remain part of
+acquisition.
+Global Voices policy~\cite{globalvoices},
+PLOS article policy~\cite{plos}.
+
+Historical publication alone does not prove a human-only workflow. For
+stronger labels and useful editing supervision, the proposed pilot
+commissions 50 writers to provide twelve independent pieces each and two
+edits of supplied drafts. Common briefs across writers permit
+comparisons with similar subject matter; multiple subjects per writer
+test consistency beyond topic. Record collaboration and AI assistance,
+and obtain separate rights for training, private evaluation, and any
+redistribution.
+
+If collection and review prove workable, expand to 500 writers: 300
+training, 100 development, and 100 private evaluation authors. A further
+cohort is needed for unknown-author rejection and stronger confirmation.
+These are acquisition targets; the writers have not been commissioned
+and this paper commits no funds.
+
+Generate model-only and mixed examples from permitted sources while
+retaining exact prompts, model revisions, outputs, and human editing
+records. Synthetic restoration pairs can start from a writer's original,
+create a generic draft, and train a return toward the original. Review
+whether that draft still contains the required information; otherwise
+restoration teaches invention. Keep such weak supervision separate from
+real writer edits.
+
+Adversarial benchmark revisions retain their original production labels.
+They may become later detector-training examples only after retirement
+from private evaluation and under agreed release terms. Preserve
+difficult human examples alongside them. Customer text, profiles, and
+outputs receive no automatic training or benchmark reuse.
+
+The existing Blog Authorship Corpus experiments remain local
+noncommercial research and do not supply the commercial starter dataset.
+Private book and correspondence material is also excluded. Source
+manifests must distinguish text rights from loader-code licenses. The
+detailed
+acquisition plan~\cite{trainingplan} records the current source screening and outstanding qualification
+work.

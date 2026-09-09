@@ -1,0 +1,130 @@
+\section{Benchmark scoring and mechanism
+mapping}\label{benchmark-scoring-and-mechanism-mapping}
+
+The current Bittensor documentation permits two chain mechanisms, each
+with separate weights and consensus while participants share UIDs.
+slopninja maps author/origin detection to mechanism 0 and combines
+separately scored transformation and writing-improvement pools in
+mechanism 1. The three logical tasks do not require three chain
+mechanisms. Deployment must also respect the documented joint
+UID/mechanism capacity constraint.
+Bittensor mechanisms~\cite{mechanisms}.
+
+For an initial offline tournament, give the three logical tasks equal
+budget shares. Within detection, balance author and origin tasks
+equally; within transformation, retain separate author-style, evasion,
+and combined modes. These are transparent pilot allocations, not an
+economically optimized split. Any live allocation and change policy must
+be published before the scoring epoch. Miners may specialize and earn
+from the pools they enter.
+
+\subsection{Detection}\label{detection}
+
+For a valid probability vector \(p\) and known one-hot label
+\(y\), use the multiclass Brier utility:
+
+\begin{equation}\label{eq:brier-utility}
+  B(p,y)=1-\frac{1}{2}\sum_k(p_k-y_k)^2.
+\end{equation}
+
+Average query results within source groups and authors before the
+declared task mixture. Compare the aggregate with a fixed public
+baseline, then use positive improvement divided by that baseline's
+remaining headroom. If the baseline is perfect, the pool has no
+remaining improvement and is unallocated in the offline simulation. Clip
+after aggregate comparison, not separately for each lucky prediction.
+Raw Brier utility is unsuitable for direct payout normalization: a
+uniform prediction in a large author gallery can already have a high
+value.
+
+Report retrieval accuracy, reciprocal rank, origin calibration, and
+human false-positive rates separately. Fix operating thresholds on
+development data. Unknown or weak production records cannot become hard
+labels merely because Pangram agrees with a miner.
+
+\subsection{Preservation before revision
+rewards}\label{preservation-before-revision-rewards}
+
+Each editing task has a preservation brief and hidden review material
+covering claims, participants, quantities, negation, uncertainty,
+citations, attribution, and argument relationships. Review the entire
+revision. Independent judges also check readability and the requested
+tone. A confirmed failure sets the task's preservation gate \(G\)
+to zero; a confirmed pass sets it to one.
+
+Readers compare anonymized revisions in randomized order without
+detector or miner scores. Maintain unchanged sources and qualified
+editor baselines. Automated judges join reward allocation only after
+agreement and failure modes have been measured against separate reader
+judgments. Instructions embedded in a candidate are evaluated text, not
+evaluator instructions.
+
+An unresolved judgment cannot pass by default. The round policy must
+resolve it or void the affected comparison for all competing miners
+consistently. Miner nonresponse remains a zero on assigned work;
+validator infrastructure failure is a separate, recorded event. Publish
+coverage and missingness so that conditional accuracy cannot conceal
+excluded difficult cases.
+
+\subsection{Transformation and improvement
+utility}\label{transformation-and-improvement-utility}
+
+Let \(A\in[0,1]\) be normalized positive improvement in target-style fit over
+the unchanged source. Estimate it from independent author models and
+blinded target-author or reader comparisons, retaining uncertainty.
+Before using a particular combination for live rewards, freeze and
+validate it on development examples. Topic copying, reference copying,
+and meaning-breaking edits must fail that validation. No miner-defined
+embedding can be its own reward oracle.
+
+For Pangram evasion, let \(F_r(t)\) be the reported
+AI-plus-assisted fraction in required observation \(r\) for text
+\(t\). The initial benchmark requires three distinct completed
+reports for each source \(x\) and candidate \(z\). Improvement using the
+least favorable pair among those submitted observations is:
+
+\begin{equation}\label{eq:evasion-improvement}
+  E(x,z)=\max\left(0,\min_r F_r(x)-\max_r F_r(z)\right).
+\end{equation}
+
+The strict target additionally requires
+\(\max_r F_r(z) < 0.10\). Three reads of one report
+count as one observation. A neighborhood such as two percentage points
+does not relax the strict target. Use the declared provider version and
+repeat policy for both sides; report sensitivity to provider variation.
+
+Miners may pay for additional search and report attempts before
+commitment. Scoring uses the committed reports, including variation in
+their provider results. The protocol does not require disclosure of
+every private attempt or a fresh validator-paid inference call. A
+reported pass applies to the committed observations.
+
+Pilot transformation utilities are \(GA\), \(GE\), and
+\(G(A+E)/2\) for the three modes. Combined mode also requires no
+regression on either requested axis. Report sub-10\% success separately
+from incremental improvement. An already suitable source can stay
+unchanged without receiving an invented improvement bonus.
+
+For writing improvement, use positive blinded preference improvement
+over the fixed qualified editor baseline, subject to preservation and no
+regression against the original. Keep ties. Pangram contributes no term
+to this utility. The first tournament determines whether these proposed
+utilities order useful revisions above omissions, unsupported
+strengthening, irrelevant padding, and needless edits.
+
+\subsection{Aggregation and failure
+policy}\label{aggregation-and-failure-policy}
+
+Fix assignments, task mixtures, baselines, and deadlines before
+submissions. Balance related examples within source groups; extra cheap
+submissions do not increase a miner's share. Normalize positive skill
+within each task pool, then combine pool distributions using the
+published shares. The chain mechanism split carries the corresponding
+aggregate task allocation.
+
+If no miner beats a baseline, record that pool as unallocated in the
+offline simulation. A live adapter must select and test a chain-valid
+fallback before launch. This paper does not assume that zero weights,
+retained emissions, a new burn destination, or custom slashing are
+available. Payout handling under empty pools and unresolved rounds is a
+required deployment decision.

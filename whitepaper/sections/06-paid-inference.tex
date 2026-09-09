@@ -1,0 +1,148 @@
+\section{Paid asynchronous jobs and on-chain
+coordination}\label{paid-asynchronous-jobs-and-on-chain-coordination}
+
+The proposed job contract uses Subtensor's EVM to coordinate offers,
+escrow, commitments, and settlement. Inference prices are denominated in
+slopninja's subnet alpha; actual model execution stays on miner hardware.
+Subtensor EVM guide~\cite{evm}.
+
+\subsection{Market pricing in alpha}\label{market-pricing-in-alpha}
+
+Miners publish signed offers for bounded jobs. Each offer specifies a
+total alpha price, task and service version, input/output limits,
+delivery deadline, available capacity, quote expiry, and settlement
+terms. Customers select among compatible offers using price, benchmark
+performance, and delivery time. A higher-quality model or faster service
+may command a different price. There need not be one clearing price for
+every kind of inference.
+
+Miners may revise their unreserved offers as demand, queue length,
+compute costs, and competition change. The subnet operator sets no base
+price, utilization target, or global price-adjustment coefficient.
+Miners choose their own pricing policies; customers decide whether the
+offers are worth buying. Alpha is the unit of account and proposed
+settlement asset. The inference market determines the number of alpha
+units charged independently of the alpha/TAO exchange market.
+
+An atomic reservation consumes offered capacity and locks the quoted
+alpha amount and job terms. Later price changes apply only to later
+reservations. An expired or exhausted offer cannot be filled; repricing
+requires a new customer choice. The reservation therefore gives both
+parties a known price through execution and settlement, even while
+other offers change.
+
+Quote discovery uses public service descriptions and the size/deadline
+information the customer chooses to reveal. Source text, reference
+writing, and the full brief remain encrypted for the selected miner.
+Obtaining competing offers does not distribute the plaintext to
+prospective bidders. If the selected miner cannot serve the bounded
+request, the job follows its rejection/refund terms; it cannot silently
+raise the price after decrypting the input.
+
+\subsection{Reservation and delivery}\label{reservation-and-delivery}
+
+Subtensor's staking-v2 interface exposes allowances and stake transfers,
+and contracts can hold stake through their mapped coldkeys. The proposed
+escrow adapter would use those operations to custody unlocked,
+transferable alpha on the same subnet. An allowance alone does not fund
+a reservation. Alpha remains associated with a subnet and hotkey;
+settlement must account for that position and its native \(10^{-9}\)
+precision. These primitives do not supply a finished job-escrow
+implementation~\cite{stakingv2,evmstake}.
+
+An offer distinguishes the service price from network and transfer fees
+and names the fee payer. Funding succeeds only after the credited alpha
+principal satisfies the quote. Release and refund must reconcile actual
+balances, transfer permissions, and fees; incidental stake accrual must
+remain separate from job principal. The adapter and its accounting
+policy require validation before paid launch. Neither an alpha price
+feed nor an assumed ERC-20 interface substitutes for that work.
+
+The proposed lifecycle is:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Offer and reserve.} The customer selects a miner's signed
+  offer, pins its key and job terms, and escrows the quoted alpha amount
+  for a bounded input/output.
+\item
+  \textbf{Encrypt and submit.} The customer posts the salted input
+  commitment and encrypted-delivery hash, then delivers the envelope to
+  that miner.
+\item
+  \textbf{Accept.} The miner decrypts, checks the opening and limits,
+  and accepts before the acceptance deadline. Failure to accept permits
+  a refund.
+\item
+  \textbf{Execute and deliver.} The miner runs the private service,
+  commits the result, and makes its customer-encrypted envelope
+  available before the delivery deadline.
+\item
+  \textbf{Acknowledge or expire.} A customer acknowledgment releases
+  payment. No timely acceptance or delivery claim permits refund. A
+  delivery claim without acknowledgment follows the bounded timeout
+  policy below.
+\end{enumerate}
+
+Bind acknowledgments and state transitions to chain, contract, job ID,
+role, nonce, and assignment generation. Bind the alpha asset's subnet ID
+and amount in native units as well. Authenticate the association
+between a Bittensor hotkey and its settlement identity. A hash or
+truncated address is not an authorization method. Enforce exactly one
+terminal settlement and explicit finality rules. A customer, miner, or
+keeper must submit timeout transactions; deadlines do not execute
+themselves.
+
+Customers may deliver ciphertext through authenticated asynchronous
+endpoints and redundant encrypted storage. Small envelopes could instead
+travel through on-chain calldata or events, so miners can discover and
+complete jobs entirely through chain messaging. Payload-size, gas, and
+retention measurements must precede that choice. Storing ciphertext
+on-chain does not hide metadata or provide permanent secrecy after key
+compromise.
+
+\subsection{Payment without disclosing the
+job}\label{payment-without-disclosing-the-job}
+
+A customer can consume a useful result and refuse acknowledgment. A
+miner can claim delivery of useless or undecryptable bytes. Public
+commitments alone do not distinguish those cases. Validators who cannot
+read the job also cannot adjudicate its meaning or writing quality.
+
+For the first private-job pilot, use customer acknowledgment for payment
+and a fixed, bounded refund timeout for unacknowledged jobs. Publish
+that policy in the offer before acceptance. This assigns nonpayment risk
+to the miner, including when a customer has already consumed a valid
+result. Cap pilot job values and record the loss rate. It is an explicit
+service tradeoff, not trustless fair exchange. Public protocol evidence
+can resolve duplicate or late transactions; it cannot resolve a secret
+editorial disagreement.
+
+Benchmark reputation can help customers choose a service without
+exposing their own work. It does not prove any particular unknown-input
+prediction correct. The customer-directed inspection route in
+Section~\ref{customer-directed-evidence-disclosure} can support an agreed
+dispute policy. Its effect on payment must be
+fixed before job acceptance; a customer-selected opinion alone cannot
+redirect escrow. The initial pilot retains acknowledgment and bounded
+timeout refunds. Stronger private payment guarantees remain a launch
+research question.
+
+\subsection{Revenue and costs}\label{revenue-and-costs}
+
+Customer fees pay for the purchased service. Emissions reward
+performance on separate benchmark assignments. Customer volume does not
+directly increase emission rewards, because miners can transact with
+themselves. A fixed quote avoids charging for hidden, unverifiable
+internal token or search counts.
+
+Miners pay their own training, inference, private search, and required
+candidate Pangram submissions for benchmarks. The benchmark operator or
+participating validators fund source-baseline reports from an explicit
+round budget; those reports can be reused across competing miners under
+the same task/version. Validators also bear retrieval, hosting, and
+review costs. Subsidies, if used, must identify their funder and cap
+before assignments begin. This design assumes no free API-credit
+allocation or automatic on-chain reimbursement scheme.

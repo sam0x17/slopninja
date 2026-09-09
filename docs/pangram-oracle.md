@@ -87,21 +87,21 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
    window. Put source hashes and private text inside salted payload commitments;
    public unsalted hashes can expose guessable text.
 2. The miner commits its final revision before learning its assigned evaluators.
-   One final candidate per assignment limits paid search through validator APIs.
+   Miners may pay for additional candidate and report attempts before commitment;
+   one final candidate and its selected reports enter scoring.
 3. Select evaluators using a future randomness source whose availability and
-   resistance to manipulation are checked before deployment. Reserve a capped
-   allowance for any separately assigned fresh API measurements.
-4. The miner supplies the required public Pangram reports, preserving each
-   accepted task and result. Commit the candidate and report score projection
-   before the audit beacon becomes available. Resume known tasks after request
-   failures; never silently resubmit an uncertain paid request.
+   resistance to manipulation are checked before deployment.
+4. The miner supplies three distinct completed public Pangram reports per
+   mandated text. Commit the candidate, selected reports and report score
+   projection before the audit beacon becomes available. The committed set
+   cannot change afterward; disclosure of other private attempts is not required.
 5. Deliver committed content through recipient-specific authenticated encryption
    after assigning validators. They verify the payload commitment and retrieve
    the reports directly from Pangram, comparing exact text, public identity,
    version and time window.
-   Random overlap checks reuse the same reports. Fresh reproducibility checks
-   are a separate, capped paid activity. Public retrieval establishes the
-   provider's current record; offline cryptographic provenance remains absent.
+   Random overlap checks reuse the same reports. Fresh validator-paid inference
+   is not required. Public retrieval establishes the provider's current record;
+   offline cryptographic provenance remains absent.
 6. Publish commitments and appropriately aggregated results. Keep report IDs,
    exact text, salts and detailed evidence with authorized auditors. A challenge process
    needs a defined appeal path and retained evidence before final rewards.
@@ -140,47 +140,52 @@ and evaluation window. Preserve exact text bytes and bind assignment nonces
 outside the prose. After measurement, the evaluator commits its own complete
 response hash, task ID and score-payload hash inside a salted commitment before
 future randomness selects the audited records and independent auditors.
-Deliver openings and evidence encrypted to those recipients. Keep every accepted task,
-failure and unresolved request in the budget ledger.
+Deliver openings and evidence encrypted to those recipients. Keep every accepted
+task, failure and unresolved request for separately funded research in its
+budget ledger; this does not require miners to disclose their private
+pre-commitment attempts.
 
 Compare a versioned projection of reward-relevant fields, including successful
 completion, returned version and all three document fractions. Retain task IDs
 and timestamps for provenance, while excluding them from cross-task score
 equality. Auxiliary scores need their own declared comparison policy if used.
-Any tolerances must be justified on separate measurements and frozen before
-scoring; this small probe supplies none. An audit tolerance never changes the
-strict `fraction_ai + fraction_ai_assisted < 0.10` reward gate.
+Any cross-task agreement tolerance would need separate measurements; this small
+probe supplies none. Such research is optional and does not determine whether
+the committed reports pass. An agreement tolerance never changes the strict
+`fraction_ai + fraction_ai_assisted < 0.10` reward gate.
 
 A suggested absolute tolerance of `0.02` (two percentage points) remains an
 unvalidated candidate. For example, `9.5%` and `11%` differ by less than two
 points, but the `11%` observation still fails the strict reward threshold.
 Agreement and reward eligibility are separate decisions.
 
-A mismatch opens a bounded dispute. Distinguish wrong request bindings, changed
-versions, provider failures and same-version score disagreement. Retain the
-original evidence, use a capped reconciliation schedule with contemporary
-controls, and defer unresolved work under the published epoch policy. Numeric
-disagreement alone does not establish fraud. Authenticated evidence of the
-original response remains the stronger route to response provenance, with
-Pangram still trusted for its computation.
+A wrong text, report identity, required version or time-window binding opens a
+bounded dispute under the published policy. A different score from a fresh
+request does not invalidate an otherwise valid committed report or establish
+fraud. Preserve provider failures and changed or unavailable committed records
+for resolution; do not replace them with a favorable new request after
+commitment. Authenticated evidence of the original response remains the stronger
+route to response provenance, with Pangram still trusted for its computation.
 
-For `N` committed measurements, audit fraction `q`, and `r` fresh requests per
-selected measurement, reserve about `q * N * r` additional evaluations at the
-applicable text-length rate, plus capped reconciliation costs. These checks
-supplement the existing repeat budget. Agreement cannot prove an immutable
-model or independently reproduce the provider's proprietary computation.
+If a separate repeatability study samples `N` committed measurements at fraction
+`q` with `r` fresh requests each, budget about `q * N * r` additional evaluations
+at the applicable text-length rate. This is optional research, not a required
+validation expense. Agreement cannot prove an immutable model or independently
+reproduce the provider's proprietary computation.
 
 ## Who pays
 
 Miners pay for private experimentation and required public candidate reports.
 Validators retrieve existing reports without buying another inference under
-the behavior observed in our probe. The subnet funds challenge baselines and
-limited fresh reproducibility checks through a capped validation allowance.
+the behavior observed in our probe. The subnet funds challenge baselines through
+a capped validation allowance. Fresh reproducibility research needs separate
+authorization and funding; the initial scoring policy does not require it.
 Bootstrap that allowance from an explicit project budget; later fund it from service fees
 and a published operating allocation. These are proposed funding sources, not
 an automatic entitlement to a fraction of chain emissions.
 
-For those fresh paid measurements, validators purchase their own credits.
+For separately authorized research measurements, validators purchase their own
+credits.
 Reimburse scheduled work at a published rate and cap, using task records and
 independent overlap checks.
 Such reimbursement still relies on the initial measurement trust model. With
@@ -203,15 +208,15 @@ exactly 500 billable words per text and three observations per text:
 $36 * 0.8 = $28.80 at the listed bulk discount
 ```
 
-This excludes human review, proof computation and extra auditor calls. If each
-of three validators repeats that entire schedule independently, API cost triples.
-Authenticated reusable receipts could avoid that duplication; they would not
-remove any separately required fresh-repeat budget. Actual lengths, failed-call
-billing and the agreed repeat policy determine the final cost.
+This excludes human review, proof computation and optional research calls.
+Validators verify the committed reports through GETs rather than repeating the
+paid inference schedule. Actual lengths, failed-call billing and additional
+miner-paid attempts determine total spending.
 
 Enforce the allowance before dispatch. Prevent reimbursement of duplicate task
-IDs and require assignment-wide accounting, including failures. If the budget
-or provider is unavailable, defer or void affected work consistently; do not
+IDs and require assignment-wide accounting for funded requests, including failures.
+Private miner-paid attempts require no reimbursement ledger or disclosure. If
+the budget or provider is unavailable, defer or void affected work consistently; do not
 replace Pangram silently with a cheaper local detector. Publicly auditable
 treasury policy and independent signers reduce operational trust, but converting
 funds into a centralized provider's prepaid credits remains an external action.

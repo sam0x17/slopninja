@@ -1,0 +1,110 @@
+\section{Confidential customer
+inference}\label{confidential-customer-inference}
+
+\subsection{Assigned-miner encryption}\label{assigned-miner-encryption}
+
+For every customer job, the protocol gives input-decryption capability
+only to its assigned miner. The customer already possesses the input and
+may retain it. Validators, gateways, storage operators, other miners,
+and chain observers receive no input key or alternate recipient
+envelope. Models execute on the assigned miner's infrastructure;
+confidential jobs may not forward plaintext to an external model API,
+detector, or another miner.
+
+A miner advertises a separate X25519 encryption key in a hotkey-signed
+record binding the network, service, key ID, validity window, and job or
+offer scope. Signing and encryption keys have distinct roles. The
+customer verifies the miner identity and finalized key registration,
+reserves that miner's offer, and encrypts locally before sending any
+payload to the network. A gateway cannot select a substitute key after
+receiving plaintext.
+
+The proposed HPKE suite uses X25519 with HKDF-SHA256 for key
+encapsulation, HKDF-SHA256 for key derivation, and ChaCha20Poly1305
+for authenticated encryption. A customer signature authenticates
+the envelope and its job context; HPKE Base does not itself authenticate
+the sender. Bind the chain, subnet, contract, job ID, assignment
+generation, offer hash, recipient key ID, expiry, and ciphertext to the
+authenticated request. Check replay state and assignment validity before
+processing. These are application requirements around the HPKE
+primitive. RFC 9180~\cite{hpke}.
+
+The encrypted payload includes the source, reference works, style
+profile, brief, private metadata, and a commitment opening. Public
+commitments use a versioned, unambiguous encoding and a fresh secret
+32-byte salt. An illustrative commitment is
+\begin{equation}\label{eq:input-commitment}
+  C = \operatorname{SHA256}\bigl(
+  \mathrm{domain} \mathbin\Vert \mathrm{context} \mathbin\Vert
+  \mathrm{salt} \mathbin\Vert \mathrm{length} \mathbin\Vert
+  \mathrm{payload}\bigr).
+\end{equation}
+Plain text hashes, filenames, report URLs, and descriptive task titles
+stay inside the envelope. Padding limits exact length leakage; public
+size buckets, timing, prices, and counterparties remain observable.
+
+The result is encrypted to the customer's authenticated output key. The
+miner knows the result it generated, but supplies no result envelope to
+validators. The same rule covers probabilities, explanations, and change
+notes: detection results can reveal sensitive inputs too.
+
+\subsection{Assignment, recovery, and the privacy
+boundary}\label{assignment-recovery-and-the-privacy-boundary}
+
+Each assignment binds one miner and one encryption-key version. Rotation
+cannot silently redirect an existing request. A retry with another miner
+requires the customer to authorize a new assignment and encrypt a new
+request. The protocol does not escrow recovery keys or re-encrypt inputs
+for a fallback miner. If the customer is unavailable, a failed job
+expires under its settlement terms. Reassignment cannot erase a previous
+miner's knowledge of text it already read.
+
+Use short-lived, preferably job-scoped keys and an explicit retention
+policy. Ordinary recipient encryption does not establish that a miner
+deleted keys, plaintext, or logs. A compromised recipient key may expose
+recorded ciphertext. An assigned miner can copy plaintext after
+decrypting it; this design protects against unauthorized protocol
+recipients and observers, and assumes the chosen miner follows its
+data-handling terms. It does not prove secrecy against that authorized
+endpoint. Hardware attestation or computation over encrypted data would
+require a separately specified and evaluated design.
+
+There is no automatic exception for customer support, quality disputes,
+subnet spot checks, or Pangram verification. A customer may separately
+choose to disclose material to another party. In particular, the subnet
+must not advertise a public Pangram report as compatible with exclusive
+miner access.
+
+\subsection{Customer-directed evidence
+disclosure}\label{customer-directed-evidence-disclosure}
+
+A customer can ask a specific validator to inspect a job by creating a
+new evidence packet encrypted to that validator's authenticated key. The
+customer signs a disclosure context binding the job, selected validator
+and key version, purpose, scope, and validity window. The packet can
+contain source passages, the delivered result, the miner's signed
+response, and relevant commitment openings. The customer selects what to
+send. Neither the miner nor a gateway can activate this access on the
+customer's behalf.
+
+This grants the selected validator access to that packet, with no
+decryption capability for other jobs or undisclosed material. The
+validator must not forward it to other reviewers or providers without
+further customer direction. Expiry ends authorization for new
+processing; it cannot erase plaintext the recipient already obtained.
+Keep the packet, findings, and openings private; publish only any agreed
+decision or commitment needed by the protocol.
+
+The validator checks which supplied evidence opens the original
+commitments. A redacted excerpt does not open a commitment to a complete
+document. Full openings or a separately specified selective-disclosure
+commitment scheme are needed for stronger binding. Incomplete evidence
+can support a limited opinion, but cannot establish fidelity of the
+whole job.
+
+Inspection is advisory by default. A signed decision affects escrow only
+if the job's original terms gave that validator or selection policy
+authority and both parties accepted those terms. Choosing a reviewer
+does not itself change payment rights or extend deadlines. This route
+permits voluntary inspection while preserving the default assigned-miner
+input boundary.

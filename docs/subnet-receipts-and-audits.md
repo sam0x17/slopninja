@@ -10,6 +10,12 @@ selection and persistent replay accounting remain unimplemented.
 Start with licensed public sources, while keeping each
 new transformation private within the authorized evaluation group.
 
+This is the benchmark evidence flow. Under the [whitepaper PDF](../whitepaper/slopninja.pdf)
+([LaTeX source](../whitepaper/main.tex)),
+customer requests are encrypted only for the assigned miner and do not enter
+these audits. Customers can separately send evidence to one chosen validator;
+that requires a customer-directed packet with its own recipient and scope.
+
 1. Publish the protocol, opaque task IDs, deadlines, scoring rules and auditor
    roster. Before assignments, validators register separate X25519 encryption
    keys in records signed by their Bittensor hotkeys, binding network, hotkey,
@@ -69,10 +75,11 @@ new transformation private within the authorized evaluation group.
 
 Miners pay for private queries and every required report. Observed report GETs
 need no API key or new inference charge; validators fund hosting and review.
-The existing offline three-distinct-observation policy is unchanged. If retained
-for the subnet, require three distinct completed reports per mandated text;
-three reads of one report remain one observation. Receipts cannot reveal private
-retries or establish that a miner supplied its first paid result.
+The proposed subnet requires three distinct completed reports per mandated text;
+three reads of one report remain one observation. Miners may pay for additional
+attempts and select their reports before commitment. Scoring uses only the
+committed set; miners need not disclose all private attempts, and validators
+need not purchase fresh inference. A pass applies to those committed observations.
 
 The observed `web.pangram.com/api/history/<id>/` endpoint serves text and results
 without authentication. Encrypting its URL prevents disclosure through our

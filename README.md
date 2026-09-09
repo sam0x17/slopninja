@@ -7,6 +7,13 @@
 
 Planned domain: **slop.ninja**.
 
+Read the subnet **[whitepaper (PDF)](whitepaper/slopninja.pdf)**, with editable
+**[LaTeX source](whitepaper/main.tex)**.
+The draft defines private miner models, training data, three benchmark tasks,
+and paid asynchronous inference at market prices denominated in subnet alpha.
+Customer inputs are encrypted for the assigned
+miner; customers can separately share evidence with a specific validator.
+
 Research toward an adversarial Bittensor subnet for text revision: make writing easier to read while preserving its arguments, details, qualifications, and intended tone, with less than 10% AI-generated **plus AI-assisted** content on repeated detector checks.
 
 The local repository lives in `slop_ninja/`. CLI commands and artifact schemas

@@ -1,0 +1,97 @@
+\section{Pangram evidence and randomly assigned
+audits}\label{pangram-evidence-and-randomly-assigned-audits}
+
+Pangram's API provides asynchronous tasks, analyzed text, document
+fractions, version information, and optional public dashboard links. The
+returned text may differ through preprocessing, so validators must bind
+evidence to the analyzed bytes rather than a preview. The local reader
+currently requires exact equality; a normalization policy would need its
+own version and review.
+Pangram API~\cite{pangramapi}.
+
+Our synthetic probe obtained a publicly retrievable report containing
+the analyzed text and scores. An independent caller retrieved it without
+a new paid inference. The observed web endpoint is undocumented and
+needs an availability, retention, and usage agreement before production
+dependence. We have not established a provider signature, immutable
+model identity, or one unique canonical result per text.
+Recorded probe~\cite{reportprobe}.
+
+For an evasion benchmark, a miner commits its final candidate and
+required report IDs before audit selection. Assigned validators receive
+the source, candidate, report URLs, score projections, and commitment
+openings in separate encrypted envelopes. They retrieve the provider's
+record directly and compare the exact text, fractions, version, and time
+window. Report IDs and URLs remain out of public logs and chain
+payloads. Anyone who obtains a public URL may still retrieve its
+content; encrypting the locator protects our delivery path, not
+Pangram's hosting.
+
+Pangram states that it does not train Pangram 4 on customer API data.
+Private miner weights prevent direct downloading, but do not prevent
+independent black-box study through purchased outputs or leaked
+examples. The subnet must not assert otherwise. Provider verification
+and any reuse of provider labels also need suitable service terms.
+Pangram model card~\cite{pangramcard}.
+
+\subsection{Audit sequence}\label{audit-sequence}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Freeze the benchmark policy, authorized auditor roster, question-pool
+  root, and source-baseline evidence. Questions and answers stay
+  private; public roots use salted commitments.
+\item
+  Accept one final submission commitment per assignment. It binds
+  candidate text, reports, task identity, and the offered service
+  version. Finalize all eligible commitments before a predetermined
+  future drand round, with an explicit timing margin.
+\item
+  Verify the pinned beacon's chain, public key, scheme, round, and
+  signature. Derive a domain-separated seed from that beacon and the
+  frozen epoch/pool commitments. Use unbiased deterministic sampling to
+  select submissions, questions, and overlapping auditors.
+\item
+  Deliver the selected benchmark evidence and inclusion proofs only to
+  the assigned auditors. Each recipient gets a separately encrypted
+  envelope. Enforce authenticated key registration, expiry, replay
+  state, and delivery deadlines.
+\item
+  Auditors commit answers before seeing peers' answers. Deliver openings
+  and evidence privately to authorized reviewers. Resolve disagreement
+  under the declared benchmark review policy before final weights.
+\end{enumerate}
+
+The live policy must fix the sample size and auditor quorum. For pilot
+measurement, use three independently assigned auditors on each sampled
+task and retain all disagreements; stake identities alone do not
+establish operator independence. Question checks supplement
+whole-revision review rather than certifying every unexamined claim.
+
+If \(b\) of \(N\) committed items contain detectable defects
+and \(s\) items are sampled uniformly without replacement, the
+probability of sampling at least one defective item is
+\begin{equation}\label{eq:audit-coverage}
+  1-\frac{\binom{N-b}{s}}{\binom{N}{s}}.
+\end{equation}
+Actual detection is weaker when
+questions miss the defect or reviewers fail to recognize it. This makes
+audit coverage measurable without claiming that sampling proves full
+fidelity.
+
+Pin drand's schedule instead of assuming the chain's last stored pulse
+is the latest public pulse. A commitment finalized after a round becomes
+public cannot use that round as unknown future randomness. Predeclare
+wait or abort behavior for missed deadlines and unavailable beacons; do
+not select a favorable replacement round.
+drand specification~\cite{drandspec},
+on-chain randomness pitfalls~\cite{drandpitfalls}.
+
+Subtensor's timelocked commit-reveal protects validator weights from
+immediate copying. It is separate from audit selection and recipient
+encryption. Weight plaintext eventually becomes public; customer inputs
+must not be encrypted with that eventual-reveal mechanism. Use the
+supported SDK/runtime path rather than hard-coding a CRv4 schedule.
+Bittensor commit-reveal~\cite{commitreveal}.

@@ -1,0 +1,56 @@
+\Needspace{22\baselineskip}
+\section{Existing evidence and implementation
+status}\label{existing-evidence-and-implementation-status}
+
+The current Rust representation uses word occurrences and grammatical
+features from spaCy annotations. It scores complete sparse distributions
+and learns selected coordinate corrections. It does not require an LLM
+to enumerate or measure deterministic edit candidates. The initial
+detector/author models and editing rules provide experimental tools, not
+a demonstrated end-to-end product.
+
+\par\medskip\noindent
+\begin{tabularx}{\linewidth}{@{}LLL@{}}
+\toprule
+Experiment & Result & Scope \\
+\midrule
+Blog author retrieval & 56.30\% top-1 & 600 evaluation authors in six
+100-author galleries; 1,206 queries \\
+Global Voices transfer & 73.81\% combined; 77.98\% lexical-only &
+Fourteen provisionally qualified authors; 58 queries; topic/editorial
+confounds \\
+Compact document projection & 32.82\% Blog; 25.00\% Global Voices &
+Development-selected linear encoder; previously evaluated test
+corpora \\
+Remove unselected contributions from old scorer & 40.83\% Blog; 29.17\%
+Global Voices & Conditional diagnostic retaining old pooling and
+calibration \\
+\bottomrule
+\end{tabularx}
+\par\medskip
+
+The projection experiment shows why 3,557 learned coordinate weights
+must not be mistaken for a sufficient fixed input vocabulary. The full
+model also retains unselected word and grammar contributions. Neither
+author retrieval nor these feature ablations establish
+meaning-preserving editing or detector evasion. In a separate edit
+diagnostic, replacing \emph{may} with \emph{must} improved author
+proximity despite changing the claim. Independent preservation checks
+are therefore central to the design.
+Author projection study~\cite{projection},
+edit counterexamples~\cite{editcounterexamples}.
+
+Implemented components include Rust tools for corpus collection and
+evaluation, portable author scoring, offline challenge and submission
+checks, a public Pangram report reader, and an HPKE prototype that
+encrypts receipts for assigned validators. The receipt prototype relies on caller-supplied
+trusted assignments; it is not a customer-request protocol or deployed
+key registry.
+Receipt implementation~\cite{receipts}.
+
+The project does not yet demonstrate a reliable sub-10\% rewriting
+model, calibrated production-origin service, reviewed commercial
+training release, authenticated live benchmark ledger, customer escrow
+contract, or private serving endpoint. The results justify a measured
+pilot and constrain its design; they do not establish readiness for
+emissions or customer funds.
