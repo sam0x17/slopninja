@@ -1,8 +1,9 @@
 # Pangram benchmark, verification and API funding
 
 Design proposal, 2026-09-09. Pangram is the required external benchmark for
-slopninja. Competing subnet detectors provide additional adversarial pressure;
-they cannot replace the Pangram result or redefine a successful evasion.
+slopninja. Evasion must also target the strongest eligible independent subnet
+origin detector from the previous completed detection round. Neither result
+substitutes for the other.
 
 ## What we measure
 
@@ -19,6 +20,29 @@ version, exact submitted text, task IDs and complete results. Measure
 under the same round policy. Improvement before crossing the threshold is
 useful development feedback; it must not be reported as a successful sub-10%
 revision. Writing-improvement rewards remain based on the editorial brief.
+
+Pin the subnet opponent before the transformation round using held-out origin
+Brier performance and human false-positive qualification. Exclude self-scoring
+and use the best eligible independent opponent under the published fallback
+order; author-identification rank does not qualify an origin detector. Controls
+and probing monitor drift, but a service version does not attest private weights.
+Until a competitive incumbent qualifies, bootstrap rounds use a named reference
+detector and report their results separately.
+
+Keep Pangram's fraction `F` distinct from the subnet probability
+`H = p(model-only) + p(mixed)`. Use
+`D_P = min_r F_r(source) - max_r F_r(revision)` and
+`D_S = H(source) - H(revision)`. Joint evasion utility is the mean of
+`max(0, D_P)` and `max(0, D_S)` only when both raw differences are nonnegative;
+otherwise it is zero. Strict joint success also requires preservation,
+`max_r F_r(revision) < 0.10` and `H(revision) < tau_S`. Calibrate `tau_S` on
+development data and freeze it before scoring; it is not automatically 10%.
+Missing required subnet evidence cannot become a Pangram-only pass.
+
+Authorized retired revisions feed later detector training and disjoint private
+evaluation, retaining their recorded production histories. This benchmark flow
+never automatically forwards confidential customer inputs to Pangram or the
+subnet opponent.
 
 Pangram documents asynchronous task IDs and bulk item/result bindings. New
 requests should name a model explicitly. A selector or returned version is the
@@ -84,23 +108,31 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
 ## Initial measurement protocol
 
 1. Commit the challenge, model/score policy, candidate budget and evaluation
-   window. Put source hashes and private text inside salted payload commitments;
+   window, including the subnet opponent, its threshold, fallback policy and
+   source-baseline evidence.
+   Put source hashes and private text inside salted payload commitments;
    public unsalted hashes can expose guessable text.
-2. The miner commits its final revision before learning its assigned evaluators.
-   Miners may pay for additional candidate and report attempts before commitment;
-   one final candidate and its selected reports enter scoring.
-3. Select evaluators using a future randomness source whose availability and
-   resistance to manipulation are checked before deployment.
-4. The miner supplies three distinct completed public Pangram reports per
-   mandated text. Commit the candidate, selected reports and report score
-   projection before the audit beacon becomes available. The committed set
-   cannot change afterward; disclosure of other private attempts is not required.
+2. The miner commits its final revision, selected Pangram reports and score
+   projection before learning its assigned evaluators. Require three distinct
+   completed reports per mandated text. Miners may pay for additional candidate
+   and Pangram attempts before commitment; disclosure of other private attempts
+   is not required. The committed set cannot change afterward.
+3. After the candidate commitment, the benchmark coordinator obtains the required
+   signed candidate response from the pinned subnet origin service. Bind the
+   round, service identity and settings, request nonce, text commitment and full
+   origin-probability vector. Private search responses cannot replace it. Commit
+   this evidence before the predetermined audit beacon becomes available.
+4. Select evaluators using that future randomness source, whose availability and
+   resistance to manipulation are checked before deployment. Both candidate and
+   required subnet-response commitments must precede its release.
 5. Deliver committed content through recipient-specific authenticated encryption
    after assigning validators. They verify the payload commitment and retrieve
    the reports directly from Pangram, comparing exact text, public identity,
-   version and time window.
-   Random overlap checks reuse the same reports. Fresh validator-paid inference
-   is not required. Public retrieval establishes the provider's current record;
+   version and time window. They also verify the committed subnet responses'
+   signatures and bindings. Required subnet serving calls use the explicit round
+   budget. Pangram overlap checks reuse the existing reports through GETs without
+   another inference charge; fresh validator-paid Pangram inference is not
+   required. Public retrieval establishes the provider's current record;
    offline cryptographic provenance remains absent.
 6. Publish commitments and appropriately aggregated results. Keep report IDs,
    exact text, salts and detailed evidence with authorized auditors. A challenge process
@@ -176,7 +208,9 @@ reproduce the provider's proprietary computation.
 ## Who pays
 
 Miners pay for private experimentation and required public candidate reports.
-Validators retrieve existing reports without buying another inference under
+Required subnet-opponent benchmark calls use an explicit round budget; private
+search against detector services remains miner-funded.
+Validators retrieve existing Pangram reports without buying another inference under
 the behavior observed in our probe. The subnet funds challenge baselines through
 a capped validation allowance. Fresh reproducibility research needs separate
 authorization and funding; the initial scoring policy does not require it.

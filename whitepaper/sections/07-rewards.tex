@@ -42,6 +42,37 @@ human false-positive rates separately. Fix operating thresholds on
 development data. Unknown or weak production records cannot become hard
 labels merely because Pangram agrees with a miner.
 
+\subsection{The adversarial feedback loop}\label{adversarial-feedback-loop}
+
+Before each transformation round, select the strongest qualified AI-origin
+service from a completed detection round. Rank eligible services by
+held-out origin Brier performance, subject to the declared calibration
+and human false-positive requirements. Author-retrieval scores do not
+select this opponent. Freeze its identity, service version, threshold,
+request settings, and response policy before releasing transformation
+assignments. Bootstrap rounds use a named reference detector until a
+competitive incumbent qualifies and are reported separately.
+
+The selected service cannot score its own operator's transformation
+submissions for rewards. Such assignments use the highest-ranked
+eligible independent opponent under a rule fixed before the round.
+Retain the opponent identity with every score and compare miners on
+matched assignments. Declared independence, signed responses, blinded
+control requests, and consistency checks reduce conflicts; they cannot
+prove that undisclosed collusion or selective service behavior is absent.
+A private version label does not attest which weights ran. Unavailable
+or invalid opponent evidence follows the frozen failure policy and
+cannot turn into a Pangram-only joint pass.
+
+Transformation miners try to defeat this opponent and Pangram while
+passing independent preservation and style review. Authorized benchmark
+rewrites then become hard examples for later detection rounds, with
+their production labels retained. Split complete source families between
+released training material and private evaluation; release training
+examples only after retiring them from evaluation. Maintain hard human
+examples alongside generated rewrites. Neither immediate publication of
+test answers nor customer-text reuse is part of this feedback loop.
+
 \subsection{Preservation before revision
 rewards}\label{preservation-before-revision-rewards}
 
@@ -84,7 +115,7 @@ reports for each source \(x\) and candidate \(z\). Improvement using the
 least favorable pair among those submitted observations is:
 
 \begin{equation}\label{eq:evasion-improvement}
-  E(x,z)=\max\left(0,\min_r F_r(x)-\max_r F_r(z)\right).
+  \Delta_P(x,z)=\min_r F_r(x)-\max_r F_r(z).
 \end{equation}
 
 The strict target additionally requires
@@ -96,8 +127,29 @@ repeat policy for both sides; report sensitivity to provider variation.
 Miners may pay for additional search and report attempts before
 commitment. Scoring uses the committed reports, including variation in
 their provider results. The protocol does not require disclosure of
-every private attempt or a fresh validator-paid inference call. A
+every private attempt or a fresh validator-paid Pangram inference call. A
 reported pass applies to the committed observations.
+
+For the selected subnet detector, let
+\(H(t)=p(\text{model-only}\mid t)+p(\text{mixed}\mid t)\), using its
+required, authenticated response under the frozen policy. This is a
+document-origin probability, while Pangram's \(F_r\) is a content
+fraction. Define \(\Delta_S(x,z)=H(x)-H(z)\) and report the two detector
+improvements separately. The pilot joint evasion utility is
+\begin{equation}\label{eq:joint-evasion-utility}
+  E(x,z)=
+  \begin{cases}
+    \bigl(\Delta_P(x,z)+\Delta_S(x,z)\bigr)/2,
+      & \Delta_P(x,z)\geq0\ \text{and}\ \Delta_S(x,z)\geq0,\\
+    0, & \text{otherwise}.
+  \end{cases}
+\end{equation}
+The joint pass requires both \(\max_r F_r(z)<0.10\) and
+\(H(z)<\tau_S\), where \(\tau_S\) is calibrated on independent
+development data at the declared human false-positive operating point
+and frozen before the round. It is not automatically 0.10: the two
+detectors report different quantities. Neither detector's improvement
+compensates for regression against the other.
 
 Pilot transformation utilities are \(GA\), \(GE\), and
 \(G(A+E)/2\) for the three modes. Combined mode also requires no
@@ -107,8 +159,8 @@ unchanged without receiving an invented improvement bonus.
 
 For writing improvement, use positive blinded preference improvement
 over the fixed qualified editor baseline, subject to preservation and no
-regression against the original. Keep ties. Pangram contributes no term
-to this utility. The first tournament determines whether these proposed
+regression against the original. Keep ties. Neither AI detector contributes
+a term to this utility. The first tournament determines whether these proposed
 utilities order useful revisions above omissions, unsupported
 strengthening, irrelevant padding, and needless edits.
 

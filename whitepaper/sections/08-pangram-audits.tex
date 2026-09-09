@@ -1,4 +1,4 @@
-\section{Pangram evidence and randomly assigned
+\section{Detector evidence and randomly assigned
 audits}\label{pangram-evidence-and-randomly-assigned-audits}
 
 Pangram's API provides asynchronous tasks, analyzed text, document
@@ -34,6 +34,18 @@ examples. The subnet must not assert otherwise. Provider verification
 and any reuse of provider labels also need suitable service terms.
 Pangram model card~\cite{pangramcard}.
 
+For the selected subnet detector, retain signed responses binding the
+round, frozen service identity and settings, request nonce, text
+commitment, and full origin-probability vector. The benchmark coordinator
+obtains the required candidate response after the candidate commitment;
+private search results cannot replace it. Record that evidence before
+the audit beacon, then deliver its openings only to authorized auditors.
+They verify the signer and bindings and check the declared control and
+consistency policy. A signature establishes the service's response; it
+does not prove execution of particular secret weights. The protocol
+must validate this evidence path independently of Pangram's public-report
+reader. Customer requests never enter it automatically.
+
 \subsection{Audit sequence}\label{audit-sequence}
 
 \begin{enumerate}
@@ -41,13 +53,14 @@ Pangram model card~\cite{pangramcard}.
 \tightlist
 \item
   Freeze the benchmark policy, authorized auditor roster, question-pool
-  root, and source-baseline evidence. Questions and answers stay
+  root, selected subnet detector, and source-baseline evidence. Questions and answers stay
   private; public roots use salted commitments.
 \item
   Accept one final submission commitment per assignment. It binds
   candidate text, reports, task identity, and the offered service
   version. Finalize all eligible commitments before a predetermined
-  future drand round, with an explicit timing margin.
+  future drand round, with an explicit timing margin. Obtain and commit
+  the required subnet-detector response before that round as well.
 \item
   Verify the pinned beacon's chain, public key, scheme, round, and
   signature. Derive a domain-separated seed from that beacon and the

@@ -1,0 +1,119 @@
+\section{Related subnets, services, and research}\label{related-work}
+
+This representative survey covers direct task competitors and relevant
+evaluation and inference infrastructure. It uses project-maintained
+documentation and research publications checked on September 9, 2026.
+Subnet numbers below follow the projects' own documentation; this is
+not an independent audit of live chain state. Published service claims
+are distinguished from results measured by this project.
+
+\subsection{Bittensor precedents}\label{related-subnets}
+
+It's AI and BitMind's GAS supply the closest task and incentive
+precedents. It's AI documents human/AI text classification on SN32,
+with miners serving detection requests. Its FAQ says the team does not
+know which models its leading miners use. This provides a precedent for
+evaluating detection endpoints with undisclosed implementations. GAS
+documents an explicit competition between detection models and
+generators that try to fool them~\cite{itsai,itsaifaq,bitmindgas}.
+
+\par\medskip\noindent
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}LL@{}}
+\toprule
+Project & Documented approach & Relevance to slopninja \\
+\midrule
+It's AI (SN32) & Human/AI text detection, including sentence-level
+probabilities, through miner endpoints~\cite{itsai,itsaifaq} & Direct
+comparison for origin detection; compare calibration and generalization
+on the same independently labeled text \\
+BitMind GAS (SN34) & Image/video/audio detector submissions and
+image/video generator endpoints; generation rewards include fooling
+detectors~\cite{bitmindgas,gasgeneration} & Direct precedent for adversarial
+incentives; text revision adds source-preservation and requested-voice
+constraints \\
+Macrocosmos Finetuning (SN37) & Miners publish competition models on
+public Hugging Face repositories for validator evaluation~\cite{finetuning} & Precedent for
+rewarding model improvements through submitted weights; slopninja
+proposes private model serving \\
+Chutes (SN64) & Serverless model inference and metered service, with
+documented confidential-serving options~\cite{chutes,chutesprivacy} &
+Paid inference and private serving infrastructure; writing quality
+requires separate task evaluation \\
+Targon (SN4) & Managed compute and inference; confidential VMs with
+attestation-bound key release for proprietary
+workloads~\cite{targon,targonconfidential} & Hardware-based endpoint
+protection and private-model execution are established design topics \\
+\bottomrule
+\end{tabularx}
+\par\medskip
+
+These projects establish that detection competition, adversarial
+generation, language-model training rewards, and paid private inference
+already have Bittensor precedents. Their documented mechanisms evaluate
+different properties. For example, GAS requires submitted detector
+weights, whereas slopninja permits private detector services. Chutes
+documents confidential serving and request/response encryption, and
+Targon describes hardware attestation and key release.
+Those hardware assumptions differ from this paper's default trust in
+the assigned miner after decryption. A secure execution environment
+alone does not establish that a revision preserved an argument.
+
+\subsection{Existing writing services}\label{related-services}
+
+Pangram and GPTZero already offer human/model-origin classification,
+including mixed or assisted categories. Pangram is the required
+external opponent here; GPTZero is another useful comparison on
+rights-cleared benchmark material. Their output categories and scores
+must be mapped explicitly to the evaluation's documented production
+labels. Agreement among detectors does not establish an author's
+identity~\cite{pangramcard,gptzero}.
+
+Grammarly documents personal voice profiles and a feature for rewriting
+in the user's voice. Wordtune offers sentence and paragraph rewriting,
+formality changes, shortening, and expansion. QuillBot documents
+multiple paraphrasing modes, including custom and Humanizer modes, and
+warns that its Creative mode can alter meaning. These are direct
+comparators for author-directed revision and writing improvement;
+personalization and editorial controls are existing product
+capabilities~\cite{grammarlyvoice,wordtune,quillbot}.
+
+Undetectable AI explicitly markets humanization modes intended to
+bypass detectors. That documents an existing commercial objective;
+this survey does not independently establish its bypass or preservation
+performance~\cite{undetectable}. Comparing such services requires the
+same sources, briefs, retained outputs, and blinded preservation review
+used for subnet miners. A product's advertised detector score cannot
+substitute for that comparison. Hosted service comparisons use
+authorized benchmark text and do not create an exception to confidential
+customer delivery.
+
+\subsection{Research foundations and proposed contribution}\label{related-research}
+
+Gero et al. model style through controls over function-word frequencies
+and syntactic constructions while retaining content words. This is a
+direct antecedent for combining lexical and grammatical features.
+StyleRemix uses interpretable style axes and LoRA modules for authorship
+obfuscation, providing a relevant comparison for controllable
+rewriting~\cite{linguisticcontrols,styleremix}. Authorship obfuscation
+changes evidence available to an author classifier; matching a requested
+writer and preserving every required claim remain separate evaluation
+questions.
+
+The PAN/ELOQUENT 2024 task paired human/AI detection with generation and
+obfuscation intended to avoid it, offering a prior benchmark for an
+adversarial loop. DIPPER demonstrated paraphrase attacks on several
+then-current detectors and studied a retrieval-based defense. Those
+results motivate adaptive opponents and held-out evaluation; they do
+not establish performance against Pangram 4 or slopninja's future
+incumbents~\cite{pan2024,dipper}.
+
+The proposed contribution is a text-focused protocol connecting
+origin-detection competition to author-directed transformation, with
+independent preservation review and a separate writing-improvement
+reward. Transformation miners face both Pangram and the best eligible
+subnet detector; retired, authorized rewrites train and test later
+detectors. Miners retain their models and can sell jobs through an
+alpha-denominated market with explicit recipient encryption. This
+combination requires validation against the precedents above. The
+survey establishes neither uniqueness across all subnets nor superior
+performance by an implementation that has not yet been built.

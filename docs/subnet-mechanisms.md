@@ -23,11 +23,11 @@ and training records; the [paid inference proposal](paid-inference.md) adds
 customer jobs with on-chain settlement. Emissions reward observed performance,
 while customers pay separately for service. No weight publication is required.
 
-Pangram is the required external benchmark for origin detection and detector
-evasion. Compare detectors against documented production histories alongside
-Pangram, and measure evasion against Pangram itself. The [API verification and
-funding design](pangram-oracle.md) specifies that dependency and its remaining
-trust assumptions. Other detectors supply supplementary challenges.
+Evasion targets both Pangram and the strongest eligible independent subnet
+origin detector from the previous completed detection round. Compare detectors
+against documented production histories; neither detector supplies ground truth.
+The [API verification and funding design](pangram-oracle.md) specifies the
+external dependency and its remaining trust assumptions.
 
 ## Three tasks, two chain mechanisms
 
@@ -42,7 +42,7 @@ design, not a claim that three independent chain mechanisms are available.
 | Logical task | Miner produces | Main evaluation | Proposed chain mechanism |
 | --- | --- | --- | --- |
 | Detection | Author probabilities and separately evaluated origin probabilities | Known author and documented production history | 0 |
-| Transformation | A revision matching a requested author/style, optionally with detector evasion | Preservation, independent style assessment and Pangram measurement | 1, transformation score pool |
+| Transformation | A revision matching a requested author/style, optionally with detector evasion | Preservation, independent style assessment, Pangram and the prior-round subnet origin detector | 1, transformation score pool |
 | Writing improvement | A revision for a supplied audience and editorial brief | Preservation and blinded reader preference | 1, quality score pool |
 
 Keep independent score tables and fixed task allocations before combining
@@ -119,17 +119,34 @@ the source unchanged:
 - `A`: improvement in target-style fit, assessed by frozen independent models
   and blinded target-author or reader judgments. Use distractor authors and
   matched content to expose copying of subject matter as a substitute for voice.
-- `E`: the nonnegative reduction in Pangram's reported AI-plus-assisted fraction,
-  measured under the same declared repeat policy before and after revision.
-  Also report the strict sub-10% pass rate separately. Secondary detectors
-  cannot substitute for that required Pangram measurement.
+- `E`: joint improvement against Pangram and the pinned subnet origin detector,
+  retaining both raw score changes and both pass rates separately.
+
+For source `x` and revision `z`, define the two improvements as:
+
+```text
+D_P = min_r F_r(x) - max_r F_r(z)
+D_S = H(x) - H(z)
+E_P = max(0, D_P)
+E_S = max(0, D_S)
+E = (E_P + E_S) / 2 if D_P >= 0 and D_S >= 0; otherwise 0
+```
+
+`F` is Pangram's reported AI-plus-assisted fraction, using three distinct
+completed committed reports per text. `H = p(model-only) + p(mixed)` is the
+subnet detector's probability of either production class. These are different
+statistics. Strict joint success requires preservation, `max_r F_r(z) < 0.10`
+and `H(z) < tau_S`, where `tau_S` is calibrated on development data and frozen
+before the round. The subnet threshold is not automatically 10%. Miners may pay
+for extra Pangram attempts before commitment; only committed reports enter
+scoring, with no mandatory disclosure of other attempts.
 
 For a first simulation, use `G*A`, `G*E` or `G*(A+E)/2` for the declared mode,
 where `G` is the preservation/quality pass and each improvement is bounded in
 `[0,1]`. The combined mode also requires no regression on either requested axis.
 These are proposed rewards to test against human rankings, not validated
 measures of usefulness. Graded development improvement is distinct from meeting
-the final sub-10% requirement. Already suitable text can remain unchanged
+the strict joint target. Already suitable text can remain unchanged
 without a fabricated improvement bonus.
 
 Our neural author score is an auxiliary measurement here. It cannot be the
@@ -182,19 +199,35 @@ flowchart LR
     V --> Q
 ```
 
-Use previous-round service versions in a crossed evaluation schedule. Freeze
-offers and detector eligibility before releasing private challenges; a private
-service's claimed model version is not execution attestation. Qualify
-detectors on independent human/model data first, and retain Pangram as the
-required external benchmark so colluding miners cannot define the whole
-opposition. Sample supplementary opponents independently of the submitting miner, cap each
-opponent's influence and keep self-play results outside its own reward.
-These controls reduce gaming opportunities; they do not prove collusion absent.
+Pin the strongest eligible origin service from the previous completed detection
+round before releasing transformation challenges. Rank and qualify it using
+held-out origin Brier performance and the declared human false-positive limit;
+author-identification rank is no substitute. Exclude self-scoring and select the
+best eligible independent opponent under a predeclared fallback order. If none
+is available, retain that failure under the round policy rather than silently
+score Pangram alone. Keep the opponent fixed during the round.
+Until a competitive incumbent qualifies, use a named reference detector for
+bootstrap rounds and report those results separately.
 
-Successful quality-preserving revisions become hard examples for a later
-detection round with their original production labels. Keep some examples
-private for evaluation and release a disjoint training set later, where benchmark
-output terms permit it. Customer jobs need separate opt-in for such reuse. Do not use
+After the miner commits its candidate, the benchmark coordinator obtains the
+required signed subnet-detector response and commits that evidence before the
+audit beacon. Private search responses cannot replace it. The
+[measurement sequence](pangram-oracle.md#initial-measurement-protocol) specifies
+its bindings. Miners may select their Pangram reports before commitment;
+validators verify those existing reports through GETs without new Pangram
+inference charges. Required subnet serving calls retain their separate round
+budget.
+
+Use controls and probing to monitor service drift and task-dependent behavior.
+A private service's claimed version is not execution attestation; these checks
+cannot prove fixed weights or exclude collusion. Fund required subnet benchmark
+calls from an explicit round budget; miners pay for private search. Confidential
+customer jobs are not forwarded to this opponent or to Pangram.
+
+Retired, authorized quality-preserving revisions become hard examples for later
+detection rounds with their original production labels, even after a detector
+pass. Allocate disjoint source families to released training material and private
+evaluation. Customer jobs need separate opt-in for such reuse. Do not use
 the same examples for immediate public feedback and purportedly unseen tests.
 Maintain human examples and fixed baselines alongside the adversarial pool.
 

@@ -1,6 +1,6 @@
 # Whitepaper build
 
-The authoritative source is [main.tex](main.tex), with twelve editable files
+The authoritative source is [main.tex](main.tex), with editable LaTeX files
 in [sections/](sections/), a bibliography in [references.bib](references.bib),
 and a vector figure in [figures/](figures/).
 Edit those LaTeX sources directly, then run from the repository root:

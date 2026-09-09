@@ -37,8 +37,10 @@ evasion}\label{author-transformation-and-detector-evasion}
 
 Inputs are the source, independent target-author samples, requested
 style changes, and a preservation brief. The task declares author
-matching, detector evasion, or both. The miner returns exact revised
-text or an abstention.
+matching, evasion against both Pangram and the selected subnet AI-origin
+detector, or both objectives. The miner returns exact revised text or an
+abstention. Opponent selection and scoring are fixed by the benchmark,
+independently of the submitting miner.
 
 The proposed starter is an 8B decoder, initially
 Qwen3-8B~\cite{qwen}, with a style

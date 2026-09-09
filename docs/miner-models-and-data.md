@@ -122,10 +122,32 @@ small candidates and explicit checks; an LLM can propose broader changes.
 
 The author distance helps choose candidates but cannot approve them. Our modal
 experiments already showed that changing a claim can improve author proximity.
-Use independent preservation checks before ranking style and Pangram outcomes
-on authorized benchmark tasks. Confidential customer jobs use local checks and
-the customer's review, with no automatic submission to Pangram or external
-judges. A customer can separately provide evidence to a chosen validator.
+Use independent preservation checks before ranking style and detector outcomes
+on authorized benchmark tasks. Evasion targets both Pangram and the strongest
+eligible independent subnet origin service from the previous completed round,
+pinned before the transformation round. Select it by held-out origin Brier
+performance subject to a human false-positive limit, with self-scoring excluded
+and a predeclared fallback; author-identification rank is not a substitute.
+Controls and probing monitor drift, without attesting the service's private
+weights. Until a competitive incumbent qualifies, use a named reference detector
+for bootstrap rounds and report those results separately.
+
+Keep Pangram's AI-plus-assisted fraction and the subnet detector's
+`H = p(model-only) + p(mixed)` separate. Joint evasion utility averages their
+positive improvements only when neither raw axis regresses. Strict joint success
+requires Pangram below 10% under the committed repeat policy and `H` below its
+own development-calibrated, frozen threshold, plus preservation. The
+[mechanism specification](subnet-mechanisms.md#2-author-transformation-and-detector-evasion)
+defines the exact aggregation. Required subnet benchmark calls have an explicit
+round budget; private search is miner-funded. The coordinator obtains the required
+signed subnet candidate response after candidate commitment and commits it before
+the audit beacon; private search responses cannot replace it. Selected Pangram
+reports may come from miner-paid precommitment attempts and are checked through
+GETs without new Pangram inference charges.
+
+Confidential customer jobs use local checks and the customer's review, with no
+automatic submission to Pangram, the subnet opponent or external judges. A
+customer can separately provide evidence to a chosen validator.
 Rhetorical strength and accessibility are requested controls, with examples
 and ratings in training, rather than assumed directions in the author space.
 
@@ -206,7 +228,10 @@ edits remain distinct in sampling and reporting.
 For adversarial training on authorized benchmark material, preserve failed
 edits, unchanged controls and good human writing alongside successful revisions.
 Retire evaluation material before releasing it for training, and only release
-samples with permission. Sharing customer outputs cannot be an entry condition
+samples with permission. Route authorized retired revisions into later detector
+training and disjoint private evaluation source families, retaining their actual
+production labels regardless of detector scores. This feedback connects the
+detection and transformation competitions. Sharing customer outputs cannot be an entry condition
 or required training contribution.
 Commissioned benchmark output terms should explicitly permit later use by
 detector miners, while the public leaderboard discloses only aggregates.
