@@ -317,5 +317,9 @@ from the remaining trust in Pangram and human quality judgments.
 An initial [repeatability probe](docs/pangram-repeatability.md) found matching
 document fractions but different window scores across three fresh submissions
 of identical text. Exact numeric determinism cannot be assumed for audits.
+The [public-result reader](docs/pangram-public-results.md) checks an existing
+Pangram report without buying another inference. The
+[receipt and audit proposal](docs/subnet-receipts-and-audits.md) uses public
+reports, future drand sampling and separate validator weight commit-reveal.
 
 `slop_ninja/` is an independent local Git repo ignored by its parent `fix-slop` repo. Corpora, API responses, and derived databases stay in ignored `data/`; reusable manifests, code, and reports are tracked. Preface copies, derived experiments and the report containing source excerpts remain local and ignored.

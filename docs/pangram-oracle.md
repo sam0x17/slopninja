@@ -40,17 +40,32 @@ protects a caller's session, but a copied JSON file, hash or validator signature
 does not let another participant verify that Pangram produced the result.
 [API documentation](https://docs.pangram.com/api-reference/introduction).
 
-Prefer provider-signed receipts if Pangram offers them. A receipt should bind
+The first supported API feature to use is `public_dashboard_link: true`.
+Our [public-result probe](pangram-public-results.md) retrieved the resulting
+report and its complete analyzed text, fractions, version and timestamp without
+credentials. Validators can fetch that stored observation without purchasing
+another inference. The public web JSON endpoint remains an undocumented
+implementation detail; obtain stable integration terms before deployment.
+The report has no verified signature or immutability guarantee, and its version
+does not identify immutable weights. Deliver the report locator and text in
+an encrypted envelope addressed only to assigned validators; publish a salted
+commitment before assignment. Anyone obtaining the decrypted URL can still
+read the hosted report, so this does not create provider-side access controls.
+
+Prefer provider-signed receipts if Pangram offers them. A signed receipt should bind
 the request body hash, model selector, task ID, response hash, returned version,
 time and billable units. Verification would then be cheap for every validator,
 while the subnet would still trust Pangram as the external benchmark provider.
 
-The alternative to investigate is authenticated TLS transcripts. TLSNotary is
+Another possible route is authenticated TLS transcripts. TLSNotary is
 implemented in Rust and supports proving server responses while hiding secrets
 such as API keys. Its documented notarized mode requires trust in the notary;
 multiple independent notaries can reduce collusion risk. It currently documents
-TLS 1.2 support. We have not implemented or measured a Pangram proof, so neither
-full protocol compatibility nor proof cost is established by this design.
+TLS 1.2 support. An ignored local-notary prototype proved a GET of Pangram's
+models list and produced a 5,513-byte presentation. This checks one transport
+exchange, with important disclosure and trust limits described in the
+[probe report](pangram-public-results.md#tls-fallback-probe). A complete
+submission/result proof and independent-notary costs remain unmeasured.
 [TLSNotary protocol and assumptions](https://tlsnotary.org/docs/intro/).
 
 A local connection check on 2026-09-09 negotiated TLS 1.2 with a verified
@@ -68,24 +83,27 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
 
 ## Initial measurement protocol
 
-1. Commit the challenge, source hash, model/score policy, candidate budget and
-   evaluation window. Keep private text with authorized evaluators; a public
-   commitment need not disclose the source.
+1. Commit the challenge, model/score policy, candidate budget and evaluation
+   window. Put source hashes and private text inside salted payload commitments;
+   public unsalted hashes can expose guessable text.
 2. The miner commits its final revision before learning its assigned evaluators.
    One final candidate per assignment limits paid search through validator APIs.
 3. Select evaluators using a future randomness source whose availability and
-   resistance to manipulation are checked before deployment. Each evaluator
-   reserves a capped API allowance before submission.
-4. Evaluate the exact committed revision through Pangram, preserving every
-   accepted task, result, failure and unresolved request. Resume known tasks;
-   never treat an uncertain submission as permission for an unrecorded retry.
-5. Initially, use independently operated validators with their own API accounts,
-   signed measurement records and randomly assigned overlapping checks. This
-   relies on honest evaluators; it is not cryptographic response provenance.
-   Replace duplicated trust checks with verified receipts/transcripts only after
-   an end-to-end proof implementation has been demonstrated.
-6. Publish verifiable commitments, usage accounting and aggregate results.
-   Share exact protected text only with authorized auditors. A challenge process
+   resistance to manipulation are checked before deployment. Reserve a capped
+   allowance for any separately assigned fresh API measurements.
+4. The miner supplies the required public Pangram reports, preserving each
+   accepted task and result. Commit the candidate and report score projection
+   before the audit beacon becomes available. Resume known tasks after request
+   failures; never silently resubmit an uncertain paid request.
+5. Deliver committed content through recipient-specific authenticated encryption
+   after assigning validators. They verify the payload commitment and retrieve
+   the reports directly from Pangram, comparing exact text, public identity,
+   version and time window.
+   Random overlap checks reuse the same reports. Fresh reproducibility checks
+   are a separate, capped paid activity. Public retrieval establishes the
+   provider's current record; offline cryptographic provenance remains absent.
+6. Publish commitments and appropriately aggregated results. Keep report IDs,
+   exact text, salts and detailed evidence with authorized auditors. A challenge process
    needs a defined appeal path and retained evidence before final rewards.
 
 The existing offline contract requires three distinct observations for a passing
@@ -95,6 +113,10 @@ between calls is not by itself evidence of validator fraud; model variability,
 provider errors and version drift must remain distinguishable from a forged
 record. Assign consequences only for objectively provable protocol violations
 under a published rule, without assuming Bittensor supplies custom slashing.
+
+The [receipt and audit proposal](subnet-receipts-and-audits.md) specifies future
+drand selection and distinguishes it from Bittensor's weight commit-reveal.
+The current offline contract has not yet been adapted to public report IDs.
 
 ### Reproducibility spot checks
 
@@ -113,11 +135,12 @@ two checks separate:
   incurred a charge.
 
 Before each round, freeze the API endpoint, exact request-body bytes and their
-hash, explicit model selector, required returned version, comparison fields,
+private hash, explicit model selector, required returned version, comparison fields,
 and evaluation window. Preserve exact text bytes and bind assignment nonces
 outside the prose. After measurement, the evaluator commits its own complete
-response hash, task ID and score-payload hash before future randomness selects
-the audited records and independent auditors. Keep every accepted task,
+response hash, task ID and score-payload hash inside a salted commitment before
+future randomness selects the audited records and independent auditors.
+Deliver openings and evidence encrypted to those recipients. Keep every accepted task,
 failure and unresolved request in the budget ledger.
 
 Compare a versioned projection of reward-relevant fields, including successful
@@ -149,15 +172,17 @@ model or independently reproduce the provider's proprietary computation.
 
 ## Who pays
 
-Use separate development and scored-evaluation budgets. Miners pay for their
-private experimentation. The subnet funds the limited, randomly assigned
-benchmark measurements through a capped validation allowance. Bootstrap that
-allowance from an explicit project budget; later fund it from service fees
+Miners pay for private experimentation and required public candidate reports.
+Validators retrieve existing reports without buying another inference under
+the behavior observed in our probe. The subnet funds challenge baselines and
+limited fresh reproducibility checks through a capped validation allowance.
+Bootstrap that allowance from an explicit project budget; later fund it from service fees
 and a published operating allocation. These are proposed funding sources, not
 an automatic entitlement to a fraction of chain emissions.
 
-Initially, validators purchase their own credits. Reimburse scheduled work at a
-published rate and cap, using task receipts and independent overlap checks.
+For those fresh paid measurements, validators purchase their own credits.
+Reimburse scheduled work at a published rate and cap, using task records and
+independent overlap checks.
 Such reimbursement still relies on the initial measurement trust model. With
 provider receipts or validated transcript proofs, reimbursement can depend on
 publicly verifiable work instead. A miner-supplied invoice or claimed query count
@@ -193,9 +218,9 @@ funds into a centralized provider's prepaid credits remains an external action.
 
 ## Next implementation decision
 
-Test the API-proof route on a synthetic, nonprivate request before choosing the
-live architecture. Establish request/result binding, replay resistance, key
-privacy, verifier assumptions and measured proof cost. In parallel, specify the
-project's initial spending cap and the evaluator reimbursement policy. This
-determines whether the first tournament can use reusable proofs or must begin
-with the explicitly weaker model of independent paid measurements.
+Adapt the offline contract to the public-report schema and an explicit repeat
+policy. Establish supported retrieval and retention terms, report replay
+accounting, fixed task/question commitments, and verified future-beacon
+selection before a live tournament. Public retrieval is now demonstrated;
+network incentives, automatic fidelity judgments and cryptographic offline
+proofs remain separate work.

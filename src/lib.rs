@@ -5,6 +5,7 @@ pub mod features;
 pub mod human_pilot;
 pub mod pilot;
 pub mod public_datasets;
+pub mod public_result;
 pub mod statistics;
 pub mod store;
 pub mod style;
