@@ -96,6 +96,57 @@ provider errors and version drift must remain distinguishable from a forged
 record. Assign consequences only for objectively provable protocol violations
 under a published rule, without assuming Bittensor supplies custom slashing.
 
+### Reproducibility spot checks
+
+The [three-request probe](pangram-repeatability.md) found equal document class
+fractions but different auxiliary scores for the same input, account, selector
+and returned version. Same-task GET rechecks matched the original result.
+Cross-account reproducibility remains unmeasured. A verifier must keep these
+two checks separate:
+
+- A GET of the original task retrieves that observation. Authenticated evidence
+  can establish what the provider returned for the bound task; repeated GETs
+  do not satisfy the distinct-observation requirement.
+- A fresh POST under an independently operated auditor's own account measures
+  agreement on the same request and adds another billable evaluation. It does
+  not authenticate the original evaluator's record or prove that evaluator
+  incurred a charge.
+
+Before each round, freeze the API endpoint, exact request-body bytes and their
+hash, explicit model selector, required returned version, comparison fields,
+and evaluation window. Preserve exact text bytes and bind assignment nonces
+outside the prose. After measurement, the evaluator commits its own complete
+response hash, task ID and score-payload hash before future randomness selects
+the audited records and independent auditors. Keep every accepted task,
+failure and unresolved request in the budget ledger.
+
+Compare a versioned projection of reward-relevant fields, including successful
+completion, returned version and all three document fractions. Retain task IDs
+and timestamps for provenance, while excluding them from cross-task score
+equality. Auxiliary scores need their own declared comparison policy if used.
+Any tolerances must be justified on separate measurements and frozen before
+scoring; this small probe supplies none. An audit tolerance never changes the
+strict `fraction_ai + fraction_ai_assisted < 0.10` reward gate.
+
+A suggested absolute tolerance of `0.02` (two percentage points) remains an
+unvalidated candidate. For example, `9.5%` and `11%` differ by less than two
+points, but the `11%` observation still fails the strict reward threshold.
+Agreement and reward eligibility are separate decisions.
+
+A mismatch opens a bounded dispute. Distinguish wrong request bindings, changed
+versions, provider failures and same-version score disagreement. Retain the
+original evidence, use a capped reconciliation schedule with contemporary
+controls, and defer unresolved work under the published epoch policy. Numeric
+disagreement alone does not establish fraud. Authenticated evidence of the
+original response remains the stronger route to response provenance, with
+Pangram still trusted for its computation.
+
+For `N` committed measurements, audit fraction `q`, and `r` fresh requests per
+selected measurement, reserve about `q * N * r` additional evaluations at the
+applicable text-length rate, plus capped reconciliation costs. These checks
+supplement the existing repeat budget. Agreement cannot prove an immutable
+model or independently reproduce the provider's proprietary computation.
+
 ## Who pays
 
 Use separate development and scored-evaluation budgets. Miners pay for their

@@ -314,5 +314,8 @@ review. It maps those tasks onto two proposed on-chain mechanisms.
 Pangram is the required external benchmark. The [API funding and verification
 design](docs/pangram-oracle.md) separates the cost of independent measurement
 from the remaining trust in Pangram and human quality judgments.
+An initial [repeatability probe](docs/pangram-repeatability.md) found matching
+document fractions but different window scores across three fresh submissions
+of identical text. Exact numeric determinism cannot be assumed for audits.
 
 `slop_ninja/` is an independent local Git repo ignored by its parent `fix-slop` repo. Corpora, API responses, and derived databases stay in ignored `data/`; reusable manifests, code, and reports are tracked. Preface copies, derived experiments and the report containing source excerpts remain local and ignored.
