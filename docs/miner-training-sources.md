@@ -2,8 +2,9 @@
 
 Primary-source review, 2026-09-09. Start with Global Voices for attributed modern
 prose and PLOS for factual revision tasks. Build a consented writer/editing
-collection alongside them. No new corpus has been downloaded or cleared as a
-complete commercial training release by this review.
+collection alongside them. The first [local Global Voices screen](global-voices-transfer.md)
+now covers 168 articles from fourteen provisionally qualified accounts. No
+complete commercial training release has been cleared.
 
 ## Sources to qualify first
 
@@ -28,8 +29,9 @@ URLs, including 114 with at least six displayed posts and 86 with at least 12.
 It also listed 2,048 inactive profiles without post counts, for 2,256 distinct
 profiles overall. Three profile checks found translations, coauthored work and
 a generic guest account. These are account counts before eligibility filtering;
-no article pages or archive pagination were collected. The inactive profiles
-are a discovery pool, not a confirmed supply of 2,048 writers with enough text.
+at that stage, no article pages or archive pagination had been collected. The
+inactive profiles are a discovery pool, not a confirmed supply of 2,048 writers
+with enough text.
 
 PLOS allows commercial reuse under attribution terms. Check licenses in article
 XML and on individual blogs, excluding noncommercial archives. Our existing
@@ -39,13 +41,15 @@ supply content constraints; they do not identify a single person's writing style
 [Article policy](https://journals.plos.org/plosone/s/licenses-and-copyright),
 [blog policy and exceptions](https://plos.org/blogs/about/).
 
-The first Global Voices acquisition should count candidates before collecting
-a large corpus. Select individual writers with at least 12 eligible whole
-articles across three dates, then report exclusions for translation, insufficient
-original prose, duplicate republication, quotations and ambiguous authorship.
-Retain raw text privately for reproducibility, but derive author features only
-from documented attributable spans. Do not silently join separated spans into
-new sentences. Keep the same article family and its translations in one split.
+The first bounded acquisition selected twenty accounts before extraction or
+scoring; fourteen supplied twelve provisionally eligible articles across at
+least four dates. It recorded 840 account–article observations and 820 distinct
+works, retaining 456 articles before taking the fixed sample. The
+[qualification report](global-voices-transfer.md) records translation/byline,
+origin-notice, length and duplicate exclusions. Article-level rights and
+production-history review remains outstanding. Retain raw text privately for
+reproducibility and keep the same article family and its translations in one
+split; do not silently join separated spans into new sentences.
 
 Sampling across regions and subjects reduces obvious topic confounding, but
 does not remove it. Include same-author/different-topic and different-author/

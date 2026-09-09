@@ -67,6 +67,12 @@ verified against every Python ranking on its earlier three test galleries.
 The improved 300-author model also has [portable Rust inference](docs/scale-coordinate-inference.md):
 all 361,800 candidate scores replayed within 5.69e-14, with every ranking and
 tie group identical to Python.
+The first [Global Voices transfer test](docs/global-voices-transfer.md) evaluates
+the same frozen models on 168 articles from fourteen provisionally attributed
+writers. Combined accuracy is 73.81%, versus 77.98% for complete lexical families
+and 39.88% for grammar alone. Every query was scored. This small gallery has
+topic and editorial confounds; the result does not support transferring the
+learned grammar weights unchanged or labeling these articles human-only.
 The [complete-family ablation](docs/full-family-ablation.md) clarifies grammar's
 role: removing all grammar contributions lowers accuracy from 56.30% to
 53.91%. The earlier reset experiments retained those contributions. A

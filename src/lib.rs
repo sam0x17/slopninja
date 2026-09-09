@@ -2,6 +2,7 @@ pub mod collection;
 pub mod evaluation;
 pub mod experiments;
 pub mod features;
+pub mod global_voices;
 pub mod hotkey_signature;
 pub mod human_pilot;
 pub mod pilot;

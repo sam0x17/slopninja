@@ -47,6 +47,12 @@ and then a text encoder with separate author and origin heads. All are proposed
 fits; our existing Blog Corpus result is a local research baseline and is not
 evidence for these new models or commercial data.
 
+Compare word-only, grammar-only and combined scoring in each held-out register.
+In the [first Global Voices transfer test](global-voices-transfer.md), retaining
+the frozen grammar contributions reduced accuracy, reversing their benefit on
+Blog data. Select a starter model across sources rather than from pooled
+accuracy on a single corpus.
+
 Train the author branch on same-author and different-author pairs, with hard
 negatives sharing topic and genre. Use independent works for reference and
 query. At inference, form each gallery author's prototype from their references
