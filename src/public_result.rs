@@ -1,7 +1,7 @@
 //! Read a Pangram public report without an account or a new inference request.
 //! This experimental web endpoint is distinct from the documented task API.
 
-use anyhow::{Context, Result, ensure};
+use anyhow::{Context, Result, anyhow, ensure};
 use chrono::{DateTime, Utc};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -38,14 +38,18 @@ pub fn fetch(id: &str) -> Result<Vec<u8>> {
     let response = client
         .get(url)
         .header("Accept", "application/json")
-        .send()?;
+        .send()
+        .map_err(|_| anyhow!("Pangram public report transport failed"))?;
     ensure!(
         response.status().as_u16() == 200,
         "Public report unavailable: HTTP {}",
         response.status()
     );
     let mut bytes = Vec::new();
-    response.take(MAX_BYTES + 1).read_to_end(&mut bytes)?;
+    response
+        .take(MAX_BYTES + 1)
+        .read_to_end(&mut bytes)
+        .map_err(|_| anyhow!("Pangram public report body could not be read"))?;
     ensure!(
         bytes.len() as u64 <= MAX_BYTES,
         "Public report exceeds size limit"

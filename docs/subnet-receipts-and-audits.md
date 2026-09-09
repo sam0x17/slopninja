@@ -3,8 +3,11 @@
 Proposal, 2026-09-09. Miners keep revisions and provider report links encrypted
 for assigned validators. Public records contain salted commitments and encrypted
 deliveries. The [report reader](../examples/verify_public_pangram.rs) checks a
-retrieved provider response; encryption, assignment and on-chain commitments
-are not implemented. Start with licensed public sources, while keeping each
+retrieved provider response. A [Rust encryption prototype](receipt-envelope.md)
+now signs recipient keys, encrypts exact payloads and verifies commitment
+openings against caller-supplied assignments. Chain registration, beacon
+selection and persistent replay accounting remain unimplemented.
+Start with licensed public sources, while keeping each
 new transformation private within the authorized evaluation group.
 
 1. Publish the protocol, opaque task IDs, deadlines, scoring rules and auditor
@@ -31,7 +34,7 @@ new transformation private within the authorized evaluation group.
    inclusion proofs only to assigned auditors, through encrypted channels.
 
 4. After assignment, encrypt the complete payload and salt separately to each
-   assigned validator's authenticated key. Proposed suite: HPKE Base mode with
+   assigned validator's authenticated key. The local prototype uses HPKE Base with
    DHKEM(X25519, HKDF-SHA256), HKDF-SHA256 and ChaCha20Poly1305, plus a
    miner-hotkey signature over the envelope. That signature supplies sender
    authentication absent from Base mode. Use fresh encapsulation randomness

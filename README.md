@@ -307,6 +307,11 @@ Pangram commands use `PANGRAM_API_KEY` and make paid requests. Inputs, model ver
 
 The Rust subnet contract checks challenge/submission bindings and computes an offline reference reward after quality and detector gates. It does not establish network authentication, replay protection, cumulative budget enforcement, or an economical automated quality judge. [The subnet design](docs/subnet.md) describes those requirements and the route to a Rust validator implementation.
 
+The [private receipt prototype](docs/receipt-envelope.md) encrypts exact payloads
+to signed validator keys, checks salted commitments, and can retrieve an existing
+Pangram report after decryption. Chain assignments and replay accounting remain
+outside the prototype.
+
 The [three-task mechanism proposal](docs/subnet-mechanisms.md) defines separate
 competitions for author/origin detection, author transformation and writing
 improvement, with reusable word/grammar representations and independent quality
