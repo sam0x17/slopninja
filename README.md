@@ -301,4 +301,13 @@ target/release/unslop attach-scores --corpus codex-rewrites-v1 data/matched-pilo
 Pangram commands use `PANGRAM_API_KEY` and make paid requests. Inputs, model versions, task IDs, and complete results are retained. Request budgets and cached records are checked before submission; uncertain submissions cannot silently be submitted again. Use `--section` for fragment experiments. A passing full-document study requires at least three repeats and a human audit bound to exact source/candidate hashes. See [the audit template](examples/quality-audit.json) and [evaluation protocol](docs/evaluation.md).
 
 The Rust subnet contract checks challenge/submission bindings and computes an offline reference reward after quality and detector gates. It does not establish network authentication, replay protection, cumulative budget enforcement, or an economical automated quality judge. [The subnet design](docs/subnet.md) describes those requirements and the route to a Rust validator implementation.
+
+The [three-task mechanism proposal](docs/subnet-mechanisms.md) defines separate
+competitions for author/origin detection, author transformation and writing
+improvement, with reusable word/grammar representations and independent quality
+review. It maps those tasks onto two proposed on-chain mechanisms.
+Pangram is the required external benchmark. The [API funding and verification
+design](docs/pangram-oracle.md) separates the cost of independent measurement
+from the remaining trust in Pangram and human quality judgments.
+
 `slop_ninja/` is an independent local Git repo ignored by its parent `fix-slop` repo. Corpora, API responses, and derived databases stay in ignored `data/`; reusable manifests, code, and reports are tracked. Preface copies, derived experiments and the report containing source excerpts remain local and ignored.

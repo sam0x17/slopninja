@@ -1,5 +1,10 @@
 # Adversarial text-revision subnet
 
+The [three-task mechanism proposal](subnet-mechanisms.md) extends this direction
+to author/origin detection, author transformation and writing improvement. It
+describes a future competition; the contract below remains the implemented
+offline revision benchmark.
+
 The target service is a miner that revises prose under a preservation contract: retain the argument, details, and intended tone; improve readability; and repeatedly score below 10% AI plus assisted text. Competing miners may use word and grammar statistics, rules, prompted models, trained models, or combinations. We can compare all of them against the same frozen challenges and validator rules.
 
 [src/subnet.rs](../src/subnet.rs) implements the first **offline reference contract in Rust**. It validates challenge/submission bindings and calculates a binary benchmark reward from recorded detector observations and a human quality audit. There is no network server, wallet, registration, signing, or weight submission in this module. Automated semantic preservation is not established.
