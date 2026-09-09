@@ -17,7 +17,7 @@ models or buy another service, subject to its advertised customer terms.
 
 | Task | Private starter model | Inputs | Outputs |
 | --- | --- | --- | --- |
-| Author and origin detection | Word/grammar metric baseline; compare a small projection network and a 149M text encoder | Query, optional reference gallery, versioned origin-label definition | Author probabilities, origin probabilities, calibrated abstention |
+| Author and origin detection | Full sparse word/grammar metric baseline; compare a 149M text encoder with author and origin heads | Query, optional reference gallery, versioned origin-label definition | Author probabilities, origin probabilities, calibrated abstention |
 | Author transformation and detector evasion | 8B decoder with a style adapter, deterministic edit proposals and candidate selection | Source, target writing samples, style changes, preservation brief, evasion mode | Exact revision or abstention; private evidence and required detector reports |
 | Writing improvement | The same decoder base with a separate editorial adapter and preference scorer | Source, audience, purpose, tone, allowed edits and preservation brief | Exact revision or unchanged text, with private change notes |
 
@@ -40,12 +40,19 @@ revision. No GPU allocation or checkpoint download is part of this proposal.
 
 ### Detection and author profiles
 
-Keep the existing 3,557-coordinate word/grammar representation as the first
-ablation. Refit vocabulary, normalization and weights using the new training
-split. Compare its diagonal metric with a `3557 -> 256 -> 128` projection,
-and then a text encoder with separate author and origin heads. All are proposed
-fits; our existing Blog Corpus result is a local research baseline and is not
-evidence for these new models or commercial data.
+Keep the existing full word/grammar metric as the first reference. The first
+[document projection experiment](author-projection.md) tested `3557 -> 128` and
+`3557 -> 256 -> 128` models. Neither replaced that reference, and both transferred
+poorly to Global Voices. The reference learns 3,557 coordinate corrections while
+still scoring complete sparse word and grammar distributions. Removing only
+unselected contributions from its frozen scorer reduced Blog accuracy from
+56.30% to 40.83% and Global Voices accuracy from 73.81% to 29.17%. Preserve that
+wider feature coverage in the next learned model; the projection comparison
+also changed pooling, normalization and scoring, so it cannot isolate network
+architecture.
+Refit vocabulary, normalization and weights using permitted training data before
+a commercial starter release. The text encoder with separate author and origin
+heads remains a proposed fit; the Blog-trained models remain local research.
 
 Compare word-only, grammar-only and combined scoring in each held-out register.
 In the [first Global Voices transfer test](global-voices-transfer.md), retaining
@@ -182,7 +189,8 @@ reliably detect losses of meaning before fine-tuning a reward-driven editor.
 Use the writer pilot to price the larger collection.
 
 Then refit the Rust word/grammar baseline on permitted authors and compare the
-small projection. Train one 8B editing adapter only after approved pairs exist;
+next learned model while retaining unselected feature contributions. Train one
+8B editing adapter only after approved pairs exist;
 separate the two adapters when their requested behavior conflicts. Run paid-job
 settlement on local/test chain with synthetic jobs before connecting customer
 funds. The resulting release should include schemas, source/license manifests,

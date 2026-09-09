@@ -73,6 +73,14 @@ writers. Combined accuracy is 73.81%, versus 77.98% for complete lexical familie
 and 39.88% for grammar alone. Every query was scored. This small gallery has
 topic and editorial confounds; the result does not support transferring the
 learned grammar weights unchanged or labeling these articles human-only.
+The first [document projection experiment](docs/author-projection.md) then tested
+shared linear and two-layer encoders, using individual-document prototypes.
+The selected linear model scored 32.82% on the same Blog test authors and 25.00%
+on Global Voices. It improved its matching untrained control on Blog data but
+lost ground on Global Voices. A separate diagnostic found that removing
+unselected features from the old scorer alone reduced accuracy to 40.83% and
+29.17%, respectively. Keep the full metric as the reference and preserve those
+wider word and grammar distributions in the next learned model.
 The [complete-family ablation](docs/full-family-ablation.md) clarifies grammar's
 role: removing all grammar contributions lowers accuracy from 56.30% to
 53.91%. The earlier reset experiments retained those contributions. A
