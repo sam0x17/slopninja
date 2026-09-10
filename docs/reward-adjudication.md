@@ -111,7 +111,9 @@ Greater stylistic force cannot strengthen factual certainty or obligations.
 The committed brief also identifies protected information and readability
 requirements. The rubric and evidence
 include the full source and candidate; a checklist does not authorize ignoring
-other material claims or tonal intent. Each final semantic ballot is `PASS`,
+other material claims. Tone review applies the frozen rubric and its source-tone
+defaults throughout the candidate; reviewers cannot add new stylistic preferences
+after generation. Each final semantic ballot is `PASS`,
 `FAIL` or `ABSTAIN`.
 
 Before task issue, the brief identifies required cleanup of unwanted filler,
@@ -128,6 +130,9 @@ Cleanup must retain the protected information.
 Insufficient evidence or unresolved interpretation, including uncertainty about
 the target tonal intent, requires `ABSTAIN`. This field always requires a
 semantic vote, including when the request contains no separate tone instruction.
+An unrequested tone reversal can defeat the writing brief while retaining literal
+claims, so we require this vote and measure its added review cost and void
+exposure in the pilot.
 A failure ballot names rubric items and source/candidate byte
 spans where applicable; omissions can identify source spans and surrounding
 candidate locations. Additional preference judgments, ties and praise remain
