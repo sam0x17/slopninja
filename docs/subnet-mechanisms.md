@@ -30,6 +30,13 @@ agreement nor a public peer identity supplies ground truth. The
 [API verification and funding design](pangram-oracle.md) specifies the
 external dependency and its remaining trust assumptions.
 
+The private-panel reward formula below remains a research candidate. Its
+connection to live monetary rewards is unresolved. The
+[settlement hypothesis](settlement-gameability.md) conserves complementary policy
+credits but finds a counterexample after simplified native normalization; that
+credit proposal is not adopted. The [funded-alpha option](alpha-match-reserve.md)
+awaits a funding decision and analysis of failure/refund incentives.
+
 ## Two tasks, two chain mechanisms
 
 Bittensor's current documentation caps a subnet at two on-chain mechanisms.
@@ -114,22 +121,31 @@ audience, allowed style changes and preservation requirements. It declares
 `author_style`, `detector_evasion` or `both`; these modes retain separate results.
 The output is exact revised text bound to the source and submitted model version.
 
-First assess preservation of claims, participants, quantities, qualifications,
-citations and argument relationships. Require readability and intended tone to
-meet the brief. A failed requirement earns zero transformation utility, however
-good the style or detector score. An unresolved review remains pending or
-unscored under the round policy; it cannot pass by default.
+The [adjudication specification](reward-adjudication.md) defines the whole-revision
+preservation, readability and tone fields. A valid global failure certificate for
+any required field sets `G=0`; otherwise every required field needs a pass
+certificate for `G=1`. Empty tone constraints are satisfied deterministically.
+If no field has a failure certificate and a required pass certificate is missing,
+`G` remains unset and the matched source/brief/mode comparison is void for the
+entire B batch. Conflicting certificates halt settlement.
+None of these outcomes erases independently attributable service failures.
 
 Among revisions that pass, measure two independent improvements over leaving
 the source unchanged:
 
-- `V`: improvement in target-style fit, assessed by frozen independent models
-  and blinded target-author or reader judgments. Use distractor authors and
-  matched content to expose copying of subject matter as a substitute for voice.
+- `V`: exact positive improvement in a public frozen author-distance rank,
+  divided by the source's remaining rank headroom. The development calibration
+  multiset, target references and evaluator are shared by source and candidate.
 - `E`: joint improvement against Pangram and the pinned subnet origin detector,
   retaining both raw score changes and both pass rates separately.
 
-For source `x` and revision `z`, define the two improvements as:
+For style tasks, [the exact rank rule](reward-adjudication.md#frozen-numerical-inputs)
+uses `Q=1,000,000`, half credit for calibration ties before flooring, and
+`V=max(0,q_z-q_x)/(Q-q_x)` when `q_x<Q`. A saturated source earns zero.
+Retain exact reduced rationals through aggregation. Evasion-only tasks record
+style as `not_requested`. Private miner scores never define this evaluator.
+
+For source `x` and revision `z`, the research evasion formula is:
 
 ```text
 D_P = min_r F_r(x) - max_r F_r(z)
@@ -160,8 +176,10 @@ guarantee. A strict pass describes the committed observations.
 For a first simulation, use `G*V`, `G*E` or `G*(V+E)/2` for the declared mode,
 where `G` is the preservation/quality pass and each improvement is bounded in
 `[0,1]`. The combined mode also requires no regression on either requested axis.
-These are proposed rewards to test against human rankings, not validated
-measures of usefulness. Graded development improvement is distinct from meeting
+These research utilities are not an approved live payout rule. A private panel
+can favor an allied B miner while answering on time; global certificates verify
+the declared evidence and judgments without proving private execution.
+Graded development improvement is distinct from meeting
 the strict joint target. Already suitable text can remain unchanged
 without a fabricated improvement bonus.
 
@@ -241,18 +259,23 @@ validators. Predictable assignments allow strategic abstention and may pair
 commonly owned UIDs. Hash verification establishes allocation and accounting,
 not owner independence, honest private execution or resistance to all Sybils.
 
-For each closed measured epoch, let `N` be valid assigned task obligations and
-`F` explicit declines or missing valid completion by their deadlines. Each
-obligation binds a UID and role: requester payload submission or provider answer
-to a valid delivered request. Eligibility
-requires `N > 0` and `10*F <= N`: more than 10% failures zeros earned A and B
+The [service-evidence protocol](service-evidence.md) records each activated
+obligation as certified success `S`, attributable failure `F`, unresolved `U`
+or platform void `V` (this accounting field is separate from style utility).
+Settled obligations are `N=S+F`. Each obligation binds a UID, interface and role:
+requester publication or provider answer after certified valid input. Invalid
+or unresolved input does not activate a provider; unused fallback reservations
+earn no credit. Eligibility requires `U=0`, `N>0` and `10*F<=N`:
+more than 10% failures zeros earned A and B
 emission credit, while exactly 10% passes this gate. Apply it in aggregate
 and separately to mandatory service on every committed interface and assigned
 role. Only actually assigned roles require their own gate. Paid or cheap
 successes cannot dilute failed free A/B obligations, and outgoing payloads
 cannot dilute provider failures. Zero traffic gives
-no automatic pass. Exclude unsolicited requests, duplicates, invalid payloads
-and impossible deadlines; count requester abandonment on its own obligation.
+no automatic pass. Exclude unsolicited requests, duplicates and impossible
+deadlines. Invalid input is a requester failure, never a provider failure;
+count requester abandonment on its own obligation. Publish `U` and platform
+void counts even though they are outside settled `N`.
 A successful fallback does not erase the preceding provider's failure.
 
 Each mandatory interface/role carries a recovery deficit, initially zero:
@@ -261,7 +284,8 @@ eligibility require zero deficit, the current epoch's gates and qualification.
 Only actual protocol-assigned probation work in that same class retires the
 deficit; it does not age out, and paid work or another class cannot dilute it.
 Updating once per epoch prevents banking earlier excess successes. `N=0` leaves
-the deficit unchanged. Key or service-version rotation within a registration
+the deficit unchanged. Unresolved and platform-void work cannot retire it.
+Key or service-version rotation within a registration
 does not reset it; new registrations require their own probation, without
 establishing that they have different owners.
 Dropping a capability or role cannot cancel an accrued deficit. Every
@@ -304,16 +328,23 @@ panel UIDs collude. That bound and the provisional panel/batch sizes need
 measurement. A earns quality on held-out labels and calibration, not harsher
 B scores. Signed responses do not attest which private model ran.
 
-Hash-rank reviewers by a separate domain, chain, subnet, shared comparison
-index, submission UID and eligible reviewer UID. The launch uses three distinct
-reviewers and fixed reserves, excluding exact miner UIDs in the comparison.
-Review every scored submission and all required checks, including the whole
-revision. Encrypted evidence goes only to assigned validators, who commit
-before peer openings and resolve disagreements by fixed block deadlines.
-Withhold detailed active-test feedback until retirement. This is predictable
-full review, with no custom drand scheduling, hidden checker or audit sample;
-native chain weight commit-reveal remains unchanged. Any later sampling policy
-needs a separate security and cost argument.
+Hash-rank three evidence preparers using the separate review domain and frozen
+assignment fields. They organize dossiers and disagreements but cannot finalize
+verdicts. Every frozen eligible validator receives authorized encrypted benchmark
+evidence. Each signer verifies the required evidence and semantic field itself.
+The proof-verified snapshot fixes integer effective weights and total `W` before
+task disclosure; agreeing signer weight must satisfy strict `3w>2W`. Missing,
+recused, abstaining and nonresponsive validators remain in `W`.
+
+The conditional assumption is dishonest weight strictly below `W/3` within that
+frozen eligible set, with sufficient honest participation to close. Honest
+signers do not authorize conflicting final verdicts. Certificates attest scoped
+judgments, without proving meaning preservation or truthful private execution.
+The [adjudication deadlines](reward-adjudication.md#fixed-pilot-deadlines) govern
+preparation, final ballots, private openings and closure. Withhold active-test
+feedback until retirement; native chain weight commit-reveal remains unchanged.
+The [two-ticket service pilot](service-evidence.md) tests transport and accounting;
+a full common-panel benchmark needs its own frozen matrix schedule and capacity.
 
 ## Combining rewards and handling failures
 
@@ -323,7 +354,8 @@ fixed task mixture. Never let additional cheap submissions increase a miner's
 share. Use the same assignments and resource budgets for competing baselines.
 Publish completion coverage alongside conditional quality measurements.
 
-Apply the aggregate and mandatory interface/role availability gates before
+In the research reward simulation, apply the aggregate and mandatory
+interface/role availability and zero-deficit gates before
 normalizing positive skill within each logical score pool. Combine A's separately
 scored author and origin subtasks under the fixed task mixture for mechanism
 0's weight vector. B's transformation scores supply mechanism 1's weight vector.
@@ -331,13 +363,23 @@ The pilot allocates 50% to each mechanism, so raw metric scale cannot decide
 the allocation.
 
 If nobody beats a task baseline, mark that pool unallocated in the offline
-simulation. Do not invent an on-chain escrow or assume an all-zero weight vector
-is valid. The live adapter needs an explicit chain-compatible failure policy.
-Verified miner timeouts and malformed submissions receive zero on their own
-assigned work; validator infrastructure failures void affected assignments
-consistently.
-Unresolved quality reviews remain visible and require resolution before final
-weights, or a predeclared whole-assignment exclusion policy.
+simulation. The [proposed live fallback](../whitepaper/sections/07-rewards.tex)
+directs its weight to a verified owner-associated hotkey whose miner incentive
+is withheld under the native burn/recycle rule. Pin its UID, registration
+generation, owner association and burn setting before submission; revalidate
+them for the payout cycle. The configuration must allow one nonzero weight
+and a full-weight destination. The latter cap is root-controlled, so owner
+configuration alone cannot establish it. Unmet conditions block this adapter's
+launch; neither zero weights nor a stale earned vector substitutes for the
+fallback. Burning can reduce future subnet emissions. Quantization, UID changes,
+native reveal timing and actual payout behavior require pinned-runtime tests.
+Application certificates specify intended weights; native consensus determines
+payouts. This fallback does not resolve the private-panel monetary formula.
+
+Verified miner failures receive zero on their assigned work. Platform incidents
+and unresolved quality comparisons follow the [service-evidence](service-evidence.md)
+and [adjudication](reward-adjudication.md) closure rules, retaining all missingness
+and independently attributable failures.
 
 The existing [Rust contract](../src/subnet.rs) binds a revision to a challenge
 and computes an offline detector/quality reward. It does not yet implement
@@ -365,8 +407,9 @@ edits from 32 to 44 of 60; this supplies no writing-quality or detector result.
 Build one small local tournament before another representation sweep. Start
 with 24 fresh tasks spanning A detection and B transformation, including already-good controls.
 Reuse existing scorers and revision contracts, and compare unchanged text, the
-current deterministic editor and a general editor on the same brief. Three hash-assigned reviewers
-should label fidelity and preference without seeing reward scores. Include
+current deterministic editor and a general editor on the same brief. Three
+hash-assigned preparers should organize the evidence for the global semantic
+certificates, with review blinded to reward scores. Include
 deliberate score exploits such as modal strengthening, omission and irrelevant
 padding. The decisive result is whether the proposed rewards rank useful
 revisions above those exploits at an affordable review cost.
@@ -377,5 +420,5 @@ does not supply permission to distribute it in a commercial subnet. Private
 correspondence and its derived profiles remain local.
 [Corpus source](https://u.cs.biu.ac.il/~koppel/BlogCorpus.htm).
 
-Launch thresholds, score-pool shares, review budget and the policy for failed
-rounds remain decisions for the pilot.
+Concrete evaluator artifacts, full benchmark capacity, native adapter behavior
+and adversarial funding remain launch requirements.

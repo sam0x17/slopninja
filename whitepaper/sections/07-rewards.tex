@@ -138,16 +138,17 @@ boundaries govern the schedule~\cite{tempo}. No heartbeat is required.
 Use authenticated outcomes of real assigned inference requests to
 measure availability.
 
-For miner \(u\) and measured epoch \(e\), let \(N_{u,e}\) be the number
-of valid assigned task obligations and \(F_{u,e}\) the number explicitly
-declined or lacking the required valid submission by their deadlines.
+For miner \(u\) and measured epoch \(e\), let \(N_{u,e}=S_{u,e}+F_{u,e}\)
+count settled successes and attributable failures under
+Section~\ref{service-evidence}. Retain unresolved obligations separately
+as \(U_{u,e}\); they block eligibility without inventing a failure.
 An obligation is either submitting a scheduled request or answering a
 valid delivered request; the ticket fixes the responsible UID and role.
 The emission-eligibility
 gate is
 \begin{equation}\label{eq:availability-gate}
  L_{u,e}=\begin{cases}
- 1,&N_{u,e}>0\ \text{and}\ 10F_{u,e}\leq N_{u,e},\\
+ 1,&U_{u,e}=0,\ N_{u,e}>0,\ 10F_{u,e}\leq N_{u,e},\\
  0,&\text{otherwise}.
  \end{cases}
 \end{equation}
@@ -176,11 +177,11 @@ peer; do not count that undelivered payload as the provider's failure.
 Bind the request's measured epoch when it
 is issued; every counted deadline must fall within that epoch's closed
 measurement window. Requests due later belong to a later window and
-cannot be marked late early. A valid on-time answer must have
-authenticated delivery evidence. A counterparty's accusation alone cannot establish a
-failure. Retain disputed records for authorized validator review under
-a predeclared evidence rule; do not silently drop hard cases or treat an
-unresolved obligation as fulfilled.
+cannot be marked late early. Section~\ref{service-evidence} fixes complete
+ciphertext publication, validity certificates, fallback activation, and
+incident closure. A counterparty's accusation alone cannot establish a
+failure. Publish unresolved and void counts alongside settled work;
+neither retires recovery deficits.
 
 Derive the next epoch's normal active roster from registration,
 qualification, and the completed prior window's request records. A
@@ -296,9 +297,10 @@ rewards}\label{preservation-before-revision-rewards}
 Each editing task has a preservation brief and hidden review material
 covering claims, participants, quantities, negation, uncertainty,
 citations, attribution, and argument relationships. Review the entire
-revision. Independent judges also check readability and the requested
-tone. A confirmed failure sets the task's preservation gate \(G\)
-to zero; a confirmed pass sets it to one.
+revision. Validators also check readability and the requested tone under
+the fixed rubric in Section~\ref{reward-adjudication}. These are B
+acceptance constraints. A certified failure sets \(G=0\); certificates
+for all required passes set \(G=1\).
 
 Readers compare anonymized revisions in hash-derived order without
 detector or miner scores. Maintain unchanged sources and qualified
@@ -307,23 +309,21 @@ agreement and failure modes have been measured against separate reader
 judgments. Instructions embedded in a candidate are evaluated text, not
 evaluator instructions.
 
-An unresolved judgment cannot pass by default. The round policy must
-resolve it or void the affected comparison for all competing miners
-consistently. Miner nonresponse remains a zero on assigned work;
-validator infrastructure failure is a separate, recorded event. Publish
-coverage and missingness so that conditional accuracy cannot conceal
-excluded difficult cases.
+Unresolved judgments at the fixed close void the matched comparison for
+the whole B batch under Section~\ref{reward-adjudication}. Miner
+nonresponse remains a zero on assigned work; validator infrastructure
+failure is a separate, recorded event. Publish coverage and missingness
+so that conditional accuracy cannot conceal excluded difficult cases.
 
-\subsection{Transformation and improvement
-utility}\label{transformation-and-improvement-utility}
+\subsection{Transformation utility}\label{transformation-and-improvement-utility}
 
-Let \(V\in[0,1]\) be normalized positive improvement in target-style fit over
-the unchanged source. Estimate it from independent author models and
-blinded target-author or reader comparisons, retaining uncertainty.
-Before using a particular combination for live rewards, freeze and
-validate it on development examples. Topic copying, reference copying,
-and meaning-breaking edits must fail that validation. No miner-defined
-embedding can be its own reward oracle.
+Let \(V\in[0,1]\) be the exact normalized positive improvement in
+target-style fit defined in Section~\ref{reward-adjudication}. A frozen
+public evaluator returns integer source and candidate scores; private
+miner predictions cannot change them. Validate the evaluator against
+independent reader comparisons before live use. Topic copying, reference
+copying, and meaning-breaking edits must fail that validation. No
+miner-defined embedding can be its own reward oracle.
 
 For Pangram evasion, let \(F_r(t)\) be the reported
 AI-plus-assisted fraction in required observation \(r\) for text
@@ -406,8 +406,32 @@ within each task pool and combine using the published shares. The chain mechanis
 aggregate task allocation.
 
 If no miner beats a baseline, record that pool as unallocated in the
-offline simulation. A live adapter must select and test a chain-valid
-fallback before launch. This paper does not assume that zero weights,
-retained emissions, a new burn destination, or custom slashing are
-available. Payout handling under empty pools and unresolved rounds is a
-required deployment decision.
+offline simulation. The proposed live fallback directs that pool's
+weight to a verified owner-associated hotkey whose miner incentive is
+withheld by the native burn/recycle rule~\cite{btmining}. Pin its UID,
+registration generation, owner association, and the burn setting before
+weight submission; validate them again for the payout cycle. The live
+configuration must admit a single nonzero weight and a full-weight
+destination. The latter weight cap is root-controlled; owner control
+alone cannot establish this precondition~\cite{btweightlimits}.
+Failure to meet these conditions blocks launch of this adapter. Do not
+substitute zero weights or leave a previous earned vector active.
+
+Withheld owner-directed incentive can reduce the subnet's later emission
+share. Burning is therefore an economic cost, and a zero-incentive epoch
+has separate native redistribution behavior~\cite{btemissions}.
+Quantization, registration changes, native reveal lag and the fallback
+must be demonstrated against the pinned runtime. A frozen application
+certificate specifies the intended weights; native consensus still
+determines the resulting payouts.
+
+\paragraph{Unresolved adversarial settlement.}
+The private-panel utility above remains a research candidate for
+simulation. It is not yet an approved live payout rule. A small private
+detector panel can favor an allied B miner while satisfying availability;
+global validator certificates cannot prove faithful private-model
+execution. Complementary fixed credits also fail to establish conserved
+alpha payouts after native weight normalization, as shown in
+Section~\ref{existing-evidence-and-implementation-status}.
+Resolving this monetary connection is required before live rewards or
+claiming the A/B design resists profitable self-dealing.

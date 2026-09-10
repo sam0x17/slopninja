@@ -1,0 +1,145 @@
+\section{Mandatory-service evidence and closure}\label{service-evidence}
+
+The proposed \texttt{service-evidence-v1} mailbox covers protocol-assigned
+A detection and B transformation. The two-ticket exercise below validates
+transport and review of its B output; its sequential A fallbacks do not
+constitute the complete common detector panel. An emission-bearing
+benchmark needs a separately frozen schedule for that matrix and its
+dependent requests. Private customer jobs retain their paid
+lifecycle and never enter mandatory-service counts. Full encrypted payloads
+are published on chain; a hash or HTTP locator alone is insufficient.
+Publication establishes bytes, sender authentication, and timing. Private
+validity and quality require the certificates below. This mailbox is a
+specified pilot, not an implemented throughput result.
+
+\paragraph{Frozen authority.}
+Before revealing task contents, exclude the exact assigned A/B UIDs from
+the round's eligible validator set. Bind every remaining UID, registration
+generation, hotkey, signing and encryption key versions, and integer native
+effective consensus stake, including native alpha/TAO scaling, to one
+finalized state snapshot. Its manifest names the block hash, runtime and
+storage schema, weight field and units, complete records, and total weight
+\(W\). Initial loading and later snapshots require verified finalized state
+proofs or a chain-verified native snapshot. A relayer's assertion alone is
+insufficient~\cite{btprecompilelifecycle}.
+
+Every final validity, quality, or incident verdict requires signatures
+whose distinct frozen weights sum to \(w\), with \(3w>2W\). Assume
+dishonest weight is strictly below \(W/3\) in this conditional set.
+Missing keys, nonresponse, recusal, and later key changes never shrink
+\(W\). Three hash-assigned preparers organize evidence; they cannot
+authorize a verdict. Honest validators independently check evidence and
+sign at most one verdict per stage. Conflicting strict quorums would share
+more than \(W/3\) weight; a detected conflict halts affected settlement.
+Signatures bind the verdict itself, evidence, snapshot, stage, and scope.
+
+\paragraph{Fixed pilot.}
+The instance manifest supplies actual chain/contract addresses, verified
+snapshots, authorizations, service/schema hashes, and funded reservations.
+Missing bindings, zero eligible weight, or insufficient qualified key and
+verification capacity prevent issue. At native epoch start \(H\), issue at most
+two tickets, one A and one B, in a 360-block measurement epoch. Each has
+three prescribed providers total. Freeze these settings before issue:
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Parameter & Value \\
+\midrule
+Input / output cap & 4,096 / 8,192 bytes \\
+Ciphertext chunk / publication cap & 4 KiB / 8 MiB per stage \\
+Global epoch publication cap & 64 MiB, including all witness copies \\
+Request publication / certificate & \(H+12\) / \(H+24\) \\
+Provider A / B response window & 12 / 36 blocks \\
+Certificate window per attempt & 12 blocks \\
+Preparer commitment / private opening & \(H+180\) / \(H+192\) \\
+Final verdict and incident close & \(H+204\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For response window \(r\), attempt \(j\in\{1,2,3\}\) starts at
+\(H+24+(j-1)(r+12)\), publishes by start plus \(r\), and certifies by
+start plus \(r+12\). Final A/B attempt cutoffs are \(H+96\)/\(H+168\).
+Early declines do not advance later windows. Reserve all possible bytes,
+gas, response and verification capacity; insufficiency prevents issue and
+does not authorize another draw. Two tickets provide a bounded transport
+pilot, not availability evidence for every UID. Settlement names a later
+native payout cycle and its actual commit/reveal configuration; no claim
+is made that reveal delays fit within the unused part of this epoch.
+
+\paragraph{DATA, then witness.}
+Use HPKE base mode with X25519/HKDF-SHA256/ChaCha20Poly1305, fresh
+single-shot ephemeral material per recipient, and separate registered
+sender signatures~\cite{hpke}. Deterministic CBOR records reject duplicate
+keys, indefinite encodings, tags, and floats~\cite{cbor}. A salted payload
+commitment and encryption context bind protocol, chain, contract, ticket,
+stage, attempt, both UID generations, and recipient key version. Input
+DATA copies address the requester and three prescribed providers; response
+copies address the requester and actual provider. Curator authorization
+covers those recipients and the complete validator set. Hidden labels and
+review answers remain in validator-only evidence packets.
+
+First fix and publish the signed DATA manifest and all ciphertext chunks.
+Then form a witness containing that DATA digest, plaintext, salt, and each
+DATA envelope's ephemeral generation material. Encrypt the witness
+separately to every frozen validator and publish those complete ciphertexts
+under a second manifest referencing DATA. Validators reconstruct each DATA
+encryption and compare the exact bytes and recipient bindings, as well as
+authorization, commitment, and schema. Decrypting only their own copy would
+not check the miner's copy. DATA never references a witness hash; witnesses
+do not contain their own encryption secrets. This avoids a hash cycle.
+Generation witnesses remain confidential and need implementation/security
+review. Their certificates do not assert that every validator decrypted
+its witness copy. Public ciphertext remains exposed to future key
+compromise; authorized archives retain complete replay evidence.
+
+\paragraph{Transitions and attribution.}
+Issue permanently consumes the requester index and activates its
+obligation. One immutable manifest fixes each stage; identical retries
+are idempotent and conflicting signed manifests remain evidence. A
+requester's decline, absent complete publication, or certified invalid
+input is its failure. An authenticated decline included by the stage's
+publication cutoff is terminal for that stage. Retain later bytes as
+evidence, but reject an acceptance certificate that ignores the decline;
+late declines cannot reopen closed accounting. Only a timely global input-acceptance certificate
+activates the first provider at its fixed start. No input acceptance
+means no provider obligation. A provider's decline, absent publication,
+or globally certified invalid response permits the next fixed fallback;
+successful fallback never erases preceding failures. Unresolved validity
+stops dependent work without another draw. Late answers remain late.
+
+Complete publication without a global validity verdict closes unresolved;
+recipient accusation alone cannot assign fault. Keys must be qualified
+before the snapshot. Key loss afterward cannot blame a sender whose
+encryption was certified correct; rotations and UID reuse cannot change
+issued tickets. A timely dishonest answer may satisfy service availability
+while failing quality. Insufficient final review evidence voids the shared
+quality comparison consistently, without deleting attributable service
+failures. The detailed record and certificate rules are specified in the
+companion service-evidence document.
+
+\paragraph{Counts and finality.}
+For each mandatory interface/role, retain activated obligations
+\(A=S+F+U+V\): success, attributable failure, unresolved, and platform void.
+Unused reservations are separate. Let \(N=S+F\); require \(U=0\), \(N>0\),
+and \(10F\leq N\) for the class and aggregate availability gates. Publish
+all counts. Keep \(D_e=\max(0,D_{e-1}+10F-N)\); neither unresolved nor void
+work retires a deficit. Require zero outstanding deficits and current
+qualification; customer jobs and other classes cannot dilute these gates.
+
+Only canonical finalized inclusion counts, with deadline equality timely.
+Subtensor separates block production from GRANDPA
+finality~\cite{btchainconsensus}. A local timeout or censorship allegation
+does not prove a platform exception. Normal operation assumes fair
+inclusion and sufficiently prompt finality. A finality stall delays
+observing closure without extending block-height deadlines. A strict
+global incident certificate must be included by \(H+204\), even if its
+block finalizes later, and identify the affected interval and every
+intersecting ticket/comparison. The rule
+voids all activated obligations in that scope, including successes and
+failures, and cannot selectively pardon a miner, shrink \(W\), or reopen
+closed epochs. Without that certificate, normal inclusion rules apply;
+missing verdicts remain unresolved. Gas, history retrieval, proof-verified
+snapshots, and the declared native settlement timing must be demonstrated
+before this EVM pilot issues work~\cite{evm}.

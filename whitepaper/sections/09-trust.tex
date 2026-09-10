@@ -25,9 +25,10 @@ preservation review, copying checks, and explicit exploit controls \\
 Miner's private search and retry costs are unverifiable & Miners fund
 their own attempts; score committed reports under fixed deadlines;
 do not reimburse claimed private costs \\
-Validators collude or score inconsistently & Hash-assigned overlapping
-assignments, independent commitments, retained disagreements; honest
-review remains necessary \\
+Validators collude or score inconsistently & Every final verdict needs
+strictly more than two-thirds of frozen eligible weight. Assume less
+than one-third is dishonest; every signer inspects the evidence and
+missing votes remain in the denominator \\
 Curator or coordinator leaks labels or selects a biased task set &
 Independent provenance review, overlap checks, and source-group splits;
 commitments constrain later changes to the frozen pool and baseline
@@ -47,6 +48,16 @@ emission scoring \\
 \bottomrule
 \end{tabularx}
 \par\medskip
+
+The quorum assumption applies after excluding the exact task participants;
+it must hold in that conditional validator set. It prevents conflicting
+certificates when honest validators sign once. It does not prove their
+semantic judgments correct or an A service's reported probabilities
+faithful to private weights. Native Yuma also processes each validator's
+submitted weights independently. A valid benchmark certificate cannot
+force a dishonest validator to submit its prescribed weight row. The
+settlement counterexample in Section~\ref{existing-evidence-and-implementation-status}
+therefore remains relevant even below one-third dishonest voting weight.
 
 The benchmark also needs private source rotation, duplicate detection,
 and delayed release of retired examples. A service may recognize a

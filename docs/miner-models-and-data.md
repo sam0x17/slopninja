@@ -72,17 +72,21 @@ metadata leaves text and commitment openings restricted to authorized recipients
 Predictable assignments and distinct UIDs do not prove separate ownership or
 prevent model extraction.
 
-Availability uses actual valid protocol-assigned task obligations, bound to the
-UID and requester/provider role, within fixed size, capacity and response-time
-limits. Declines and missing valid completion by the
-deadline count as failures. More than 10% failures gives zero earned A
+The [service-evidence rules](service-evidence.md) track activated obligations
+by UID, interface and requester/provider role: certified successes `S`,
+attributable failures `F`, unresolved work `U` and platform voids. Settled work
+is `N=S+F`; availability requires `U=0`, `N>0` and `10F<=N`. More than 10%
+failures gives zero earned A
 and B emission credit for that measured epoch; exactly 10% passes the availability
 gate. Every committed interface and actually assigned role must also pass its
 mandatory-service gate with a positive assigned workload. Outgoing payloads
 cannot dilute provider failures. Paid traffic and cheap detection replies cannot
 dilute failed transformation obligations; no requests means no automatic pass.
-Authenticated delivery evidence supports failure decisions, and retries count
-once. Qualification uses the prior completed request window, with bounded real
+Authenticated publication and validity certificates support failure decisions;
+retries count once. An invalid or unresolved request does not activate its
+provider. Unused fallback reservations earn no credit. Publish unresolved and
+void counts alongside settled work. Qualification uses the prior completed
+request window, with bounded real
 probation work for new or recovering registrations. Each registration generation
 must establish its own performance even when its UID slot counter persists.
 Measurement deadlines close before weight submission and reveal; the published
@@ -91,6 +95,9 @@ Each mandatory interface/role also carries `D_e = max(0, D_previous + 10*F_e - N
 from an initial zero. Normal eligibility requires zero deficit and current gates;
 only same-class protocol probation work retires it, with no age-out or reset
 through key/service-version rotation. New registrations need their own probation.
+Unresolved or platform-void work cannot retire a deficit. The two-ticket
+transport pilot does not supply the full common detector matrix; benchmark
+capacity and its schedule must be frozen separately before emission-bearing work.
 
 Paid inference has its own market in subnet alpha. Miners publish signed total
 quotes for bounded jobs, with capacity, expiry and delivery terms; customers
@@ -185,7 +192,8 @@ commitments. A panel failure requires the fixed replacement and rescoring of
 every affected cell for the batch, or a void comparison. A detector failure
 cannot become B nonresponse. Report bootstrap reference-service rounds separately.
 
-Keep Pangram's AI-plus-assisted fraction separate from each panel member's
+The private-panel monetary utility remains a research candidate, not an approved
+live payout rule. Keep Pangram's AI-plus-assisted fraction separate from each panel member's
 `H = p(model-only) + p(mixed)`. Subnet improvement is the median of the three
 paired source-minus-candidate improvements. Joint evasion utility averages
 Pangram and median panel improvement only when neither aggregate axis regresses.
@@ -195,13 +203,31 @@ repeat policy, a majority of panel services below their own frozen thresholds,
 and a pass against the actual strongest reference service. Report strongest-A
 and panel success separately. The [reward rules](../whitepaper/sections/07-rewards.tex)
 define the exact aggregation and treatment of missing strongest-service evidence.
+The [settlement hypothesis](settlement-gameability.md) shows that complementary
+credits do not guarantee conserved alpha payouts after native normalization.
+Its credit proposal is not adopted; the [funded-match option](alpha-match-reserve.md)
+also remains pending. Global certificates cannot prove truthful private execution.
+
+The [adjudication specification](reward-adjudication.md) separately fixes `V`
+from a public frozen author-distance artifact and development calibration.
+Source and candidate use the same empirical distance rank; `V` is exact positive
+improvement divided by the source's remaining rank headroom, with zero for a
+saturated source. Certified preservation, readability and tone fields determine
+`G`. A certified failure sets `G=0`; absent a failure, every required field must
+pass for `G=1`. Unresolved judgments void the matched comparison for the B batch
+without erasing independently attributable service failures.
 
 The coordinator conceals submitting B UIDs and source/candidate roles in grading
 requests, mixes controls and commits the complete signed panel evidence by a
 fixed deadline. Under the [audit rules](../whitepaper/sections/08-pangram-audits.tex),
-three hash-assigned validators review every scored submission and all required
-checks, with fixed reserves and resolution deadlines. Reviewers commit judgments
-before seeing peers' answers and open them privately for authorized review.
+three hash-assigned preparers organize each dossier. Final certificates require
+distinct signers with agreeing frozen effective weight `3w>2W`. Every certifying
+validator receives encrypted benchmark evidence and verifies each required
+semantic field; checking the preparers' tally is insufficient. Missing,
+abstaining and recused validators remain in `W`. Security assumes dishonest
+eligible weight below `W/3` in that frozen set and sufficient honest participation
+for closure. Validators commit final ballots before private openings; conflicting
+certificates halt settlement.
 Native chain weight commit-reveal remains unchanged. These checks do not attest
 private weights or establish honest majorities.
 
@@ -224,8 +250,8 @@ accessibility, argument force and tone as separate labels; shortening alone is
 not a quality target. Retain uncertain and tied reader judgments.
 
 The miner's preference scorer can rank its own candidates. Benchmark validators
-use different frozen judges and reader audits; a miner cannot award itself
-emissions. Confidential customer payment follows acknowledgment and the agreed
+use the frozen public evaluator and certified semantic fields; a miner cannot
+award itself emissions. Confidential customer payment follows acknowledgment and the agreed
 timeout policy. A chosen validator's inspection can be advisory; its signed
 opinion affects escrow only if both parties accepted that validator's authority
 and dispute terms before accepting the job. Choosing a reviewer cannot change

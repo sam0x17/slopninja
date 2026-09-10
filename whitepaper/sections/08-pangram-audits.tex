@@ -18,14 +18,18 @@ model identity, or one unique canonical result per text.
 Recorded probe~\cite{reportprobe}.
 
 For an evasion benchmark, a miner commits its final candidate and
-required report IDs before the evidence deadline. Assigned validators receive
-the source, candidate, report URLs, score projections, and commitment
-openings in separate encrypted envelopes. They retrieve the provider's
-record directly and compare the exact text, fractions, version, and time
-window. Report IDs and URLs remain out of public logs and chain
-payloads. Anyone who obtains a public URL may still retrieve its
-content; encrypting the locator protects our delivery path, not
-Pangram's hosting.
+required report IDs before the evidence deadline. Every validator in the
+round's frozen certifying set receives the source, candidate, report URLs,
+score projections, and commitment openings in a separate encrypted evidence
+envelope. A signer must retrieve the provider's record and inspect the exact
+text, fractions, version, time window, and required preservation evidence;
+preparer signatures cannot substitute for that inspection. Report IDs and
+URLs remain encrypted in chain payloads and absent from public plaintext
+logs. Anyone who obtains a public URL may still retrieve its content;
+encrypting the locator protects our delivery path, not Pangram's hosting.
+Curator authorization must cover all frozen certifiers. Private customer
+jobs remain outside this benchmark; a customer's optional disclosure to
+one chosen validator does not authorize wider benchmark disclosure.
 
 Pangram states that it does not train Pangram 4 on customer API data.
 Private miner weights prevent direct downloading, but do not prevent
@@ -41,15 +45,18 @@ panel's complete source/candidate response matrix after B candidate
 commitments. Miner-selected search results cannot replace it. The
 coordinator relays work under committed assignments; validators can
 verify that it followed the allocation rule. A signature establishes a
-service's response, not execution of particular private weights. The
-ticket ledger, timely-delivery evidence, and scoring path need
-validation independently of Pangram's public-report reader.
+service's response, not execution of particular private weights.
+Section~\ref{service-evidence} specifies complete on-chain ciphertext
+publication, separate confidential generation witnesses, and fixed
+validity/closure certificates. A report URL, response hash, or recipient
+accusation alone cannot satisfy that service-evidence contract. Its runtime
+implementation still needs validation independently of the report reader.
 
 \subsection{Assignment and audit sequence}\label{audit-sequence}
 
 Reciprocal partners are determined by the lifetime interaction counter
 and frozen eligible roster. Benchmark batches, common detector panels,
-and reviewer assignments use a separate, shared comparison counter and
+and preparer assignments use a separate, shared comparison counter and
 distinct hash domains. These schedules are publicly predictable. At
 launch, review every scored submission and all required checks, including
 whole-revision preservation. There is no hidden audit sample and no
@@ -57,11 +64,21 @@ application-level external beacon dependency.
 
 For each scored submission, rank eligible validator UIDs by the hash of
 the versioned review domain, chain, subnet, shared comparison index,
-submitting UID, and reviewer UID. Use canonical encoding, UID tie-breaking,
-three distinct reviewers, and an ordered reserve list. Exclude the exact
-miner UIDs involved in that comparison. The coordinator cannot choose
-reviewers or obtain another draw; different UIDs can still have the same
-owner. Reviewer capacity must be reserved before issuing the task.
+submitting UID, and candidate preparer UID. Use canonical encoding, UID tie-breaking,
+three distinct evidence preparers, and an ordered reserve list. Exclude
+the exact miner UIDs involved in that comparison before freezing its
+certifying validator set and native effective-consensus-weight snapshot.
+The coordinator cannot choose preparers or obtain another draw; different
+UIDs can still have the same owner. Reserve preparation and full-set
+verification capacity before issue.
+
+Preparers organize checks and retain independent commitments/openings.
+Final certificates bind the actual validity or quality verdict and require
+\(3w>2W\), where \(W\) is the full frozen eligible validator weight and
+\(w\) is the weight of distinct signers who inspected the evidence.
+Assume dishonest weight is below \(W/3\) in that conditional set.
+Nonresponse, recusal, missing keys, and later role changes never reduce
+\(W\). Three preparers have no independent approval authority.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -69,9 +86,11 @@ owner. Reviewer capacity must be reserved before issuing the task.
 \item
   Freeze the eligible epoch roster from qualification and actual request
   outcomes, service capacities, global task budgets, index-allocation
-  rules, deadlines, and authorized auditor roster. Commit the question
+  rules, deadlines, and authorized certifying validator roster. Verify its
+  native weight and identity records against the finalized snapshot
+  specified in Section~\ref{service-evidence}. Commit the question
   pool and source Pangram baselines. Publish fixed block deadlines for
-  submissions, complete evidence, reviewer commitments, private openings,
+  submissions, complete evidence, preparer commitments, private openings,
   dispute resolution, and weight submission.
 \item
   Issue reciprocal-service tickets in the protocol schedule. Consume
@@ -96,24 +115,30 @@ owner. Reviewer capacity must be reserved before issuing the task.
   the fixed evidence deadline; a favorable score is never grounds to
   switch provider or discard an observation.
 \item
-  Deliver the required evidence and inclusion proofs for every scored
-  submission in separately encrypted envelopes to its assigned reviewers.
-  Enforce authenticated key records,
-  expiry, replay state, and delivery deadlines. Auditors commit answers
-  before seeing peers' answers, then open them privately for authorized
-  review. Resolve disagreements before the relevant weight deadline.
+  Publish complete recipient-bound DATA ciphertexts, followed by separate
+  confidential witness/evidence envelopes to every frozen certifier, under
+  Section~\ref{service-evidence}. Retain finalized inclusion proofs and
+  enforce key versions, expiry, replay state, and publication deadlines.
+  Preparers commit answers before peer openings, then open privately to
+  the frozen certifiers. Every signing validator inspects the evidence,
+  verifies the DATA-generation witnesses and report/panel bindings, and
+  signs the exact verdict under the strict weighted threshold. Close
+  unresolved records under the fixed rule before the declared settlement
+  cycle; missing evidence never grants approval.
   Withhold detailed active-test feedback from revision miners until
   retirement; each scoring service necessarily knows its own response.
 \end{enumerate}
 
-Retain every review and disagreement. A missing review follows the fixed
-reserve and resolution policy; it cannot default to approval. Full
+Retain every review and disagreement. A missing preparer follows its fixed
+reserve policy; a missing global certificate closes unresolved under
+Section~\ref{service-evidence}. Neither defaults to approval. Full
 coverage prevents a miner from concentrating defects in a publicly
-predictable unreviewed subset. It does not establish reviewer honesty or
-guarantee that readers detect every error. A three-UID majority is useful
-only under a stated bound on colluding reviewers, and stake identities
-alone do not establish that bound. Reduce task volume to fit the funded
-review budget instead of silently reducing coverage. Any later sampling
+predictable unreviewed subset. It does not establish validator honesty or
+guarantee that readers detect every error. Weighted certificates require
+the stated honesty bound, and stake identities alone do not establish it.
+Reduce task volume to fit the funded preparation, ciphertext publication,
+and full-validator inspection budget instead of reducing coverage or the
+certificate denominator. Any later sampling
 policy needs a separate security argument and measured cost benefit.
 
 Subtensor's timelocked commit-reveal protects validator weights from

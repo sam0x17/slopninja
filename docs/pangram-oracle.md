@@ -1,6 +1,6 @@
 # Pangram benchmark, verification and API funding
 
-Design proposal, 2026-09-09. Pangram is the required external benchmark for
+Design proposal, 2026-09-10. Pangram is the required external benchmark for
 Slop Ninja. Evasion also faces a common three-service subnet origin panel,
 including the strongest qualified service from the previous completed A round.
 
@@ -83,8 +83,10 @@ another inference. The public web JSON endpoint remains an undocumented
 implementation detail; obtain stable integration terms before deployment.
 The report has no verified signature or immutability guarantee, and its version
 does not identify immutable weights. Deliver the report locator and text in
-an encrypted envelope addressed only to assigned validators; publish a salted
-commitment before assignment. Anyone obtaining the decrypted URL can still
+separate encrypted evidence envelopes to every validator in the round's frozen
+certifying set; publish the salted commitment and complete ciphertext under
+the [service-evidence contract](service-evidence.md). The assignment is fixed
+before task disclosure. Anyone obtaining the decrypted URL can still
 read the hosted report, so this does not create provider-side access controls.
 
 Prefer provider-signed receipts if Pangram offers them. A signed receipt should bind
@@ -119,30 +121,50 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
 ## Initial measurement protocol
 
 1. Freeze the epoch roster, global quotas, common panel/batch schedule, source
-   baselines, settings and fixed deadlines. Reserve the complete scoring matrix,
-   fallback stages and reviewer capacity separately from private peer tickets.
+   baselines, settings and fixed deadlines. Before task disclosure, exclude the
+   exact participating A/B UIDs and freeze the complete remaining validator set
+   and its native effective-consensus-stake integers, with sum `W`, at a verified
+   finalized snapshot. Bind runtime/storage schema, identities, generations and
+   encryption keys. A relayer assertion alone is insufficient. Reserve the
+   complete scoring matrix, fallback stages, ciphertext publication, preparer
+   work, and all-validator inspection separately from private peer tickets.
 2. Each B miner commits one final revision and three selected Pangram reports
    per mandated text. Other private attempts need not be disclosed; committed
-   reports cannot be replaced afterward. Panel and reviewer assignments are
+   reports cannot be replaced afterward. Panel and preparer assignments are
    predictable from the committed schedule, not hidden until commitment.
 3. Obtain signed source/candidate responses from every panel member after B
    commitments. Bind service, settings, nonce, text commitment and complete
    origin probabilities. Mix human/model controls and conceal the text-to-B-UID
    mapping through the grading relay. Private search results cannot replace
    this matrix. Commit evidence by its fixed block deadline.
-4. Three hash-assigned validators review every scored submission and all
-   required checks. Use exact UID exclusions and a fixed reserve order; no
-   coordinator chooses reviewers and no custom beacon or audit sample is used.
-   Deliver exact text, report locators, commitment openings and panel evidence
-   encrypted to those recipients. Reviewers commit before seeing peer openings.
-5. Verify Pangram records through GETs and panel signatures/bindings. No fresh
-   validator-paid Pangram inference is mandatory. Review whole-revision
-   preservation, retain disagreements and resolve them before weight deadlines.
+4. Three hash-assigned preparers organize every scored submission's required
+   checks, with fixed reserves; they have no final approval authority. No
+   coordinator chooses preparers and no custom beacon or audit sample is used.
+   Publish exact text, report locators, openings and panel evidence encrypted
+   separately to every frozen certifier. Curator authorization covers that
+   entire set. Follow the DATA-first, separately encrypted generation-witness
+   procedure in [service-evidence-v1](service-evidence.md#data-first-confidential-witness-second),
+   retaining complete ciphertext bytes and finalized inclusion proofs.
+   Preparers commit before seeing peer openings and open privately to certifiers.
+5. Every signing validator must inspect the actual evidence, reproduce the
+   required DATA envelopes from their confidential witnesses, verify Pangram
+   records through GETs and panel signatures/bindings, and review whole-revision
+   preservation. A preparer signature cannot replace this inspection. No fresh
+   validator-paid Pangram inference is mandatory. Retain disagreements and
+   certify the exact validity/quality verdict using distinct signer weight `w`
+   with strict `3w>2W`. Assume dishonest weight below `W/3` in the conditional
+   frozen set; missing keys, nonresponse, recusal and later role changes never
+   reduce `W`. Use the [fixed closure rule](service-evidence.md#stage-transitions-and-certificates)
+   for missing evidence or no quorum; neither grants approval.
    Withhold detailed active-test feedback from revision miners until retirement;
    each scoring service necessarily knows its own response.
-6. Publish commitments and reviewed aggregates. Retain encrypted evidence and
-   disputes. Apply service-failure gates before earned weights; demonstrate the
-   relationship between measurement deadlines and native payout lag.
+6. Publish commitments, ciphertexts, certificate verdicts and reviewed
+   aggregates. Retain encrypted evidence and disputes. Apply the settled
+   service-failure and unresolved gates before earned weights; bind the native
+   settlement cycle to the closed measurement rather than assuming a one-epoch
+   reveal delay. Private customer jobs stay outside this process. A customer's
+   optional evidence packet to one chosen validator has its own limited scope
+   and cannot authorize disclosure to the full benchmark set.
 
 The existing offline contract requires three distinct observations for a passing
 full-document result. Keep that policy explicit in cost estimates. Selection
@@ -155,7 +177,10 @@ from a forged record. Assign consequences only for objectively provable protocol
 under a published rule, without assuming Bittensor supplies custom slashing.
 
 The [receipt and audit proposal](subnet-receipts-and-audits.md) specifies
-predictable hash assignment and full review. Native Bittensor weight
+predictable preparer assignment, full review, and strict global weighted
+certification. A certificate attests the specified verdict under the validator
+honesty assumption; it does not prove Pangram's private computation or the
+execution of a miner's private weights. Native Bittensor weight
 commit-reveal remains a separate supported chain mechanism.
 The current offline contract has not yet been adapted to public report IDs.
 
@@ -184,7 +209,7 @@ and evaluation window. Preserve exact text bytes and bind assignment nonces
 outside the prose. After measurement, the evaluator commits its own complete
 response hash, task ID and score-payload hash inside a salted commitment by
 the fixed evidence deadline. Review assignments follow the published hash schedule.
-Deliver openings and evidence encrypted to those recipients. Keep every accepted
+Deliver openings and evidence encrypted to every frozen certifier. Keep every accepted
 task, failure and unresolved request for separately funded research in its
 budget ledger; this does not require miners to disclose their private
 pre-commitment attempts.
@@ -232,22 +257,31 @@ restricted. No nomination, skipped index, reroll or retry-created quota is
 permitted. The [mechanism proposal](subnet-mechanisms.md) defines the shared
 ledger, bounded sizes, capacity reservations and fallback response windows.
 
-Obligations bind the UID and its assigned role: requester payload submission or
-provider answer to a valid delivered request. More than 10% valid assigned
-failures zeros earned A+B epoch credit; exactly
-10% passes and zero workload supplies no automatic eligibility. Require the
+Obligations bind the UID and its assigned role: requester payload submission at
+issue, or provider response after timely global acceptance of the input at the
+fixed start. Retain activated `A=S+F+U+V` for successes, attributable failures,
+unresolved and platform-void obligations; inactive fallbacks remain reservations.
+Set settled `N=S+F` and require `U=0`, `N>0`, and `10F<=N`. More than 10% failures
+zeros earned A+B epoch credit; exactly 10% passes the failure-rate test,
+and zero workload supplies no automatic eligibility. Require the
 aggregate gate and separate gates on each mandatory interface and actually
 assigned role, so paid/cheap replies or outgoing payloads cannot dilute provider
-failures. Abandoned requester obligations
-count against the requester, not a provider lacking a valid payload. Count
-duplicates once and require authenticated delivery/dispute evidence. Prior
+failures. Abandoned requester obligations count against the requester; a
+provider lacking accepted input never activates. A successful fallback cannot
+erase an earlier provider failure. Count duplicates once and require the full
+publication, validity-certificate and dispute evidence specified in
+[service-evidence-v1](service-evidence.md#deterministic-accounting-and-platform-failure).
+No recipient accusation proves failure. The fixed global platform-incident
+rule cannot selectively pardon miners, extend deadlines, or shrink `W`. Prior
 actual request records determine the frozen next roster, with bounded real
 probation work and no heartbeats. Close measurement before weight deadlines;
 native payout lag prevents retroactive removal of already paid emissions.
 Mandatory interface/role recovery also requires zero deficit under
 `D_e = max(0, D_previous + 10*F_e - N_e)`, initially zero. Only same-class
 protocol probation work reduces it; there is no age-out, other-class dilution,
-or reset by key/service-version rotation. Current gates still apply.
+or reset by key/service-version rotation. Unresolved and platform-void records
+cannot retire the deficit; `U>0` blocks the class. Current gates still apply.
+Private customer jobs enter none of these mandatory counts.
 
 Miners pay for private experimentation and the three selected Pangram candidate
 reports committed before evaluation. Validators retrieve existing Pangram

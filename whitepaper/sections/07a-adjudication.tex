@@ -1,0 +1,157 @@
+\section{Style measurement and final review}\label{reward-adjudication}
+
+This section defines the style utility \(V\) and semantic gate \(G\)
+for B transformation. Preservation, readability, and requested tone are
+constraints on B; they create no separate writing-improvement service
+or reward pool. Numerical measurement uses a public frozen artifact.
+Semantic judgments are explicit oracle inputs certified under the
+validator-weight assumption in Section~\ref{service-evidence}.
+
+\paragraph{Frozen style measurement.}
+Style measurement applies to tasks requesting target-author fit.
+Evasion-only tasks record it as \texttt{not\_requested} and need no
+target-reference or calibration input.
+Before task issue, publish a permitted word/grammar author-distance
+artifact and pin its hash, parser and feature schemas, model parameters,
+reference-pooling rule, executable/runtime, numerical operations,
+rounding, resource bounds, and test vectors. Its distance function
+\(d_\theta(t,R)\) returns a nonnegative integer for text \(t\) and
+target-author references \(R\). The instance manifest must supply these
+concrete bindings; this specification does not select or claim to have
+trained the artifact. Miner models and weights remain private and do
+not define this evaluator.
+
+Freeze a nonempty calibration multiset \(C=(c_1,\ldots,c_M)\) of
+integer distances from development queries to their attributed authors'
+independent reference works. Keep development source families separate
+from fitting and evaluation, record provenance and hashes, and use the
+same artifact and reference-pooling rule. The task pins its calibration
+ID before candidate generation. Retain duplicate distances. With
+\(Q=1{,}000{,}000\), define the integer style fit
+\begin{equation}\label{eq:style-fit}
+ q(t,R)=\left\lfloor
+ Q\,\frac{2\#\{m:c_m>d_\theta(t,R)\}
+             +\#\{m:c_m=d_\theta(t,R)\}}{2M}
+ \right\rfloor.
+\end{equation}
+This empirical rank gives exact ties half credit. Smaller distance
+cannot reduce \(q\). It is a calibrated distance rank, not an authorship
+probability or a certificate of preserved meaning.
+
+For source \(x\) and candidate \(z\), evaluate both against the same
+\(R\), artifact, and calibration. Let \(q_x=q(x,R)\), \(q_z=q(z,R)\),
+and define
+\begin{equation}\label{eq:style-utility}
+ V(x,z)=\begin{cases}
+ 0,&q_x=Q,\\
+ \displaystyle\frac{\max(0,q_z-q_x)}{Q-q_x},&q_x<Q.
+ \end{cases}
+\end{equation}
+Equal fit earns zero improvement; a saturated source has no remaining
+headroom. Preserve the exact rational numerator and denominator through
+aggregation. A task requesting no style regression requires
+\(q_z\geq q_x\), even though \(V\) clips negative improvement.
+Task mixtures and final credit rounding remain part of the frozen
+allocation policy.
+
+For style-scored tasks, source and reference scoring must succeed before
+issue. A declared, deterministic \texttt{unscorable\_candidate} result gives zero style
+utility. Execution disagreement or unavailable shared evidence cannot
+silently supply a score: it remains unresolved under the common
+comparison-closure rule. A numerical failure alone does not establish
+attributable service nonresponse. Validate the frozen artifact against
+copying, topic substitution, and meaning-breaking controls before
+funds depend on it.
+
+\paragraph{Three semantic fields.}
+The frozen brief and rubric define required protected information and
+allowed changes. Review the whole candidate, including information not
+enumerated in the checklist. Every certifying validator records one
+verdict, \texttt{PASS}, \texttt{FAIL}, or \texttt{ABSTAIN}, for each field:
+\begin{itemize}
+\tightlist
+\item
+  \(P\), preservation: retain required claims, entities, quantities,
+  negation, uncertainty, attribution, citations, and argument relations;
+  permit only changes authorized by the brief. Unsupported material
+  additions, omissions, or prohibited reference copying fail.
+\item
+  \(R\), readability: introduce no material readability regression
+  against the source and satisfy the brief's stated readability
+  requirements. Shorter text or simpler vocabulary alone supplies no pass.
+\item
+  \(T\), tone: satisfy every declared tone and audience constraint.
+  With no such constraint, this field is deterministically satisfied.
+\end{itemize}
+Insufficient evidence or unresolved interpretation requires abstention.
+Failure ballots identify rubric items and bound source/candidate spans
+where applicable. Preference ties and extra editorial praise earn no
+additional utility. No private detector score substitutes for these
+semantic fields.
+
+\paragraph{Authority and timing.}
+Three hash-assigned preparers assemble the dossier; their vote count
+cannot finalize a judgment. Every final signer receives authorized
+benchmark evidence, checks the relevant source, references, brief,
+candidate and rubric, and attests the semantic field itself. The review
+client presents semantic evidence first; honest signers commit their
+field ballots before inspecting detector scores or numerical style
+results. Full-set authorization is not a cryptographic blinding guarantee.
+Checking
+three preparers' signatures or tally is insufficient. Reuse the verified
+frozen validator snapshot and integer effective weights from
+Section~\ref{service-evidence}, including its conditional assumption of
+strictly less than \(W/3\) dishonest eligible weight. Positive \(W\),
+qualified recipient keys and complete capacity reservations are required
+before issue.
+
+For the pilot epoch starting at \(H\), preparers commit by \(H+180\)
+and open privately by \(H+192\). Evidence corrections close at
+\(H+196\); they may correct references to already committed evidence,
+but cannot change the candidate, brief, evaluator, or calibration.
+Each validator then commits its one final ballot per field by
+\(H+198\), opens it privately by \(H+202\), and the global field
+certificate must be included by \(H+204\). Deadline equality is timely;
+finalized inclusion, incident scope and payout timing follow
+Section~\ref{service-evidence}. Reserve all witness publication and
+verification work before issue; these cutoffs do not establish measured
+review throughput.
+
+The first canonical timely commitment fixes that validator's ballot for
+the field. Identical retries are idempotent; a conflicting signed ballot
+is retained as evidence and cannot replace it. Late, absent, or invalid
+openings contribute no agreeing weight. Keep missing, abstaining,
+recused, and nonresponsive validators in the frozen denominator \(W\).
+A \texttt{PASS} or \texttt{FAIL} certificate requires distinct eligible
+signers of that verdict with total weight \(w\) satisfying
+\(3w>2W\). Honest signers never authorize conflicting final verdicts;
+conflicting strict certificates halt affected settlement.
+
+\paragraph{Deterministic closure.}
+At the close, set \(G=1\) only if every required field has a valid
+\texttt{PASS} certificate. Set \(G=0\) if any field has a valid
+\texttt{FAIL} certificate. Otherwise the judgment is unresolved. An
+empty tone-constraint set supplies the deterministic \(T\) condition
+without a semantic vote. Conflicting certificates take precedence and
+halt settlement. Missing candidate submissions remain attributable
+miner nonresponse under the service-evidence rules.
+
+An unresolved candidate judgment voids that matched source/brief/mode
+comparison for the entire B batch. It cannot selectively remove a
+difficult candidate or erase independently attributable service failures.
+Retain all ballots and disagreements; do not draw replacement judges
+to obtain a preferred verdict. This rule makes outcomes reproducible
+from certified inputs. It does not require honest readers to interpret
+every passage identically or turn quorum agreement into semantic proof.
+
+The versioned adjudication record binds the task and comparison IDs,
+source/candidate/reference/brief commitments, evaluator and calibration
+hashes, exact \(q_x,q_z,V\), rubric fields, evidence root, validator
+snapshot and \(W\), ballot commitments/openings, field certificates,
+deadlines, \(G\), and any unresolved or void reason. Records use the
+canonical encoding and authenticated encrypted evidence paths of
+Section~\ref{service-evidence}. Evidence must reach every authorized
+certifier within the funded publication limits. Customer jobs never
+enter this process automatically. Certificates attest scoped judgments
+and faithful computation; they do not establish truthful private-A
+execution or determine the separate adversarial reward formula.

@@ -1,14 +1,18 @@
 # Encrypted Pangram receipts and assigned audits
 
-Proposal, 2026-09-09. Miners keep revisions and provider report links encrypted
-for assigned validators. Public records contain salted commitments and encrypted
-deliveries. The [report reader](../examples/verify_public_pangram.rs) checks a
+Proposal, 2026-09-10. Miners keep revisions and provider report links encrypted
+for every validator in the round's frozen certifying set. Public records
+contain salted commitments and complete encrypted deliveries. The
+[mandatory A/B service-evidence contract](service-evidence.md) specifies the
+mailbox, generation witnesses, strict weighted certificates, and closure.
+The [report reader](../examples/verify_public_pangram.rs) checks a
 retrieved provider response. A [Rust encryption prototype](receipt-envelope.md)
 now signs recipient keys, encrypts exact payloads and verifies commitment
 openings against caller-supplied assignments. Chain registration, deterministic
-assignment and persistent replay accounting remain unimplemented.
-Start with licensed public sources, while keeping each
-new transformation private within the authorized evaluation group.
+assignment, generation-witness verification, and persistent replay accounting
+remain unimplemented. Start with licensed public sources whose authorization
+covers every frozen certifier, while keeping each new transformation private
+within that authorized evaluation group.
 
 This is the benchmark evidence flow. Under the [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)),
@@ -18,10 +22,17 @@ that requires a customer-directed packet with its own recipient and scope.
 
 1. Freeze qualified epoch rosters from completed actual request records, global
    quotas, capacities, canonical counter schedules, and fixed block deadlines
-   for candidates, evidence, review commitments/openings, disputes and weights.
+   for candidates, evidence, preparer commitments/openings, certificates and
+   the declared native settlement cycle. Use the actual pilot values in
+   [service-evidence-v1](service-evidence.md#frozen-authority-and-parameters).
    Register separate X25519 keys signed by current Bittensor hotkeys, binding
    network, registration generation, epoch, key ID and expiry. Verify against
-   finalized chain state; signing keys are not encryption keys.
+   finalized chain state; signing keys are not encryption keys. Before task
+   disclosure, exclude the exact A/B participants from the round's certifying
+   set and freeze all remaining native effective-consensus-stake integers,
+   their sum `W`, generations and keys. Verify the finalized snapshot and its
+   runtime/storage schema by state proof or a chain-verified native snapshot.
+   A relayer's signature alone cannot establish those records.
 
 2. Derive training counterparts from the next lifetime requester-UID-slot index
    by canonical `SHA256(domain, chain, netuid, requester_UID, index, peer_UID)`.
@@ -45,9 +56,11 @@ that requires a customer-directed packet with its own recipient and scope.
    the question pool and source evidence. B miners commit one final canonical
    payload containing source/candidate binding, exact text, Pangram report
    IDs/URLs, score projections and raw-response hashes by the fixed deadline.
-   Publish only `SHA256(domain || salt || encoded_payload)` with a fresh
-   secret 32-byte salt and unambiguous encoding. Keep the salt encrypted;
-   unsalted text and score hashes permit guessing attacks.
+   Use the service-evidence contract's versioned deterministic encoding and
+   fresh secret 32-byte salt. Publish the salted commitment and complete DATA
+   ciphertexts, never plaintext or unsalted text/score hashes. The DATA
+   manifest fixes bytes before the separate confidential witness packet is
+   constructed; hashes alone cannot complete delivery.
 
 5. Obtain the panel's required signed response matrix after B commitments,
    binding service/settings, nonce, text commitment and full probabilities.
@@ -61,35 +74,50 @@ that requires a customer-directed packet with its own recipient and scope.
 
 6. Review every scored submission and all required checks at launch. Hash-rank
    eligible validator UIDs using a separate review domain, chain, subnet,
-   shared comparison index, submitting UID and reviewer UID, with UID
-   tie-breaking. Assign three distinct reviewers and fixed reserves, excluding
-   exact miner UIDs involved in the comparison. The schedule is predictable;
+   shared comparison index, submitting UID and candidate preparer UID, with UID
+   tie-breaking. Assign three distinct evidence preparers and fixed reserves
+   from the already frozen eligible set. They organize evidence and retain
+   independent checks; they cannot approve final validity or quality. The
+   schedule is predictable;
    there is no hidden checker, audit sample or custom drand dependency.
    Common ownership and dishonest review remain possible.
 
-7. Encrypt the complete payload and salt separately to assigned validators.
+7. Encrypt the complete evidence and salt separately to every frozen certifier.
    The existing prototype uses HPKE Base with DHKEM(X25519, HKDF-SHA256),
    HKDF-SHA256 and ChaCha20Poly1305, plus a miner-hotkey envelope signature.
-   Use fresh encapsulation per recipient. The proposed assignment binding
-   includes opaque task ID, commitment, comparison index, recipient/key ID,
-   registration generation, epoch, expiry and protocol version in HPKE
-   `info`/AEAD associated data and the signature. This binding still requires
-   implementation and does not change the existing prototype schema.
+   Use fresh encapsulation per recipient. The service-evidence assignment
+   binding includes protocol, chain/contract, ticket/stage/attempt, commitment,
+   sender/recipient generations and key versions in HPKE `info`, authenticated
+   additional data, and the signature. After DATA is fixed, publish separate
+   validator-encrypted witness packets containing its digest, plaintext, salt,
+   and each DATA envelope's ephemeral generation material. A validator must
+   reproduce every required miner/requester DATA copy, not merely decrypt its
+   own evidence. Witness envelopes do not include their own generation secrets;
+   DATA does not refer back to a witness hash. These bindings and witness checks
+   still require implementation and do not change the existing prototype.
    Associated data is visible; keep report URLs, text and scores encrypted.
    Verify signatures, assignments and keys before decryption, then verify the
-   commitment opening. Enforce replay and size limits. HPKE provides no general
+   commitment opening, complete ciphertext publication, and finalized inclusion
+   proof. Enforce replay and size limits. HPKE provides no general
    replay protection or recipient-compromise forward secrecy.
    [RFC 9180](https://www.rfc-editor.org/rfc/rfc9180.html),
    [Rust HPKE API](https://docs.rs/hpke/latest/hpke/).
 
-8. Fetch report IDs from the allowlisted provider over HTTPS. Verify exact
+8. Every validator that signs must inspect the actual evidence. Fetch report
+   IDs from the allowlisted provider over HTTPS. Verify exact
    analyzed text, version, time window and all three fractions. Preserve raw
    JSON separately from the versioned score projection. Verify panel signatures
    and source/candidate bindings, then review the entire revision for claims,
-   quantities, negation, uncertainty, attribution and readability. Reviewers
+   quantities, negation, uncertainty, attribution and readability. Preparers
    commit before peer openings; all openings and disputes stay encrypted to
-   authorized reviewers. Missing reviews cannot default to approval. Resolve
-   disagreements before weight deadlines, retaining every observation.
+   every frozen certifier. A final certificate binds the exact verdict,
+   snapshot, stage and evidence, with distinct signer weight `w` satisfying
+   strict `3w > 2W`. Assume dishonest weight below `W/3` in this conditional
+   set. Preparer signatures or a certificate over an evidence hash alone are
+   insufficient. Missing keys, nonresponse, recusal, or a replacement preparer
+   never shrink `W`. Retain every observation and use the
+   [fixed certificate/closure rule](service-evidence.md#stage-transitions-and-certificates)
+   for disagreement or missing evidence; neither defaults to approval.
 
 Panel reward uses the median of three paired detector improvements, with
 Pangram improvement separately nonnegative. Strict joint success additionally
@@ -106,15 +134,22 @@ UID reuse, but new owners do not inherit old performance records. Issued
 requester abandonment consumes the index and counts against the requester;
 a provider cannot fail on a payload never validly delivered.
 
-Each obligation binds the UID and requester/provider role. For measured `N > 0`
-valid obligations and `F` failures, `10*F <= N` passes
-availability. More than 10% failures zeros earned A+B epoch credit. Require
+Each obligation binds the UID and requester/provider role. Requester obligation
+begins at issue; a provider activates only after timely globally certified valid
+input at its fixed start. Retain activated `A=S+F+U+V`, separating success,
+attributable failure, unresolved and platform-void records; inactive fallback
+reservations are separate. Set settled `N=S+F`. Require `U=0`, `N>0`, and
+`10*F<=N` for availability. More than 10% failures zeros earned A+B epoch credit.
+Require
 this gate in aggregate and separately for mandatory service on each committed
 interface and actually assigned role; paid/cheap replies or outgoing payloads
 cannot dilute provider failures. Zero
-workload is no automatic pass. Exclude duplicates, unsolicited or malformed
-requests and impossible deadlines; retain independent delivery evidence and
-disputes. A complaint alone cannot prove failure. Eligibility uses closed
+workload is no automatic pass. Unsolicited traffic and duplicate retries create
+no new obligation. Invalid requester publication cannot activate a provider,
+but the issued requester obligation still closes under the fixed rule.
+Impossible windows prevent issue. Retain complete publication, certificate,
+and dispute evidence; a complaint alone cannot prove failure. Eligibility uses
+closed
 prior request windows plus bounded real probation assignments, without
 heartbeats. Close measurement before weight deadlines and demonstrate the
 native payout lag; already distributed emissions cannot be clawed back.
@@ -122,12 +157,21 @@ Retain each mandatory interface/role's recovery deficit from an initial zero:
 `D_e = max(0, D_previous + 10*F_e - N_e)`. Normal eligibility also requires zero
 deficit; only same-class protocol probation work can retire it. It does not age
 out or reset through key/service-version rotation, and zero workload leaves it
-unchanged. Retain the supporting signed task and delivery records.
+unchanged. Unresolved/void records supply no deficit-recovery credit, and `U>0`
+blocks the affected class. A successful fallback leaves earlier provider
+failures intact. Retain all supporting records. Use the
+[finality and platform-incident rule](service-evidence.md#deterministic-accounting-and-platform-failure):
+strict global certificates must cover the full prescribed incident scope;
+local timeouts or accusations cannot selectively pardon failures or extend
+deadlines. Private customer work never enters mandatory `N` or `F`.
 
 Withhold detailed active-test evidence from revision miners until retirement;
 each panel service knows its own response. Publish only necessary scheduling
-metadata and reviewed aggregates. Keep provider locators, text and scores out
-of logs and public artifacts. Encryption does not hide all identities or
+metadata, ciphertexts and reviewed aggregates. Keep provider locators, text and
+scores out of plaintext logs and public plaintext artifacts. Every frozen
+certifier is authorized to inspect active evidence; no preparer can widen a
+customer's separate chosen-validator disclosure. Encryption does not hide all
+identities or
 timing, prove endpoint nondisclosure or establish private model execution.
 
 Miners pay for private queries beyond those tickets and required Pangram
@@ -155,8 +199,10 @@ normalization needs a versioned policy. Timestamps do not prove immutability,
 and no signed or unique canonical result per text was established.
 
 The launch adds no external beacon wait. Predictable full review avoids a
-publicly identifiable unreviewed subset; it does not guarantee that reviewers
-detect every defect. Later sampling requires a separate security/cost argument.
+publicly identifiable unreviewed subset; it does not guarantee that validators
+detect every defect or establish the below-one-third dishonest-weight bound.
+Fund every signer's actual inspection as well as preparation and publication.
+Later sampling requires a separate security/cost argument.
 
 Weight commitments follow scoring, separately from audit-answer commitments.
 Use the supported SDK/runtime timelock and epoch schedule, including any native beacon dependency, rather than

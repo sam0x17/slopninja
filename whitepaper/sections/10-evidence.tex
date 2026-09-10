@@ -100,9 +100,44 @@ These are assignment and accounting tests, not measured model accuracy,
 profitable attacks, or an equilibrium analysis. The simulation assumes
 fixed membership and reserved capacity; it does not model adaptive UID
 acquisition, shared-detector fallback, delivery disputes, private-model
-execution, or native payouts. Three-member panels remain a pilot choice;
-the results do not justify calling their decisions trustless or enabling
-live rewards without further evidence.
+execution, or native payouts. These results concern the earlier
+three-reviewer majority policy. In this revision, three preparers assemble
+evidence and a strict global weighted quorum certifies the actual
+judgments. Private detector responses still do not prove private execution.
+
+\subsection{Settlement counterexamples and certificate boundaries}
+
+A second isolated Rust experiment checks 1,921,920 binary-probability
+cases and 693 three-class cases for a proposed complementary integer
+allocation. For fixed admission and a pot \(c\), assigning B
+\(\lfloor cb\rfloor\) and A its remainder conserves \(c\) in every
+admitted case. Rejected joint admissions award neither endpoint. This
+verifies accounting in the synthetic model; it does not verify the
+quality oracle or imply alpha-payout conservation~\cite{settlementgameability}.
+
+With separate normalization, moving an allied pair's raw credits from
+\((12{,}000,0)\) to \((9{,}000,3{,}000)\) increases its combined allocation
+from 10.00000\% to 10.83591\%. Even fixed complete weight rows leave a
+counterexample: with 70\% honest and 30\% malicious validator stake, a
+simplified native clipping and rank-normalization model increases the
+pair's miner-incentive share from 13.15789\% to 13.56362\%. Its combined
+policy credits remain 12,000. The simulation omits native fixed-point
+details, registration filtering, dividends, pruning, and future emission
+changes. It disproves an inference from conserved credits to conserved
+payouts; it is not a measured deployed exploit.
+
+The abstract certificate model also checks 1,332 admissible pairs of weighted vote sets
+without a conflicting strict quorum at or below one-third dishonest
+weight when honest validators never double-sign. Exactly one-third can
+block liveness by withholding. Above one-third, an explicit roster admits
+conflicting certificates through double-signing. This vote-set model does
+not implement the mailbox's first-commitment ledger. Removing missing voters from the denominator
+breaks the safety argument even below that boundary. Service fixtures
+cover unresolved obligations, requester fault before provider activation,
+replay accounting, the 10\% boundary, and persistent recovery deficits.
+Seven focused tests, formatting, and Clippy pass for this isolated
+experiment. These checks supply neither a production ledger nor an
+economic equilibrium proof.
 
 The project does not yet demonstrate a reliable sub-10\% rewriting
 model, calibrated production-origin service, reviewed commercial

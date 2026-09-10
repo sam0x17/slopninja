@@ -22,16 +22,29 @@ emissions.
 Deterministic hash assignments pair training counterparts on released,
 authorized text. Each B comparison batch faces Pangram and a common three-A
 panel, including the strongest qualified prior-round origin detector. Three
-assigned validators review every scored submission and all required checks.
+hash-assigned preparers organize each submission's evidence. Final semantic
+certificates require agreeing weight `3w > 2W` from the frozen eligible validator
+set; every signer inspects the authorized encrypted benchmark evidence. The
+conditional assumption is dishonest eligible weight below `W/3`, with no
+denominator reduction for missing or abstaining validators.
 Active evaluation feedback remains private until retirement. The whitepaper's
 [reward rules](whitepaper/sections/07-rewards.tex) define fixed budgets,
 mandatory assignments, aggregate/interface/role availability gates and recovery
-deficits for earned A and B emissions.
+deficits for earned A and B emissions. The [service-evidence rules](docs/service-evidence.md)
+retain successes, failures, unresolved work and platform voids separately; the
+[adjudication rules](docs/reward-adjudication.md) define exact style utility `V`
+and certified preservation, readability and tone gate `G`.
 
 The [assignment gameability experiment](docs/assignment-gameability.md) compares
 peer selection, selective failures, committee collusion and recovery accounting
 with reproducible Rust simulations. It records both blocked strategies and
 attacks that pass availability checks while corrupting scores.
+The [settlement hypothesis](docs/settlement-gameability.md) conserves complementary
+policy credits but finds a counterexample after simplified native weight
+normalization. That credit proposal is not adopted. The monetary connection
+between private A responses and B rewards remains unresolved; the
+[funded-alpha option](docs/alpha-match-reserve.md) awaits a funding decision and
+resolution of failure/refund incentives.
 
 Research toward an adversarial Bittensor subnet for text revision: make writing easier to read while preserving its arguments, details, qualifications, and intended tone, with less than 10% AI-generated **plus AI-assisted** content on repeated detector checks.
 
@@ -372,8 +385,9 @@ miner selection of committed reports can still bias observed pass rates.
 The [public-result reader](docs/pangram-public-results.md) checks an existing
 Pangram report without buying another inference. The
 [receipt and audit proposal](docs/subnet-receipts-and-audits.md) uses provider
-reports and full review by three hash-assigned validators per scored submission.
+reports, three evidence preparers and final global weighted certificates.
 The [audit rules](whitepaper/sections/08-pangram-audits.tex) retain native
-validator weight commit-reveal and define fixed reviewer reserves and deadlines.
+validator weight commit-reveal; [adjudication](docs/reward-adjudication.md)
+defines field ballots, private openings and fixed closure deadlines.
 
 `slop_ninja/` is an independent local Git repo ignored by its parent `fix-slop` repo. Corpora, API responses, and derived databases stay in ignored `data/`; reusable manifests, code, and reports are tracked. Preface copies, derived experiments and the report containing source excerpts remain local and ignored.
