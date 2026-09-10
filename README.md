@@ -10,13 +10,28 @@ Planned domain: **slop.ninja**.
 Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
 The draft surveys related work and defines private miner models, training data,
-three benchmark tasks, and paid asynchronous inference at market prices
+two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
 Customer inputs are encrypted for the assigned
 miner; customers can separately share evidence with a specific validator.
-Transformation benchmarks target both Pangram and the subnet's strongest
-qualified AI detector from a completed round. Retired benchmark rewrites feed
-later detection rounds.
+Task A detects author and origin; Task B transforms text toward an author's
+style under a source and brief, with optional detector evasion. Both share
+bounded training and benchmark services as an emission-eligibility obligation,
+free to the assigned requester and funded by the serving miner's expected
+emissions.
+Deterministic hash assignments pair training counterparts on released,
+authorized text. Each B comparison batch faces Pangram and a common three-A
+panel, including the strongest qualified prior-round origin detector. Three
+assigned validators review every scored submission and all required checks.
+Active evaluation feedback remains private until retirement. The whitepaper's
+[reward rules](whitepaper/sections/07-rewards.tex) define fixed budgets,
+mandatory assignments, aggregate/interface/role availability gates and recovery
+deficits for earned A and B emissions.
+
+The [assignment gameability experiment](docs/assignment-gameability.md) compares
+peer selection, selective failures, committee collusion and recovery accounting
+with reproducible Rust simulations. It records both blocked strategies and
+attacks that pass availability checks while corrupting scores.
 
 Research toward an adversarial Bittensor subnet for text revision: make writing easier to read while preserving its arguments, details, qualifications, and intended tone, with less than 10% AI-generated **plus AI-assisted** content on repeated detector checks.
 
@@ -337,24 +352,28 @@ to signed validator keys, checks salted commitments, and can retrieve an existin
 Pangram report after decryption. Chain assignments and replay accounting remain
 outside the prototype.
 
-The [three-task mechanism proposal](docs/subnet-mechanisms.md) defines separate
-competitions for author/origin detection, author transformation and writing
-improvement, with reusable word/grammar representations and independent quality
-review. It maps those tasks onto two proposed on-chain mechanisms.
+The [two-task mechanism proposal](docs/subnet-mechanisms.md) defines author/origin
+detection in on-chain mechanism 0 and author-directed transformation under the
+source and brief, including optional detector evasion, in mechanism 1. Each receives
+50% of pilot emissions. Fidelity, readability and the requested audience and
+style controls remain transformation gates and brief requirements.
 The [private model plan](docs/miner-models-and-data.md) specifies starter
-classifiers and editing adapters, with a [training-source plan](docs/miner-training-sources.md)
+classifiers and an editing adapter, with a [training-source plan](docs/miner-training-sources.md)
 covering Global Voices, PLOS and consented writing. Miners keep their weights
 and can earn customer fees through [asynchronous inference](docs/paid-inference.md)
 with proposed on-chain job settlement and private execution.
 Pangram is the required external benchmark. The [API funding and verification
 design](docs/pangram-oracle.md) separates the cost of independent measurement
 from the remaining trust in Pangram and human quality judgments.
-An initial [repeatability probe](docs/pangram-repeatability.md) found matching
-document fractions but different window scores across three fresh submissions
-of identical text. Exact numeric determinism cannot be assumed for audits.
+The [repeatability probe](docs/pangram-repeatability.md) found matching document
+fractions across fresh requests for three texts, with varying auxiliary window
+scores. It provides no near-10% observation or general determinism guarantee;
+miner selection of committed reports can still bias observed pass rates.
 The [public-result reader](docs/pangram-public-results.md) checks an existing
 Pangram report without buying another inference. The
-[receipt and audit proposal](docs/subnet-receipts-and-audits.md) uses public
-reports, future drand sampling and separate validator weight commit-reveal.
+[receipt and audit proposal](docs/subnet-receipts-and-audits.md) uses provider
+reports and full review by three hash-assigned validators per scored submission.
+The [audit rules](whitepaper/sections/08-pangram-audits.tex) retain native
+validator weight commit-reveal and define fixed reviewer reserves and deadlines.
 
 `slop_ninja/` is an independent local Git repo ignored by its parent `fix-slop` repo. Corpora, API responses, and derived databases stay in ignored `data/`; reusable manifests, code, and reports are tracked. Preface copies, derived experiments and the report containing source excerpts remain local and ignored.

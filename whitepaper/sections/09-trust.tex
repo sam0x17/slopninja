@@ -4,8 +4,9 @@ behavior}\label{trust-assumptions-and-adversarial-behavior}
 
 The chain can enforce authenticated accounting and commitment
 consistency. Recipient encryption limits who can decrypt protocol
-deliveries. A verified beacon permits reproducible selection after the
-commitment deadline. Each guarantee has a narrower scope than useful,
+deliveries. Counter and roster commitments permit reproducible assignment
+of peers, comparison batches, and reviewers. Every scored submission
+receives the required review at launch. Each guarantee has a narrower scope than useful,
 confidential writing inference.
 
 \par\medskip\noindent
@@ -24,13 +25,17 @@ preservation review, copying checks, and explicit exploit controls \\
 Miner's private search and retry costs are unverifiable & Miners fund
 their own attempts; score committed reports under fixed deadlines;
 do not reimburse claimed private costs \\
-Validators collude or score inconsistently & Random overlapping
+Validators collude or score inconsistently & Hash-assigned overlapping
 assignments, independent commitments, retained disagreements; honest
 review remains necessary \\
+Curator or coordinator leaks labels or selects a biased task set &
+Independent provenance review, overlap checks, and source-group splits;
+commitments constrain later changes to the frozen pool and baseline
+evidence. Label secrecy and honest curation remain trust assumptions \\
 Selected subnet detector favors a transformation miner & Prior-round
-qualification, independent opponent assignment, signed responses and
-blinded controls; private execution and operator independence remain
-assumptions \\
+qualification, a common three-UID panel, signed responses and
+blinded controls; median robustness requires a bound on colluding UIDs,
+and private execution remains unproved \\
 Pangram changes or serves conflicting records & Pin the reported
 interface/version, retain observations, and suspend affected comparisons
 under a fixed policy \\
@@ -50,3 +55,21 @@ do not attest execution. Changing the benchmark or judge after observing
 a miner's answer would invalidate the declared comparison. Publish
 protocol versions and aggregate outcomes while keeping customer material
 and active evidence private.
+
+Reciprocal-service tickets bound aggregate free-query exposure. The
+predictable hash schedule does not prevent common owners from obtaining
+multiple UIDs or exploiting occasional favorable assignments. It
+provides verifiable allocation without an ownership registry. Service
+failure rates need authenticated request and delivery evidence; the
+strict greater-than-10\% rule cannot be based on a recipient's complaint
+alone. Predictable assignments remain mandatory, and requester abandonment
+consumes both an index and its failure allowance. The permitted 10\%
+allows selective refusal; timely dishonest answers require quality
+evaluation and can pass availability checks. Mandatory-service gates by
+interface and role prevent miners from buying cheap successes to dilute
+failures. A persistent recovery deficit makes abandoned work delay later
+eligibility even after the current epoch's credit is lost. It cannot
+make an operator who plans to leave value future participation.
+An outage can disrupt a full scoring batch, so reserve capacity
+and an explicit void policy remain necessary. Epoch qualification uses
+actual requests and deterministic probation work, without heartbeats.

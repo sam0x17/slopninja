@@ -1,5 +1,5 @@
-\section{Detector evidence and randomly assigned
-audits}\label{pangram-evidence-and-randomly-assigned-audits}
+\section{Detector evidence and assigned
+audits}\label{pangram-evidence-and-assigned-audits}
 
 Pangram's API provides asynchronous tasks, analyzed text, document
 fractions, version information, and optional public dashboard links. The
@@ -18,7 +18,7 @@ model identity, or one unique canonical result per text.
 Recorded probe~\cite{reportprobe}.
 
 For an evasion benchmark, a miner commits its final candidate and
-required report IDs before audit selection. Assigned validators receive
+required report IDs before the evidence deadline. Assigned validators receive
 the source, candidate, report URLs, score projections, and commitment
 openings in separate encrypted envelopes. They retrieve the provider's
 record directly and compare the exact text, fractions, version, and time
@@ -34,77 +34,93 @@ examples. The subnet must not assert otherwise. Provider verification
 and any reuse of provider labels also need suitable service terms.
 Pangram model card~\cite{pangramcard}.
 
-For the selected subnet detector, retain signed responses binding the
-round, frozen service identity and settings, request nonce, text
-commitment, and full origin-probability vector. The benchmark coordinator
-obtains the required candidate response after the candidate commitment;
-private search results cannot replace it. Record that evidence before
-the audit beacon, then deliver its openings only to authorized auditors.
-They verify the signer and bindings and check the declared control and
-consistency policy. A signature establishes the service's response; it
-does not prove execution of particular secret weights. The protocol
-must validate this evidence path independently of Pangram's public-report
-reader. Customer requests never enter it automatically.
+For required subnet-detector calls, retain signed responses binding the
+round, service identity and settings, request nonce, text commitment,
+and full origin-probability vector. The coordinator obtains the common
+panel's complete source/candidate response matrix after B candidate
+commitments. Miner-selected search results cannot replace it. The
+coordinator relays work under committed assignments; validators can
+verify that it followed the allocation rule. A signature establishes a
+service's response, not execution of particular private weights. The
+ticket ledger, timely-delivery evidence, and scoring path need
+validation independently of Pangram's public-report reader.
 
-\subsection{Audit sequence}\label{audit-sequence}
+\subsection{Assignment and audit sequence}\label{audit-sequence}
+
+Reciprocal partners are determined by the lifetime interaction counter
+and frozen eligible roster. Benchmark batches, common detector panels,
+and reviewer assignments use a separate, shared comparison counter and
+distinct hash domains. These schedules are publicly predictable. At
+launch, review every scored submission and all required checks, including
+whole-revision preservation. There is no hidden audit sample and no
+application-level external beacon dependency.
+
+For each scored submission, rank eligible validator UIDs by the hash of
+the versioned review domain, chain, subnet, shared comparison index,
+submitting UID, and reviewer UID. Use canonical encoding, UID tie-breaking,
+three distinct reviewers, and an ordered reserve list. Exclude the exact
+miner UIDs involved in that comparison. The coordinator cannot choose
+reviewers or obtain another draw; different UIDs can still have the same
+owner. Reviewer capacity must be reserved before issuing the task.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Freeze the benchmark policy, authorized auditor roster, question-pool
-  root, selected subnet detector, and source-baseline evidence. Questions and answers stay
-  private; public roots use salted commitments.
+  Freeze the eligible epoch roster from qualification and actual request
+  outcomes, service capacities, global task budgets, index-allocation
+  rules, deadlines, and authorized auditor roster. Commit the question
+  pool and source Pangram baselines. Publish fixed block deadlines for
+  submissions, complete evidence, reviewer commitments, private openings,
+  dispute resolution, and weight submission.
 \item
-  Accept one final submission commitment per assignment. It binds
-  candidate text, reports, task identity, and the offered service
-  version. Finalize all eligible commitments before a predetermined
-  future drand round, with an explicit timing margin. Obtain and commit
-  the required subnet-detector response before that round as well.
+  Issue reciprocal-service tickets in the protocol schedule. Consume
+  consecutive lifetime indices, derive their ordered peers from the
+  pinned roster, and record responses, declines, expiries, and fixed
+  fallbacks. Training feedback uses released, authorized material;
+  active benchmark labels and detailed review material remain private.
 \item
-  Verify the pinned beacon's chain, public key, scheme, round, and
-  signature. Derive a domain-separated seed from that beacon and the
-  frozen epoch/pool commitments. Use unbiased deterministic sampling to
-  select submissions, questions, and overlapping auditors.
+  Use the shared comparison index to determine the common A panel and B
+  batch under the frozen policy. Exclude every B UID from A reserves
+  before freezing replacement capacity. Commit every selected service version,
+  threshold, and reserve order. Accept one final B candidate and selected
+  Pangram-report commitment per assigned task. The predictable opponent
+  schedule does not allow a second draw or a revised submission after
+  commitment.
 \item
-  Deliver the selected benchmark evidence and inclusion proofs only to
-  the assigned auditors. Each recipient gets a separately encrypted
-  envelope. Enforce authenticated key registration, expiry, replay
-  state, and delivery deadlines.
+  Obtain the required common panel matrix through the blinded grading
+  interface, retaining control outcomes and service failures. Apply a
+  justified fixed replacement to every affected source/candidate cell
+  for the batch, or void the shared comparison. Record any missing
+  strongest-service comparison. Finalize all evidence commitments before
+  the fixed evidence deadline; a favorable score is never grounds to
+  switch provider or discard an observation.
 \item
-  Auditors commit answers before seeing peers' answers. Deliver openings
-  and evidence privately to authorized reviewers. Resolve disagreement
-  under the declared benchmark review policy before final weights.
+  Deliver the required evidence and inclusion proofs for every scored
+  submission in separately encrypted envelopes to its assigned reviewers.
+  Enforce authenticated key records,
+  expiry, replay state, and delivery deadlines. Auditors commit answers
+  before seeing peers' answers, then open them privately for authorized
+  review. Resolve disagreements before the relevant weight deadline.
+  Withhold detailed active-test feedback from revision miners until
+  retirement; each scoring service necessarily knows its own response.
 \end{enumerate}
 
-The live policy must fix the sample size and auditor quorum. For pilot
-measurement, use three independently assigned auditors on each sampled
-task and retain all disagreements; stake identities alone do not
-establish operator independence. Question checks supplement
-whole-revision review rather than certifying every unexamined claim.
-
-If \(b\) of \(N\) committed items contain detectable defects
-and \(s\) items are sampled uniformly without replacement, the
-probability of sampling at least one defective item is
-\begin{equation}\label{eq:audit-coverage}
-  1-\frac{\binom{N-b}{s}}{\binom{N}{s}}.
-\end{equation}
-Actual detection is weaker when
-questions miss the defect or reviewers fail to recognize it. This makes
-audit coverage measurable without claiming that sampling proves full
-fidelity.
-
-Pin drand's schedule instead of assuming the chain's last stored pulse
-is the latest public pulse. A commitment finalized after a round becomes
-public cannot use that round as unknown future randomness. Predeclare
-wait or abort behavior for missed deadlines and unavailable beacons; do
-not select a favorable replacement round.
-drand specification~\cite{drandspec},
-on-chain randomness pitfalls~\cite{drandpitfalls}.
+Retain every review and disagreement. A missing review follows the fixed
+reserve and resolution policy; it cannot default to approval. Full
+coverage prevents a miner from concentrating defects in a publicly
+predictable unreviewed subset. It does not establish reviewer honesty or
+guarantee that readers detect every error. A three-UID majority is useful
+only under a stated bound on colluding reviewers, and stake identities
+alone do not establish that bound. Reduce task volume to fit the funded
+review budget instead of silently reducing coverage. Any later sampling
+policy needs a separate security argument and measured cost benefit.
 
 Subtensor's timelocked commit-reveal protects validator weights from
-immediate copying. It is separate from audit selection and recipient
-encryption. Weight plaintext eventually becomes public; customer inputs
+immediate copying. Use its supported SDK/runtime path, including any
+beacon dependency within that native mechanism; this proposal adds no
+separate beacon wait for peer allocation or auditing. Weight plaintext
+eventually becomes public; customer inputs
 must not be encrypted with that eventual-reveal mechanism. Use the
-supported SDK/runtime path rather than hard-coding a CRv4 schedule.
+recipient encryption described above and do not hard-code a CRv4 schedule.
 Bittensor commit-reveal~\cite{commitreveal}.

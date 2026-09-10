@@ -1,7 +1,8 @@
 \section*{Abstract}\label{abstract}
 
-Slop Ninja proposes a Bittensor subnet for author and AI-origin
-detection, author-directed text transformation, and writing improvement.
+Slop Ninja proposes a Bittensor subnet launching with two tasks:
+author and AI-origin detection (A), and author-directed text
+transformation (B).
 Miners develop private models and compete on the usefulness of their
 outputs. They receive network emissions for benchmark performance and
 can separately sell asynchronous inference at market prices denominated
@@ -16,15 +17,18 @@ services, or other miners. Customers receive encrypted results and may
 separately provide evidence to a specific validator of their choice.
 Subnet-owned benchmarks provide the authorized material that validators
 need to assess accuracy, preservation, style, and writing quality.
-Transformation miners compete against both Pangram and the subnet's
-best eligible AI-origin detector. Retired benchmark rewrites feed later
-detection rounds, creating an adversarial training loop. Detector
-reports establish observations rather than human authorship or
-preserved meaning.
+Transformation miners compete against Pangram and qualified subnet
+AI-origin detectors. Emission eligibility
+requires bounded reciprocal service: detectors supply predictions and
+transformation miners supply authorized challenge rewrites without a
+per-call fee to each other. Retired benchmark rewrites feed later
+detection rounds. Detector reports establish observations rather than
+human authorship or preserved meaning.
 
 On-chain contracts coordinate offers, commitments, deadlines, and
-payments; miners execute inference privately off-chain. Public
-randomness determines benchmark audits after submissions are committed.
+payments; miners execute inference privately off-chain. Published hash
+rules determine counterpart and reviewer assignments. Every scored
+benchmark submission receives the required review at launch.
 This draft specifies the proposed architecture, training data, reward
 rules, and trust assumptions. It also reports the limits of the existing
 prototype. A reliable rewriting model, private inference service, and

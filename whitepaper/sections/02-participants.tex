@@ -1,12 +1,26 @@
 \section{Participants and the two kinds of
 work}\label{participants-and-the-two-kinds-of-work}
 
-Miners register service offers and retain their models. Customers buy
-specific jobs from those offers. Validators evaluate subnet-owned
+Miners register signed service endpoints and capabilities and retain
+their models. Customers buy detection and transformation jobs through
+separately quoted offers. Validators evaluate subnet-owned
 benchmark tasks and submit weights. Benchmark curators maintain
 permitted source material, production records, and hidden evaluation
 labels. A customer-facing gateway may relay ciphertext, but receives no
 decryption key.
+
+Benchmark operator and coordinator denote administrative duties assigned
+to named curators and validators before each round: funding and managing
+the round, recording protocol-derived assignments, and obtaining baseline evidence. A pilot may
+combine these duties in one service. The task owner is the customer for
+private inference and the curator for a benchmark. Authorized evaluators
+and auditors are assigned validators; judges, readers, and authorized
+reviewers perform independent review for those validators. Automated
+judges require the qualification described in
+Section~\ref{preservation-before-revision-rewards}. The settlement adapter
+is the proposed contract software for customer escrow and alpha
+transfers, described in
+Section~\ref{paid-asynchronous-jobs-and-on-chain-coordination}.
 
 \par\medskip\noindent
 \begin{tabularx}{\linewidth}{@{}LLL@{}}
@@ -14,9 +28,11 @@ decryption key.
 Property & Customer inference & Subnet benchmark \\
 \midrule
 Purpose & Serve a customer's request & Measure miners for emissions \\
+Launch services & A: detection; B: transformation & A: detection;
+B: transformation \\
 Source of text & Customer & Authorized benchmark collection \\
-Default input recipients & Customer and assigned miner & Task owner,
-assigned miner, authorized evaluators \\
+Default input recipients & Customer and assigned miner & Curator,
+assigned service miners, validators, commissioned reviewers \\
 Evaluation & Customer acceptance & Fixed scoring policy and independent
 review \\
 Pangram submission & Excluded from the confidential job protocol &
@@ -40,8 +56,8 @@ Customer tasks do not become benchmark examples automatically.
 Validators must not obtain customer inputs through an audit exception, a
 shared support key, or an arbitration process. A customer may initiate a
 separate, explicitly addressed evidence disclosure as described in
-Section~\ref{customer-directed-evidence-disclosure}. This applies to detection requests as well as both editing
-tasks. An author's uploaded reference collection can be more identifying
+Section~\ref{customer-directed-evidence-disclosure}. This applies to both
+detection and transformation requests. An author's uploaded reference collection can be more identifying
 than the query itself and receives the same protection.
 
 Miners may advertise specialties, prices, length limits, and delivery

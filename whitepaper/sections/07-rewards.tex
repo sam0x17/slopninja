@@ -1,22 +1,18 @@
 \section{Benchmark scoring and mechanism
 mapping}\label{benchmark-scoring-and-mechanism-mapping}
 
-The current Bittensor documentation permits two chain mechanisms, each
-with separate weights and consensus while participants share UIDs.
-Slop Ninja maps author/origin detection to mechanism 0 and combines
-separately scored transformation and writing-improvement pools in
-mechanism 1. The three logical tasks do not require three chain
-mechanisms. Deployment must also respect the documented joint
-UID/mechanism capacity constraint.
-Bittensor mechanisms~\cite{mechanisms}.
+The initial subnet has two logical tasks and two chain mechanisms:
+A, author/origin detection, maps to mechanism 0; B, author-directed
+transformation and detector evasion, maps to mechanism 1. Writing
+quality and meaning preservation are requirements within B, not a
+separate launch reward pool. Deployment must respect the documented
+joint UID/mechanism capacity constraint~\cite{mechanisms}.
 
-For an initial offline tournament, give the three logical tasks equal
-budget shares. Within detection, balance author and origin tasks
-equally; within transformation, retain separate author-style, evasion,
-and combined modes. These are transparent pilot allocations, not an
-economically optimized split. Any live allocation and change policy must
-be published before the scoring epoch. Miners may specialize and earn
-from the pools they enter.
+For an initial offline tournament, give A and B equal budget shares.
+Within A, balance author and origin tasks equally; within B, retain
+separate author-style, evasion, and combined modes. These are pilot
+allocations, not an economically optimized split. Publish any live
+allocation and change policy before the scoring epoch.
 
 \subsection{Detection}\label{detection}
 
@@ -44,34 +40,255 @@ labels merely because Pangram agrees with a miner.
 
 \subsection{The adversarial feedback loop}\label{adversarial-feedback-loop}
 
-Before each transformation round, select the strongest qualified AI-origin
-service from a completed detection round. Rank eligible services by
-held-out origin Brier performance, subject to the declared calibration
-and human false-positive requirements. Author-retrieval scores do not
-select this opponent. Freeze its identity, service version, threshold,
-request settings, and response policy before releasing transformation
-assignments. Bootstrap rounds use a named reference detector until a
-competitive incumbent qualifies and are reported separately.
+Participation includes a bounded reciprocal-service obligation. A miners
+provide author/origin predictions on assigned B training requests; B
+miners provide rewrites that follow the source and brief in assigned A
+training requests. The request is free at the point of use, with the
+provider bearing its cost in exchange for eligibility for task
+emissions. Expected emissions need not cover every miner's costs. The
+obligation concerns delivered service, not unverifiable training effort.
+Independent preservation, readability, and requested-tone review are
+required for B. A miner cannot approve its own revision for rewards.
 
-The selected service cannot score its own operator's transformation
-submissions for rewards. Such assignments use the highest-ranked
-eligible independent opponent under a rule fixed before the round.
-Retain the opponent identity with every score and compare miners on
-matched assignments. Declared independence, signed responses, blinded
-control requests, and consistency checks reduce conflicts; they cannot
-prove that undisclosed collusion or selective service behavior is absent.
-A private version label does not attest which weights ran. Unavailable
-or invalid opponent evidence follows the frozen failure policy and
-cannot turn into a Pangram-only joint pass.
+Use released, authorized training sources and retain the production
+history, brief, and preservation status with each response. A later
+rewrite does not acquire a human-only label by defeating a detector.
+Unknown assistance histories remain weak labels; a private endpoint is
+not itself proof of model generation.
+Allocate complete source families to either released training material
+or private evaluation. Assigned miners receive the inputs needed to
+perform their service. Hidden labels, private review material, and
+detailed evaluation feedback stay with authorized evaluators until
+retirement; active examples are not released into reciprocal training.
+Customer jobs never enter this exchange automatically. Private weights remain private, but
+serving outputs still permits some model extraction and endpoint
+retention; quotas limit exposure without preventing either.
 
-Transformation miners try to defeat this opponent and Pangram while
-passing independent preservation and style review. Authorized benchmark
-rewrites then become hard examples for later detection rounds, with
-their production labels retained. Split complete source families between
-released training material and private evaluation; release training
-examples only after retiring them from evaluation. Maintain hard human
-examples alongside generated rewrites. Neither immediate publication of
-test answers nor customer-text reuse is part of this feedback loop.
+\subsubsection{Service budgets and deterministic pairing}
+
+Freeze a global budget, request schedule, interface qualifications, and
+capacity limits before each evaluation epoch. Detection and generation
+have separate input/output limits and capacity reservations. New UIDs
+and traffic do not increase the global budget, and serving volume earns
+no reward by itself. There are no counterparty nominations or voluntary
+pairing offers. Customer market quotes remain separate from this
+protocol-assigned work.
+
+For each protocol-issued interaction, consume the next lifetime index
+\(i_u\) of the requester UID slot \(u\). The counter is persistent for
+that chain and subnet, including through hotkey changes and UID reuse;
+each assignment also pins the current registration generation, hotkey,
+service version, and encryption key. A requester cannot skip indices,
+reset them, or issue empty calls merely to advance the counter. An
+expired assigned slot still consumes its index and counts as a requester
+failure if the requester abandons its obligation; retransmission keeps the
+same index, request, and peer assignment. New or replaced registrations
+must qualify before earning rewards; inheriting a slot counter does not
+inherit its former holder's performance record.
+
+Let \(R_e\) commit the eligible, active service roster fixed for epoch
+\(e\). Rank each eligible opposite-interface peer \(v\ne u\) by
+\begin{equation}\label{eq:peer-ranking}
+ h_{u,i,v}=\operatorname{SHA256}\!\left(
+ \operatorname{encode}(D,\mathrm{chain},\mathrm{netuid},u,i_u,v)
+ \right),
+\end{equation}
+where \(D\) is a versioned domain and \(\operatorname{encode}\) is a
+canonical, length-delimited encoding. Break hash ties by UID. The first
+\(k\) distinct entries form the small permitted peer set. The first peer
+is assigned; later entries are prescribed fallbacks following recorded
+failure, not a menu from which the requester picks a favorable result.
+The pilot must publish \(k\), capacities, and fallback limits before work
+begins. If the permitted set is exhausted, retain the failure; do not
+hash again. Hash-derived ranking and the fixed global schedule must
+respect provider capacity without allowing discretionary substitutions.
+Process capacity reservations in a canonical slot order; a request is
+issued only when its prescribed service windows fit the reserved
+capacity. Fallback stages have predeclared deadlines and minimum response
+windows, so later providers cannot inherit an impossible deadline.
+The ticket pins \(R_e\) for eligibility without mixing it into each
+peer's rank: changing one roster member does not reshuffle the relative
+order of all remaining peers.
+
+A ticket binds the epoch, UID/index, roster root, prescribed peers and roles,
+permitted task, salted input commitment, size limits, deadline, and
+nonce. Anyone can check the scheduling metadata and sequential
+consumption against the finalized ledger. The text and commitment
+openings remain restricted to authorized recipients. Counterparty UID
+visibility does not establish the origin of the text. Validate
+authorization before inference; duplicates return the recorded response
+without another charge against the quota. Counter issuance and quota
+consumption require one authoritative, replay-protected ledger shared
+by validators, not independent per-validator counters.
+
+This schedule is predictable. A miner can inspect future assignments,
+and another UID may have the same owner. Registration costs, bounded
+work schedules, and penalties for assigned failures constrain abuse;
+the hash does not prove operator independence or eliminate strategic
+abstention. Block height defines protocol-assigned slots and deadlines.
+Using a requester-chosen submission block as the peer seed would permit
+waiting for a favorable set. A short deadline narrows that opportunity
+without making a public block number unpredictable.
+
+\subsubsection{Availability from actual requests}
+
+The default Bittensor tempo is 360 blocks, approximately 72 minutes at
+12 seconds per block; the actual subnet tempo and finalized epoch
+boundaries govern the schedule~\cite{tempo}. No heartbeat is required.
+Use authenticated outcomes of real assigned inference requests to
+measure availability.
+
+For miner \(u\) and measured epoch \(e\), let \(N_{u,e}\) be the number
+of valid assigned task obligations and \(F_{u,e}\) the number explicitly
+declined or lacking the required valid submission by their deadlines.
+An obligation is either submitting a scheduled request or answering a
+valid delivered request; the ticket fixes the responsible UID and role.
+The emission-eligibility
+gate is
+\begin{equation}\label{eq:availability-gate}
+ L_{u,e}=\begin{cases}
+ 1,&N_{u,e}>0\ \text{and}\ 10F_{u,e}\leq N_{u,e},\\
+ 0,&\text{otherwise}.
+ \end{cases}
+\end{equation}
+More than 10\% failures means zero earned emission credit in both A and
+B for that measured epoch. Exactly 10\% passes this availability gate,
+while quality requirements still apply. With no assigned requests there
+is no availability evidence and no automatic pass. Report counts and
+failure rates by interface as well as in aggregate. Apply the same gate
+separately to mandatory protocol service for each committed interface
+and assigned role,
+and require every applicable gate to pass. Purchased traffic cannot
+dilute failures on mandatory work, nor can cheap detection replies dilute
+missed transformation obligations. Successful outgoing requests cannot
+dilute missed provider replies. A miner needs a positive assigned
+workload on each interface for which it seeks eligibility; apply a
+role-specific gate when the schedule assigns that role work.
+An answer after its deadline remains a recorded late answer. A successful
+fallback does not erase the preceding provider's decline or failure.
+
+Only protocol-issued requests within the fixed input, output, capacity,
+and response-time limits enter \(N\). Unsolicited traffic, duplicate
+retries, malformed inputs, and deadlines that cannot meet the declared
+service window do not count. Count a protocol-issued requester obligation
+even if the requester withholds its payload to avoid an unfavorable
+peer; do not count that undelivered payload as the provider's failure.
+Bind the request's measured epoch when it
+is issued; every counted deadline must fall within that epoch's closed
+measurement window. Requests due later belong to a later window and
+cannot be marked late early. A valid on-time answer must have
+authenticated delivery evidence. A counterparty's accusation alone cannot establish a
+failure. Retain disputed records for authorized validator review under
+a predeclared evidence rule; do not silently drop hard cases or treat an
+unresolved obligation as fulfilled.
+
+Derive the next epoch's normal active roster from registration,
+qualification, and the completed prior window's request records. A
+small, deterministic probation allocation of real requests lets new or
+recovering UIDs establish availability without a self-declared online
+flag. Missing evidence can block normal admission without proving
+misconduct. Freeze each issued interaction's roster and ordered peers;
+mid-epoch declines or outages invoke its existing fallback list rather
+than recomputing the set. The probation budget and minimum workload
+coverage must be measured in the pilot and fixed before live use.
+
+The zero-credit cutoff can remove the immediate incentive to finish an
+already failed epoch. For each mandatory interface and role, retain a
+recovery deficit alongside the epoch gate:
+\begin{equation}\label{eq:recovery-deficit}
+ D_e=\max\{0,D_{e-1}+10F_e-N_e\},\qquad D_0=0.
+\end{equation}
+Only authenticated, protocol-assigned work in that same class enters
+this update. Normal admission and emission eligibility require zero
+remaining deficit as well as the current availability and quality gates.
+Past surplus service cannot be banked; an epoch with no work cannot
+erase a deficit. Probation uses bounded real requests to permit recovery.
+Purchased jobs and other interfaces cannot retire the deficit, and key
+or service-version changes within a registration do not reset it.
+Dropping an advertised interface or role does not cancel its accrued
+deficit; every outstanding class must be cleared before normal admission.
+Replacement registrations follow their own qualification and probation;
+the design cannot establish whether their owners are different.
+
+For 100 fixed obligations, 11 failures followed by 89 successful replies
+leave a deficit of 10. Abandoning all 100 leaves 900. Both cases earn no
+credit for that epoch, but require respectively 10 or 900 subsequent
+successful obligations to clear the deficit if no further failures occur.
+Capacity limits determine how many epochs recovery takes. This rule gives
+continued service a future eligibility benefit; it does not prove that
+every miner values future emissions above its costs.
+
+The measurement window must close early enough for the relevant weight
+submission and commit-reveal deadlines. Publish which payout cycle
+settles each measured epoch. The proposed zero-credit rule cannot
+retroactively erase emissions already distributed by the chain. The
+adapter must demonstrate its effect on both mechanisms under actual
+weight-reveal delays and stale-weight behavior before launch; this
+paper assumes no custom slashing primitive.
+
+\subsubsection{Common evidence for transformation rewards}
+
+Per-miner peer sets allocate reciprocal training and search access.
+Their outputs cannot directly determine B rewards: different miners
+would otherwise face different detectors, and a favorable pairing could
+become a private reward vote. The benchmark scheduler reserves separate
+service capacity for a common comparison batch. It does not try to
+collect a full scoring matrix by burning miners' private interaction
+indices.
+
+For each shared comparison index, deterministically select three
+qualified A UIDs and a B batch from the frozen registry. Include the
+strongest qualified origin detector from the previous completed A round
+in the A panel; hash-rank eligible remaining A UIDs under a separate
+comparison domain to select the other two and the reserve order. Then
+hash-rank eligible B UIDs outside that panel to fill the published batch
+size. Filter the deterministic A reserve ranking against every UID in
+the B batch and the initial panel, then freeze the remaining reserve
+order and capacity. A reserve cannot later score its own B entry.
+Insufficient reserved capacity prevents issuing that comparison; it
+does not permit another B draw. Qualifications, sizes, capacity, tie-breaking, and the shared
+counter are frozen and reproducible. Miners cannot nominate a panel,
+join a preferred batch, or obtain another draw by declining work. Only
+exact UID exclusion is asserted; different UIDs may share ownership.
+
+Rank the strongest A service by held-out origin Brier performance,
+subject to the declared calibration and human false-positive limits.
+Author-retrieval rank does not qualify an origin service. Every B entry
+faces the same three detectors, source texts, briefs, task modes,
+source-baseline evidence, and frozen settings. Collect a complete source
+and candidate response matrix after B candidate commitments. This is
+what matched assignments mean. The three-member pilot is provisional;
+its cost, coverage, and susceptibility to colluding UIDs require
+measurement before live rewards.
+
+If a panel service fails, apply one predetermined replacement to the
+whole batch and recompute that service's source and every candidate
+response, or void the shared comparison if reserved capacity is
+exhausted. Never mix per-miner panels or discard only missing cells.
+Detector failure is recorded against that detector's service and cannot
+become B nonresponse. A B miner that fails to submit receives zero on
+its assigned work. A missing strongest-detector result prevents a claim
+of success against that detector; a degraded comparison must identify
+its replacement and cannot silently retain the original claim.
+
+The median panel improvement used below limits one arbitrary outlier
+when fewer than half the panel UIDs collude. It does not establish that
+bound, prove owner independence, or make private execution verifiable.
+One A response cannot alone determine B's utility, and A earns quality
+from independent labeled evaluation, not from how harshly it scores B.
+The strongest detector's result is also reported separately. Legitimate
+detector disagreement alone is neither fraud nor a replacement trigger.
+
+For grading requests, conceal the mapping from texts to submitting B
+UIDs and source/candidate roles, mix human and model controls, and use
+one request interface. This differs from the inspectable metadata needed
+for peer-access verification. The service may still recognize a text or
+infer its role. Required signed responses cannot be replaced by private
+search results. Commit the complete evidence by the fixed block deadline;
+hash-assigned validators review every scored submission and all required
+checks at launch. Bootstrap rounds
+use explicitly funded reference services until enough competitive
+services qualify, and are reported separately.
 
 \subsection{Preservation before revision
 rewards}\label{preservation-before-revision-rewards}
@@ -83,7 +300,7 @@ revision. Independent judges also check readability and the requested
 tone. A confirmed failure sets the task's preservation gate \(G\)
 to zero; a confirmed pass sets it to one.
 
-Readers compare anonymized revisions in randomized order without
+Readers compare anonymized revisions in hash-derived order without
 detector or miner scores. Maintain unchanged sources and qualified
 editor baselines. Automated judges join reward allocation only after
 agreement and failure modes have been measured against separate reader
@@ -100,7 +317,7 @@ excluded difficult cases.
 \subsection{Transformation and improvement
 utility}\label{transformation-and-improvement-utility}
 
-Let \(A\in[0,1]\) be normalized positive improvement in target-style fit over
+Let \(V\in[0,1]\) be normalized positive improvement in target-style fit over
 the unchanged source. Estimate it from independent author models and
 blinded target-author or reader comparisons, retaining uncertainty.
 Before using a particular combination for live rewards, freeze and
@@ -120,58 +337,72 @@ least favorable pair among those submitted observations is:
 
 The strict target additionally requires
 \(\max_r F_r(z) < 0.10\). Three reads of one report
-count as one observation. A neighborhood such as two percentage points
-does not relax the strict target. Use the declared provider version and
-repeat policy for both sides; report sensitivity to provider variation.
+count as one observation. The 10\% cutoff is the project's declared
+engineering target. Any tolerance used to compare repeated reports must
+be reported separately and cannot widen that success criterion. Use the
+declared provider version and repeat policy for both sides; report
+sensitivity to provider variation.
 
 Miners may pay for additional search and report attempts before
 commitment. Scoring uses the committed reports, including variation in
 their provider results. The protocol does not require disclosure of
 every private attempt or a fresh validator-paid Pangram inference call. A
-reported pass applies to the committed observations.
+reported pass applies only to the committed observations, not to every
+future measurement of that text. Selection can bias the submitted set
+when provider results vary. We accept this limitation to keep external
+Pangram costs with the submitting miner; the subnet can instead require
+its own services to supply post-commitment responses through the
+reciprocal-service obligation. Our probe found equal document fractions
+across fresh requests for three tested texts, with auxiliary-score
+variation, but no observations within two percentage points of 10\%.
+It establishes neither general determinism nor threshold stability~\cite{repeatability}.
 
-For the selected subnet detector, let
-\(H(t)=p(\text{model-only}\mid t)+p(\text{mixed}\mid t)\), using its
-required, authenticated response under the frozen policy. This is a
-document-origin probability, while Pangram's \(F_r\) is a content
-fraction. Define \(\Delta_S(x,z)=H(x)-H(z)\) and report the two detector
-improvements separately. The pilot joint evasion utility is
+For panel detector \(j\), let
+\(H_j(t)=p_j(\text{model-only}\mid t)+p_j(\text{mixed}\mid t)\),
+using its required authenticated response under the frozen policy.
+These are document-origin probabilities; Pangram's \(F_r\) is a
+content fraction. Define
+\(\Delta_j(x,z)=H_j(x)-H_j(z)\) and
+\(\Delta_S(x,z)=\operatorname{median}_{j=1}^{3}\Delta_j(x,z)\).
+Retain each detector's raw responses and improvements. The pilot evasion
+utility is
 \begin{equation}\label{eq:joint-evasion-utility}
-  E(x,z)=
-  \begin{cases}
-    \bigl(\Delta_P(x,z)+\Delta_S(x,z)\bigr)/2,
-      & \Delta_P(x,z)\geq0\ \text{and}\ \Delta_S(x,z)\geq0,\\
-    0, & \text{otherwise}.
-  \end{cases}
+ E(x,z)=
+ \begin{cases}
+ (\Delta_P(x,z)+\Delta_S(x,z))/2,
+   &\Delta_P(x,z)\geq0\ \text{and}\ \Delta_S(x,z)\geq0,\\
+ 0,&\text{otherwise}.
+ \end{cases}
 \end{equation}
-The joint pass requires both \(\max_r F_r(z)<0.10\) and
-\(H(z)<\tau_S\), where \(\tau_S\) is calibrated on independent
-development data at the declared human false-positive operating point
-and frozen before the round. It is not automatically 0.10: the two
-detectors report different quantities. Neither detector's improvement
-compensates for regression against the other.
+The strict joint pass requires preservation, \(\max_r F_r(z)<0.10\),
+a majority of panel detectors satisfying \(H_j(z)<\tau_j\), and a pass
+against the actual strongest reference service at its own threshold.
+Calibrate each \(\tau_j\) on independent development data at the
+declared human false-positive operating point and freeze it before the
+round. These thresholds are not automatically 0.10. Report strongest-A
+and panel pass rates separately; the strongest-A result is not a sole
+veto on incremental utility. Neither Pangram improvement nor panel
+improvement compensates for regression on the other aggregate axis.
 
-Pilot transformation utilities are \(GA\), \(GE\), and
-\(G(A+E)/2\) for the three modes. Combined mode also requires no
+Pilot transformation utilities are \(GV\), \(GE\), and
+\(G(V+E)/2\) for the three modes. Combined mode also requires no
 regression on either requested axis. Report sub-10\% success separately
 from incremental improvement. An already suitable source can stay
 unchanged without receiving an invented improvement bonus.
 
-For writing improvement, use positive blinded preference improvement
-over the fixed qualified editor baseline, subject to preservation and no
-regression against the original. Keep ties. Neither AI detector contributes
-a term to this utility. The first tournament determines whether these proposed
-utilities order useful revisions above omissions, unsupported
-strengthening, irrelevant padding, and needless edits.
+Validate these proposed utilities against blinded reader comparisons
+before live reward use. They must order useful revisions above omissions,
+unsupported strengthening, irrelevant padding, and needless edits.
 
 \subsection{Aggregation and failure
 policy}\label{aggregation-and-failure-policy}
 
 Fix assignments, task mixtures, baselines, and deadlines before
 submissions. Balance related examples within source groups; extra cheap
-submissions do not increase a miner's share. Normalize positive skill
-within each task pool, then combine pool distributions using the
-published shares. The chain mechanism split carries the corresponding
+submissions do not increase a miner's share. Apply the availability and
+zero-deficit gates to each miner's earned A and B skill for the measured
+epoch. Then normalize eligible positive skill
+within each task pool and combine using the published shares. The chain mechanism split carries the corresponding
 aggregate task allocation.
 
 If no miner beats a baseline, record that pool as unallocated in the

@@ -8,38 +8,39 @@ those differences. A detector can measure one aspect of how the result
 is classified. Neither measurement alone establishes that the revision
 is good.
 
-The subnet therefore evaluates three tasks separately:
+The initial subnet evaluates two tasks separately:
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
+\def\labelenumi{\Alph{enumi}.}
 \tightlist
 \item
   Identify authors and documented human/model production histories.
 \item
   Transform writing toward a requested voice, optionally reducing
-  detection by Pangram and the subnet's own best AI detection model,
-  while preserving the source's meaning and intended tone.
-\item
-  Improve writing for an explicit audience and editorial purpose.
+  detection by Pangram and qualified subnet AI-origin detectors,
+  while preserving the source's meaning, readability, and intended tone.
 \end{enumerate}
 
 The joint evasion target requires Pangram's reported AI-generated
-\textbf{plus AI-assisted} fraction strictly below 10\% and a pass against
-the subnet detector at its separately calibrated threshold, with
-preservation and quality requirements satisfied. Reaching zero is a
+\textbf{plus AI-assisted} fraction strictly below 10\%, a majority pass
+against the common three-detector panel, and a pass against the actual
+strongest qualified prior-round detector at its calibrated threshold,
+with preservation and quality requirements satisfied. Reaching zero is a
 desirable measured outcome, not a promise
 of this design. A model-origin text retains that recorded origin after a
 successful rewrite. Detector evasion does not change its production
 history.
 
-The adversarial loop connects the first two tasks: detection miners
+The adversarial loop connects these two tasks: detection miners
 learn to recognize transformed model-origin text, while transformation
-miners try to defeat the best eligible detector from a completed round.
-The benchmark fixes that opponent before accepting rewrites and retains
-the source's production labels as the models improve.
+miners try to defeat qualified detectors from completed rounds.
+The benchmark fixes the opponent-assignment and scoring rules and retains
+the source's production records as the models improve.
 
 The initial scope is English prose, document-level author/origin
 predictions, and bounded asynchronous editing jobs. Span-level origin
 labels, multilingual rewards, and arbitrary-length manuscripts need
 their own validated datasets. There is no requirement for token
-streaming or interactive latency.
+streaming or interactive latency. A separate writing-improvement service
+is deferred beyond the initial launch; audience and editorial controls
+remain part of transformation briefs and preservation review.

@@ -5,16 +5,23 @@ status}\label{existing-evidence-and-implementation-status}
 The current Rust representation uses word occurrences and grammatical
 features from spaCy annotations. It scores complete sparse distributions
 and learns selected coordinate corrections. It does not require an LLM
-to enumerate or measure deterministic edit candidates. The initial
-detector/author models and editing rules provide experimental tools, not
-a demonstrated end-to-end product.
+to enumerate or measure deterministic edit candidates. The current
+author/detector models and editing rules support experiments for A
+detection and B transformation; a demonstrated end-to-end product remains
+to be built.
+
+The table reports top-1 accuracy averaged within each author, then
+equally across authors, then across three seeds. Query counts describe
+unique inputs scored in every seed; these author-macro percentages are
+not pooled fractions of those counts.
+Evaluation protocols~\cite{projection,gvtransfer}.
 
 \par\medskip\noindent
 \begin{tabularx}{\linewidth}{@{}LLL@{}}
 \toprule
-Experiment & Result & Scope \\
+Experiment & Author-macro top-1 & Scope \\
 \midrule
-Blog author retrieval & 56.30\% top-1 & 600 evaluation authors in six
+Blog author retrieval & 56.30\% & 600 evaluation authors in six
 100-author galleries; 1,206 queries \\
 Global Voices transfer & 73.81\% combined; 77.98\% lexical-only &
 Fourteen provisionally qualified authors; 58 queries; topic/editorial
@@ -47,6 +54,55 @@ encrypts receipts for assigned validators. The receipt prototype relies on calle
 trusted assignments; it is not a customer-request protocol or deployed
 key registry.
 Receipt implementation~\cite{receipts}.
+
+\subsection{Assignment and accounting stress tests}
+
+A reproducible Rust experiment uses SHA-256 rankings for 100 synthetic
+miner UIDs and a separate, already-eligible 100-UID reviewer roster.
+It evaluates 10,000 scheduled slots for each of three fixed seeds, with
+fixed cartel shares from 0\% to 50\%. The table gives pooled counts for
+the 20\% case. Peer rates concern cartel requesters; panel and reviewer
+rates concern all modeled comparisons~\cite{assignmentgameability}.
+
+\par\medskip\noindent
+\begin{tabularx}{\linewidth}{@{}Lrr@{}}
+\toprule
+Event & Count / opportunities & Rate \\
+\midrule
+Cartel peer, mandatory first assignment & 1,128 / 6,000 & 18.80\% \\
+Cartel peer, requester chooses among three & 2,875 / 6,000 & 47.92\% \\
+Cartel A majority, strongest A honest & 1,179 / 30,000 & 3.93\% \\
+Cartel A majority, strongest A colluding & 10,250 / 30,000 & 34.17\% \\
+Cartel majority among three reviewers & 3,060 / 30,000 & 10.20\% \\
+\bottomrule
+\end{tabularx}
+\par\medskip
+
+Counting selective requester skips against each interface's 10\% limit
+raised favorable partners among delivered requests to 20.89\%, while
+leaving their absolute count unchanged. Aggregate-only accounting let
+34 of 60 cartel UID-epochs pass despite exceeding an interface's limit.
+These results support mandatory first assignment, persistent consumed
+indices, and separate service gates. The recovery calculation in
+Equation~\ref{eq:recovery-deficit} also passes the experiment's boundary
+checks; its incentive effect remains conditional on valuing future
+participation.
+
+Colluders can answer every request on time and reserve dishonest answers
+for known favorable committees. Under the modeled majority rule,
+complete review coverage then fails to establish correctness. Exact
+without-replacement calculations lower the reviewer-majority frequency
+from 10.11\% for three reviewers to 1.47\% for nine at the same fixed
+20\% share, with three times the review calls. Larger committees reduce
+this modeled frequency without proving an honest majority.
+
+These are assignment and accounting tests, not measured model accuracy,
+profitable attacks, or an equilibrium analysis. The simulation assumes
+fixed membership and reserved capacity; it does not model adaptive UID
+acquisition, shared-detector fallback, delivery disputes, private-model
+execution, or native payouts. Three-member panels remain a pilot choice;
+the results do not justify calling their decisions trustless or enabling
+live rewards without further evidence.
 
 The project does not yet demonstrate a reliable sub-10\% rewriting
 model, calibrated production-origin service, reviewed commercial

@@ -1,7 +1,8 @@
 \section{Model interfaces and starter
 architectures}\label{model-interfaces-and-starter-architectures}
 
-The three interfaces define compatible jobs and outputs. Miners may
+The two launch interfaces, A for detection and B for transformation,
+define compatible jobs and outputs. Miners may
 change their internal architectures, grammatical representations, search
 methods, and training data without changing those interfaces. Sharing a
 foundation model between tasks is permitted. Publishing a winning model
@@ -37,10 +38,13 @@ evasion}\label{author-transformation-and-detector-evasion}
 
 Inputs are the source, independent target-author samples, requested
 style changes, and a preservation brief. The task declares author
-matching, evasion against both Pangram and the selected subnet AI-origin
-detector, or both objectives. The miner returns exact revised text or an
+matching, evasion against Pangram and the common subnet AI-origin
+panel, or both objectives. The miner returns exact revised text or an
 abstention. Opponent selection and scoring are fixed by the benchmark,
-independently of the submitting miner.
+independently of the submitting miner. Author-directed revision of
+one's own or licensed writing and authorized detector-robustness research
+motivate this mode. A detector pass does not replace the documented
+production history or any disclosure required for the intended use.
 
 The proposed starter is an 8B decoder, initially
 Qwen3-8B~\cite{qwen}, with a style
@@ -56,22 +60,15 @@ Include originals, failed rewrites, copied reference passages, and
 fluent meaning-breaking edits as controls. A miner's own style score may
 guide its search, but cannot approve its output for benchmark rewards.
 
-\subsection{Writing improvement}\label{writing-improvement}
+Transformation briefs may specify audience, clarity, accessibility,
+organization, rhetorical force, and tone. A lower reading level or
+shorter text is useful only when the brief calls for it. Suitable text
+can remain unchanged. Validators use independent judges and reader
+audits to assess preservation, readability, and requested voice;
+reviewer ties and disagreements remain in the data. A miner cannot
+approve its own revision for rewards.
 
-This task supplies an audience, purpose, tone, and allowed changes. The
-miner returns an improved revision or leaves suitable text unchanged.
-The starter shares the decoder base with transformation and uses a
-separate editorial adapter and preference scorer when the tasks'
-requested behavior conflicts.
-
-Training preferences distinguish clarity, accessibility, organization,
-rhetorical force, and tone. A lower reading level or shorter text is
-useful only when the brief calls for it. Reviewer ties and disagreement
-remain in the data. Validators use independent judges and reader audits;
-a miner cannot determine its own payment by scoring its revision.
-
-Pangram is not part of the writing-improvement reward. Future
-comparisons of 4B, 8B, and 32B editing models should use fidelity,
+Future comparisons of 4B, 8B, and 32B transformation models should use fidelity,
 reader preference, and cost per accepted revision. All checkpoint
 licenses and revisions must be pinned before a training release. The
 named starters are proposals, not trained subnet products.

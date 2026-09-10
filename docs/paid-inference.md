@@ -8,6 +8,11 @@ and settlement belong on chain; model execution runs on the assigned miner's
 hardware. This repository
 has no deployed job contract or paid serving endpoint yet.
 
+Initial paid offers cover two task interfaces: A for author/origin detection,
+and B for author-directed transformation under the source and brief, including
+optional detector evasion. Audience, tone, readability and fidelity belong in
+the transformation brief and its acceptance criteria.
+
 ## Customer confidentiality
 
 Every customer inference input, including source text, reference writing,
@@ -211,6 +216,20 @@ measured performance on authorized benchmark assignments, not claimed GPU
 hours or customer transaction volume. A miner could buy its own jobs, so those
 payments must not increase benchmark rewards. Benchmark validators may review
 benchmark text under its own access policy.
+
+The pilot assigns A to on-chain mechanism 0 and B to mechanism 1, with 50% of
+emissions each. Editorial quality is part of B's gates and brief requirements.
+The [reward rules](../whitepaper/sections/07-rewards.tex) also require fulfillment
+of bounded mandatory free service. More than 10% failed valid assigned task obligations
+gives zero earned A and B credit for the measured epoch, with separate mandatory
+gates for each interface and actually assigned requester/provider role, with no
+automatic pass without assigned work. Each obligation binds its UID and role. Exactly
+10% passes this availability gate. Paid jobs cannot dilute mandatory-service
+failures. Measurement closes before the relevant weight deadlines; the published
+payout lag does not claw back emissions already distributed.
+Each mandatory interface/role must also clear its persistent recovery deficit
+through actual same-class protocol probation work. Paid success, another service
+class, elapsed time or key/service-version rotation cannot clear that deficit.
 
 The alpha service quote covers local inference/search and agreed storage costs;
 the offer separately identifies network/transfer fees and their payer. Miners

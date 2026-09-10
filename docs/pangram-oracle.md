@@ -1,11 +1,11 @@
 # Pangram benchmark, verification and API funding
 
 Design proposal, 2026-09-09. Pangram is the required external benchmark for
-Slop Ninja. Evasion must also target the strongest eligible independent subnet
-origin detector from the previous completed detection round. Neither result
-substitutes for the other.
+Slop Ninja. Evasion also faces a common three-service subnet origin panel,
+including the strongest qualified service from the previous completed A round.
 
 ## What we measure
+
 
 For origin detection, compare miners and Pangram against the same independently
 documented production histories. Report calibration and human false-positive
@@ -19,30 +19,41 @@ version, exact submitted text, task IDs and complete results. Measure
 `0.10`, after preservation and quality review. Record the unchanged source
 under the same round policy. Improvement before crossing the threshold is
 useful development feedback; it must not be reported as a successful sub-10%
-revision. Writing-improvement rewards remain based on the editorial brief.
+revision. Every B revision must also satisfy its preservation and readability
+requirements.
 
-Pin the subnet opponent before the transformation round using held-out origin
-Brier performance and human false-positive qualification. Exclude self-scoring
-and use the best eligible independent opponent under the published fallback
-order; author-identification rank does not qualify an origin detector. Controls
-and probing monitor drift, but a service version does not attest private weights.
-Until a competitive incumbent qualifies, bootstrap rounds use a named reference
-detector and report their results separately.
+The two launch tasks are A detection and B transformation. The deterministic
+comparison schedule includes the strongest qualified prior-round A service,
+hash-selects two other distinct qualified A UIDs, then hash-selects B entries
+outside that panel. Filter A reserves against all B batch UIDs and the initial
+panel, then freeze the residual order and capacity before issuing tickets.
+Insufficient reserve capacity prevents issuance; it cannot trigger a new B draw.
+Every B entry receives the same panel, sources, briefs,
+modes and frozen settings. Only exact UID exclusion is asserted; common
+ownership remains possible. The [mechanism proposal](subnet-mechanisms.md)
+defines persistent counters, domains, roster commitments and reserved capacity.
 
-Keep Pangram's fraction `F` distinct from the subnet probability
-`H = p(model-only) + p(mixed)`. Use
+Keep Pangram's fraction `F` distinct from each service's document-origin
+probability `H_j = p_j(model-only) + p_j(mixed)`. Use
 `D_P = min_r F_r(source) - max_r F_r(revision)` and
-`D_S = H(source) - H(revision)`. Joint evasion utility is the mean of
-`max(0, D_P)` and `max(0, D_S)` only when both raw differences are nonnegative;
-otherwise it is zero. Strict joint success also requires preservation,
-`max_r F_r(revision) < 0.10` and `H(revision) < tau_S`. Calibrate `tau_S` on
-development data and freeze it before scoring; it is not automatically 10%.
-Missing required subnet evidence cannot become a Pangram-only pass.
+`D_S = median_j(H_j(source) - H_j(revision))` over the three panel services.
+Evasion utility is `(D_P + D_S)/2` only when both differences are nonnegative,
+otherwise zero. Strict joint success requires preservation, Pangram below
+`0.10`, a majority of panel services below their own calibrated thresholds,
+and a pass against the actual strongest service. Report its result separately;
+it has one vote in the median, without a unilateral incremental-utility veto.
 
-Authorized retired revisions feed later detector training and disjoint private
-evaluation, retaining their recorded production histories. This benchmark flow
-never automatically forwards confidential customer inputs to Pangram or the
-subnet opponent.
+Fixed replacements apply to every affected source and candidate cell for the
+whole batch, or the comparison is void. A missing strongest result prevents
+the corresponding strict claim; degraded comparisons identify replacements.
+Detector disagreement alone is neither fraud nor a fallback trigger. Three
+panel UIDs limit one arbitrary outlier only under a bound of fewer than half
+colluding, which the hash cannot establish. Freeze qualifications, thresholds,
+capacities and fallback deadlines before issuing work.
+
+Authorized retired revisions can feed later training, with source families
+excluded from private evaluation and production histories retained. Customer
+text never enters this benchmark exchange automatically.
 
 Pangram documents asynchronous task IDs and bulk item/result bindings. New
 requests should name a model explicitly. A selector or returned version is the
@@ -107,56 +118,57 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
 
 ## Initial measurement protocol
 
-1. Commit the challenge, model/score policy, candidate budget and evaluation
-   window, including the subnet opponent, its threshold, fallback policy and
-   source-baseline evidence.
-   Put source hashes and private text inside salted payload commitments;
-   public unsalted hashes can expose guessable text.
-2. The miner commits its final revision, selected Pangram reports and score
-   projection before learning its assigned evaluators. Require three distinct
-   completed reports per mandated text. Miners may pay for additional candidate
-   and Pangram attempts before commitment; disclosure of other private attempts
-   is not required. The committed set cannot change afterward.
-3. After the candidate commitment, the benchmark coordinator obtains the required
-   signed candidate response from the pinned subnet origin service. Bind the
-   round, service identity and settings, request nonce, text commitment and full
-   origin-probability vector. Private search responses cannot replace it. Commit
-   this evidence before the predetermined audit beacon becomes available.
-4. Select evaluators using that future randomness source, whose availability and
-   resistance to manipulation are checked before deployment. Both candidate and
-   required subnet-response commitments must precede its release.
-5. Deliver committed content through recipient-specific authenticated encryption
-   after assigning validators. They verify the payload commitment and retrieve
-   the reports directly from Pangram, comparing exact text, public identity,
-   version and time window. They also verify the committed subnet responses'
-   signatures and bindings. Required subnet serving calls use the explicit round
-   budget. Pangram overlap checks reuse the existing reports through GETs without
-   another inference charge; fresh validator-paid Pangram inference is not
-   required. Public retrieval establishes the provider's current record;
-   offline cryptographic provenance remains absent.
-6. Publish commitments and appropriately aggregated results. Keep report IDs,
-   exact text, salts and detailed evidence with authorized auditors. A challenge process
-   needs a defined appeal path and retained evidence before final rewards.
+1. Freeze the epoch roster, global quotas, common panel/batch schedule, source
+   baselines, settings and fixed deadlines. Reserve the complete scoring matrix,
+   fallback stages and reviewer capacity separately from private peer tickets.
+2. Each B miner commits one final revision and three selected Pangram reports
+   per mandated text. Other private attempts need not be disclosed; committed
+   reports cannot be replaced afterward. Panel and reviewer assignments are
+   predictable from the committed schedule, not hidden until commitment.
+3. Obtain signed source/candidate responses from every panel member after B
+   commitments. Bind service, settings, nonce, text commitment and complete
+   origin probabilities. Mix human/model controls and conceal the text-to-B-UID
+   mapping through the grading relay. Private search results cannot replace
+   this matrix. Commit evidence by its fixed block deadline.
+4. Three hash-assigned validators review every scored submission and all
+   required checks. Use exact UID exclusions and a fixed reserve order; no
+   coordinator chooses reviewers and no custom beacon or audit sample is used.
+   Deliver exact text, report locators, commitment openings and panel evidence
+   encrypted to those recipients. Reviewers commit before seeing peer openings.
+5. Verify Pangram records through GETs and panel signatures/bindings. No fresh
+   validator-paid Pangram inference is mandatory. Review whole-revision
+   preservation, retain disagreements and resolve them before weight deadlines.
+   Withhold detailed active-test feedback from revision miners until retirement;
+   each scoring service necessarily knows its own response.
+6. Publish commitments and reviewed aggregates. Retain encrypted evidence and
+   disputes. Apply service-failure gates before earned weights; demonstrate the
+   relationship between measurement deadlines and native payout lag.
 
 The existing offline contract requires three distinct observations for a passing
-full-document result. Keep that policy explicit in cost estimates. Three
-matching calls are not three independent proofs of a text's origin. Disagreement
-between calls is not by itself evidence of validator fraud; model variability,
-provider errors and version drift must remain distinguishable from a forged
-record. Assign consequences only for objectively provable protocol violations
+full-document result. Keep that policy explicit in cost estimates. Selection
+from undisclosed private attempts can bias the committed set toward favorable
+results, so a pass describes those observations rather than fresh-query success
+probability. Three matching calls are not three independent proofs of a text's
+origin. Disagreement between calls is not by itself evidence of validator fraud;
+model variability, provider errors and version drift must remain distinguishable
+from a forged record. Assign consequences only for objectively provable protocol violations
 under a published rule, without assuming Bittensor supplies custom slashing.
 
-The [receipt and audit proposal](subnet-receipts-and-audits.md) specifies future
-drand selection and distinguishes it from Bittensor's weight commit-reveal.
+The [receipt and audit proposal](subnet-receipts-and-audits.md) specifies
+predictable hash assignment and full review. Native Bittensor weight
+commit-reveal remains a separate supported chain mechanism.
 The current offline contract has not yet been adapted to public report IDs.
 
 ### Reproducibility spot checks
 
-The [three-request probe](pangram-repeatability.md) found equal document class
-fractions but different auxiliary scores for the same input, account, selector
-and returned version. Same-task GET rechecks matched the original result.
-Cross-account reproducibility remains unmeasured. A verifier must keep these
-two checks separate:
+The [repeatability probe](pangram-repeatability.md) covered three texts, with
+three fresh requests per text through one account. Document class fractions
+matched within each text while auxiliary scores varied. The two selected
+intermediate-fraction texts also matched their older document fractions;
+same-task GET rechecks on the first text matched its original result. The
+nearest observed fraction was 14.80%, with no observation within two percentage
+points of 10%. This does not establish determinism near the reward boundary or
+cross-account reproducibility. A verifier must keep these two checks separate:
 
 - A GET of the original task retrieves that observation. Authenticated evidence
   can establish what the provider returned for the bound task; repeated GETs
@@ -170,8 +182,8 @@ Before each round, freeze the API endpoint, exact request-body bytes and their
 private hash, explicit model selector, required returned version, comparison fields,
 and evaluation window. Preserve exact text bytes and bind assignment nonces
 outside the prose. After measurement, the evaluator commits its own complete
-response hash, task ID and score-payload hash inside a salted commitment before
-future randomness selects the audited records and independent auditors.
+response hash, task ID and score-payload hash inside a salted commitment by
+the fixed evidence deadline. Review assignments follow the published hash schedule.
 Deliver openings and evidence encrypted to those recipients. Keep every accepted
 task, failure and unresolved request for separately funded research in its
 budget ledger; this does not require miners to disclose their private
@@ -207,12 +219,41 @@ reproduce the provider's proprietary computation.
 
 ## Who pays
 
-Miners pay for private experimentation and required public candidate reports.
-Required subnet-opponent benchmark calls use an explicit round budget; private
-search against detector services remains miner-funded.
-Validators retrieve existing Pangram reports without buying another inference under
-the behavior observed in our probe. The subnet funds challenge baselines through
-a capped validation allowance. Fresh reproducibility research needs separate
+Required A/B service is free to assigned requesters within a fixed global
+budget; providers bear the cost for emission eligibility. Benchmark panel and
+full-review capacity has separate reservations from per-miner training/search
+tickets. Expected emissions do not guarantee cost recovery.
+
+Tickets use the next persistent requester-UID-slot index and mandatory hash-
+ranked peers with fixed fallbacks. The rank hashes domain, chain, subnet,
+requester UID, index and peer UID; the pinned roster root is excluded from the
+rank. Scheduling metadata is inspectable, while text and salted openings stay
+restricted. No nomination, skipped index, reroll or retry-created quota is
+permitted. The [mechanism proposal](subnet-mechanisms.md) defines the shared
+ledger, bounded sizes, capacity reservations and fallback response windows.
+
+Obligations bind the UID and its assigned role: requester payload submission or
+provider answer to a valid delivered request. More than 10% valid assigned
+failures zeros earned A+B epoch credit; exactly
+10% passes and zero workload supplies no automatic eligibility. Require the
+aggregate gate and separate gates on each mandatory interface and actually
+assigned role, so paid/cheap replies or outgoing payloads cannot dilute provider
+failures. Abandoned requester obligations
+count against the requester, not a provider lacking a valid payload. Count
+duplicates once and require authenticated delivery/dispute evidence. Prior
+actual request records determine the frozen next roster, with bounded real
+probation work and no heartbeats. Close measurement before weight deadlines;
+native payout lag prevents retroactive removal of already paid emissions.
+Mandatory interface/role recovery also requires zero deficit under
+`D_e = max(0, D_previous + 10*F_e - N_e)`, initially zero. Only same-class
+protocol probation work reduces it; there is no age-out, other-class dilution,
+or reset by key/service-version rotation. Current gates still apply.
+
+Miners pay for private experimentation and the three selected Pangram candidate
+reports committed before evaluation. Validators retrieve existing Pangram
+reports without buying another inference under the behavior observed in our
+probe. The subnet funds challenge baselines through a capped validation
+allowance. Fresh reproducibility research needs separate
 authorization and funding; the initial scoring policy does not require it.
 Bootstrap that allowance from an explicit project budget; later fund it from service fees
 and a published operating allocation. These are proposed funding sources, not
@@ -259,7 +300,7 @@ funds into a centralized provider's prepaid credits remains an external action.
 
 Adapt the offline contract to the public-report schema and an explicit repeat
 policy. Establish supported retrieval and retention terms, report replay
-accounting, fixed task/question commitments, and verified future-beacon
-selection before a live tournament. Public retrieval is now demonstrated;
+accounting, fixed task/question commitments, verifiable hash assignments,
+and complete review capacity before a live tournament. Public retrieval is now demonstrated;
 network incentives, automatic fidelity judgments and cryptographic offline
 proofs remain separate work.

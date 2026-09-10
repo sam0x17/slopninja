@@ -1,6 +1,7 @@
 \section{Paid asynchronous jobs and on-chain
 coordination}\label{paid-asynchronous-jobs-and-on-chain-coordination}
 
+The launch market offers A detection and B transformation jobs.
 The proposed job contract uses Subtensor's EVM to coordinate offers,
 escrow, commitments, and settlement. Inference prices are denominated in
 Slop Ninja's subnet alpha; actual model execution stays on miner hardware.
@@ -81,7 +82,8 @@ The proposed lifecycle is:
   available before the delivery deadline.
 \item
   \textbf{Acknowledge or expire.} A customer acknowledgment releases
-  payment. No timely acceptance or delivery claim permits refund. A
+  payment. If there is no timely acceptance or delivery claim, the
+  customer may claim a refund. A
   delivery claim without acknowledgment follows the bounded timeout
   policy below.
 \end{enumerate}
@@ -135,7 +137,13 @@ research question.
 Customer fees pay for the purchased service. Emissions reward
 performance on separate benchmark assignments. Customer volume does not
 directly increase emission rewards, because miners can transact with
-themselves. A fixed quote avoids charging for hidden, unverifiable
+themselves. Paid successes cannot dilute failures on mandatory protocol
+service: the measured availability gate applies in aggregate and
+separately to each committed interface and assigned role's mandatory work. Its zero-credit
+and recovery-deficit rules are specified in Section~\ref{adversarial-feedback-loop}.
+The zero-credit
+effect must be validated under the chain's payout lag; it cannot reclaim
+already distributed emissions. A fixed quote avoids charging for hidden, unverifiable
 internal token or search counts.
 
 Miners pay their own training, inference, private search, and required
@@ -147,9 +155,12 @@ review costs. Subsidies, if used, must identify their funder and cap
 before assignments begin. This design assumes no free API-credit
 allocation or automatic on-chain reimbursement scheme.
 
-Required calls to the selected subnet detector also need an explicit
-round budget and service terms with that miner. The benchmark operator
-or participating validators fund those calls; miners fund any
-additional private search. This access applies to authorized benchmark
-text. Confidential customer jobs cannot automatically forward inputs or
-outputs to Pangram or the selected detector's operator.
+Required subnet-detector calls and reciprocal training requests consume
+reserved capacity under the service obligation in
+Section~\ref{adversarial-feedback-loop}; the recipient pays no per-call
+fee within that budget. Providers bear the compute cost as a condition
+of emission eligibility. This obligation covers neither Pangram's
+external charges nor unlimited private search. Bootstrap reference
+services need a separately named research funder. Confidential customer
+jobs cannot automatically forward inputs or outputs to Pangram or a
+peer miner.

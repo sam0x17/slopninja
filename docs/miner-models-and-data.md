@@ -1,7 +1,7 @@
 # Private miner models and training data
 
 Design decision, 2026-09-09. Miners retain their trained weights, adapters,
-feature definitions and training recipes. They serve three versioned task
+feature definitions and training recipes. They serve two versioned task
 interfaces and earn emissions for measured performance. Customers can separately
 buy [asynchronous inference](paid-inference.md). Publishing a winning model is
 optional. This replaces the earlier proposal to execute submitted miner
@@ -32,21 +32,65 @@ miner's hardware; forwarding content to another miner or hosted API is outside
 that policy. Encryption and private weights cannot prevent the assigned miner
 from leaking plaintext it receives.
 
-## Three task interfaces
+## Two task interfaces
 
 | Task | Private starter model | Inputs | Outputs |
 | --- | --- | --- | --- |
-| Author and origin detection | Full sparse word/grammar metric baseline; compare a 149M text encoder with author and origin heads | Query, optional reference gallery, versioned origin-label definition | Author probabilities, origin probabilities, calibrated abstention |
-| Author transformation and detector evasion | 8B decoder with a style adapter, deterministic edit proposals and candidate selection | Source, target writing samples, style changes, preservation brief, evasion mode | Exact revision or abstention; detector reports only for authorized benchmark tasks |
-| Writing improvement | The same decoder base with a separate editorial adapter and preference scorer | Source, audience, purpose, tone, allowed edits and preservation brief | Exact revision or unchanged text, with private change notes |
+| A: Author and origin detection | Full sparse word/grammar metric baseline; compare a 149M text encoder with author and origin heads | Query, optional reference gallery, versioned origin-label definition | Author probabilities, origin probabilities, calibrated abstention |
+| B: Author-directed transformation, with optional detector evasion | 8B decoder with a style adapter, deterministic edit proposals and candidate selection | Source, target writing samples, audience, purpose, tone, allowed edits, preservation brief and optional evasion mode | Exact revision, unchanged text or abstention; private change notes; detector reports only for authorized benchmark tasks |
 
-These are three functional models; miners need not maintain three independent
-foundation models. Sharing a base between editing adapters reduces the starting
-cost. Independent validator judges evaluate benchmark-owned tasks under their
-authorized access rules. Customer evidence reaches a chosen validator only
-through a separate customer-directed disclosure.
-The current [two-mechanism mapping](subnet-mechanisms.md) remains: detection in
-mechanism 0, separately scored transformation and quality pools in mechanism 1.
+These are two functional interfaces; miners may choose the private model
+architecture behind each. Independent validator judges evaluate benchmark-owned
+tasks under their authorized access rules. Customer evidence reaches a chosen
+validator only through a separate customer-directed disclosure.
+The [two-mechanism mapping](subnet-mechanisms.md) assigns author/origin detection
+to mechanism 0 and author-directed transformation to mechanism 1, each with 50%
+of pilot emissions. Fidelity, readability and the requested audience and style
+controls are Task B gates and brief requirements. A separate writing-improvement
+service is deferred beyond the initial launch.
+
+Task emission eligibility requires valid fulfillment of bounded benchmark and
+training service tickets. Requests within that obligation carry no per-call
+payment; the serving miner bears their costs in exchange for emission
+eligibility. Freeze global budgets, capacities and the schedule before admission.
+New UIDs and traffic create no extra total capacity or request-count rewards.
+
+The whitepaper's [reward rules](../whitepaper/sections/07-rewards.tex) define
+deterministic peer assignment using SHA256 over a canonical, length-delimited
+encoding of the versioned domain, chain, netuid, requester UID, lifetime
+interaction index and peer UID. Rank eligible opposite-interface peers excluding
+the exact requester UID. A ticket
+pins the frozen eligible roster root without including it in the peer hash.
+The requester UID slot counter persists across hotkey changes and UID reuse.
+The first ranked peer is mandatory; recorded failures invoke the fixed reserve
+order. Requesters cannot nominate peers, skip indices or obtain another draw.
+An authoritative replay-protected ledger records issuance and consumption.
+Duplicates and retries keep the original index and assignment. Abandoning an
+issued requester obligation consumes its index and counts as requester failure;
+an undelivered payload does not count against the provider. Public scheduling
+metadata leaves text and commitment openings restricted to authorized recipients.
+Predictable assignments and distinct UIDs do not prove separate ownership or
+prevent model extraction.
+
+Availability uses actual valid protocol-assigned task obligations, bound to the
+UID and requester/provider role, within fixed size, capacity and response-time
+limits. Declines and missing valid completion by the
+deadline count as failures. More than 10% failures gives zero earned A
+and B emission credit for that measured epoch; exactly 10% passes the availability
+gate. Every committed interface and actually assigned role must also pass its
+mandatory-service gate with a positive assigned workload. Outgoing payloads
+cannot dilute provider failures. Paid traffic and cheap detection replies cannot
+dilute failed transformation obligations; no requests means no automatic pass.
+Authenticated delivery evidence supports failure decisions, and retries count
+once. Qualification uses the prior completed request window, with bounded real
+probation work for new or recovering registrations. Each registration generation
+must establish its own performance even when its UID slot counter persists.
+Measurement deadlines close before weight submission and reveal; the published
+payout lag settles earned credit without clawing back distributed emissions.
+Each mandatory interface/role also carries `D_e = max(0, D_previous + 10*F_e - N_e)`
+from an initial zero. Normal eligibility requires zero deficit and current gates;
+only same-class protocol probation work retires it, with no age-out or reset
+through key/service-version rotation. New registrations need their own probation.
 
 Paid inference has its own market in subnet alpha. Miners publish signed total
 quotes for bounded jobs, with capacity, expiry and delivery terms; customers
@@ -105,6 +149,8 @@ and revision logs alongside that coarse label. Model-to-model rewriting remains
 model-only. Historical publication alone receives weaker provenance status.
 Pangram supplies a comparison, not the label. A future span head needs separately
 validated alignments; workflow labels do not justify invented token-level truth.
+Private endpoint responses alone cannot establish an output's assistance
+history. Retain unknown provenance when the production record is insufficient.
 
 ### Transformation
 
@@ -123,27 +169,48 @@ small candidates and explicit checks; an LLM can propose broader changes.
 The author distance helps choose candidates but cannot approve them. Our modal
 experiments already showed that changing a claim can improve author proximity.
 Use independent preservation checks before ranking style and detector outcomes
-on authorized benchmark tasks. Evasion targets both Pangram and the strongest
-eligible independent subnet origin service from the previous completed round,
-pinned before the transformation round. Select it by held-out origin Brier
-performance subject to a human false-positive limit, with self-scoring excluded
-and a predeclared fallback; author-identification rank is not a substitute.
-Controls and probing monitor drift, without attesting the service's private
-weights. Until a competitive incumbent qualifies, use a named reference detector
-for bootstrap rounds and report those results separately.
+on authorized benchmark tasks. Each comparison batch uses a common three-A
+panel: the strongest qualified origin detector from the previous completed A
+round plus two services selected by hash rank. A separate comparison domain and
+shared counter fix the panel and then the B batch, excluding the exact panel
+UIDs. Filter the deterministic A reserve ranking against all B batch UIDs and
+the initial panel; freeze its residual order and capacity before issuing tickets.
+Insufficient capacity prevents issuance without a new B draw. This keeps exact
+UID self-grading excluded through fallback. Different UIDs can share an owner.
+Select the strongest service
+by held-out origin Brier performance subject to calibration and human
+false-positive limits. Every B entrant faces the same sources, briefs, panel
+and settings. Collect the complete source/candidate matrix after candidate
+commitments. A panel failure requires the fixed replacement and rescoring of
+every affected cell for the batch, or a void comparison. A detector failure
+cannot become B nonresponse. Report bootstrap reference-service rounds separately.
 
-Keep Pangram's AI-plus-assisted fraction and the subnet detector's
-`H = p(model-only) + p(mixed)` separate. Joint evasion utility averages their
-positive improvements only when neither raw axis regresses. Strict joint success
-requires Pangram below 10% under the committed repeat policy and `H` below its
-own development-calibrated, frozen threshold, plus preservation. The
-[mechanism specification](subnet-mechanisms.md#2-author-transformation-and-detector-evasion)
-defines the exact aggregation. Required subnet benchmark calls have an explicit
-round budget; private search is miner-funded. The coordinator obtains the required
-signed subnet candidate response after candidate commitment and commits it before
-the audit beacon; private search responses cannot replace it. Selected Pangram
-reports may come from miner-paid precommitment attempts and are checked through
-GETs without new Pangram inference charges.
+Keep Pangram's AI-plus-assisted fraction separate from each panel member's
+`H = p(model-only) + p(mixed)`. Subnet improvement is the median of the three
+paired source-minus-candidate improvements. Joint evasion utility averages
+Pangram and median panel improvement only when neither aggregate axis regresses.
+The median's outlier protection assumes fewer than half the panel UIDs collude.
+Strict joint success requires preservation, Pangram below 10% under the committed
+repeat policy, a majority of panel services below their own frozen thresholds,
+and a pass against the actual strongest reference service. Report strongest-A
+and panel success separately. The [reward rules](../whitepaper/sections/07-rewards.tex)
+define the exact aggregation and treatment of missing strongest-service evidence.
+
+The coordinator conceals submitting B UIDs and source/candidate roles in grading
+requests, mixes controls and commits the complete signed panel evidence by a
+fixed deadline. Under the [audit rules](../whitepaper/sections/08-pangram-audits.tex),
+three hash-assigned validators review every scored submission and all required
+checks, with fixed reserves and resolution deadlines. Reviewers commit judgments
+before seeing peers' answers and open them privately for authorized review.
+Native chain weight commit-reveal remains unchanged. These checks do not attest
+private weights or establish honest majorities.
+
+Required subnet calls use the bounded service obligation. Pangram requires three
+distinct completed reports for both source and candidate; miners fund selected
+precommitment reports, and validators retrieve them without mandatory fresh
+inference. Report selection can bias observed passes; the
+[three-text repeatability probe](pangram-repeatability.md) does not establish
+near-threshold stability or general determinism.
 
 Confidential customer jobs use local checks and the customer's review, with no
 automatic submission to Pangram, the subnet opponent or external judges. A
@@ -151,9 +218,7 @@ customer can separately provide evidence to a chosen validator.
 Rhetorical strength and accessibility are requested controls, with examples
 and ratings in training, rather than assumed directions in the author space.
 
-### Writing improvement
-
-Train the editorial adapter on brief-specific edits and blinded preferences,
+Train the transformation adapter on brief-specific edits and blinded preferences,
 including fluent but unnecessary edits and already-good originals. Keep
 accessibility, argument force and tone as separate labels; shortening alone is
 not a quality target. Retain uncertain and tied reader judgments.
@@ -184,7 +249,7 @@ automatically license the text its loader downloads.
 The initial source choices and their limits are in
 [the data acquisition plan](miner-training-sources.md). The principal missing
 asset is a consented collection of multiple works by each writer, paired with
-editorial decisions. It would serve all three tasks better than collecting
+editorial decisions. It would serve both tasks better than collecting
 unattributed web text solely for volume.
 
 For a pilot, commission 50 writers to supply or create 12 distinct pieces each,
@@ -225,14 +290,18 @@ draft retained the information needed to reconstruct it. Otherwise the target
 teaches the model to invent missing details. Synthetic pairs and real writer
 edits remain distinct in sampling and reporting.
 
-For adversarial training on authorized benchmark material, preserve failed
-edits, unchanged controls and good human writing alongside successful revisions.
-Retire evaluation material before releasing it for training, and only release
-samples with permission. Route authorized retired revisions into later detector
-training and disjoint private evaluation source families, retaining their actual
-production labels regardless of detector scores. This feedback connects the
-detection and transformation competitions. Sharing customer outputs cannot be an entry condition
-or required training contribution.
+On released authorized training text, assigned A miners supply author/origin
+probabilities to B; assigned B miners supply rewrites that follow the source
+and brief to A. The frozen roster and lifetime interaction indices determine
+mandatory counterparts under the hash schedule. Preserve failed edits, unchanged
+controls and human writing alongside successful revisions, with their actual
+production labels regardless of detector scores.
+Retire evaluation material before releasing it for training, release only with
+permission, and keep complete source families disjoint from future private
+evaluation. Withhold panel outputs and detailed evaluation feedback from
+competing revision miners until retirement; assigned scoring services necessarily know
+their own responses. Sharing customer outputs cannot be an
+entry condition or required training contribution.
 Commissioned benchmark output terms should explicitly permit later use by
 detector miners, while the public leaderboard discloses only aggregates.
 
@@ -250,15 +319,14 @@ an accessible endpoint alone supplies no such license.
 ## What to build next
 
 First make a small licensed source manifest and 24 reviewed tasks across the
-three interfaces. Compare the unchanged source, current deterministic edits
+two interfaces. Compare the unchanged source, current deterministic edits
 and one general editor under the same brief. Establish whether reviewers can
 reliably detect losses of meaning before fine-tuning a reward-driven editor.
 Use the writer pilot to price the larger collection.
 
 Then refit the Rust word/grammar baseline on permitted authors and compare the
 next learned model while retaining unselected feature contributions. Train one
-8B editing adapter only after approved pairs exist;
-separate the two adapters when their requested behavior conflicts. Run paid-job
+8B transformation adapter only after approved pairs exist. Run paid-job
 settlement on local/test chain with synthetic jobs before connecting customer
 funds. The resulting release should include schemas, source/license manifests,
 split rules and aggregate measurements. Raw private writing, live reports,
