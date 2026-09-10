@@ -25,6 +25,19 @@ is the proposed contract software for customer escrow and alpha
 transfers, described in
 Section~\ref{paid-asynchronous-jobs-and-on-chain-coordination}.
 
+An \emph{evidence preparer} is a hash-assigned validator who assembles
+the review dossier. A \emph{certifying validator} belongs to the round's
+frozen eligible set and independently checks the evidence. In certificate
+rules, a \emph{signer} is such a validator signing a particular final
+verdict. These duties may overlap; preparation alone grants no approval
+authority. Section~\ref{service-evidence} fixes the weighted quorum.
+
+An A \emph{model-credit entry} records performance credit for one
+detector's inference content after exact duplicates are coalesced under
+Section~\ref{a-artifact-execution}. It uses the canonical submitting UID
+and existing A payout policy; it creates no additional UID, token or
+payout pool.
+
 \par\medskip\noindent
 \begin{tabularx}{\linewidth}{@{}LLL@{}}
 \toprule

@@ -100,6 +100,17 @@ comparison closure. Numerical failure alone does not establish attributable
 service nonresponse. Test copying, topic substitution and meaning-breaking
 candidates before relying on this artifact for rewards.
 
+Also test adaptive optimization against the published style artifact. Search
+repeatedly for edits that maximize `V` under a predeclared budget; retain query
+histories, failed candidates and selected outputs. Compare them with independent
+reader judgments of author fit and full semantic review. Higher `V` among
+revisions that pass `P/R/T` must still track useful author matching; the gates
+alone do not validate the ranking. Before live rewards, compare adaptive search
+with unchanged sources and ordinary editing under matched generation/compute
+budgets on held-out source families and writers. Publish metric gains alongside
+reader judgments, semantic failures and search costs. Freeze the evaluator and
+rubric throughout each comparison; fixes enter a later validation round.
+
 ## Semantic fields
 
 The source's full meaning must remain intact. Before generation, resolve the

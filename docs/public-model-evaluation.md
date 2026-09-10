@@ -50,6 +50,9 @@ matrix, using identical settings. Record the artifact, input and output hashes
 with the execution evidence. B commits its self-scores with the final text,
 the assigned panel's artifact hashes and reference settings, full candidate
 probability vectors, required source baselines and scalar projections.
+These numbers record the miner's claimed result under the assigned configuration,
+so validators can identify and investigate discrepancies tied to that submission.
+They earn no separate credit and do not reduce required validator execution.
 Validators independently recompute the canonical results; those verified
 results determine rewards. Record mismatches without trusting a claimed high
 score or using it to skip other candidates' verification. B cannot nominate an

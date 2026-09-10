@@ -314,7 +314,11 @@ validator-signed execution records binding the model, runtime, inputs
 and outputs. Miner-selected local search records cannot replace this
 matrix. B submits self-scores with its final candidate, binding the
 assigned panel hashes, reference settings, full candidate probability
-vectors, required source baselines and scalar projections. Validators
+vectors, required source baselines and scalar projections. These numbers
+record the miner's claimed result under the assigned configuration, so
+validators can identify and investigate discrepancies tied to that
+submission. They earn no separate credit and do not reduce required
+validator execution. Validators
 recompute the canonical outputs and compare the claims; verified results
 determine rewards, with mismatches retained. A claimed high score cannot
 skip another candidate's verification. Commit the complete evidence by the fixed block deadline;
