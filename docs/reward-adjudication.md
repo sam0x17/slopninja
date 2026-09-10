@@ -5,6 +5,10 @@ Design specification for the A/B launch. This defines B's target-style utility
 writing-improvement service or separate quality bonus. A artifacts are public
 and validators execute them for benchmark probabilities. B generators remain
 private; their committed revisions supply the text evaluated here.
+Every B task must preserve the source's full meaning and fulfill the task's
+target tonal intent. Positive utility requires independent semantic certification;
+style proximity and detector evasion cannot compensate for a preservation
+failure.
 The [whitepaper section](../whitepaper/sections/07a-adjudication.tex) carries the
 same rules. Authority, encrypted publication, service fault attribution and
 incident handling follow [mandatory-service evidence](../whitepaper/sections/08a-service-evidence.tex).
@@ -98,10 +102,17 @@ candidates before relying on this artifact for rewards.
 
 ## Semantic fields
 
-The committed brief supplies protected information, permitted changes,
-readability requirements, and tone/audience constraints. The rubric and evidence
+The source's full meaning must remain intact. Before generation, resolve the
+target tonal intent from the brief and, where supplied, the requested authorial
+style and authorized reference samples; freeze it in the task rubric. A dramatic authorial-style
+change may authorize a different tone without a separate tone instruction.
+Source tone remains the default for aspects the request leaves unchanged.
+Greater stylistic force cannot strengthen factual certainty or obligations.
+The committed brief also identifies protected information and readability
+requirements. The rubric and evidence
 include the full source and candidate; a checklist does not authorize ignoring
-other material claims. Each final semantic ballot is `PASS`, `FAIL` or `ABSTAIN`.
+other material claims or tonal intent. Each final semantic ballot is `PASS`,
+`FAIL` or `ABSTAIN`.
 
 Before task issue, the brief identifies required cleanup of unwanted filler,
 repetition or formulaic phrasing under `R`, and intentional voice features to
@@ -110,13 +121,14 @@ Cleanup must retain the protected information.
 
 | Field | PASS condition | FAIL condition |
 | --- | --- | --- |
-| `P`, preservation | Required claims, entities, quantities, negation, uncertainty, citations, attribution and argument relations remain correct; changes stay within the brief | Any unauthorized material omission, change, unsupported addition or prohibited reference copying |
+| `P`, preservation | The source's full meaning remains intact, including all claims, entities, quantities, negation, uncertainty, citations, attribution and argument relations | Any material omission, altered meaning, unsupported addition or prohibited reference copying |
 | `R`, readability | No material readability regression against the source, and every stated readability requirement, including required cleanup, is satisfied | A material regression or a violated readability requirement |
-| `T`, tone | Every declared tone and audience constraint, including intentional voice features to preserve, is satisfied | Any declared constraint is violated |
+| `T`, tone | The frozen target tonal intent, tone/audience constraints and intended voice features are satisfied | The revision violates the target tonal intent or any tone/audience constraint |
 
-Insufficient evidence or unresolved interpretation requires `ABSTAIN`. An empty
-tone/audience constraint list satisfies `T` deterministically and needs no
-semantic vote. A failure ballot names rubric items and source/candidate byte
+Insufficient evidence or unresolved interpretation, including uncertainty about
+the target tonal intent, requires `ABSTAIN`. This field always requires a
+semantic vote, including when the request contains no separate tone instruction.
+A failure ballot names rubric items and source/candidate byte
 spans where applicable; omissions can identify source spans and surrounding
 candidate locations. Additional preference judgments, ties and praise remain
 diagnostic and earn no extra utility. Detector probabilities supply none of
@@ -180,6 +192,11 @@ These deadlines specify the pilot; they do not demonstrate that full global
 semantic review fits its publication, gas or verification budget. Failure to
 reserve the required capacity prevents issue. Finality stalls, certified
 platform incidents and payout-cycle delays use the service-evidence rules.
+Candidate certification by `H+72` through `H+168` leaves 30 to 126 blocks
+before final ballot commitment: approximately 6 to 25 minutes at 12 seconds
+per block. Certifiers must begin from the authorized source and candidate
+as evidence becomes available. Waiting for dossier opening at `H+192`
+would leave only six blocks for review.
 
 ## Closure and record format
 
@@ -187,10 +204,10 @@ At the final deadline, first check for conflicting certificates. A conflict
 halts settlement. Otherwise:
 
 ```text
-if any required field has a valid FAIL certificate:
+if any of P, R, T has a valid FAIL certificate:
     outcome = FAIL
     G = 0
-else if every required field has a valid PASS certificate:
+else if all of P, R, T have valid PASS certificates:
     outcome = PASS
     G = 1
 else:
@@ -198,13 +215,43 @@ else:
     G = null
 ```
 
-The empty-constraint `T` condition counts as satisfied. A field lacking a quorum
-does not default to either `PASS` or `FAIL`. An unresolved candidate judgment
+All three fields require certification, including target-tone compliance when
+the request adds no separate tone instruction. A field lacking a quorum does not
+default to either `PASS` or `FAIL`. An unresolved candidate judgment
 voids its matched source/brief/mode comparison for the whole B batch. Preserve
 every candidate and review in reporting; do not selectively remove a difficult
 case or draw different reviewers to obtain a preferred verdict. This quality
 void does not erase independently attributable service failures. Missing miner
 submissions retain the service-evidence protocol's nonresponse treatment.
+
+Whole-batch closure prevents validators from using unresolved judgments to
+exclude only one competitor's candidate. It also gives a B submitter a
+possible disruption strategy.
+A chosen candidate may split honest judgments or induce abstention until
+neither `PASS` nor `FAIL` exceeds `2*W/3` on a required field. If no other
+field has a `FAIL` certificate, the comparison is void. Dissent need not
+cause a void: more than two-thirds agreeing on failure certifies `G=0`.
+A dishonest minority below `W/3` cannot block a certificate when all
+remaining weight agrees and participates.
+
+An unresolved semantic judgment adds no service failure or recovery deficit.
+Generation and report costs still apply. A UID expecting zero skill can
+nevertheless remove competitors' positive skill from that comparison and
+increase its owner's normalized share through sibling UIDs scoring elsewhere.
+This economic risk remains unresolved. The [launch pilot](../whitepaper/sections/11-launch.tex)
+reserves four source/brief comparisons covering attribution/negation,
+qualifications, readability and tone, with clear-pass, clear-fail and attempted
+unresolved variants for each. Include a requested dramatic tonal shift as an
+intended pass, and certainty changes, unrequested tone reversal and loss of
+required informality as violations. Briefs without separate tone instructions
+must still receive target-tone certification, using the requested authorial
+style or the source-tone default as appropriate. Preserve field-level weighted ballots, review
+time, candidate/report costs, induced voids and excluded competitor skill.
+Replay the frozen allocation with and without the attack entry to measure
+common-owner share changes against benign-ambiguity and infrastructure-failure
+controls. These counterfactuals are diagnostics; the actual rule remains
+whole-batch closure with strict certificates. Live-reward acceptance must
+address any profitable induced voids observed in the study.
 
 The proposed `reward-adjudication-v1` record uses the same deterministic CBOR
 restrictions and encrypted publication path as `service-evidence-v1`. It binds:

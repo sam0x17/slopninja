@@ -139,11 +139,16 @@ and compare canonical outputs; they do not replay B's private generator.
 The [adjudication specification](reward-adjudication.md) defines the whole-revision
 preservation, readability and tone fields. A valid global failure certificate for
 any required field sets `G=0`; otherwise every required field needs a pass
-certificate for `G=1`. Empty tone constraints are satisfied deterministically.
+certificate for `G=1`. Every mode requires preservation of source meaning.
+Match target tonal intent, fixed before generation from the brief and any
+requested authorial style and reference samples. That target can differ from source tone.
+An empty list of additional tone constraints still requires tone review.
 If no field has a failure certificate and a required pass certificate is missing,
 `G` remains unset and the matched source/brief/mode comparison is void for the
 entire B batch. Conflicting certificates halt settlement.
 None of these outcomes erases independently attributable service failures.
+The semantic gate multiplies every mode's utility; detector success and author
+fit cannot compensate for a meaning or tone failure.
 
 Among revisions that pass, measure two independent improvements over leaving
 the source unchanged:

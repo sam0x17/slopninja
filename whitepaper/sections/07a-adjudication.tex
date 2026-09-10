@@ -1,31 +1,25 @@
 \section{Style measurement and final review}\label{reward-adjudication}
 
 This section defines the style utility \(V\) and semantic gate \(G\)
-for B transformation. Preservation, readability, and requested tone are
-constraints on B; they create no separate writing-improvement service
-or reward pool. Numerical measurement uses a public frozen artifact.
+for B transformation. Every B task requires preservation of the source's
+full meaning, fulfillment of the task's target tonal intent, and
+readability. These constraints
+create no separate writing-improvement service or reward pool. Positive
+utility requires independent semantic certification; style proximity or
+detector evasion cannot compensate for a preservation failure.
+Numerical measurement uses a public frozen artifact.
 Semantic judgments are explicit oracle inputs certified under the
 validator-weight assumption in Section~\ref{service-evidence}.
 
 Validators obtain authoritative benchmark origin probabilities by
-executing the published, immutable A panel artifacts. Freeze their
-epoch qualification, complete manifests, and canonical execution
-settings and cache the artifacts before B task disclosure or generation.
-B submits full locally computed probability vectors bound to the assigned
-A models/settings and exact candidate-input commitment. Validators
-re-execute and compare canonical outputs, binding each receipt to the
-artifact, runtime, input, and full output. There are no mandatory A
-inference-service calls. Qualification uses hidden independent labels
-and targeted-trigger controls. Public replay establishes the specified
-computation, while detector accuracy still requires evaluation.
-B models remain private; rewards assess their committed output text.
-B miners can compute A scores for their own candidates during search;
-these scores are not hidden evaluation feedback. Hidden labels and
-unreleased benchmark and semantic-review evidence remain restricted.
-After issue, a runner outage permits only the same cached artifact on
-a reserved approved runner. No model, version, or threshold substitution
-is allowed. Canonical reference failure leaves the whole comparison
-unresolved or void under fixed closure, never a pass or B nonresponse.
+executing the published A panel under the artifact-freeze and execution
+rules in Sections~\ref{a-artifact-execution}
+and~\ref{common-transformation-evidence}. They
+compare B's submitted vectors with canonical outputs bound to the same
+artifact, runtime and input. B models remain private; rewards assess
+their committed output text. B miners can compute public A scores during
+search, while hidden labels and unreleased semantic-review evidence
+remain restricted.
 
 \paragraph{Frozen style measurement.}
 Style measurement applies to tasks requesting target-author fit.
@@ -84,17 +78,23 @@ copying, topic substitution, and meaning-breaking controls before
 funds depend on it.
 
 \paragraph{Three semantic fields.}
-The frozen brief and rubric define required protected information and
-allowed changes. Review the whole candidate, including information not
-enumerated in the checklist. Every certifying validator records one
+The source's full meaning must remain intact. Before generation, resolve
+the target tonal intent from the brief and, where supplied, the requested
+authorial style and authorized reference samples; freeze it in the task rubric. A dramatic
+change of authorial style can authorize a different tone without a
+separate tone instruction. Use source tone as the default for aspects the
+request leaves unchanged. Review the whole candidate, including information and tonal
+intent not enumerated in the checklist. Every certifying validator records one
 verdict, \texttt{PASS}, \texttt{FAIL}, or \texttt{ABSTAIN}, for each field:
 \begin{itemize}
 \tightlist
 \item
-  \(P\), preservation: retain required claims, entities, quantities,
-  negation, uncertainty, attribution, citations, and argument relations;
-  permit only changes authorized by the brief. Unsupported material
-  additions, omissions, or prohibited reference copying fail.
+  \(P\), preservation: retain the source's full meaning, including all
+  claims, entities, quantities, negation, uncertainty, attribution,
+  citations, and argument relations. Changes to expression must preserve
+  that information. Unsupported material additions, omissions, altered
+  meaning, or prohibited reference copying fail. Greater stylistic force
+  cannot strengthen factual certainty or obligations.
 \item
   \(R\), readability: introduce no material readability regression
   against the source and satisfy the brief's stated readability
@@ -102,12 +102,14 @@ verdict, \texttt{PASS}, \texttt{FAIL}, or \texttt{ABSTAIN}, for each field:
   filler, repetition or formulaic phrasing. Shorter text or simpler
   vocabulary alone supplies no pass.
 \item
-  \(T\), tone: satisfy every declared tone and audience constraint.
-  These include any specified intentional voice features to preserve,
-  such as the writer's informality or idiosyncrasies.
-  With no such constraint, this field is deterministically satisfied.
+  \(T\), tone: fulfill the frozen target tonal intent and every tone
+  and audience constraint. Preserve the intended voice features,
+  including informality or idiosyncrasies, specified by that target.
+  This field always requires a semantic vote, including when no separate
+  tone instruction appears in the request.
 \end{itemize}
-Insufficient evidence or unresolved interpretation requires abstention.
+Insufficient evidence or unresolved interpretation, including uncertainty
+about the target tonal intent, requires abstention.
 Failure ballots identify rubric items and bound source/candidate spans
 where applicable. Preference ties and extra editorial praise earn no
 additional utility. No detector probability substitutes for these
@@ -138,8 +140,13 @@ Each validator then commits its one final ballot per field by
 certificate must be included by \(H+204\). Deadline equality is timely;
 finalized inclusion, incident scope and payout timing follow
 Section~\ref{service-evidence}. Reserve all witness publication and
-verification work before issue; these cutoffs do not establish measured
-review throughput.
+verification work before issue. Under the pilot response schedule,
+candidate certification occurs by \(H+72\) through \(H+168\), leaving
+30 to 126 blocks before the ballot commitment cutoff: approximately
+6 to 25 minutes at 12 seconds per block. Certifiers must review the
+authorized source and candidate as evidence becomes available; waiting
+for the preparers' private opening would leave only six blocks.
+These cutoffs do not establish measured review throughput.
 
 The first canonical timely commitment fixes that validator's ballot for
 the field. Identical retries are idempotent; a conflicting signed ballot
@@ -152,11 +159,10 @@ signers of that verdict with total weight \(w\) satisfying
 conflicting strict certificates halt affected settlement.
 
 \paragraph{Deterministic closure.}
-At the close, set \(G=1\) only if every required field has a valid
+At the close, set \(G=1\) only if all three fields have a valid
 \texttt{PASS} certificate. Set \(G=0\) if any field has a valid
-\texttt{FAIL} certificate. Otherwise the judgment is unresolved. An
-empty tone-constraint set supplies the deterministic \(T\) condition
-without a semantic vote. Conflicting certificates take precedence and
+\texttt{FAIL} certificate. Otherwise the judgment is unresolved.
+Conflicting certificates take precedence and
 halt settlement. Missing candidate submissions remain attributable
 miner nonresponse under the service-evidence rules.
 
@@ -167,6 +173,25 @@ Retain all ballots and disagreements; do not draw replacement judges
 to obtain a preferred verdict. This rule makes outcomes reproducible
 from certified inputs. It does not require honest readers to interpret
 every passage identically or turn quorum agreement into semantic proof.
+
+Whole-batch closure prevents validators from using unresolved judgments
+to exclude only one competitor's candidate, at the cost of giving B
+submitters a way to disrupt the comparison. A chosen candidate can split
+honest judgments
+or induce abstention so that neither \texttt{PASS} nor \texttt{FAIL}
+exceeds \(2W/3\) on a required field. If no other field receives a
+\texttt{FAIL} certificate, that candidate voids the comparison. Dissent
+alone need not cause a void: enough agreeing failure weight certifies
+\(G=0\). A dishonest minority below \(W/3\) also cannot prevent a
+certificate when all remaining weight agrees and participates.
+An unresolved semantic judgment adds no service failure or recovery
+deficit; the submitter still pays its generation and any report costs. A UID
+expecting zero skill could therefore remove rivals' positive skill from
+one comparison and increase its owner's normalized share through sibling
+UIDs scoring elsewhere. This economic risk remains unresolved. The
+bounded attack study in Section~\ref{development-and-launch-criteria}
+must measure its frequency, collateral loss and owner-level payoff
+before live rewards.
 
 The versioned adjudication record binds the task and comparison IDs,
 source/candidate/reference/brief commitments, evaluator and calibration

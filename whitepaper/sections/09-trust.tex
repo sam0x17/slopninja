@@ -1,4 +1,4 @@
-\Needspace{38\baselineskip}
+\Needspace{14\baselineskip}
 \section{Trust assumptions and adversarial
 behavior}\label{trust-assumptions-and-adversarial-behavior}
 
@@ -9,11 +9,13 @@ of peers, comparison batches, and reviewers. Every scored submission
 receives the required review at launch. Each guarantee has a narrower scope than useful,
 confidential writing inference.
 
-\par\medskip\noindent
-\begin{tabularx}{\linewidth}{@{}LL@{}}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr0.5\linewidth-\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr0.5\linewidth-\tabcolsep\relax}@{}}
 \toprule
 Risk & Proposed response and remaining assumption \\
 \midrule
+\endhead
+\bottomrule
+\endfoot
 Customer text reaches another miner or gateway & Encrypt locally to the
 pinned assignment; no alternate keys or automatic reassignment \\
 Assigned miner leaks decrypted text & Minimize retention and enforce
@@ -26,6 +28,9 @@ artifact on the bound source and final text and compare canonical vectors
 and scalar projections; B's report does not authorize its own reward \\
 Miner copies reference content or removes difficult claims & Full
 preservation review, copying checks, and explicit exploit controls \\
+B miner chooses a candidate that prevents a semantic quorum & Whole-batch
+voiding limits selective exclusion by validators but can erase rivals'
+skill; measure induced voids and common-owner payoff before live rewards \\
 Miner's private search and retry costs are unverifiable & Miners fund
 their own attempts; score committed reports under fixed deadlines;
 do not reimburse claimed private costs \\
@@ -53,9 +58,7 @@ and explicit miner nonpayment risk; private fair exchange remains
 unresolved \\
 Miner manufactures paid demand & Keep customer revenue separate from
 emission scoring \\
-\bottomrule
-\end{tabularx}
-\par\medskip
+\end{longtable}
 
 The quorum assumption applies after excluding the exact task participants;
 it must hold in that conditional validator set. It prevents conflicting
@@ -94,7 +97,6 @@ consumes both an index and its failure allowance. The permitted 10\%
 allows selective refusal. Timely valid rewrites may still fail quality
 evaluation; availability does not certify quality. The 90\% gate and
 recovery deficits apply to issued A-requester and B-provider obligations.
-Absent A-provider or B-requester classes create no extra obligation.
 Separate role counts prevent cheap successes from diluting failures.
 A persistent recovery deficit makes abandoned work delay later
 eligibility even after the current epoch's credit is lost. It cannot

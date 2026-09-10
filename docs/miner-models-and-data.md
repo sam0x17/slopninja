@@ -255,7 +255,10 @@ from a public frozen author-distance artifact and development calibration.
 Source and candidate use the same empirical distance rank; `V` is exact positive
 improvement divided by the source's remaining rank headroom, with zero for a
 saturated source. Certified preservation, readability and tone fields determine
-`G`. A certified failure sets `G=0`; absent a failure, every required field must
+`G`. Source meaning must be preserved. Target tonal intent is fixed before
+generation from the brief and any requested authorial style and reference samples;
+it may differ from source tone. Tone review is mandatory even without a
+separate tone instruction. A certified failure sets `G=0`; absent a failure, every required field must
 pass for `G=1`. Unresolved judgments void the matched comparison for the B batch
 without erasing independently attributable service failures.
 

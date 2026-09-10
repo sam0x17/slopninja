@@ -3,10 +3,11 @@
 
 Slop Ninja's primary transformation goal is to remove unwanted generic
 and mechanically patterned writing while preserving the source's full
-argumentation, details, qualifications and intended tone. The result
+argumentation, details and qualifications. The result
 should read naturally in a particular authorized writer's voice, with
 their characteristic word choices, grammatical constructions and
-rhetorical habits. Here, \emph{slop} means unwanted filler, vague or
+rhetorical habits and the tonal intent of the requested style.
+Here, \emph{slop} means unwanted filler, vague or
 formulaic phrasing, needless repetition and other patterns that weaken
 the intended writing. Intentional informality, unusual constructions
 and recognizable personal habits belong to the target profile when
@@ -53,12 +54,14 @@ The initial subnet evaluates two tasks separately:
   optional evasion of Pangram and qualified subnet AI-origin detectors.
 \end{enumerate}
 
-For tasks requesting detector evasion, the additional joint target
-requires Pangram's reported AI-generated
-\textbf{plus AI-assisted} fraction strictly below 10\%, a majority pass
-against the common three-detector panel, and a pass against the actual
-strongest qualified prior-round detector at its calibrated threshold,
-with preservation and quality requirements satisfied. Reaching zero is a
+The strict success target for detector-evasion tasks requires the
+preservation and quality checks, a score strictly below 10\% on
+Pangram's reported AI-generated \textbf{plus AI-assisted} fraction,
+a majority pass against a common panel of three qualified subnet origin
+detectors, and a pass against the strongest qualified prior-round detector at its
+calibrated threshold. The panel contains that strongest detector and two
+hash-selected qualified detectors, frozen for all B candidates in a
+matched batch (Section~\ref{common-transformation-evidence}). Reaching zero is a
 desirable measured outcome, not a promise
 of this design. A model-origin text retains that recorded origin after a
 successful rewrite. Detector evasion does not change its production

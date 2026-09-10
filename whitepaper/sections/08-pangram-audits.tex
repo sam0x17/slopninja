@@ -46,19 +46,12 @@ Report external and subnet-detector outcomes separately; missing A
 evidence cannot become an adversarial pass. Customer text is not sent
 to Pangram without the customer's separate authorization.
 
-B submits self-scores bound to its final candidate, the assigned panel,
-artifact hashes, reference settings, full probability vectors and scalar
-projections. Validators execute the public, qualified artifacts cached
-before B task issue, compare the claims and use the verified results.
-Retain signed execution records binding the round, artifact content and
-manifest hashes, reference runtime and settings, text commitment, and
-full origin-probability vector. Execute the complete source/candidate
-matrix after B candidate commitments. Miner-selected local search
-records cannot replace it. Every final signer replays the required
-computations; a coordinator's signature alone does not verify execution.
-No A endpoint supplies authoritative probabilities, and B's generator
-need not be replayed. Published model behavior can still be inaccurate
-or designed to favor an allied B.
+For public A scores, use the complete comparison matrix, B self-score
+bindings and signed execution records in
+Section~\ref{common-transformation-evidence}. Every final signer
+independently verifies the required computations under
+Section~\ref{a-artifact-execution}; a coordinator's signature alone is
+insufficient.
 Section~\ref{service-evidence} specifies complete on-chain ciphertext
 publication, separate confidential generation witnesses, and fixed
 validity/closure certificates. A report URL, response hash, or recipient
@@ -86,12 +79,9 @@ UIDs can still have the same owner. Reserve preparation and full-set
 verification capacity before issue.
 
 Preparers organize checks and retain independent commitments/openings.
-Final certificates bind the actual validity or quality verdict and require
-\(3w>2W\), where \(W\) is the full frozen eligible validator weight and
-\(w\) is the weight of distinct signers who inspected the evidence.
-Assume dishonest weight is below \(W/3\) in that conditional set.
-Nonresponse, recusal, missing keys, and later role changes never reduce
-\(W\). Three preparers have no independent approval authority.
+Final certificates follow the frozen authority and strict weighted
+quorum in Section~\ref{service-evidence}. They attest the actual verdict;
+preparers have no separate approval authority.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -122,11 +112,9 @@ Nonresponse, recusal, missing keys, and later role changes never reduce
   commitment.
 \item
   Execute the required common panel matrix in the restricted reference
-  runner, retaining control outcomes and execution failures. A failed
-  runner can be replaced only by one executing the same frozen
-  artifact. Do not substitute a detector or threshold after issue.
-  An unresolved reference computation voids the common comparison
-  under the closure rule; it is not B nonresponse or an automatic pass.
+  runner, retaining control outcomes and execution failures. Apply
+  Section~\ref{a-artifact-execution} for runner recovery and
+  Section~\ref{reward-adjudication} for unresolved computations.
   Record any missing strongest-detector comparison. Finalize all evidence commitments before
   the fixed evidence deadline; a favorable score is never grounds to
   switch provider or discard an observation.

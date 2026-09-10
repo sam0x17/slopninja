@@ -2,10 +2,9 @@
 
 The proposed \texttt{service-evidence-v1} mailbox covers bounded,
 protocol-assigned rewrite requests from A requesters to B providers.
-A models are public; B generators remain private. Authoritative benchmark
-probabilities come from validators executing complete, frozen qualified
-A artifacts. There are no mandatory A-provider inference calls or
-B-requester inference tickets. The one-ticket exercise below specifies
+A models are public; B generators remain private. The requester counters,
+provider assignments and availability gates are defined in
+Section~\ref{adversarial-feedback-loop}. The one-ticket exercise below specifies
 transport and review of a B rewrite. It implements neither an artifact runner nor the
 complete common source/candidate matrix. An emission-bearing benchmark
 needs a separate frozen execution schedule and capacity budget.
@@ -18,25 +17,11 @@ Publication establishes bytes, sender authentication, and timing. Private
 validity and quality require the certificates below. This mailbox is a
 specified pilot, not an implemented throughput result.
 
-Freeze the qualified epoch roster and cache complete A panel artifacts before
-B task disclosure or candidate generation. Execution receipts bind the model manifest and
-artifact hashes, canonical runtime and settings, input commitment, and
-full probability output. B's scored submission includes its full locally
-computed vectors, the protocol-assigned model and settings, and the exact
-candidate-input commitment. Validators re-execute and compare canonical
-outputs; local claims cannot replace those results. Hidden
-independently labeled qualification and targeted-trigger controls remain
-necessary: replay can reproduce a deliberately defective model.
-Validator execution has its own funded capacity, separate from rewrite
-service tickets. B miners may run the public artifacts on their own
-candidates during search. Their resulting scores are not secret; hidden
-labels, other miners' candidates, unreleased sources, and semantic
-review evidence retain their access restrictions.
-After issue, no model, version, or threshold can change. A validator-node
-outage permits execution of the same cached artifact on a reserved approved
-runner. Canonical reference failure leaves the whole comparison unresolved
-or void under fixed closure; it cannot supply a pass or become B nonresponse.
-Deliberately triggered execution errors remain a pilot attack case.
+Authoritative A execution follows Section~\ref{a-artifact-execution};
+the common benchmark matrix and its separately funded capacity follow
+Section~\ref{common-transformation-evidence}. The mailbox certificates
+below establish transport and declared service validity. They do not
+replace benchmark execution or semantic review.
 
 \paragraph{Frozen authority.}
 Before revealing task contents, exclude the exact assigned A/B UIDs from
@@ -91,8 +76,7 @@ start plus 48 blocks. The final B attempt cutoff is \(H+168\).
 Early declines do not advance later windows. Reserve all possible bytes,
 gas, response and verification capacity; insufficiency prevents issue and
 does not authorize another draw. One ticket provides a bounded transport
-pilot, not availability evidence for every UID. Earlier two-ticket fixtures
-remain historical evidence for the prior design. Settlement names a later
+pilot, not availability evidence for every UID. Settlement names a later
 native payout cycle and its actual commit/reveal configuration; no claim
 is made that reveal delays fit within the unused part of this epoch.
 
@@ -145,6 +129,9 @@ issued tickets. Certified delivery of a B response does not establish
 its revision quality. A request-publication failure remains in its
 requester ledger and cannot alter a benchmark artifact or computed result.
 Validator runner failures never enter this rewrite-service ledger.
+Missing service-validity certificates do enter it as unresolved
+obligations, which block epoch eligibility even without miner fault
+(Section~\ref{adversarial-feedback-loop}).
 B rewards evaluate the submitted revision without requiring replay of
 the private generator. Insufficient final review evidence voids the shared
 quality comparison consistently, without deleting attributable service
@@ -159,7 +146,6 @@ and \(10F\leq N\) for the class and aggregate availability gates. Publish
 all counts. Keep \(D_e=\max(0,D_{e-1}+10F-N)\); neither unresolved nor void
 work retires a deficit. Require zero outstanding deficits and current
 qualification; customer jobs and other classes cannot dilute these gates.
-The removed A-provider and B-requester classes create no zero-work failure.
 A artifact publication and qualification are separate eligibility gates.
 
 Only canonical finalized inclusion counts, with deadline equality timely.

@@ -36,6 +36,15 @@ calibration \\
 \end{tabularx}
 \par\medskip
 
+The Global Voices comparison removes grammar terms from the frozen
+Blog-trained scorer without refitting or renormalizing any remaining
+term. That removal improves accuracy by 4.17 percentage points on this
+sample, reversing the grammar contribution's benefit on Blog data.
+The experiment does not identify why: it has no matched-topic control
+and does not isolate register, editorial practice or extraction effects.
+This supports testing feature weights across registers; it does not
+establish that grammar is generally unhelpful~\cite{gvtransfer}.
+
 The projection experiment shows why 3,557 learned coordinate weights
 must not be mistaken for a sufficient fixed input vocabulary. The full
 model also retains unselected word and grammar contributions. Neither
@@ -54,6 +63,19 @@ encrypts receipts for assigned validators. The receipt prototype relies on calle
 trusted assignments; it is not a customer-request protocol or deployed
 key registry.
 Receipt implementation~\cite{receipts}.
+
+\paragraph{Design history of the stress tests.}\label{historical-stress-tests}
+The following experiments include earlier designs with private A
+inference endpoints, reciprocal A/B service obligations and
+three-reviewer majority judgments. Some fixtures therefore use two
+tickets and four service roles. The current design publishes A artifacts,
+requires training service from A requesters to B providers, and certifies
+judgments through the global weighted quorum
+(Sections~\ref{model-interfaces-and-starter-architectures},
+\ref{adversarial-feedback-loop} and \ref{service-evidence}). The
+complementary-credit and shared-pool policies tested below remain
+experimental settlement proposals. Their arithmetic and counterexamples
+constrain the design without becoming adopted payout rules.
 
 \subsection{Assignment and accounting stress tests}
 
@@ -100,12 +122,8 @@ These are assignment and accounting tests, not measured model accuracy,
 profitable attacks, or an equilibrium analysis. The simulation assumes
 fixed membership and reserved capacity; it does not model adaptive UID
 acquisition, shared-detector fallback, delivery disputes, private-model
-execution, or native payouts. These results concern the earlier
-three-reviewer majority policy. In this revision, three preparers assemble
-evidence and a strict global weighted quorum certifies the actual
-judgments. Those historical private detector responses did not prove
-execution. This revision instead requires validator execution of public A
-artifacts; the earlier assignment experiment does not test that runner.
+execution, or native payouts. It also does not test the public A artifact
+runner required by the current design.
 
 \subsection{Settlement counterexamples and certificate boundaries}
 

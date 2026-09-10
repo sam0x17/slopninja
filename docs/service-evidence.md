@@ -4,8 +4,7 @@ This specifies the proposed `service-evidence-v1` transport and accounting pilot
 for bounded authorized rewrite requests from A requesters to B providers.
 A models are public; B generators remain private. Validators execute complete
 frozen, qualified A artifacts for authoritative benchmark probabilities.
-There are no mandatory A-provider inference calls or B-requester inference
-tickets. B rewrite responses supply training material for A.
+B rewrite responses supply training material for A.
 
 The one-ticket exercise reviews its B rewrite. It implements neither an artifact runner nor the
 common three-A source/candidate matrix. An emission-bearing benchmark requires
@@ -80,7 +79,7 @@ All ciphertext and witness copies must fit their stage's byte, transaction,
 gas and verifier reservations before issue. Insufficient capacity prevents
 that scheduled issue; it does not permit another peer draw. One ticket is a
 small transport pilot, not enough evidence to qualify every subnet UID.
-Earlier two-ticket fixtures remain historical evidence for the prior design;
+The whitepaper's design-history note identifies earlier fixtures;
 they do not implement this directed rewrite pilot or the artifact runner.
 
 The 360-block pilot requires a subnet with that measured tempo. A different tempo needs a separately versioned schedule. Settlement binds a particular later native payout cycle and its actual commit/reveal configuration; the remaining block heights are not a claim that native reveal delays fit inside this epoch. No issue is permitted if its declared settlement path cannot use the closed result in time. A finality stall can delay observing closure beyond that payout cycle; the settlement adapter must then apply its declared unresolved-round handling rather than fabricate a timely result.
@@ -129,7 +128,10 @@ Late publication remains late even if its contents are valid. Recipient accusati
 
 An A requester's publication failure remains a service-accounting event; it
 cannot change the frozen benchmark artifact or its canonical result. Validator
-runner failures never enter the rewrite-service ledger. B quality scoring uses the committed candidate and does not
+runner failures never enter the rewrite-service ledger. Missing service-validity
+certificates do enter it as unresolved obligations and block epoch eligibility
+even without miner fault. If every miner is ineligible, the pool follows the
+unallocated/burn policy. B quality scoring uses the committed candidate and does not
 require replay of private generation. The mailbox deadlines and byte limits do
 not establish that artifact distribution, canonical inference or full-matrix
 execution fits the benchmark budget.
@@ -142,8 +144,7 @@ and platform voids. Do not count inactive fallback reservations. Set settled
 valid obligations `N=S+F`. The class passes availability only if `U=0`, `N>0`,
 and `10F<=N`. Publish all counts, including `U` and `V`; excluding them from
 settled `N` never hides missingness or gives automatic approval. Apply the same
-test in aggregate and to each applicable class. The removed A-provider and
-B-requester classes create no zero-work failure. A artifact publication and
+test in aggregate and to each applicable class. A artifact publication and
 qualification have separate eligibility gates. Private customer successes and
 other classes cannot dilute these counts.
 

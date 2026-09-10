@@ -40,6 +40,7 @@ a 149M encoder, is a concrete starter candidate. Selection must compare
 it with the existing metric on new authors, topics, and registers. The
 subnet does not require that checkpoint or assume it will win.
 
+\paragraph{Published artifact and execution policy.}\label{a-artifact-execution}
 Each A artifact binds weights, features, tokenizer, preprocessing and
 postprocessing, calibration, reference pooling, executable dependencies,
 runtime, numerical precision, hardware requirements and output rules.
@@ -76,11 +77,15 @@ evasion}\label{author-transformation-and-detector-evasion}
 Inputs are the source, independent target-author samples, requested
 style changes, and a preservation brief. The brief identifies unwanted
 writing patterns to remove and intentional voice features to retain.
+Before generation, it fixes the target tonal intent using any requested
+style and supplied reference samples. A dramatic authorial-style shift can change
+tone while preserving the source's full meaning.
 Author matching covers lexical, grammatical and rhetorical habits in
 the requested register; generic polish alone does not satisfy it.
 The task declares author
 matching, evasion against Pangram and the common subnet AI-origin
-panel, or both objectives. The miner returns exact revised text or an
+panel defined in Section~\ref{purpose-and-scope}, or both objectives.
+The miner returns exact revised text or an
 abstention. Evasion-only tasks isolate the adversarial benchmark; they
 do not demonstrate the primary product goal of cleanup in a particular
 writer's voice. Opponent selection and scoring are fixed by the benchmark,
@@ -104,8 +109,7 @@ availability for every search step. Direct gradients are available only
 where the architecture permits them; differentiable feedback does not
 guarantee useful discrete text edits. Training tickets serve authorized
 rewrite requests from A to B under bounded limits. Benchmark submissions retain the frozen
-candidate and deadline rules. B's private generation process is judged by
-its submitted text, not by a claimed internal model execution.
+candidate and deadline rules.
 B can compute its own candidates' A scores before and after commitment;
 these public-model scores are not hidden feedback. The official comparison
 uses the one committed candidate and the frozen panel. Hidden labels,
@@ -131,8 +135,7 @@ organization, rhetorical force, and tone. A lower reading level or
 shorter text is useful only when the brief calls for it. Suitable text
 can remain unchanged. Validators use independent judges and reader
 audits to assess preservation, readability, and requested voice;
-reviewer ties and disagreements remain in the data. A miner cannot
-approve its own revision for rewards.
+reviewer ties and disagreements remain in the data.
 
 Future comparisons of 4B, 8B, and 32B transformation models should use fidelity,
 reader preference, and cost per accepted revision. All checkpoint

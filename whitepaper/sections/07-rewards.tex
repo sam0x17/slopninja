@@ -62,28 +62,20 @@ Those queries consume B's compute and
 have no protocol per-query quota. This local access does not create
 additional benchmark submissions or discharge an assigned service
 obligation. Validators separately reserve their own compute to grade the
-official comparison matrix. A's quality reward comes from its published
-artifact's independent performance; B's private generation procedure is
-not a claim that must be replayed to score the submitted text. No
-mandatory A inference endpoint or B-to-A prediction ticket remains.
+official comparison matrix. A earns quality credit from independent
+evaluation of its published artifact; B earns it from the committed
+revision. Section~\ref{a-artifact-execution} defines canonical A execution.
 
 Use released, authorized training sources and retain the production
 history, brief, and preservation status with each response. A later
 rewrite does not acquire a human-only label by defeating a detector.
 Unknown assistance histories remain weak labels; a private endpoint is
 not itself proof of model generation.
-Allocate complete source families to either released training material
-or private evaluation. Assigned miners receive the inputs needed to
-perform their service. Hidden labels, private review material, and
-detailed evaluation feedback stay with authorized evaluators until
-retirement; active examples are not released into training exchanges.
-Customer jobs never enter this exchange automatically. A artifacts are
-public, including to external detector providers. B weights remain
-private, but serving outputs still permits model-extraction attempts and
-endpoint retention; quotas limit exposure without preventing either.
-Each B miner can calculate public A scores for its own known texts.
-Hidden labels, unreleased source families and other miners' candidates
-remain separate from that locally available feedback.
+The source-family splits, release rules and access boundaries in
+Section~\ref{training-data-and-evaluation-separation} govern this exchange.
+Private B weights can still be studied through served outputs;
+request quotas limit that exposure without preventing model extraction
+or retention by recipients.
 
 \subsubsection{Service budgets and deterministic pairing}
 
@@ -160,8 +152,7 @@ Use authenticated outcomes of real assigned inference requests to
 measure availability.
 
 The mandatory classes are A as requester of training rewrites and B as
-their provider. There is no A inference-provider or B prediction-requester
-class, and neither absent class receives a zero-workload failure.
+their provider.
 A artifact availability and performance are separate qualification
 requirements. The schedule must reserve real work for every activated
 mandatory class before that class can earn availability credit.
@@ -170,6 +161,10 @@ For miner \(u\) and measured epoch \(e\), let \(N_{u,e}=S_{u,e}+F_{u,e}\)
 count settled successes and attributable failures under
 Section~\ref{service-evidence}. Retain unresolved obligations separately
 as \(U_{u,e}\); they block eligibility without inventing a failure.
+If validator non-certification leaves a service obligation unresolved,
+even an honest miner loses earned emission eligibility for that measured
+epoch. If this affects every miner, no positive eligible skill remains
+and the pool follows the unallocated/burn policy below.
 An obligation is either submitting a scheduled request or answering a
 valid delivered request; the ticket fixes the responsible UID and role.
 The emission-eligibility
@@ -254,7 +249,7 @@ adapter must demonstrate its effect on both mechanisms under actual
 weight-reveal delays and stale-weight behavior before launch; this
 paper assumes no custom slashing primitive.
 
-\subsubsection{Common evidence for transformation rewards}
+\subsubsection{Common evidence for transformation rewards}\label{common-transformation-evidence}
 
 Per-miner peer sets allocate authorized B rewrite service for A training.
 Those training outputs do not replace the common committed benchmark
@@ -293,22 +288,19 @@ what matched assignments mean. The three-member pilot is provisional;
 its cost, coverage, and susceptibility to colluding UIDs require
 measurement before live rewards.
 
-After issue, never replace a panel model, version or threshold. An
-unavailable validator runner is replaced by an approved runner executing
-the same artifact. Failure of the canonical reference execution leaves
-the whole common comparison unresolved or void under the fixed closure
-rule. Do not discard only missing cells, invent a passing probability,
-or count validator execution failure as B nonresponse or an A training
-endpoint failure. A B miner that fails to submit receives zero on its
+Apply the frozen-artifact and runner-recovery rules in
+Section~\ref{a-artifact-execution}. Unresolved execution follows the
+whole-comparison closure in Section~\ref{reward-adjudication}.
+A B miner that fails to submit receives zero on its
 assigned work. A missing strongest-detector result prevents a claim of
 success against that detector. Deliberately triggered execution errors
 are a required pilot attack case.
 
 The median panel improvement used below limits one arbitrary outlier
 when fewer than half the panel UIDs collude. It does not establish that
-bound or prove owner independence. Validators reproduce model behavior,
-including any learned trigger that favors a colluding B. Hidden
-qualification and targeted-behavior controls must test that risk.
+bound or prove owner independence. Validators reproduce model behavior;
+the artifact qualification controls in Section~\ref{a-artifact-execution}
+must test deliberate bias.
 One A result cannot alone determine B's utility, and A earns quality
 from independent labeled evaluation, not from how harshly it scores B.
 The strongest detector's result is also reported separately. Legitimate
@@ -325,11 +317,10 @@ assigned panel hashes, reference settings, full candidate probability
 vectors, required source baselines and scalar projections. Validators
 recompute the canonical outputs and compare the claims; verified results
 determine rewards, with mismatches retained. A claimed high score cannot
-skip another candidate's verification. No A miner endpoint or replay of
-B's generator is required. Commit the complete evidence by the fixed block deadline;
+skip another candidate's verification. Commit the complete evidence by the fixed block deadline;
 hash-assigned validators review every scored submission and all required
 checks at launch. Bootstrap rounds
-use published, explicitly funded reference A artifacts until enough
+use published, explicitly funded bootstrap A artifacts until enough
 competitive models qualify, and are reported separately.
 
 \subsection{Preservation before revision
@@ -338,14 +329,18 @@ rewards}\label{preservation-before-revision-rewards}
 Each editing task has a preservation brief and hidden review material
 covering claims, participants, quantities, negation, uncertainty,
 citations, attribution, and argument relationships. Review the entire
-revision. Validators also check readability and the requested tone under
+revision. Positive utility requires preservation of the source's full
+meaning and conformity to the task's target tonal intent. That target
+may differ from source tone when the requested authorial style calls
+for a change. Validators also check readability and tone under
 the fixed rubric in Section~\ref{reward-adjudication}. Before issue, the
 brief identifies required cleanup of unwanted filler, repetition or
 formulaic phrasing under \(R\), and intentional voice features to
 preserve under \(T\), including any specified informality or
 idiosyncrasies. Cleanup must retain the protected information. These are B
 acceptance constraints. A certified failure sets \(G=0\); certificates
-for all required passes set \(G=1\).
+for all required passes set \(G=1\). Every task requires tone review,
+including a request that supplies no separate tone instruction.
 
 Readers compare anonymized revisions in hash-derived order without
 detector or miner scores. Maintain unchanged sources and qualified
@@ -356,8 +351,11 @@ evaluator instructions.
 
 Unresolved judgments at the fixed close void the matched comparison for
 the whole B batch under Section~\ref{reward-adjudication}. Miner
-nonresponse remains a zero on assigned work; validator infrastructure
-failure is a separate, recorded event. Publish coverage and missingness
+nonresponse remains a zero on assigned work. A validator outage can
+still erase comparison credit or block epoch eligibility when a service
+certificate remains unresolved. Section~\ref{reward-adjudication} describes the residual
+risk that a miner induces semantic disagreement to void its batch.
+Publish coverage and missingness
 so that conditional accuracy cannot conceal excluded difficult cases.
 
 \subsection{Transformation utility}\label{transformation-and-improvement-utility}
@@ -396,8 +394,7 @@ reported pass applies only to the committed observations, not to every
 future measurement of that text. Selection can bias the submitted set
 when provider results vary. We accept this limitation to keep external
 Pangram costs with the submitting miner. Validators independently
-execute the frozen A panel against the committed candidate; no A
-serving endpoint is involved. Our probe found equal document fractions
+execute the frozen A panel against the committed candidate. Our probe found equal document fractions
 across fresh requests for three tested texts, with auxiliary-score
 variation, but no observations within two percentage points of 10\%.
 It establishes neither general determinism nor threshold stability~\cite{repeatability}.
@@ -421,7 +418,7 @@ utility is
 \end{equation}
 The strict joint pass requires preservation, \(\max_r F_r(z)<0.10\),
 a majority of panel detectors satisfying \(H_j(z)<\tau_j\), and a pass
-against the actual strongest reference service at its own threshold.
+against the strongest qualified prior-round origin detector at its own threshold.
 Calibrate each \(\tau_j\) on independent development data at the
 declared human false-positive operating point and freeze it before the
 round. These thresholds are not automatically 0.10. Report strongest-A
@@ -431,7 +428,10 @@ improvement compensates for regression on the other aggregate axis.
 
 Pilot transformation utilities are \(GV\), \(GE\), and
 \(G(V+E)/2\) for the three modes. Combined mode also requires no
-regression on either requested axis. Report sub-10\% success separately
+regression on either requested axis. The semantic gate multiplies every
+mode's utility: author fit or detector success cannot compensate for a
+meaning or tone failure. Unresolved semantic evidence follows the
+closure rule and earns no positive score. Report sub-10\% success separately
 from incremental improvement. An already suitable source can stay
 unchanged without receiving an invented improvement bonus.
 
@@ -471,19 +471,11 @@ certificate specifies the intended weights; native consensus still
 determines the resulting payouts.
 
 \paragraph{Execution and incentive limits.}
-The selected public-A policy removes private reported probabilities
-from benchmark authority. The earlier private-panel proposal motivated
-complementary fixed-credit experiments, which fail to establish conserved
-alpha payouts after native weight normalization, as shown in
-Section~\ref{existing-evidence-and-implementation-status}.
-Shared settlement preserves the ideal maximum miner incentive under
-fixed-state assumptions, but historical validator dividends break the
-broader combined-receipts claim. A current-only legacy configuration
-removes that history attack in the tested fixtures; integer rounding and
-native lifecycle effects remain to be bounded~\cite{sharedpoolgameability}.
-Neither experimental complementary settlement nor its current-only
-configuration is adopted. The two native task pools above reward
+The two native task pools above reward
 independently evaluated A artifact performance and B output utility.
+Section~\ref{existing-evidence-and-implementation-status} records earlier
+private-panel and shared-settlement experiments and why they do not
+establish conserved native payouts for this design.
 Public A models can still favor colluding B outputs, and public weights
 make copying possible. Qualification, duplicate handling, execution
 budgets and actual native settlement must be tested before live rewards.

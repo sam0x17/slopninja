@@ -87,8 +87,12 @@ evaluation, restrict active evidence to authorized validators, and retire tasks
 before releasing hidden labels, other miners' candidates and detailed review
 material. Evaluate artifact updates on fresh hidden material. Public weights
 do not establish common ownership, original training,
-truthful provenance or absence of targeted backdoors. Preservation and requested
-readability/tone constraints still need their own adjudication.
+truthful provenance or absence of targeted backdoors. Every B mode requires
+independent adjudication of meaning, readability and target tonal intent.
+Fix that intent before generation from the brief and any requested authorial
+style and reference samples; a style shift may call for different tone from the
+source. Detector or author-fit gains cannot offset a failed
+semantic gate.
 
 ## The complete artifact
 
