@@ -236,8 +236,8 @@ From the repository root:
 ```sh
 study=data/author-corpora/blog-authorship-2004/lexical-frames-v1
 cargo build --manifest-path grammar/Cargo.toml --release \
-  --bin slopninja-lexical-frames
-grammar/target/release/slopninja-lexical-frames import \
+  --bin slop_ninja-lexical-frames
+grammar/target/release/slop_ninja-lexical-frames import \
   --repo "$PWD" \
   --manifest grammar/resources/verbnet-3.4-manifest-v1.json \
   --expected-manifest-sha256 1051972db94caaca527cabbb69f40102ecb1a7a54a883fe6afca81d648c3bcb4 \
@@ -250,7 +250,7 @@ separate receipts. Run requires that protocol's recorded digest, the exact
 bound assets and a fresh output directory:
 
 ```sh
-grammar/target/release/slopninja-lexical-frames run \
+grammar/target/release/slop_ninja-lexical-frames run \
   --repo "$PWD" \
   --protocol "$study/protocol.json" \
   --expected-protocol-sha256 10e7d5c2c2db956bf12e9cd17aa9057c8b1dcab8859aa0784612e8cd4a5b594f \

@@ -216,7 +216,7 @@ From the repository root, the command shape is:
 
 ```sh
 study=data/author-corpora/blog-authorship-2004/boundary-view-v1
-grammar/target/release/slopninja-boundary-view \
+grammar/target/release/slop_ninja-boundary-view \
   --protocol "$study/protocol.json" \
   --expected-protocol-sha256 0d7cf7f681f1244f304fceab4007827309de2a1c0ecb4d32e4db54216e4921ba \
   --repo "$PWD" \

@@ -80,7 +80,7 @@ readability. The existing fused-punctuation and absent-case limitations remain
 relevant. This study fits no author model and makes no LLM or detector calls.
 
 The Rust executable
-[`slopninja-sentence-context`](../grammar/crates/grammar-eval/src/bin/slopninja-sentence-context.rs)
+[`slop_ninja-sentence-context`](../grammar/crates/grammar-eval/src/bin/slop_ninja-sentence-context.rs)
 provides `freeze` and `run` commands; the latter requires the expected protocol
 SHA256. The protocol binds every case, exact parse input and origin, predecessor,
 source file, executable, parser configuration and resource manifest before

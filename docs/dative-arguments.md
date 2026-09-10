@@ -62,7 +62,7 @@ descriptive replay of reused training sources. The support thresholds,
 author/date denominators and missingness treatment remain unchanged; no
 preference fitting or detector calls occur.
 
-The `slopninja-dative-arguments` executable provides `freeze` and `run`
+The `slop_ninja-dative-arguments` executable provides `freeze` and `run`
 commands. The protocol binds the new sources, changed predecessor sources,
 fixture manifest, parser/resource assets and every reused transformer
 annotation before execution. Corpus passages and identifying artifacts remain

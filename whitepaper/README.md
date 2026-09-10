@@ -14,7 +14,7 @@ Pagella/Heros and Latin Modern Mono fonts. It renders the editable SVG to a
 PDF figure and compiles the native LaTeX project. No Markdown conversion is
 part of the build. Temporary files and logs stay in ignored `build/`.
 
-[slopninja.pdf](slopninja.pdf) and the PDF figure are checked in. With the
+[slop_ninja.pdf](slop_ninja.pdf) and the PDF figure are checked in. With the
 existing figure, run `latexmk -xelatex -outdir=build main.tex` from this
 directory, or configure a TeX editor for XeLaTeX with BibTeX.
 The source and rendered paper are design proposals, not a deployed protocol.

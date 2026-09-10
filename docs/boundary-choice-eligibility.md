@@ -259,7 +259,7 @@ Its `run-command.sh` records the exact invocation. From the repository root,
 the equivalent command below requires a fresh output directory:
 
 ```sh
-grammar/target/release/slopninja-boundary-eligibility \
+grammar/target/release/slop_ninja-boundary-eligibility \
   --protocol data/author-corpora/blog-authorship-2004/boundary-choice-eligibility-v1/protocol.json \
   --expected-protocol-sha256 a2e4575bf565ec3f5a0b6a4aceb4f0382bca5ee84f2e783bbf34429fa9577b0a \
   --repo "$PWD" \

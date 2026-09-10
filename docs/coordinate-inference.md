@@ -1,6 +1,6 @@
 # Rust inference for coordinate weights
 
-`slopninja-score` runs the frozen positive coordinate metric without PyTorch.
+`slop_ninja-score` runs the frozen positive coordinate metric without PyTorch.
 The reusable `Metric` type lives in
 [`coordinate_inference.rs`](../grammar/crates/grammar-eval/src/coordinate_inference.rs).
 It accepts complete family distances and selected coordinates through
@@ -42,8 +42,8 @@ artifact paths and a fresh output directory:
   --baseline-fit FAMILY_SPLINE_FIT --out data/portable-metric/models
 
 cargo build --release --manifest-path grammar/Cargo.toml \
-  -p grammar-eval --bin slopninja-score
-grammar/target/release/slopninja-score \
+  -p grammar-eval --bin slop_ninja-score
+grammar/target/release/slop_ninja-score \
   --model data/portable-metric/models/metric-seed-0.json export \
   --export ORIGINAL_COORDINATE_EXPORT --out data/portable-metric/scores \
   --expected-scores SAVED_PYTHON_SCORES.json

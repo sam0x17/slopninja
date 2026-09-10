@@ -121,7 +121,7 @@ numerical axes separately. The first valid training tensor, failed-attempt
 logs and both executed source versions remain available. This correction
 changed input validation and provenance, with no distance or profile changes.
 
-The generic `slopninja-score-families` Rust command loads the selected portable
+The generic `slop_ninja-score-families` Rust command loads the selected portable
 model, maps its named families to a validated tensor and applies the shared
 spline and family coefficients. It supports both representations. All 24
 model/gallery replays passed: 475,818 candidate scores and 4,794 rankings,
@@ -131,8 +131,8 @@ The final workspace checks passed formatting, 184 tests and Clippy.
 From `grammar/`, build and inspect the command with:
 
 ```sh
-cargo build --release -p grammar-eval --bin slopninja-score-families
-target/release/slopninja-score-families --help
+cargo build --release -p grammar-eval --bin slop_ninja-score-families
+target/release/slop_ninja-score-families --help
 ```
 
 Scoring requires the portable model, named-family export, their expected

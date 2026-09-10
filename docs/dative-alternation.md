@@ -140,10 +140,10 @@ author artifacts present:
 
 ```sh
 cargo build --release --manifest-path grammar/Cargo.toml \
-  -p grammar-eval --bin slopninja-dative-alternation
-grammar/target/release/slopninja-dative-alternation freeze \
+  -p grammar-eval --bin slop_ninja-dative-alternation
+grammar/target/release/slop_ninja-dative-alternation freeze \
   --repo "$PWD" --out /absolute/path/to/new-protocol-directory
-grammar/target/release/slopninja-dative-alternation run \
+grammar/target/release/slop_ninja-dative-alternation run \
   --repo "$PWD" \
   --protocol /absolute/path/to/new-protocol-directory/protocol.json \
   --expected-protocol-sha256 SHA256_PRINTED_BY_FREEZE \

@@ -217,7 +217,7 @@ or evaluated in this study. These results do not select a replacement parser.
 
 ## Reproduction
 
-The Rust comparator is `slopninja-lexical-frame-parsers`. It reads saved,
+The Rust comparator is `slop_ninja-lexical-frame-parsers`. It reads saved,
 hash-bound outputs and makes no parser calls. The producer executable and its
 25 source bindings remained identical to the preceding lexical-frame study.
 The new comparator protocol binds those sources, its two new files, both

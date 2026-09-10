@@ -180,7 +180,7 @@ assign semantic-equivalence labels.
 With the pinned local inputs present, reproduce into a new directory:
 
 ```sh
-grammar/target/release/slopninja-claim-guard evaluate \
+grammar/target/release/slop_ninja-claim-guard evaluate \
   --protocol data/author-corpora/blog-authorship-2004/claim-guard-v1/protocol.json \
   --expected-protocol-sha256 9ca196751e364f9c1c5845c18da8ff7e30c41766cc27726ba07b1d9289ceceb8 \
   --repo . \
@@ -191,7 +191,7 @@ No new author allocation, model fitting, LLM call or detector request was used.
 
 ## Compare a proposed edit
 
-The `slopninja-claim-guard compare` command accepts two syntax `Document` JSON
+The `slop_ninja-claim-guard compare` command accepts two syntax `Document` JSON
 files and an array of exact `Edit` patches. Supply their SHA256 values with
 `--expected-source-annotation-sha256`, `--expected-candidate-annotation-sha256`
 and `--expected-edits-sha256`, alongside `--source-annotation`,

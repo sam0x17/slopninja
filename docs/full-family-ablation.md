@@ -121,8 +121,8 @@ independence, and retrieval does not certify useful text edits.
 
 ```sh
 cargo build --release --manifest-path grammar/Cargo.toml \
-  -p grammar-eval --bin slopninja-ablate-families
-grammar/target/release/slopninja-ablate-families \
+  -p grammar-eval --bin slop_ninja-ablate-families
+grammar/target/release/slop_ninja-ablate-families \
   --protocol data/author-corpora/blog-authorship-2004/full-family-ablation-v1/protocol.json \
   --out data/author-corpora/blog-authorship-2004/full-family-ablation-v1/run-v2
 ```

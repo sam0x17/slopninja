@@ -530,7 +530,7 @@ fn run(args: Args) -> Result<()> {
     fs::write(args.out.join("protocol.json"), &protocol_bytes)?;
     fs::write(
         args.out.join("source.rs"),
-        include_bytes!("slopninja-content-diagnostic.rs"),
+        include_bytes!("slop_ninja-content-diagnostic.rs"),
     )?;
     let query_output = rows
         .iter()
@@ -541,7 +541,7 @@ fn run(args: Args) -> Result<()> {
     fs::write(args.out.join("queries.jsonl"), &query_output)?;
     let output = json!({"schema":"slopninja-content-proxy-diagnostic-result-v1","status":"pass",
         "analysis":"descriptive_after_test_evaluation","protocol_sha256":digest(&protocol_bytes),
-        "source_sha256":digest(include_bytes!("slopninja-content-diagnostic.rs")),
+        "source_sha256":digest(include_bytes!("slop_ninja-content-diagnostic.rs")),
         "executed_binary_sha256":digest(&fs::read(std::env::current_exe()?)?),
         "source_report_sha256":protocol.report.sha256,"queries_sha256":digest(query_output.as_bytes()),
         "score_files_verified":score_files,"per_query_metrics_reconstructed":score_metrics,

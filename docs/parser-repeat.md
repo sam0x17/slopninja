@@ -94,7 +94,7 @@ stop the run and leave a failure record.
 The protocol binds the predecessor reports, selection records, exact text
 digests, historical annotation references, parser assets, source files and
 executable. The new
-[`slopninja-parser-repeat`](../grammar/crates/grammar-eval/src/bin/slopninja-parser-repeat.rs)
+[`slop_ninja-parser-repeat`](../grammar/crates/grammar-eval/src/bin/slop_ninja-parser-repeat.rs)
 CLI provides `freeze` and `run` commands; `run` requires the expected protocol
 SHA256. Protocols, corpus-derived text and annotations remain under ignored
 `data/author-corpora/blog-authorship-2004/parser-repeat-v1/`. The

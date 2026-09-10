@@ -66,7 +66,7 @@ are synthetic.
 From the repository root, after building the new binary in `grammar/`:
 
 ```sh
-grammar/target/release/slopninja-grammar-choices \
+grammar/target/release/slop_ninja-grammar-choices \
   --protocol data/author-corpora/blog-authorship-2004/grammar-choices-v1/protocol.json \
   --expected-protocol-sha256 b73a0db45387bd1155be4a66e4bef649c073995eb56e0d8b38a3eff55d0f253d \
   --repo . \

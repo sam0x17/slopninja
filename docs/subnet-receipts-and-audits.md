@@ -10,7 +10,7 @@ selection and persistent replay accounting remain unimplemented.
 Start with licensed public sources, while keeping each
 new transformation private within the authorized evaluation group.
 
-This is the benchmark evidence flow. Under the [whitepaper PDF](../whitepaper/slopninja.pdf)
+This is the benchmark evidence flow. Under the [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)),
 customer requests are encrypted only for the assigned miner and do not enter
 these audits. Customers can separately send evidence to one chosen validator;

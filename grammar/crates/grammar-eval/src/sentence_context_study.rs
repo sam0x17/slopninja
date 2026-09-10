@@ -324,7 +324,7 @@ fn freeze(repo: &Path, out: &Path) -> Result<()> {
         "sentence_context_study.rs",
         "sentence_context_projection.rs",
         "sentence_context_comparison.rs",
-        "bin/slopninja-sentence-context.rs",
+        "bin/slop_ninja-sentence-context.rs",
     ] {
         names.insert(format!("grammar/crates/grammar-eval/src/{name}"));
     }

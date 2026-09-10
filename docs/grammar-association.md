@@ -77,7 +77,7 @@ The standalone command requires a frozen protocol hash and a new output path:
 
 ```sh
 cargo run --release --manifest-path grammar/Cargo.toml -p grammar-eval \
-  --bin slopninja-grammar-association -- \
+  --bin slop_ninja-grammar-association -- \
   --protocol PROTOCOL.json --expected-protocol-sha256 PROTOCOL_SHA256 \
   --repo REPOSITORY_ROOT --out NEW_RUN_DIRECTORY
 ```

@@ -23,7 +23,7 @@ protocol digests and a fresh output directory:
   --baseline-fit FAMILY_SPLINE_FIT --out data/portable-scale/models
 ```
 
-[`slopninja-score-subset`](../grammar/crates/grammar-eval/src/bin/slopninja-score-subset.rs)
+[`slop_ninja-score-subset`](../grammar/crates/grammar-eval/src/bin/slop_ninja-score-subset.rs)
 replays frontier and fixed-panel exports through the unchanged Rust `Metric`.
 It gathers the named subset from the maximal query and author arrays while
 keeping all 14 complete family distances. Contributions from unselected or
@@ -32,8 +32,8 @@ keep their original scales and full family denominators.
 
 ```sh
 cargo build --release --manifest-path grammar/Cargo.toml \
-  -p grammar-eval --bin slopninja-score-subset
-grammar/target/release/slopninja-score-subset \
+  -p grammar-eval --bin slop_ninja-score-subset
+grammar/target/release/slop_ninja-score-subset \
   --model data/portable-scale/models/metric-seed-0.json export \
   --export MAXIMAL_TEST_EXPORT --subset all_m2 \
   --expected-scores SAVED_TREATMENT_SCORES.json \
@@ -54,7 +54,7 @@ must agree exactly. Outputs include binary logits and a manifest binding the
 model, export, reference scores, executed source and binary.
 
 For operational scoring of two full writing profiles, use the existing
-[`slopninja-score profiles` command](coordinate-inference.md). It accepts these
+[`slop_ninja-score profiles` command](coordinate-inference.md). It accepts these
 compact model artifacts through the same dimension-generic `Metric` API. Supply
 the required identity envelopes, every family, and every original numerical
 axis. A score measures proximity under the learned geometry; it does not

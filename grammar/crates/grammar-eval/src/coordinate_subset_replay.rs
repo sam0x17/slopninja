@@ -414,7 +414,7 @@ pub fn replay(model: &Path, export: &Path, name: &str, expected: &Path, out: &Pa
             "all_candidate_rankings_and_ties_identical":true,"compared_queries":q,"compared_candidate_scores":q*a,
             "compact_maximal_unit_tail_maximum_absolute_error":compact_full_error},
         "source_sha256":{"coordinate_inference.rs":hash(include_bytes!("coordinate_inference.rs")),"coordinate_subset_replay.rs":hash(include_bytes!("coordinate_subset_replay.rs")),
-            "scorer.rs":hash(include_bytes!("bin/slopninja-score-subset.rs")),"grammar_eval_lib.rs":hash(include_bytes!("lib.rs"))},
+            "scorer.rs":hash(include_bytes!("bin/slop_ninja-score-subset.rs")),"grammar_eval_lib.rs":hash(include_bytes!("lib.rs"))},
         "executed_binary_sha256":hash(&fs::read(std::env::current_exe()?)?),"training_calls":0,"external_model_calls":0});
     fs::create_dir(out)?;
     fs::write(out.join("logits.f64"), logit_bytes)?;

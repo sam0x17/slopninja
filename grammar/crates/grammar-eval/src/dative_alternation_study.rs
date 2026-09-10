@@ -69,7 +69,7 @@ fn freeze(repo: &Path, out: &Path) -> Result<()> {
         "dative_alternation.rs",
         "dative_vector_scoring.rs",
         "dative_alternation_study.rs",
-        "bin/slopninja-dative-alternation.rs",
+        "bin/slop_ninja-dative-alternation.rs",
     ] {
         names.insert(format!("grammar/crates/grammar-eval/src/{name}"));
     }

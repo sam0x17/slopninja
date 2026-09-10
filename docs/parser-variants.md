@@ -231,7 +231,7 @@ parser identities. The unchanged incumbent environment remains available.
 root, use a fresh output directory to reproduce it:
 
 ```sh
-grammar/target/release/slopninja-parser-variants \
+grammar/target/release/slop_ninja-parser-variants \
   --protocol data/author-corpora/blog-authorship-2004/parser-variants-v1/protocol.json \
   --expected-protocol-sha256 592927853da397b1ffc1c5a284206c49945c94b9fb1ae4023c674f557d4a5353 \
   --repo "$PWD" \

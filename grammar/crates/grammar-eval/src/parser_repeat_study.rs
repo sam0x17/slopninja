@@ -353,7 +353,7 @@ fn freeze(repo: &Path, out: &Path) -> Result<()> {
     for name in [
         "parser_repeat_study.rs",
         "parser_repeat_observation.rs",
-        "bin/slopninja-parser-repeat.rs",
+        "bin/slop_ninja-parser-repeat.rs",
     ] {
         names.insert(format!("grammar/crates/grammar-eval/src/{name}"));
     }

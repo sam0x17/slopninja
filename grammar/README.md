@@ -165,7 +165,7 @@ uses the same underlying geometry.
 The selected 3,557-weight model improved on the incumbent by 1.91 points on
 300 new authors, with a paired 95% interval of [-0.04, +3.69]. For that study,
 the incumbent remained the reference. It supports [Rust inference](../docs/coordinate-inference.md)
-through `slopninja-score`, without a tensor runtime.
+through `slop_ninja-score`, without a tensor runtime.
 
 The [training-author scale study](../docs/training-author-scale.md) fits the same
 3,557 coordinates on 300 authors across three fixed panels. Accuracy improved
@@ -214,34 +214,34 @@ connects observed negative-contraction choices to exact proposals.
 `edit_choice_observation.rs` enumerates the original rule descriptors without
 the search cap. `edit_preference_model.rs` estimates context probabilities with
 explicit support and predicts excluded-date choices. The
-`slopninja-edit-preferences` command retains observations, full author profiles
+`slop_ninja-edit-preferences` command retains observations, full author profiles
 and a separate synthetic application of the claim guard. These probability
 profiles cover declared alternatives; they do not define a semantic distance.
-`slopninja-preference-chronology` tests unchanged TRAIN profiles on existing
+`slop_ninja-preference-chronology` tests unchanged TRAIN profiles on existing
 later posts from the same authors, retaining null coverage rows and descriptive
 DEV/TEST breakdowns. The [later-post results](../docs/preference-chronology.md)
 show an 8.1% reduction in Brier loss from personalization.
-`slopninja-preference-score-comparison` compares each target author's exact
+`slop_ninja-preference-score-comparison` compares each target author's exact
 form preference against the frozen neural score, with claim-guard decisions
 recorded separately. The [synthetic comparison](../docs/preference-score-comparison.md)
 found substantial disagreement between those two objectives.
-`slopninja-boundary-eligibility` enumerates raw period/semicolon sites and
+`slop_ninja-boundary-eligibility` enumerates raw period/semicolon sites and
 uncapped original-rule proposals, then checks parsed inverses and both claim
 guards. The [TRAIN eligibility screen](../docs/boundary-choice-eligibility.md)
 retained every source and rejection but found no paired eligible edits.
 The observer and evidence reports are available for parser/rule diagnostics;
 they do not yet supply usable structural preference observations.
-`slopninja-parser-variants` compares pinned parser configurations on the same
+`slop_ninja-parser-variants` compares pinned parser configurations on the same
 synthetic boundary pairs, checking historical replay and environment equality
 before interpreting differences. The [four-configuration screen](../docs/parser-variants.md)
 found no eligible paired edit in any configuration. The reports retain direct
 guard checks for excluded cases even when no rule emits the requested edit.
-`slopninja-boundary-view` compares local clause trees across exact period and
+`slop_ninja-boundary-view` compares local clause trees across exact period and
 semicolon alternatives. The [boundary-view study](../docs/boundary-view.md)
 retains the original crossing edge and each token's original parent alongside
 the local comparison. It reports attribution uncertainty and runs the existing
 claim guard separately; structural agreement does not license an edit.
-`slopninja-lexical-frames` imports a pinned VerbNet XML resource and records
+`slop_ninja-lexical-frames` imports a pinned VerbNet XML resource and records
 frame-specific argument bindings while retaining every alternative, restriction
 and original parser attachment. Its [synthetic study](../docs/lexical-frames.md)
 separates complete syntax from unresolved semantic compatibility, tests missing
@@ -249,27 +249,27 @@ coverage with explicit masks, and compares controlled participant changes with
 word counts. The resource importer and matching logic are Rust; the existing
 spaCy bridge supplies annotations. No new author-style feature family or edit
 license has been added.
-`slopninja-lexical-frame-parsers` compares saved lexical-frame outputs from
+`slop_ninja-lexical-frame-parsers` compares saved lexical-frame outputs from
 four pinned parser configurations. The [comparison](../docs/lexical-frame-parsers.md)
 retains exact predicate spans, separates complete and partial role assertions,
 and checks embedded participant occurrences when names repeat. Larger parsers
 increased target coverage on the fresh texts, while unsupported prepositional
 `dative` labels caused some transformer bindings to become incomplete.
-`slopninja-lexical-frame-datives` tests an explicit mapping version for that
+`slop_ninja-lexical-frame-datives` tests an explicit mapping version for that
 prepositional form. Its [study](../docs/lexical-frame-datives.md) requires exact
 baseline replay before comparing both mappings on identical annotations.
 The shared observer retains its baseline APIs; extended reports carry a
 separate schema and mapping identity. Complete bindings for specified roles
 remain distinct from shorter alternative frames and unresolved semantics.
 
-`slopninja-dative-alternation` generates both directions of the pinned dative
+`slop_ninja-dative-alternation` generates both directions of the pinned dative
 frame pair and checks exact participant occurrences after reparsing. Its
 [study](../docs/dative-alternation.md) preserves both older mappings, retains
 all proposals and rejected sites, and records sparse word-and-grammar vectors
 under frozen author geometry. Raw and appended-context scores remain separate;
 missing grammar families are unavailable. No distance licenses an edit.
 
-`slopninja-dative-corpus` audits all 3,889 existing training posts under the
+`slop_ninja-dative-corpus` audits all 3,889 existing training posts under the
 transformer and cached small parser. Its [report](../docs/dative-corpus.md)
 separates verb exposure, complete frames, proposals and reciprocal checks,
 preserving all posts and incomplete assessments in the support calculation.
@@ -277,7 +277,7 @@ The transformer found 169 complete constructions, one proposal and no
 reciprocally confirmed edits. The fixed support threshold failed at every
 tier; no preference model was fitted.
 
-`slopninja-dative-arguments` adds an optional role-aware phrase policy while
+`slop_ninja-dative-arguments` adds an optional role-aware phrase policy while
 retaining the original default. The [experiment](../docs/dative-arguments.md)
 checks fresh reciprocal fixtures and reuses both parsers' whole-post corpus
 annotations. Phrase assessment, exact movement and reciprocal comparison
@@ -288,7 +288,7 @@ of fused abbreviation/terminal punctuation. Missing case features also caused
 otherwise matching positive comparisons to fail. These remain recorded
 limitations; neither parser met the preference-model support threshold.
 
-`slopninja-parser-repeat` runs [identical-text controls](../docs/parser-repeat.md)
+`slop_ninja-parser-repeat` runs [identical-text controls](../docs/parser-repeat.md)
 on the same 117 source and candidate texts under both pinned parsers. It retains
 adjacent repeats and fresh-process comparisons, including reversed input order,
 and reports missing historical annotations separately. The comparator anchors
@@ -298,7 +298,7 @@ Both parsers matched every controlled repeat and available historical reference.
 The preceding source/candidate disagreements remain unexplained by these
 identical-text controls.
 
-`slopninja-sentence-context` supplies that [diagnostic](../docs/sentence-context.md).
+`slop_ninja-sentence-context` supplies that [diagnostic](../docs/sentence-context.md).
 It preserves exact source-defined sentence slices and patches, records missing
 full-sentence projections, and evaluates saved projections and isolated parses
 with the same regenerated proposal and reciprocal checks. Both views passed
@@ -306,7 +306,7 @@ with the same regenerated proposal and reciprocal checks. Both views passed
 experiment retains all cases and does not authorize local passes to override
 that gate.
 
-`slopninja-evidence-contracts` compares [revised structural evidence](../docs/evidence-contracts.md)
+`slop_ninja-evidence-contracts` compares [revised structural evidence](../docs/evidence-contracts.md)
 against those saved results, distinguishing missing morphology, sentence
 membership and terminal punctuation inside tokens. Primary saved-sentence
 acceptance rose from 32 to 44 of 60; the original comparison API remains the

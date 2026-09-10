@@ -303,7 +303,7 @@ fn score_export(
         "queries_sha256":hash(&query_bytes),"minimum_unselected_tail":minimum_tail,"comparison":comparison,
         "executed_binary_sha256":hash(&fs::read(std::env::current_exe()?)?),
         "source_sha256":{"coordinate_inference.rs":hash(include_bytes!("../coordinate_inference.rs")),
-            "scorer.rs":hash(include_bytes!("slopninja-score.rs"))},"training_calls":0,"external_model_calls":0});
+            "scorer.rs":hash(include_bytes!("slop_ninja-score.rs"))},"training_calls":0,"external_model_calls":0});
     fs::write(
         out.join("manifest.json"),
         serde_json::to_vec_pretty(&receipt)?,

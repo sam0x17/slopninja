@@ -277,7 +277,7 @@ With the pinned local inputs present, reproduce into a new directory:
 
 ```sh
 cargo run --release --manifest-path grammar/Cargo.toml -p grammar-eval \
-  --bin slopninja-edit-preferences -- \
+  --bin slop_ninja-edit-preferences -- \
   --protocol data/author-corpora/blog-authorship-2004/edit-preferences-v1/protocol.json \
   --expected-protocol-sha256 2f3d8c3774a70da95631ef52ce5b81171d61f03a3f48e0064261b6aeaa2039a4 \
   --repo . \

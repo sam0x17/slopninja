@@ -107,7 +107,7 @@ checks remain necessary before applying those preferences to a rewrite.
 
 ## Reproduction and local artifacts
 
-The Rust entry point is `slopninja-preference-score-comparison`; orchestration
+The Rust entry point is `slop_ninja-preference-score-comparison`; orchestration
 lives in `grammar/crates/grammar-eval/src/preference_score_comparison.rs`.
 It uses the existing Rust scorer and preference estimator. Python supplies only
 the spaCy parses. No LLM or detector calls occurred.

@@ -92,7 +92,7 @@ To extract from an existing, hash-bound annotation without loading a parser:
 
 ```sh
 cargo run --manifest-path grammar/Cargo.toml -p grammar-eval \
-  --bin slopninja-predicate-operators -- \
+  --bin slop_ninja-predicate-operators -- \
   --input annotation.json --expected-sha256 ANNOTATION_SHA256 --out result.json
 ```
 

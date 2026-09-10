@@ -1,6 +1,6 @@
 # Paid asynchronous inference
 
-Proposal, 2026-09-09. The [whitepaper PDF](../whitepaper/slopninja.pdf)
+Proposal, 2026-09-09. The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)) is the canonical design draft.
 Customers buy asynchronous jobs at miner-quoted prices in subnet alpha from
 miners who retain their private models. Offers, assignments, commitments, escrow

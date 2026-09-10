@@ -852,7 +852,7 @@ fn validate_protocol(protocol: &Value) -> Result<()> {
         "grammar/crates/grammar-core/src/edits.rs",
         "grammar/crates/grammar-eval/src/boundary_view.rs",
         "grammar/crates/grammar-eval/src/boundary_view_study.rs",
-        "grammar/crates/grammar-eval/src/bin/slopninja-boundary-view.rs",
+        "grammar/crates/grammar-eval/src/bin/slop_ninja-boundary-view.rs",
         "grammar/crates/grammar-eval/src/boundary_choice_observation.rs",
         "grammar/crates/grammar-eval/src/claim_guard.rs",
         "grammar/crates/grammar-eval/src/lexical_context.rs",

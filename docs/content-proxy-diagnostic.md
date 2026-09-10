@@ -90,8 +90,8 @@ No source text is included in its output.
 
 ```sh
 cargo build --release --manifest-path grammar/Cargo.toml \
-  -p grammar-eval --bin slopninja-content-diagnostic
-grammar/target/release/slopninja-content-diagnostic \
+  -p grammar-eval --bin slop_ninja-content-diagnostic
+grammar/target/release/slop_ninja-content-diagnostic \
   --protocol data/author-corpora/blog-authorship-2004/content-proxy-diagnostic-v1/protocol.json \
   --out data/author-corpora/blog-authorship-2004/content-proxy-diagnostic-v1/run-v1
 ```

@@ -97,7 +97,7 @@ distance scores.
 ## Completed execution
 
 The Rust
-[`slopninja-edit-utility`](../grammar/crates/grammar-eval/src/bin/slopninja-edit-utility.rs)
+[`slop_ninja-edit-utility`](../grammar/crates/grammar-eval/src/bin/slop_ninja-edit-utility.rs)
 harness parsed 48 distinct texts representing 26 case-variants in two contexts.
 All 26 raw variants and all 26 variants with the predeclared appended context
 had the required original-family opportunities and were scored. No parse failed,
@@ -154,8 +154,8 @@ With those local frozen inputs present, reproduce into a new directory:
 
 ```sh
 cargo build --release --manifest-path grammar/Cargo.toml \
-  -p grammar-eval --bin slopninja-edit-utility
-grammar/target/release/slopninja-edit-utility \
+  -p grammar-eval --bin slop_ninja-edit-utility
+grammar/target/release/slop_ninja-edit-utility \
   --protocol data/author-corpora/blog-authorship-2004/edit-utility-v1/protocol.json \
   --expected-protocol-sha256 e05adc3b0cc75248dd65be5a6ee3712d7599ff792facddd347156985a0fb3d3f \
   --out data/author-corpora/blog-authorship-2004/edit-utility-v1/run-new

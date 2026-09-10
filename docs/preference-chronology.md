@@ -181,8 +181,8 @@ bindings and a fresh output directory:
 
 ```sh
 cargo build --release --manifest-path grammar/Cargo.toml -p grammar-eval \
-  --bin slopninja-preference-chronology
-grammar/target/release/slopninja-preference-chronology \
+  --bin slop_ninja-preference-chronology
+grammar/target/release/slop_ninja-preference-chronology \
   --protocol data/author-corpora/blog-authorship-2004/preference-chronology-v1/protocol.json \
   --expected-protocol-sha256 950ce30520e6618869bc31245e5e789772be85e4b931b55e625ae7ecdfacb6fb \
   --repo "$PWD" --out NEW_OUTPUT_DIRECTORY

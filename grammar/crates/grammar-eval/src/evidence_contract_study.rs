@@ -203,7 +203,7 @@ fn freeze(repo: &Path, out: &Path) -> Result<()> {
         "orthographic_evidence.rs",
         "sentence_membership_evidence.rs",
         "structural_evidence.rs",
-        "bin/slopninja-evidence-contracts.rs",
+        "bin/slop_ninja-evidence-contracts.rs",
     ] {
         names.insert(format!("grammar/crates/grammar-eval/src/{name}"));
     }

@@ -7,7 +7,7 @@ buy [asynchronous inference](paid-inference.md). Publishing a winning model is
 optional. This replaces the earlier proposal to execute submitted miner
 artifacts on validators.
 
-The [whitepaper PDF](../whitepaper/slopninja.pdf)
+The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)) is the canonical design draft. Customer
 sources, references, profiles and briefs are encrypted only for the assigned
 miner, besides the customer's own access. Results return encrypted to the

@@ -7,7 +7,7 @@
 
 Planned domain: **slop.ninja**.
 
-Read the subnet **[whitepaper (PDF)](whitepaper/slopninja.pdf)**, with editable
+Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
 The draft surveys related work and defines private miner models, training data,
 three benchmark tasks, and paid asynchronous inference at market prices

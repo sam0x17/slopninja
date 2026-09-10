@@ -17,6 +17,6 @@ if ! latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=build main
   tail -n 60 build/latexmk.log >&2
   exit 1
 fi
-cp build/main.pdf slopninja.pdf
+cp build/main.pdf slop_ninja.pdf
 
-printf 'Built whitepaper/slopninja.pdf\n'
+printf 'Built whitepaper/slop_ninja.pdf\n'

@@ -94,7 +94,7 @@ fn freeze(repo: &Path, out: &Path) -> Result<()> {
         names.insert(name.to_owned());
     }
     names.insert("grammar/crates/grammar-eval/src/dative_argument_study.rs".into());
-    names.insert("grammar/crates/grammar-eval/src/bin/slopninja-dative-arguments.rs".into());
+    names.insert("grammar/crates/grammar-eval/src/bin/slop_ninja-dative-arguments.rs".into());
     if repo
         .join("grammar/crates/grammar-eval/src/dative_argument_policy.rs")
         .exists()

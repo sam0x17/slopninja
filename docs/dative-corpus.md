@@ -146,10 +146,10 @@ repository root:
 
 ```sh
 cargo build --release --manifest-path grammar/Cargo.toml \
-  -p grammar-eval --bin slopninja-dative-corpus
-grammar/target/release/slopninja-dative-corpus freeze \
+  -p grammar-eval --bin slop_ninja-dative-corpus
+grammar/target/release/slop_ninja-dative-corpus freeze \
   --repo "$PWD" --out /absolute/path/to/new-protocol-directory
-grammar/target/release/slopninja-dative-corpus run \
+grammar/target/release/slop_ninja-dative-corpus run \
   --repo "$PWD" \
   --protocol /absolute/path/to/new-protocol-directory/protocol.json \
   --expected-protocol-sha256 SHA256_PRINTED_BY_FREEZE \

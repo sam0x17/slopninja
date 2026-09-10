@@ -144,7 +144,7 @@ remain unresolved. Author-style scoring and rewriting need separate tests.
 
 Local protocol, execution logs, snapshots and outputs belong under
 `data/author-corpora/blog-authorship-2004/lexical-frame-dative-v1/`.
-The study command is `slopninja-lexical-frame-datives` in the grammar workspace.
+The study command is `slop_ninja-lexical-frame-datives` in the grammar workspace.
 
 | Record | SHA-256 |
 | --- | --- |
