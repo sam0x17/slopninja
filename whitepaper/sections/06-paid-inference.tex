@@ -2,6 +2,11 @@
 coordination}\label{paid-asynchronous-jobs-and-on-chain-coordination}
 
 The launch market offers A detection and B transformation jobs.
+A customers pay for compute and delivery while retaining the option to
+run the public model themselves. That alternative can constrain hosted
+A prices; the protocol prescribes neither a discount nor a price ratio
+between A and B. Both use the alpha-denominated market and the same
+customer privacy rules.
 The proposed job contract uses Subtensor's EVM to coordinate offers,
 escrow, commitments, and settlement. Inference prices are denominated in
 Slop Ninja's subnet alpha; actual model execution stays on miner hardware.
@@ -150,17 +155,22 @@ Miners pay their own training, inference, private search, and required
 candidate Pangram submissions for benchmarks. The benchmark operator or
 participating validators fund source-baseline reports from an explicit
 round budget; those reports can be reused across competing miners under
-the same task/version. Validators also bear retrieval, hosting, and
-review costs. Subsidies, if used, must identify their funder and cap
+the same task/version. Validators also bear A artifact distribution and
+benchmark execution, retrieval, hosting, and review costs. Subsidies, if used, must identify their funder and cap
 before assignments begin. This design assumes no free API-credit
 allocation or automatic on-chain reimbursement scheme.
 
-Required subnet-detector calls and reciprocal training requests consume
-reserved capacity under the service obligation in
+Assigned B rewrite requests consume reserved provider capacity under
+the training-service obligation in
 Section~\ref{adversarial-feedback-loop}; the recipient pays no per-call
 fee within that budget. Providers bear the compute cost as a condition
-of emission eligibility. This obligation covers neither Pangram's
-external charges nor unlimited private search. Bootstrap reference
-services need a separately named research funder. Confidential customer
+of emission eligibility. A miners have requester obligations for those
+tickets, with no mandatory A inference endpoint. Authoritative A
+benchmark execution uses the validators' separately reserved budget.
+B miners may query public A artifacts locally without a protocol quota,
+bearing that compute cost themselves. This obligation covers neither
+Pangram's external charges nor unlimited hosted search. Bootstrap
+reference artifacts and execution need a separately named research
+funder. Confidential customer
 jobs cannot automatically forward inputs or outputs to Pangram or a
 peer miner.

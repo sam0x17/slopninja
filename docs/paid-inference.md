@@ -1,9 +1,11 @@
 # Paid asynchronous inference
 
-Proposal, 2026-09-09. The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
+Proposal, updated 2026-09-10. The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)) is the canonical design draft.
 Customers buy asynchronous jobs at miner-quoted prices in subnet alpha from
-miners who retain their private models. Offers, assignments, commitments, escrow
+providers hosting public A detectors or private B transformation models.
+A hosting is optional; publishing a qualified artifact does not require an A
+inference endpoint. Offers, assignments, commitments, escrow
 and settlement belong on chain; model execution runs on the assigned miner's
 hardware. This repository
 has no deployed job contract or paid serving endpoint yet.
@@ -12,6 +14,12 @@ Initial paid offers cover two task interfaces: A for author/origin detection,
 and B for author-directed transformation under the source and brief, including
 optional detector evasion. Audience, tone, readability and fidelity belong in
 the transformation brief and its acceptance criteria.
+
+Both interfaces can earn hosted inference fees. A customers pay for compute
+and delivery and can instead run the published model themselves. This outside
+option can put downward pressure on hosted A prices; the protocol sets no
+fixed A discount or A/B price ratio. Both prices come from competing quotes
+denominated in alpha.
 
 ## Customer confidentiality
 
@@ -56,7 +64,7 @@ not extend to customer jobs.
 | Deposits, acknowledgment, payment and timeout refunds | Contract | Deterministic accounting under the accepted policy |
 | Salted input/result commitments and envelope hashes | Contract | Binding to exact bytes when an authorized recipient checks an opening |
 | Source, references, profiles, brief and result | Encrypted transport/storage | Plaintext available only to the designated endpoints |
-| Weights, adapters, search and inference | Assigned miner hardware | Private execution; no proof of which weights ran |
+| Hosted inference and B search | Assigned miner hardware | Public A artifacts or private B weights; customer content remains private |
 
 All content-bearing fields stay inside the envelope. Public offer and job
 metadata must not include excerpts, private profile values or the brief.
@@ -220,7 +228,11 @@ benchmark text under its own access policy.
 The pilot assigns A to on-chain mechanism 0 and B to mechanism 1, with 50% of
 emissions each. Editorial quality is part of B's gates and brief requirements.
 The [reward rules](../whitepaper/sections/07-rewards.tex) also require fulfillment
-of bounded mandatory free service. More than 10% failed valid assigned task obligations
+of bounded mandatory free B rewrite service for A training requesters.
+Only the actual A-requester and B-provider classes count; there is no mandatory
+A-provider inference or B-requester prediction class. Removed classes do not
+create zero-workload failures. A artifact qualification and validator benchmark
+replay remain separate. More than 10% failed valid assigned task obligations
 gives zero earned A and B credit for the measured epoch, with separate mandatory
 gates for each interface and actually assigned requester/provider role, with no
 automatic pass without assigned work. Each obligation binds its UID and role. Exactly

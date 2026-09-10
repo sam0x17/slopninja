@@ -1,8 +1,51 @@
 # Mandatory A/B service evidence
 
-This specifies the proposed `service-evidence-v1` transport and accounting pilot. It covers protocol-assigned A detection and B transformation requests. The two-ticket exercise reviews its B output but cannot execute the common three-A source/candidate matrix: its A peers are sequential fallbacks, and its inputs are fixed before the B output exists. An emission-bearing benchmark requires a separately frozen full-matrix schedule and capacity budget. Private customer jobs keep their separate paid lifecycle and never enter mandatory-service counts. This is a protocol design; no mailbox deployment or throughput result is claimed.
+This specifies the proposed `service-evidence-v1` transport and accounting pilot
+for bounded authorized rewrite requests from A requesters to B providers.
+A models are public; B generators remain private. Validators execute complete
+frozen, qualified A artifacts for authoritative benchmark probabilities.
+There are no mandatory A-provider inference calls or B-requester inference
+tickets. B rewrite responses supply training material for A.
 
-The public ledger establishes who published which ciphertext bytes and when. A certificate establishes the declared private validity or quality verdict under the validator honesty assumption. A timely dishonest answer can satisfy transport requirements while failing quality.
+The one-ticket exercise reviews its B rewrite. It implements neither an artifact runner nor the
+common three-A source/candidate matrix. An emission-bearing benchmark requires
+a separately frozen execution schedule and capacity budget. Private customer
+jobs keep their separate paid lifecycle and never enter mandatory-service
+counts. Their inputs remain encrypted only to the selected miner; a customer
+may separately disclose evidence to a chosen validator. This is a protocol
+design; no mailbox deployment or throughput result is claimed.
+
+The public ledger establishes who published which ciphertext bytes and when.
+A certificate establishes the declared private validity or quality verdict
+under the validator honesty assumption. Certified delivery of a B response
+does not establish its revision quality.
+
+Freeze epoch qualification and cache the complete public A panel artifacts before
+B task disclosure or candidate generation. The execution manifest binds weights, features, tokenizer,
+preprocessing and postprocessing, calibration, runtime, dependencies and every
+parameter needed to reproduce the output. Validator execution receipts bind
+that manifest, artifact hashes, canonical runtime/settings, input commitment and
+complete probability output. B's scored submission includes full locally
+computed vectors, the protocol-assigned A models/settings and the exact
+candidate-input commitment. Validators re-execute and compare canonical outputs;
+the submitted claims cannot replace their results.
+Independent hidden qualification labels and targeted-trigger controls remain
+necessary because a published artifact can reproduce deliberately biased behavior.
+Training recipes and training data need not be public merely to publish the
+complete executable artifact.
+Validator execution has a separate funded capacity budget from rewrite-service
+tickets. B miners can compute their own candidates' A scores
+during search; those scores are not secret. Hidden labels, other miners'
+candidates, unreleased sources and semantic-review evidence retain their
+authorized recipient restrictions.
+
+After issue, no model, version or threshold can change. A validator-node outage
+permits rerunning the same cached artifact on a reserved approved runner.
+Failure of the canonical reference execution leaves the entire comparison
+unresolved or void under fixed closure. It cannot supply a passing score or
+be counted as B nonresponse. Deliberately triggered execution errors remain a
+required pilot attack case. These execution rules do not change the fixed B
+provider fallbacks on rewrite-service tickets.
 
 ## Frozen authority and parameters
 
@@ -15,21 +58,30 @@ The following are actual pilot settings, rather than unspecified future values. 
 | Parameter | `service-evidence-v1` value |
 | --- | --- |
 | Measured epoch | 360 native block heights; issue offset `H=epoch_start` |
-| Global ticket budget | Two tickets: one A request and one B request |
-| Permitted providers | Three total: mandatory first provider and two ordered fallbacks |
+| Global ticket budget | One authorized rewrite: A requester to B provider |
+| Permitted providers | Three B providers total: mandatory first provider and two ordered fallbacks |
 | Input / output payload cap | 4,096 / 8,192 bytes, including task data and private metadata |
 | Ciphertext chunk cap | 4,096 bytes; the final chunk may be shorter |
 | DATA plus witness publication cap | 8 MiB per stage across all recipient copies |
-| Epoch publication cap | 64 MiB across the two tickets and all possible attempts |
+| Epoch publication cap | 64 MiB across the ticket and all possible attempts |
 | Request publication / certificate cutoff | `H+12` / `H+24` |
-| Provider response window | A: 12 blocks; B: 36 blocks |
+| B provider response window | 36 blocks |
 | Certificate window after each response | 12 blocks |
 | Preparer commitment / private opening cutoff | `H+180` / `H+192` |
 | Final quality, incident, and accounting close | `H+204` |
 | Certificate threshold | Strict `3w > 2W`; no rounding or responder renormalization |
 | Availability / recovery | `10F <= N`, `U=0`, and `D=max(0,D_previous+10F-N)` |
 
-At stage `j` in `1..3`, let `r=12` for A or `36` for B. Its fixed start is `H+24+(j-1)(r+12)`, publication cutoff is start plus `r`, and certificate cutoff is start plus `r+12`. The final A/B certificate cutoffs are therefore `H+96` and `H+168`. Early declines do not pull later windows forward. Unused stages remain reservations and earn no availability credit. All ciphertext and witness copies must fit their stage's byte, transaction, gas, and verifier reservations before issue. Insufficient capacity prevents that scheduled issue; it does not permit another peer draw. Two tickets are a small transport pilot, not enough evidence to qualify every subnet UID.
+At stage `j` in `1..3`, the fixed start is `H+24+48*(j-1)`, publication cutoff
+is start plus 36 blocks, and certificate cutoff is start plus 48 blocks. The
+final B certificate cutoff is `H+168`. Early declines do not pull later windows
+forward. Unused stages remain reservations and earn no availability credit.
+All ciphertext and witness copies must fit their stage's byte, transaction,
+gas and verifier reservations before issue. Insufficient capacity prevents
+that scheduled issue; it does not permit another peer draw. One ticket is a
+small transport pilot, not enough evidence to qualify every subnet UID.
+Earlier two-ticket fixtures remain historical evidence for the prior design;
+they do not implement this directed rewrite pilot or the artifact runner.
 
 The 360-block pilot requires a subnet with that measured tempo. A different tempo needs a separately versioned schedule. Settlement binds a particular later native payout cycle and its actual commit/reveal configuration; the remaining block heights are not a claim that native reveal delays fit inside this epoch. No issue is permitted if its declared settlement path cannot use the closed result in time. A finality stall can delay observing closure beyond that payout cycle; the settlement adapter must then apply its declared unresolved-round handling rather than fabricate a timely result.
 
@@ -59,7 +111,7 @@ the bytes as evidence and reject any acceptance certificate that ignores the
 decline. A late decline cannot reopen closed accounting. The next fallback, if
 required, still starts at its reserved time.
 
-A stage identifier is `(protocol_hash, ticket_id, interface, role, attempt)`. The ticket also pins the lifetime requester index, current registration generation, nonce, task, limits, keys, measurement epoch, and all deadlines. No requester's chosen submission block changes its assignment. The first valid manifest fixes the stage bytes. Byte-identical retries are idempotent; a different signed manifest cannot overwrite it and is retained as conflicting evidence. Malformed transactions do not reset the deadline or earn an extra attempt. Certificate evidence includes the complete canonical records through the stage publication cutoff; later revelations remain separate records and cannot silently rescore a closed stage.
+A stage identifier is `(protocol_hash, ticket_id, interface, role, attempt)`. The ticket fixes an A requester, prescribed B providers and the authorized rewrite task; it also pins the lifetime requester index, current registration generation, nonce, limits, keys, measurement epoch, and all deadlines. No requester's chosen submission block changes its assignment. The first valid manifest fixes the stage bytes. Byte-identical retries are idempotent; a different signed manifest cannot overwrite it and is retained as conflicting evidence. Malformed transactions do not reset the deadline or earn an extra attempt. Certificate evidence includes the complete canonical records through the stage publication cutoff; later revelations remain separate records and cannot silently rescore a closed stage.
 
 | Stage condition at its fixed cutoff | Terminal result | Consequence |
 | --- | --- | --- |
@@ -75,9 +127,25 @@ The requester obligation activates on issue, including abandonment of an unfavor
 
 Late publication remains late even if its contents are valid. Recipient accusations and unrecorded private messages establish no terminal result. Missing or malformed witness publication is objectively distinguishable from a published witness that a validator cannot decrypt; the latter needs a global verdict or closes unresolved. The verifier's own missing key or local outage is not evidence of sender fault. Quality review stays separate: every scored submission receives all required checks, three preparers retain their commitments/openings and disagreements, and the global strict-weight certificate decides the final verdict. Insufficient evidence by `H+204` voids the shared quality comparison consistently, without deleting already attributable service failures. Native weight commit/reveal is a separate mechanism and adds no assignment beacon.
 
+An A requester's publication failure remains a service-accounting event; it
+cannot change the frozen benchmark artifact or its canonical result. Validator
+runner failures never enter the rewrite-service ledger. B quality scoring uses the committed candidate and does not
+require replay of private generation. The mailbox deadlines and byte limits do
+not establish that artifact distribution, canonical inference or full-matrix
+execution fits the benchmark budget.
+
 ## Deterministic accounting and platform failure
 
-For a UID and mandatory interface/role class, retain activated obligations `A=S+F+U+V`: certified successes, attributable failures, unresolved obligations, and platform voids. Do not count inactive fallback reservations. Set settled valid obligations `N=S+F`. The class passes availability only if `U=0`, `N>0`, and `10F<=N`. Publish all counts, including `U` and `V`; excluding them from settled `N` never hides missingness or gives automatic approval. Apply the same test in aggregate and to every applicable mandatory class. Private customer successes and other interfaces/roles cannot dilute these counts.
+For each applicable A-requester or B-provider class, retain activated obligations
+`A=S+F+U+V`: certified successes, attributable failures, unresolved obligations,
+and platform voids. Do not count inactive fallback reservations. Set settled
+valid obligations `N=S+F`. The class passes availability only if `U=0`, `N>0`,
+and `10F<=N`. Publish all counts, including `U` and `V`; excluding them from
+settled `N` never hides missingness or gives automatic approval. Apply the same
+test in aggregate and to each applicable class. The removed A-provider and
+B-requester classes create no zero-work failure. A artifact publication and
+qualification have separate eligibility gates. Private customer successes and
+other classes cannot dilute these counts.
 
 Update the persistent class deficit exactly once at close: `D=max(0,D_previous+10F-N)`. Require zero outstanding deficits, current class gates, and qualification before normal admission. Unresolved and platform-void work cannot retire a deficit. An epoch with no settled work leaves it unchanged. A closed unresolved class receives no emission eligibility that epoch; later recovery uses new scheduler-assigned probation work, not retroactive relabeling of the missing evidence. Dropping a role or changing keys within a registration does not erase its deficit.
 

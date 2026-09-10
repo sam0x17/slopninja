@@ -8,6 +8,17 @@ those differences. A detector can measure one aspect of how the result
 is classified. Neither measurement alone establishes that the revision
 is good.
 
+The model-publication split is intentional. A should make strong
+author/origin detection available for anyone to run and use in training,
+including external detector providers. Matching Pangram-level origin
+detection is an evaluation target, not an achieved result. Public A
+models give B immediate local feedback while B miners retain their
+transformation models. A submissions must permit free artifact access,
+local inference and reuse for training private B models. Hosting still
+costs compute and may be sold separately. The subnet aims to make
+detector access a shared resource while miners compete to provide
+useful private transformation services.
+
 The initial subnet evaluates two tasks separately:
 
 \begin{enumerate}

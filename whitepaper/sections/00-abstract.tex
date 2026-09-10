@@ -3,12 +3,14 @@
 Slop Ninja proposes a Bittensor subnet launching with two tasks:
 author and AI-origin detection (A), and author-directed text
 transformation (B).
-Miners develop private models and compete on the usefulness of their
+Miners publish complete, immutable A inference artifacts and keep B
+generation models private. They compete on the usefulness of their
 outputs. They receive network emissions for benchmark performance and
 can separately sell asynchronous inference at market prices denominated
-in the subnet's alpha token. The protocol
-requires no publication of model weights, feature definitions, adapters,
-or training recipes.
+in the subnet's alpha token. Validators execute frozen A artifacts
+directly; B miners can use them locally for training and search.
+Training recipes and source data need not be published merely to
+reproduce A inference.
 
 Every customer inference request is encrypted for its assigned miner.
 The customer's source text, reference writing, style profile, and
@@ -20,9 +22,9 @@ need to assess accuracy and target style, with preservation, readability,
 and tone as constraints on B.
 Transformation miners compete against Pangram and qualified subnet
 AI-origin detectors. Emission eligibility
-requires bounded reciprocal service: detectors supply predictions and
-transformation miners supply authorized challenge rewrites without a
-per-call fee to each other. Retired benchmark rewrites feed later
+requires public A artifacts and bounded B rewrite service on authorized
+A training requests. B miners self-score locally; validators verify
+those scores without involving A inference endpoints. Retired benchmark rewrites feed later
 detection rounds. Detector reports establish observations rather than
 human authorship or preserved meaning.
 
@@ -35,7 +37,9 @@ validator weight, assuming less than one-third is dishonest and each
 signer inspects the evidence.
 This draft specifies the proposed architecture, training data, reward
 rules, and trust assumptions. It also reports the limits of the existing
-prototype. Direct monetary use of private detector responses remains
-unresolved: fixed paired credits do not guarantee conserved native
-payouts. A reliable rewriting model, private inference service, and live
+prototype. Shared-pool experiments show why complementary credits alone
+do not prevent collusion; the design instead removes private A score
+reports from benchmark authority. Published detectors still require
+independent qualification and checks for behavior that favors allied B
+models. A reliable rewriting model, private inference service, and live
 reward mechanism remain to be demonstrated.

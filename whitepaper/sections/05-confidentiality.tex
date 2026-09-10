@@ -11,6 +11,16 @@ envelope. Models execute on the assigned miner's infrastructure;
 confidential jobs may not forward plaintext to an external model API,
 detector, or another miner.
 
+Public A artifacts do not make customer inputs public or authorize
+validator replay of customer jobs. Validator execution for emissions uses
+the separately authorized benchmark collection. A customer may choose to
+run a public detector locally; a job sent through this protocol retains
+the assigned-miner input boundary. Public weights do not authorize sending
+customer text to Pangram or any other external service.
+Paid A hosting is optional and separate from artifact publication and
+protocol-assigned training requests. Its customer inputs retain the same
+confidentiality rules as private B jobs.
+
 A miner advertises a separate X25519 encryption key in a hotkey-signed
 record binding the network, service, key ID, validity window, and job or
 offer scope. Signing and encryption keys have distinct roles. The
@@ -101,6 +111,11 @@ document. Full openings or a separately specified selective-disclosure
 commitment scheme are needed for stronger binding. Incomplete evidence
 can support a limited opinion, but cannot establish fidelity of the
 whole job.
+
+For detection, that validator may reproduce a published A artifact on
+the supplied material within the customer's disclosure scope. This grants
+no access to other customer text and does not verify execution of a
+private B model.
 
 Inspection is advisory by default. A signed decision affects escrow only
 if the job's original terms gave that validator or selection policy

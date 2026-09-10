@@ -1,7 +1,10 @@
 # Funded alpha matches: design option
 
-This option is pending a funding decision. It is not an adopted launch policy
-or an implemented contract. Launch scope remains A detection and B
+This unadopted option records research into the earlier private-score design.
+The selected [public A/private B policy](public-model-evaluation.md) instead
+uses B self-scores and independent validator execution of published A models.
+No reserve funding decision is currently required for that policy. This document
+does not describe an implemented contract. Launch scope remains A detection and B
 transformation; a match reserve would pay the adversarial interaction between
 them, without adding another task or chain mechanism.
 
@@ -109,7 +112,15 @@ one endpoint from stranding its honest partner's award. Future stake, reputation
 and registration effects require separate analysis. Fixed admitted-pot
 conservation alone supplies no broader claim about profitable deviations.
 
+The later [shared-pool study](shared-pool-gameability.md#failures-costs-and-changing-state)
+tests a separate 100-unit pot with irreversible funding, capped compensation
+for independently certified partner work, and per-ticket default bonds. A
+200-unit bond blocks its bounded attributable-default cases when each role's
+cost is at most 200. It does not establish private execution or eliminate
+unobservable cost-saving shortcuts. Those hypothetical rules have not been
+adopted into this reserve proposal.
+
 Adoption would require a named source of launch funding and a bounded reserve,
 then a simulation of the complete scoring and refund rules followed by the
-alpha custody pilot. Without that choice, the monetary connection between
-private A outputs and B remains unresolved in the whitepaper.
+alpha custody pilot if this option were revisited. The current whitepaper
+uses public A artifacts instead of private A reports as benchmark authority.

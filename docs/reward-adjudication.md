@@ -2,11 +2,33 @@
 
 Design specification for the A/B launch. This defines B's target-style utility
 `V`, preservation/readability/tone gate `G`, and judgment closure. It adds no
-writing-improvement service or separate quality bonus. It does not select the
-adversarial reward formula or prove truthful execution by a private A service.
+writing-improvement service or separate quality bonus. A artifacts are public
+and validators execute them for benchmark probabilities. B generators remain
+private; their committed revisions supply the text evaluated here.
 The [whitepaper section](../whitepaper/sections/07a-adjudication.tex) carries the
 same rules. Authority, encrypted publication, service fault attribution and
 incident handling follow [mandatory-service evidence](../whitepaper/sections/08a-service-evidence.tex).
+
+Freeze the qualified epoch roster and cache complete A panel artifacts before
+B task disclosure or candidate generation. Model manifests bind weights, features, tokenizer,
+preprocessing and postprocessing, calibration and all runtime parameters and
+dependencies needed for canonical execution. Validator receipts bind the model
+and manifest hashes, runtime/settings, input commitment and complete probability
+output. B submits full locally computed vectors bound to the protocol-assigned
+A models/settings and exact candidate-input commitment. Validators re-execute
+and compare canonical outputs; no mandatory A inference-service call supplies
+a score. Hidden independent author/origin labels and
+targeted-trigger controls qualify published artifacts; replay alone does not
+establish detector accuracy or absence of deliberately targeted behavior.
+B miners can run those public models on their own candidates during search.
+Their scores cannot be withheld as secret evaluation feedback. Hidden labels,
+other miners' candidates, unreleased sources and semantic-review evidence
+remain restricted to their authorized recipients. Validator execution has its
+own capacity budget, separate from directed A-requester/B-provider rewrite tickets.
+After issue, a validator outage permits only execution of the same cached
+artifact on a reserved approved runner, with no model, version or threshold
+substitution. Canonical reference failure leaves the entire comparison
+unresolved or void under fixed closure; it cannot become a pass or B nonresponse.
 
 ## Frozen numerical inputs
 
@@ -21,8 +43,8 @@ arithmetic, rounding, resource limits and test vectors. Its function
 `d_theta(text, target_references)` returns a nonnegative integer distance or a
 declared error status. Concrete artifact selection and validation are required
 implementation inputs; this specification does not claim that a released or
-trained evaluator already meets them. Miner weights remain private and never
-define this evaluator.
+trained evaluator already meets them. Private B generator weights never define
+this public style evaluator.
 
 Compute a nonempty calibration multiset `C = [c_1, ..., c_M]` from development
 queries and independent reference works by their attributed authors, using that
@@ -92,7 +114,7 @@ tone/audience constraint list satisfies `T` deterministically and needs no
 semantic vote. A failure ballot names rubric items and source/candidate byte
 spans where applicable; omissions can identify source spans and surrounding
 candidate locations. Additional preference judgments, ties and praise remain
-diagnostic and earn no extra utility. Private detector scores supply none of
+diagnostic and earn no extra utility. Detector probabilities supply none of
 these field verdicts.
 
 ## Global certification
@@ -185,6 +207,9 @@ restrictions and encrypted publication path as `service-evidence-v1`. It binds:
 - Protocol, chain, contract, epoch, task, comparison and submission identifiers.
 - Source, candidate, target-reference, brief and rubric commitments; artifact,
   parameter, runtime, calibration and evidence hashes.
+- Qualified public A panel manifests, canonical execution settings and bound
+  input/output receipts when origin scoring is requested; B's complete submitted
+  probability vectors and their comparison with canonical validator outputs.
 - Numeric status, `q_x`, `q_z`, reduced `V` numerator/denominator and any required
   raw nonregression check.
 - Frozen validator snapshot root, total `W`, signer UID/generation/key bindings,
@@ -202,4 +227,8 @@ jobs never enter this process automatically.
 Given the same certified inputs, validators compute the same result. Human
 interpretations may disagree and fail to obtain a quorum. Agreement certifies
 the scoped semantic judgment under the declared trust assumption, without
-proving meaning preservation or truthful private-detector execution.
+proving meaning preservation. Validators reproduce public A computation;
+scoring B's submitted output does not require reproducing its private generator.
+The one-ticket A-requester/B-provider rewrite mailbox pilot does not implement
+artifact loading, canonical inference or the full common panel matrix; those
+need separate capacity and replay checks.

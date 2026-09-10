@@ -1,8 +1,10 @@
 # Pangram benchmark, verification and API funding
 
-Design proposal, 2026-09-10. Pangram is the required external benchmark for
-Slop Ninja. Evasion also faces a common three-service subnet origin panel,
-including the strongest qualified service from the previous completed A round.
+Design decision, 2026-09-10. Pangram is the required external origin benchmark
+for Slop Ninja. A artifacts are public and immutable; B generation remains
+private. Validators execute a common three-artifact subnet origin panel,
+including the strongest qualified artifact from the previous completed A round.
+Pangram cannot replace author-specific A evaluation or preservation review.
 
 ## What we measure
 
@@ -23,33 +25,38 @@ revision. Every B revision must also satisfy its preservation and readability
 requirements.
 
 The two launch tasks are A detection and B transformation. The deterministic
-comparison schedule includes the strongest qualified prior-round A service,
+comparison schedule includes the strongest qualified prior-round A artifact,
 hash-selects two other distinct qualified A UIDs, then hash-selects B entries
-outside that panel. Filter A reserves against all B batch UIDs and the initial
-panel, then freeze the residual order and capacity before issuing tickets.
-Insufficient reserve capacity prevents issuance; it cannot trigger a new B draw.
+outside that panel. Qualify, freeze and cache the complete A artifacts before
+B task disclosure or generation. Reserves apply only before issue. Require
+distinct A UIDs and inference-content hashes, excluding owner/signature metadata;
+an identical hash gets one credit entry and panel seat, selected by earliest
+finalized accepted commitment and canonical UID tie-break. Near copies remain
+an evaluation problem. Reserve full validator replay capacity before issue.
 Every B entry receives the same panel, sources, briefs,
 modes and frozen settings. Only exact UID exclusion is asserted; common
 ownership remains possible. The [mechanism proposal](subnet-mechanisms.md)
 defines persistent counters, domains, roster commitments and reserved capacity.
 
-Keep Pangram's fraction `F` distinct from each service's document-origin
+Keep Pangram's fraction `F` distinct from each artifact's document-origin
 probability `H_j = p_j(model-only) + p_j(mixed)`. Use
 `D_P = min_r F_r(source) - max_r F_r(revision)` and
-`D_S = median_j(H_j(source) - H_j(revision))` over the three panel services.
+`D_S = median_j(H_j(source) - H_j(revision))` over the three validator-executed A artifacts.
 Evasion utility is `(D_P + D_S)/2` only when both differences are nonnegative,
 otherwise zero. Strict joint success requires preservation, Pangram below
-`0.10`, a majority of panel services below their own calibrated thresholds,
-and a pass against the actual strongest service. Report its result separately;
+`0.10`, a majority of panel artifacts below their own calibrated thresholds,
+and a pass against the actual strongest artifact. Report its result separately;
 it has one vote in the median, without a unilateral incremental-utility veto.
 
-Fixed replacements apply to every affected source and candidate cell for the
-whole batch, or the comparison is void. A missing strongest result prevents
-the corresponding strict claim; degraded comparisons identify replacements.
-Detector disagreement alone is neither fraud nor a fallback trigger. Three
-panel UIDs limit one arbitrary outlier only under a bound of fewer than half
-colluding, which the hash cannot establish. Freeze qualifications, thresholds,
-capacities and fallback deadlines before issuing work.
+After issue, no model or threshold substitution is allowed. A validator-node
+outage can use another approved runner executing the same artifact. An actual
+reference-execution failure leaves the common comparison unresolved or void
+under the fixed closure rule; it grants no B nonresponse or automatic pass.
+An A endpoint has no authoritative response or fallback role. Three panel
+entries limit one arbitrary outlier only under a bound of fewer than half
+colluding, which public artifacts and hashes cannot establish. Keep targeted
+collusion tests: validators can faithfully reproduce a deliberately permissive
+model. Standard A/B native pools remain; experimental shared settlement is not adopted.
 
 Authorized retired revisions can feed later training, with source families
 excluded from private evaluation and production histories retained. Customer
@@ -121,22 +128,32 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
 ## Initial measurement protocol
 
 1. Freeze the epoch roster, global quotas, common panel/batch schedule, source
-   baselines, settings and fixed deadlines. Before task disclosure, exclude the
+   baselines, settings and fixed deadlines. Qualify and cache complete immutable
+   A artifacts, including all inference dependencies and reference-execution
+   rules, before B generation. Before task disclosure, exclude the
    exact participating A/B UIDs and freeze the complete remaining validator set
    and its native effective-consensus-stake integers, with sum `W`, at a verified
    finalized snapshot. Bind runtime/storage schema, identities, generations and
    encryption keys. A relayer assertion alone is insufficient. Reserve the
-   complete scoring matrix, fallback stages, ciphertext publication, preparer
-   work, and all-validator inspection separately from private peer tickets.
-2. Each B miner commits one final revision and three selected Pangram reports
-   per mandated text. Other private attempts need not be disclosed; committed
+   complete validator-executed scoring matrix, ciphertext publication, preparer
+   work, and all-validator inspection separately from training/service tickets.
+2. Each B miner commits one final revision, its assigned A artifact hashes,
+   reference settings and seed schedule, full candidate origin-probability
+   vectors, required source baselines, scalar projections and three selected
+   Pangram reports per mandated text. No easier model, omitted panel cell or
+   score from another text or seed is permitted. Other private attempts need not be disclosed; committed
    reports cannot be replaced afterward. Panel and preparer assignments are
    predictable from the committed schedule, not hidden until commitment.
-3. Obtain signed source/candidate responses from every panel member after B
-   commitments. Bind service, settings, nonce, text commitment and complete
-   origin probabilities. Mix human/model controls and conceal the text-to-B-UID
-   mapping through the grading relay. Private search results cannot replace
-   this matrix. Commit evidence by its fixed block deadline.
+3. Validators execute the same cached A panel after B commitments. Bind each
+   artifact's content hash, reference runner/settings, text commitment and
+   complete origin probabilities. Independently compare the canonical outputs
+   and projections with B's committed self-scores. A hash, signature or claimed
+   score cannot replace those forward passes or reduce their compute budget.
+   B generator replay is not required; preservation `G`, public style `V` and
+   Pangram evidence remain separate. Mix human/model controls and supply no
+   undeclared UID, hidden-label or source/candidate-role inputs to the isolated
+   runner. Private search results cannot replace this matrix. Commit replay
+   evidence by its fixed block deadline.
 4. Three hash-assigned preparers organize every scored submission's required
    checks, with fixed reserves; they have no final approval authority. No
    coordinator chooses preparers and no custom beacon or audit sample is used.
@@ -148,7 +165,8 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
    Preparers commit before seeing peer openings and open privately to certifiers.
 5. Every signing validator must inspect the actual evidence, reproduce the
    required DATA envelopes from their confidential witnesses, verify Pangram
-   records through GETs and panel signatures/bindings, and review whole-revision
+   records through GETs, reproduce the common A panel with its exact execution
+   bindings, and review whole-revision
    preservation. A preparer signature cannot replace this inspection. No fresh
    validator-paid Pangram inference is mandatory. Retain disagreements and
    certify the exact validity/quality verdict using distinct signer weight `w`
@@ -156,8 +174,9 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
    frozen set; missing keys, nonresponse, recusal and later role changes never
    reduce `W`. Use the [fixed closure rule](service-evidence.md#stage-transitions-and-certificates)
    for missing evidence or no quorum; neither grants approval.
-   Withhold detailed active-test feedback from revision miners until retirement;
-   each scoring service necessarily knows its own response.
+   Keep hidden labels, other miners' candidates, unreleased sources and
+   preservation adjudication restricted until retirement. B can execute public
+   A locally on text it possesses, including its own candidates.
 6. Publish commitments, ciphertexts, certificate verdicts and reviewed
    aggregates. Retain encrypted evidence and disputes. Apply the settled
    service-failure and unresolved gates before earned weights; bind the native
@@ -179,8 +198,9 @@ under a published rule, without assuming Bittensor supplies custom slashing.
 The [receipt and audit proposal](subnet-receipts-and-audits.md) specifies
 predictable preparer assignment, full review, and strict global weighted
 certification. A certificate attests the specified verdict under the validator
-honesty assumption; it does not prove Pangram's private computation or the
-execution of a miner's private weights. Native Bittensor weight
+honesty assumption; it does not prove Pangram's private computation or private
+B generation. A's declared computation is directly replayed, with accuracy and
+targeted behavior evaluated separately. Native Bittensor weight
 commit-reveal remains a separate supported chain mechanism.
 The current offline contract has not yet been adapted to public report IDs.
 
@@ -244,28 +264,36 @@ reproduce the provider's proprietary computation.
 
 ## Who pays
 
-Required A/B service is free to assigned requesters within a fixed global
-budget; providers bear the cost for emission eligibility. Benchmark panel and
-full-review capacity has separate reservations from per-miner training/search
-tickets. Expected emissions do not guarantee cost recovery.
+Mandatory training-service tickets run only from A requesters to B providers
+for authorized rewrites. They are free to requesters within a fixed global
+budget; B providers bear that cost for emission eligibility. A publishes
+artifacts and has no mandatory inference endpoint. Endpoint service does not
+qualify the artifact; separately offered A paid hosting uses customer terms.
+Validators bear authoritative A benchmark execution costs and reserve the
+complete panel and review workload separately. B can run public A locally at
+its own compute cost without a Pangram charge. Local A feedback does not replace
+required external reports. Expected emissions do not guarantee cost recovery.
 
-Tickets use the next persistent requester-UID-slot index and mandatory hash-
-ranked peers with fixed fallbacks. The rank hashes domain, chain, subnet,
+Training-service tickets use the next persistent A-requester-UID-slot index and
+mandatory hash-ranked B providers with fixed fallbacks. The rank hashes domain,
+chain, subnet,
 requester UID, index and peer UID; the pinned roster root is excluded from the
 rank. Scheduling metadata is inspectable, while text and salted openings stay
 restricted. No nomination, skipped index, reroll or retry-created quota is
 permitted. The [mechanism proposal](subnet-mechanisms.md) defines the shared
 ledger, bounded sizes, capacity reservations and fallback response windows.
 
-Obligations bind the UID and its assigned role: requester payload submission at
-issue, or provider response after timely global acceptance of the input at the
+Obligations bind the UID and its actual mandatory role: A requester publication at
+issue, or B provider response after timely global acceptance of the input at the
 fixed start. Retain activated `A=S+F+U+V` for successes, attributable failures,
 unresolved and platform-void obligations; inactive fallbacks remain reservations.
 Set settled `N=S+F` and require `U=0`, `N>0`, and `10F<=N`. More than 10% failures
 zeros earned A+B epoch credit; exactly 10% passes the failure-rate test,
-and zero workload supplies no automatic eligibility. Require the
-aggregate gate and separate gates on each mandatory interface and actually
-assigned role, so paid/cheap replies or outgoing payloads cannot dilute provider
+and an actually assigned class with no settled work receives no automatic
+service pass. Require the
+aggregate gate and separate gates on each actually assigned A-requester or
+B-provider class. A-provider and B-requester detector-call classes do not exist
+and incur no zero-work penalty. Paid hosting replies or outgoing payloads cannot dilute provider
 failures. Abandoned requester obligations count against the requester; a
 provider lacking accepted input never activates. A successful fallback cannot
 erase an earlier provider failure. Count duplicates once and require the full
@@ -276,12 +304,15 @@ rule cannot selectively pardon miners, extend deadlines, or shrink `W`. Prior
 actual request records determine the frozen next roster, with bounded real
 probation work and no heartbeats. Close measurement before weight deadlines;
 native payout lag prevents retroactive removal of already paid emissions.
-Mandatory interface/role recovery also requires zero deficit under
+Actual A-requester/B-provider class recovery also requires zero deficit under
 `D_e = max(0, D_previous + 10*F_e - N_e)`, initially zero. Only same-class
 protocol probation work reduces it; there is no age-out, other-class dilution,
 or reset by key/service-version rotation. Unresolved and platform-void records
 cannot retire the deficit; `U>0` blocks the class. Current gates still apply.
-Private customer jobs enter none of these mandatory counts.
+Private customer jobs enter none of these mandatory counts. B downloads and
+executes public A locally without an A inference request; artifact distribution
+creates no detector-call obligation. Authorized retired B outputs can feed A
+training under the source-release rules.
 
 Miners pay for private experimentation and the three selected Pangram candidate
 reports committed before evaluation. Validators retrieve existing Pangram

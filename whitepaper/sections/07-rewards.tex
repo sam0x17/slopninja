@@ -16,6 +16,13 @@ allocation and change policy before the scoring epoch.
 
 \subsection{Detection}\label{detection}
 
+Validators obtain probabilities by executing the published, qualified A
+artifact frozen for the round. Its manifest binds the complete inference
+procedure and reference runtime; endpoint replies cannot replace these
+executions. Independently labeled hidden tasks determine author/origin
+performance. Publication establishes which computation is being scored,
+not the correctness of its predictions~\cite{publicmodelevaluation}.
+
 For a valid probability vector \(p\) and known one-hot label
 \(y\), use the multiclass Brier utility:
 
@@ -40,15 +47,25 @@ labels merely because Pangram agrees with a miner.
 
 \subsection{The adversarial feedback loop}\label{adversarial-feedback-loop}
 
-Participation includes a bounded reciprocal-service obligation. A miners
-provide author/origin predictions on assigned B training requests; B
-miners provide rewrites that follow the source and brief in assigned A
-training requests. The request is free at the point of use, with the
+Participation includes public A artifacts and a bounded training-service
+obligation. A miners request authorized training rewrites; assigned B
+miners provide revisions that follow the source and brief. The request
+is free at the point of use, with the
 provider bearing its cost in exchange for eligibility for task
 emissions. Expected emissions need not cover every miner's costs. The
 obligation concerns delivered service, not unverifiable training effort.
 Independent preservation, readability, and requested-tone review are
 required for B. A miner cannot approve its own revision for rewards.
+
+Public A artifacts let B miners train and search locally.
+Those queries consume B's compute and
+have no protocol per-query quota. This local access does not create
+additional benchmark submissions or discharge an assigned service
+obligation. Validators separately reserve their own compute to grade the
+official comparison matrix. A's quality reward comes from its published
+artifact's independent performance; B's private generation procedure is
+not a claim that must be replayed to score the submitted text. No
+mandatory A inference endpoint or B-to-A prediction ticket remains.
 
 Use released, authorized training sources and retain the production
 history, brief, and preservation status with each response. A later
@@ -59,16 +76,20 @@ Allocate complete source families to either released training material
 or private evaluation. Assigned miners receive the inputs needed to
 perform their service. Hidden labels, private review material, and
 detailed evaluation feedback stay with authorized evaluators until
-retirement; active examples are not released into reciprocal training.
-Customer jobs never enter this exchange automatically. Private weights remain private, but
-serving outputs still permits some model extraction and endpoint
-retention; quotas limit exposure without preventing either.
+retirement; active examples are not released into training exchanges.
+Customer jobs never enter this exchange automatically. A artifacts are
+public, including to external detector providers. B weights remain
+private, but serving outputs still permits model-extraction attempts and
+endpoint retention; quotas limit exposure without preventing either.
+Each B miner can calculate public A scores for its own known texts.
+Hidden labels, unreleased source families and other miners' candidates
+remain separate from that locally available feedback.
 
 \subsubsection{Service budgets and deterministic pairing}
 
 Freeze a global budget, request schedule, interface qualifications, and
-capacity limits before each evaluation epoch. Detection and generation
-have separate input/output limits and capacity reservations. New UIDs
+capacity limits before each evaluation epoch. A artifact execution and B
+rewrite service have separate resource limits and capacity reservations. New UIDs
 and traffic do not increase the global budget, and serving volume earns
 no reward by itself. There are no counterparty nominations or voluntary
 pairing offers. Customer market quotes remain separate from this
@@ -87,7 +108,7 @@ must qualify before earning rewards; inheriting a slot counter does not
 inherit its former holder's performance record.
 
 Let \(R_e\) commit the eligible, active service roster fixed for epoch
-\(e\). Rank each eligible opposite-interface peer \(v\ne u\) by
+\(e\). For an A requester, rank each eligible B provider \(v\ne u\) by
 \begin{equation}\label{eq:peer-ranking}
  h_{u,i,v}=\operatorname{SHA256}\!\left(
  \operatorname{encode}(D,\mathrm{chain},\mathrm{netuid},u,i_u,v)
@@ -138,6 +159,13 @@ boundaries govern the schedule~\cite{tempo}. No heartbeat is required.
 Use authenticated outcomes of real assigned inference requests to
 measure availability.
 
+The mandatory classes are A as requester of training rewrites and B as
+their provider. There is no A inference-provider or B prediction-requester
+class, and neither absent class receives a zero-workload failure.
+A artifact availability and performance are separate qualification
+requirements. The schedule must reserve real work for every activated
+mandatory class before that class can earn availability credit.
+
 For miner \(u\) and measured epoch \(e\), let \(N_{u,e}=S_{u,e}+F_{u,e}\)
 count settled successes and attributable failures under
 Section~\ref{service-evidence}. Retain unresolved obligations separately
@@ -160,8 +188,7 @@ failure rates by interface as well as in aggregate. Apply the same gate
 separately to mandatory protocol service for each committed interface
 and assigned role,
 and require every applicable gate to pass. Purchased traffic cannot
-dilute failures on mandatory work, nor can cheap detection replies dilute
-missed transformation obligations. Successful outgoing requests cannot
+dilute failures on mandatory work. Successful outgoing requests cannot
 dilute missed provider replies. A miner needs a positive assigned
 workload on each interface for which it seeks eligibility; apply a
 role-specific gate when the schedule assigns that role work.
@@ -229,23 +256,24 @@ paper assumes no custom slashing primitive.
 
 \subsubsection{Common evidence for transformation rewards}
 
-Per-miner peer sets allocate reciprocal training and search access.
-Their outputs cannot directly determine B rewards: different miners
-would otherwise face different detectors, and a favorable pairing could
-become a private reward vote. The benchmark scheduler reserves separate
-service capacity for a common comparison batch. It does not try to
-collect a full scoring matrix by burning miners' private interaction
-indices.
+Per-miner peer sets allocate authorized B rewrite service for A training.
+Those training outputs do not replace the common committed benchmark
+or let a requester nominate scoring inputs. The benchmark scheduler reserves validator
+execution capacity for a common comparison batch using published A
+artifacts. This matrix consumes no miner service-ticket quota or lifetime
+interaction index.
 
 For each shared comparison index, deterministically select three
-qualified A UIDs and a B batch from the frozen registry. Include the
+qualified A artifacts on distinct UIDs and a B batch from the frozen registry. Include the
 strongest qualified origin detector from the previous completed A round
 in the A panel; hash-rank eligible remaining A UIDs under a separate
 comparison domain to select the other two and the reserve order. Then
 hash-rank eligible B UIDs outside that panel to fill the published batch
 size. Filter the deterministic A reserve ranking against every UID in
 the B batch and the initial panel, then freeze the remaining reserve
-order and capacity. A reserve cannot later score its own B entry.
+order and capacity. Distinct artifacts must have distinct inference-content
+hashes, with duplicate model-credit entries coalesced under
+Section~\ref{model-interfaces-and-starter-architectures}. A reserve cannot later score its own B entry.
 Insufficient reserved capacity prevents issuing that comparison; it
 does not permit another B draw. Qualifications, sizes, capacity, tie-breaking, and the shared
 counter are frozen and reproducible. Miners cannot nominate a panel,
@@ -256,40 +284,53 @@ Rank the strongest A service by held-out origin Brier performance,
 subject to the declared calibration and human false-positive limits.
 Author-retrieval rank does not qualify an origin service. Every B entry
 faces the same three detectors, source texts, briefs, task modes,
-source-baseline evidence, and frozen settings. Collect a complete source
-and candidate response matrix after B candidate commitments. This is
+source-baseline evidence, and frozen settings. Validate and cache the
+entire selected A panel before revealing the B task or starting its
+generation window. Artifact reserves may be used only before that issue
+point. Execute a complete source and candidate matrix after B candidate
+commitments, using the same frozen artifacts and reference runtime. This is
 what matched assignments mean. The three-member pilot is provisional;
 its cost, coverage, and susceptibility to colluding UIDs require
 measurement before live rewards.
 
-If a panel service fails, apply one predetermined replacement to the
-whole batch and recompute that service's source and every candidate
-response, or void the shared comparison if reserved capacity is
-exhausted. Never mix per-miner panels or discard only missing cells.
-Detector failure is recorded against that detector's service and cannot
-become B nonresponse. A B miner that fails to submit receives zero on
-its assigned work. A missing strongest-detector result prevents a claim
-of success against that detector; a degraded comparison must identify
-its replacement and cannot silently retain the original claim.
+After issue, never replace a panel model, version or threshold. An
+unavailable validator runner is replaced by an approved runner executing
+the same artifact. Failure of the canonical reference execution leaves
+the whole common comparison unresolved or void under the fixed closure
+rule. Do not discard only missing cells, invent a passing probability,
+or count validator execution failure as B nonresponse or an A training
+endpoint failure. A B miner that fails to submit receives zero on its
+assigned work. A missing strongest-detector result prevents a claim of
+success against that detector. Deliberately triggered execution errors
+are a required pilot attack case.
 
 The median panel improvement used below limits one arbitrary outlier
 when fewer than half the panel UIDs collude. It does not establish that
-bound, prove owner independence, or make private execution verifiable.
-One A response cannot alone determine B's utility, and A earns quality
+bound or prove owner independence. Validators reproduce model behavior,
+including any learned trigger that favors a colluding B. Hidden
+qualification and targeted-behavior controls must test that risk.
+One A result cannot alone determine B's utility, and A earns quality
 from independent labeled evaluation, not from how harshly it scores B.
 The strongest detector's result is also reported separately. Legitimate
 detector disagreement alone is neither fraud nor a replacement trigger.
 
-For grading requests, conceal the mapping from texts to submitting B
-UIDs and source/candidate roles, mix human and model controls, and use
-one request interface. This differs from the inspectable metadata needed
-for peer-access verification. The service may still recognize a text or
-infer its role. Required signed responses cannot be replaced by private
-search results. Commit the complete evidence by the fixed block deadline;
+Execute A under an isolated reference interface that excludes B UIDs,
+source/candidate role labels, scheduling metadata and undeclared state.
+Mix human and model controls. Text itself can still reveal its origin
+or purpose; interface restrictions do not prove blindness. Retain
+validator-signed execution records binding the model, runtime, inputs
+and outputs. Miner-selected local search records cannot replace this
+matrix. B submits self-scores with its final candidate, binding the
+assigned panel hashes, reference settings, full candidate probability
+vectors, required source baselines and scalar projections. Validators
+recompute the canonical outputs and compare the claims; verified results
+determine rewards, with mismatches retained. A claimed high score cannot
+skip another candidate's verification. No A miner endpoint or replay of
+B's generator is required. Commit the complete evidence by the fixed block deadline;
 hash-assigned validators review every scored submission and all required
 checks at launch. Bootstrap rounds
-use explicitly funded reference services until enough competitive
-services qualify, and are reported separately.
+use published, explicitly funded reference A artifacts until enough
+competitive models qualify, and are reported separately.
 
 \subsection{Preservation before revision
 rewards}\label{preservation-before-revision-rewards}
@@ -350,16 +391,16 @@ every private attempt or a fresh validator-paid Pangram inference call. A
 reported pass applies only to the committed observations, not to every
 future measurement of that text. Selection can bias the submitted set
 when provider results vary. We accept this limitation to keep external
-Pangram costs with the submitting miner; the subnet can instead require
-its own services to supply post-commitment responses through the
-reciprocal-service obligation. Our probe found equal document fractions
+Pangram costs with the submitting miner. Validators independently
+execute the frozen A panel against the committed candidate; no A
+serving endpoint is involved. Our probe found equal document fractions
 across fresh requests for three tested texts, with auxiliary-score
 variation, but no observations within two percentage points of 10\%.
 It establishes neither general determinism nor threshold stability~\cite{repeatability}.
 
 For panel detector \(j\), let
 \(H_j(t)=p_j(\text{model-only}\mid t)+p_j(\text{mixed}\mid t)\),
-using its required authenticated response under the frozen policy.
+using its validator-verified probability vector under the frozen policy.
 These are document-origin probabilities; Pangram's \(F_r\) is a
 content fraction. Define
 \(\Delta_j(x,z)=H_j(x)-H_j(z)\) and
@@ -425,13 +466,21 @@ must be demonstrated against the pinned runtime. A frozen application
 certificate specifies the intended weights; native consensus still
 determines the resulting payouts.
 
-\paragraph{Unresolved adversarial settlement.}
-The private-panel utility above remains a research candidate for
-simulation. It is not yet an approved live payout rule. A small private
-detector panel can favor an allied B miner while satisfying availability;
-global validator certificates cannot prove faithful private-model
-execution. Complementary fixed credits also fail to establish conserved
+\paragraph{Execution and incentive limits.}
+The selected public-A policy removes private reported probabilities
+from benchmark authority. The earlier private-panel proposal motivated
+complementary fixed-credit experiments, which fail to establish conserved
 alpha payouts after native weight normalization, as shown in
 Section~\ref{existing-evidence-and-implementation-status}.
-Resolving this monetary connection is required before live rewards or
-claiming the A/B design resists profitable self-dealing.
+Shared settlement preserves the ideal maximum miner incentive under
+fixed-state assumptions, but historical validator dividends break the
+broader combined-receipts claim. A current-only legacy configuration
+removes that history attack in the tested fixtures; integer rounding and
+native lifecycle effects remain to be bounded~\cite{sharedpoolgameability}.
+Neither experimental complementary settlement nor its current-only
+configuration is adopted. The two native task pools above reward
+independently evaluated A artifact performance and B output utility.
+Public A models can still favor colluding B outputs, and public weights
+make copying possible. Qualification, duplicate handling, execution
+budgets and actual native settlement must be tested before live rewards.
+The design does not claim to eliminate all profitable self-dealing.

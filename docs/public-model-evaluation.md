@@ -12,6 +12,18 @@ they do not have to publish their generation models or prove the generation
 procedure. Pangram supplies an independent external origin-detection benchmark.
 It cannot replace author-attribution labels or B's preservation review.
 
+The intended product split is free access to capable detection models and
+competition in private transformation services. Pangram-level origin detection
+is a benchmark target, not a measured result of this project. A submissions
+must permit free artifact access, local inference and reuse for training private
+B models. External providers, including Pangram, may obtain A models. Paid A
+hosting remains possible because execution costs compute; B miners can retain
+their transformation weights and sell inference. A training data and recipes
+need not be published.
+Customers can buy either A or B inference at market prices denominated in
+alpha. Self-hosting gives A customers an alternative to a provider's quote;
+the protocol fixes no discount or price ratio between the interfaces.
+
 ## What publication changes
 
 For each round, validate and cache qualified A artifacts before revealing B's

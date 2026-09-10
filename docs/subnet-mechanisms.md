@@ -1,6 +1,6 @@
 # Slop Ninja subnet mechanisms
 
-Status: design proposal, 2026-09-09. We have enough evidence to define an
+Status: public A/private B design approved, 2026-09-10. We have enough evidence to define an
 offline competition. Paid validation still needs a suitable private benchmark,
 measured judge reliability and an authenticated challenge ledger.
 
@@ -17,11 +17,16 @@ meaning and readability. Miners can improve the grammar and word representation,
 the task models, or the editing process. The existing model supplies a baseline;
 we do not need to perfect it before testing these incentives.
 
-Miners keep their trained models private and serve authenticated task requests.
+A miners publish complete immutable inference artifacts. B miners keep their
+generation models private and serve authenticated task requests.
 The [model and data plan](miner-models-and-data.md) defines starter architectures
 and training records; the [paid inference proposal](paid-inference.md) adds
 customer jobs with on-chain settlement. Emissions reward observed performance,
-while customers pay separately for service. No weight publication is required.
+while customers pay separately for service. A publication includes every
+component needed for the frozen reference execution; raw training data and
+recipes can remain private. The [public-model contract](public-model-evaluation.md)
+requires qualification, artifact availability and validator replay capacity
+before B generation.
 
 Evasion targets Pangram and a common panel of qualified subnet origin
 detectors, including the strongest from the previous completed A round.
@@ -30,12 +35,11 @@ agreement nor a public peer identity supplies ground truth. The
 [API verification and funding design](pangram-oracle.md) specifies the
 external dependency and its remaining trust assumptions.
 
-The private-panel reward formula below remains a research candidate. Its
-connection to live monetary rewards is unresolved. The
+The standard A/B native pools remain the proposed launch settlement. The
 [settlement hypothesis](settlement-gameability.md) conserves complementary policy
 credits but finds a counterexample after simplified native normalization; that
-credit proposal is not adopted. The [funded-alpha option](alpha-match-reserve.md)
-awaits a funding decision and analysis of failure/refund incentives.
+credit proposal and experimental shared-pool settlement are not adopted. The
+[funded-alpha option](alpha-match-reserve.md) also remains unadopted.
 
 ## Two tasks, two chain mechanisms
 
@@ -49,8 +53,8 @@ separately scored subtasks of A.
 
 | Logical task | Miner produces | Main evaluation | Proposed chain mechanism |
 | --- | --- | --- | --- |
-| A: Detection | Author probabilities and separately evaluated origin probabilities | Known author and documented production history | 0 |
-| B: Transformation | A revision matching a requested author/style, optionally with detector evasion | Preservation, independent style assessment, Pangram and the common three-service origin panel | 1 |
+| A: Detection | Public immutable author/origin inference artifact | Validators execute it against known authors and documented production histories | 0 |
+| B: Transformation | A revision from a private model matching a requested author/style, optionally with detector evasion | Preservation, independent style assessment, Pangram and validator execution of the common three-artifact origin panel | 1 |
 
 Keep independent score tables and fixed task allocations before combining
 weights. Otherwise cheap detection requests or a permissive quality judge could
@@ -59,17 +63,21 @@ only in the task pools they enter. The offline pilot gives A and B equal 50%
 budget shares. These are provisional allocations to test, without an established
 economic optimum.
 
-Eligibility for a task's emissions also requires fulfilling its bounded
-benchmark and training service obligations. Assigned requests are free at the
+Mandatory training-service tickets run only from A requesters to B providers
+for authorized rewrites. A publishes artifacts and has no mandatory inference
+endpoint; provider endpoint service does not qualify an A artifact. Eligibility
+also requires fulfilling actually assigned training-service roles. Requests are free at the
 point of use; serving miners bear the costs from expected emissions. The
-[reciprocal service policy](#how-the-tasks-train-one-another) caps this work
-before admission. Customer jobs retain their separate quoted fees.
+[training-service policy](#how-the-tasks-train-one-another) caps this work
+before admission. A miners may offer paid hosting separately; customer jobs
+retain their quoted fees, assigned-provider encryption and optional disclosure
+to one chosen validator.
 
 ## 1. Author and origin detection
 
 An author task supplies a query and reference samples labeled with opaque author
 IDs. The initial benchmark uses a fixed gallery of 100 authors, matching our
-existing evaluation. The miner returns a probability distribution over that
+existing evaluation. Validators execute the frozen A artifact to obtain a probability distribution over that
 gallery. Unknown-author rejection needs separately allocated unknown examples
 and calibration before joining the reward.
 
@@ -86,7 +94,7 @@ Use the multiclass Brier score for each task:
 B = 1 - 0.5 * sum_k((p_k - y_k)^2)
 ```
 
-Here `p` is the submitted probability vector and `y` is the known one-hot label.
+Here `p` is the validator-computed probability vector and `y` is the known one-hot label.
 Score author and origin tasks separately, balancing authors/source groups before
 aggregation. Report author retrieval accuracy and reciprocal rank, and origin
 calibration, human false-positive rate and recall at a development-fixed
@@ -106,13 +114,14 @@ different-author/similar-topic challenges, and hold out generation families.
 Known hard human examples are essential to prevent an always-AI classifier
 from winning against a pool dominated by generator submissions.
 
-Miners serve a versioned author/origin prediction interface. They can retain
-`encode(text)` and `profile(samples)` internally, including proprietary grammar
+Miners publish a versioned author/origin inference artifact, including
+`encode(text)` and `profile(samples)` when used, grammar
 features and learned embeddings. Our public starter implementation exposes named
-features, denominators and missingness for reproducibility; competitors need not
-publish their implementation. Validators authenticate responses and score them
-against held-out labels. A declared model version does not prove which private
-weights ran. Reward measured performance rather than dimension count.
+features, denominators and missingness for reproducibility. Every competing A
+artifact must supply its complete inference implementation, weights, tokenizer,
+preprocessing, calibration, dependencies and reference-execution rules.
+Validators execute those artifacts against held-out labels and retain exact
+input/output bindings. Reward measured performance rather than dimension count.
 
 ## 2. Author transformation and detector evasion
 
@@ -120,6 +129,12 @@ A challenge supplies source text, target reference samples, intended tone,
 audience, allowed style changes and preservation requirements. It declares
 `author_style`, `detector_evasion` or `both`; these modes retain separate results.
 The output is exact revised text bound to the source and submitted model version.
+Its candidate envelope also commits the protocol-assigned A panel artifact
+hashes, reference settings and seed schedule, every candidate origin-probability
+vector, source baselines where required, and scalar projections. The panel is
+pinned for the full batch before B task disclosure. B cannot choose an easier
+model, omit cells or use a score for another text or seed. Validators rerun A
+and compare canonical outputs; they do not replay B's private generator.
 
 The [adjudication specification](reward-adjudication.md) defines the whole-revision
 preservation, readability and tone fields. A valid global failure certificate for
@@ -156,14 +171,14 @@ E = (E_P + E_S) / 2 if D_P >= 0 and D_S >= 0; otherwise 0
 ```
 
 `F` is Pangram's reported AI-plus-assisted fraction, using three distinct
-completed committed reports per text. Each panel service returns
+completed committed reports per text. Validator execution of each A artifact produces
 `H_j = p_j(model-only) + p_j(mixed)`, a document-origin probability.
 Take the median of the three paired improvements, retaining all raw responses.
 A strict joint pass requires preservation, `max_r F_r(z) < 0.10`, a majority
-of panel services with `H_j(z) < tau_j`, and a pass against the actual strongest
-qualified prior-round service. Each threshold is calibrated on held-out
+of panel artifacts with `H_j(z) < tau_j`, and a pass against the actual strongest
+qualified prior-round artifact. Each threshold is calibrated on held-out
 development data and frozen before scoring; it is not automatically 10%.
-Report panel and strongest-service pass rates separately. The strongest has
+Report panel and strongest-artifact pass rates separately. The strongest has
 one vote in the median and cannot alone veto incremental utility.
 
 Miners may pay for extra Pangram attempts before commitment; only committed
@@ -176,9 +191,11 @@ guarantee. A strict pass describes the committed observations.
 For a first simulation, use `G*V`, `G*E` or `G*(V+E)/2` for the declared mode,
 where `G` is the preservation/quality pass and each improvement is bounded in
 `[0,1]`. The combined mode also requires no regression on either requested axis.
-These research utilities are not an approved live payout rule. A private panel
-can favor an allied B miner while answering on time; global certificates verify
-the declared evidence and judgments without proving private execution.
+The standard A/B native pools remain separate; shared-pool experiments do not
+change that settlement. A public model can contain behavior that favors an
+allied B miner, and validators will reproduce it. Publication removes private
+A score reporting but supplies no accuracy or ownership-independence guarantee.
+Hidden-label evaluation and targeted collusion tests remain required.
 Graded development improvement is distinct from meeting
 the strict joint target. Already suitable text can remain unchanged
 without a fabricated improvement bonus.
@@ -219,21 +236,28 @@ automatic authority to judge writing quality.
 
 ## How the tasks train one another
 
-On released authorized text, A supplies author/origin probabilities for
-assigned B training requests; B supplies source- and brief-constrained rewrites
+On released authorized text, B can execute public A artifacts locally for
+author/origin feedback at its own compute cost, without a Pangram call. B can
+also calculate scores for its own candidate text before commitment; those scores
+are not secret. B supplies source- and brief-constrained rewrites
 for assigned A requests. Preserve production records, failed edits and human
 controls. Unknown assistance histories remain weak labels. Retire evaluation
 material before releasing it, and keep complete source families separate from
-private evaluation. Customer jobs never enter this exchange automatically.
+private evaluation. Authorized retired B outputs feed later A training.
+B weights, raw training data and recipes remain private. Customer jobs never
+enter this exchange automatically. A has no mandatory inference service;
+artifact downloads and B's local A execution create no detector-call tickets.
+Validators perform authoritative benchmark A execution separately.
 
 Freeze the global epoch budget, qualified active roster, input/output limits,
-provider capacities and canonical request schedule. Serving is mandatory
+qualified B-provider capacities and canonical A-requester schedule. B serving
+is mandatory
 within this bounded emission-eligibility obligation and free to the requester;
 expected emissions need not cover each provider's costs. New UIDs and request
 volume cannot expand the global budget or create reward by themselves.
 
-Each protocol-issued requester slot consumes its next lifetime interaction
-index. Hash-rank opposite-interface peer UIDs using canonical, length-delimited
+Each protocol-issued A-requester slot consumes its next lifetime interaction
+index. Hash-rank qualified B-provider UIDs using canonical, length-delimited
 `SHA256(domain, chain, netuid, requester_UID, lifetime_index, peer_UID)`, with
 UID tie-breaking and exact requester-UID exclusion. Pin the eligible roster
 root in the ticket, but exclude it from the hash so membership changes do not
@@ -262,23 +286,25 @@ not owner independence, honest private execution or resistance to all Sybils.
 The [service-evidence protocol](service-evidence.md) records each activated
 obligation as certified success `S`, attributable failure `F`, unresolved `U`
 or platform void `V` (this accounting field is separate from style utility).
-Settled obligations are `N=S+F`. Each obligation binds a UID, interface and role:
-requester publication or provider answer after certified valid input. Invalid
+Settled obligations are `N=S+F`. Each obligation binds a UID and one actual
+mandatory role: A requester publication or B provider answer after certified
+valid input. Invalid
 or unresolved input does not activate a provider; unused fallback reservations
 earn no credit. Eligibility requires `U=0`, `N>0` and `10*F<=N`:
 more than 10% failures zeros earned A and B
 emission credit, while exactly 10% passes this gate. Apply it in aggregate
-and separately to mandatory service on every committed interface and assigned
-role. Only actually assigned roles require their own gate. Paid or cheap
-successes cannot dilute failed free A/B obligations, and outgoing payloads
-cannot dilute provider failures. Zero traffic gives
-no automatic pass. Exclude unsolicited requests, duplicates and impossible
+and separately to each actually assigned A-requester or B-provider class.
+A-provider and B-requester detector-call classes do not exist and receive no
+zero-work penalty. Paid or optional hosting successes cannot dilute failed
+training-service obligations, and outgoing payloads cannot dilute provider
+failures. An actually assigned class with no settled work receives no automatic
+service pass. Exclude unsolicited requests, duplicates and impossible
 deadlines. Invalid input is a requester failure, never a provider failure;
 count requester abandonment on its own obligation. Publish `U` and platform
 void counts even though they are outside settled `N`.
 A successful fallback does not erase the preceding provider's failure.
 
-Each mandatory interface/role carries a recovery deficit, initially zero:
+Each actual A-requester or B-provider class carries a recovery deficit, initially zero:
 `D_e = max(0, D_previous + 10*F_e - N_e)`. Normal active status and emission
 eligibility require zero deficit, the current epoch's gates and qualification.
 Only actual protocol-assigned probation work in that same class retires the
@@ -303,30 +329,40 @@ behavior under reveal delays; already distributed emissions cannot be reclaimed.
 
 Peer training/search results never directly award B. A shared comparison
 counter schedules a common three-A panel: include the strongest qualified
-prior-round origin service, then hash-rank two other distinct qualified A UIDs
-under a separate domain. Hash-rank B entries outside the panel into the fixed-size
-batch. Filter the deterministic A reserve ranking against every B batch UID and
-the initial panel, then freeze the residual order and capacity before issuing
-tickets. Insufficient reserve capacity prevents issuance, without redrawing B.
-Exact UID self-grading exclusion therefore persists through fallback.
-Capacities, qualifications and tie-breaking are
-committed; no participant chooses a batch. Only exact UID exclusion is claimed.
+prior-round public origin artifact, then hash-rank two other distinct qualified
+A UIDs under a separate domain. Hash-rank B entries outside the panel into the
+fixed-size batch. Freeze and cache complete qualified artifacts, thresholds,
+panel and resource budget before B task disclosure or generation. Require
+distinct UIDs and inference-content hashes excluding owner/signature metadata.
+Identical content receives one credit entry and panel seat, by earliest finalized
+accepted commitment and canonical UID tie-break. Near copies remain an
+evaluation problem. Reserves apply only before issue. Publication and artifact
+availability are admission requirements. Insufficient validator capacity prevents issue;
+no participant chooses a batch. Only exact UID exclusion is claimed.
 
-Reserve separate benchmark capacity for the complete common source/candidate
-matrix, with identical sources, briefs, modes and service settings for all B
-entries. Obtain signed required responses after candidate commitment. Opaque
-grading mappings and mixed human/model controls conceal which B UID produced
-each text and its source/candidate role, without guaranteeing that a service
-cannot infer either. A failure invokes the fixed replacement for every affected
-source and candidate cell, or voids the batch. Never mix per-miner panels.
-Missing actual strongest-service evidence prevents a strongest-detector pass;
-any degraded comparison identifies its replacement. Disagreement alone is
-neither fraud nor grounds for replacement. A failure is charged to A, not B.
+Reserve validator execution for the complete common source/candidate matrix,
+with identical sources, briefs, modes and inference settings for all B entries.
+Validators execute the fixed artifacts after candidate commitment, retaining
+artifact hashes, exact input bindings and reference-execution outputs. They
+compare the full canonical outputs and derived projections with B's committed
+self-scores. Claimed scores, hashes and signatures do not establish correct
+inference. Verification still requires the full A forward-pass workload;
+preservation `G`, public style `V` and Pangram reports remain separate. The
+isolated runner exposes no undeclared UID, hidden-label, source/candidate-role
+or scheduling inputs. Text may still reveal task properties. An A endpoint
+reply or timeout cannot determine a score or trigger an artifact fallback.
+No model or threshold changes after issue. A validator-node outage uses another
+approved runner with the same artifact; actual reference failure leaves the
+common comparison unresolved or void under fixed batch closure. It cannot
+become B nonresponse or an automatic pass. Missing strongest-artifact evidence prevents
+the corresponding strict pass. Never mix per-miner panels.
 
 The median limits one arbitrary outlier only when fewer than half the three
 panel UIDs collude. That bound and the provisional panel/batch sizes need
 measurement. A earns quality on held-out labels and calibration, not harsher
-B scores. Signed responses do not attest which private model ran.
+B scores. Validator replay establishes the declared A computation; it cannot
+rule out committed triggers. Pangram supplies an external origin check and
+cannot replace author-specific A evaluation or preservation review.
 
 Hash-rank three evidence preparers using the separate review domain and frozen
 assignment fields. They organize dossiers and disagreements but cannot finalize
@@ -339,11 +375,13 @@ recused, abstaining and nonresponsive validators remain in `W`.
 The conditional assumption is dishonest weight strictly below `W/3` within that
 frozen eligible set, with sufficient honest participation to close. Honest
 signers do not authorize conflicting final verdicts. Certificates attest scoped
-judgments, without proving meaning preservation or truthful private execution.
+judgments, without proving meaning preservation or private B generation.
 The [adjudication deadlines](reward-adjudication.md#fixed-pilot-deadlines) govern
-preparation, final ballots, private openings and closure. Withhold active-test
-feedback until retirement; native chain weight commit-reveal remains unchanged.
-The [two-ticket service pilot](service-evidence.md) tests transport and accounting;
+preparation, final ballots, private openings and closure. Keep hidden labels,
+unreleased sources, other miners' candidates and preservation adjudication
+restricted until retirement. B can compute A scores on text it possesses.
+Native chain weight commit-reveal remains unchanged.
+The [training-service pilot](service-evidence.md) tests transport and accounting;
 a full common-panel benchmark needs its own frozen matrix schedule and capacity.
 
 ## Combining rewards and handling failures
@@ -354,8 +392,8 @@ fixed task mixture. Never let additional cheap submissions increase a miner's
 share. Use the same assignments and resource budgets for competing baselines.
 Publish completion coverage alongside conditional quality measurements.
 
-In the research reward simulation, apply the aggregate and mandatory
-interface/role availability and zero-deficit gates before
+In the research reward simulation, apply the aggregate and actually assigned
+A-requester/B-provider availability and zero-deficit gates before
 normalizing positive skill within each logical score pool. Combine A's separately
 scored author and origin subtasks under the fixed task mixture for mechanism
 0's weight vector. B's transformation scores supply mechanism 1's weight vector.
@@ -374,7 +412,7 @@ launch; neither zero weights nor a stale earned vector substitutes for the
 fallback. Burning can reduce future subnet emissions. Quantization, UID changes,
 native reveal timing and actual payout behavior require pinned-runtime tests.
 Application certificates specify intended weights; native consensus determines
-payouts. This fallback does not resolve the private-panel monetary formula.
+payouts. Experimental shared-pool settlement remains unadopted.
 
 Verified miner failures receive zero on their assigned work. Platform incidents
 and unresolved quality comparisons follow the [service-evidence](service-evidence.md)
@@ -383,7 +421,7 @@ and independently attributable failures.
 
 The existing [Rust contract](../src/subnet.rs) binds a revision to a challenge
 and computes an offline detector/quality reward. It does not yet implement
-these task pools, private serving, replay protection or
+these task pools, public A artifact execution, private B serving, replay protection or
 cumulative accounting. Its [documentation](subnet.md) remains the description
 of current behavior; this proposal does not silently change that contract.
 The separate [receipt prototype](receipt-envelope.md) implements envelope

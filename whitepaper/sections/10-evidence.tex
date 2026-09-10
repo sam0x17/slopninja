@@ -103,7 +103,9 @@ acquisition, shared-detector fallback, delivery disputes, private-model
 execution, or native payouts. These results concern the earlier
 three-reviewer majority policy. In this revision, three preparers assemble
 evidence and a strict global weighted quorum certifies the actual
-judgments. Private detector responses still do not prove private execution.
+judgments. Those historical private detector responses did not prove
+execution. This revision instead requires validator execution of public A
+artifacts; the earlier assignment experiment does not test that runner.
 
 \subsection{Settlement counterexamples and certificate boundaries}
 
@@ -138,6 +140,51 @@ replay accounting, the 10\% boundary, and persistent recovery deficits.
 Seven focused tests, formatting, and Clippy pass for this isolated
 experiment. These checks supply neither a production ledger nor an
 economic equilibrium proof.
+
+\subsection{Shared-pool and dividend follow-up}
+
+A third isolated Rust experiment considers settling complementary A/B
+credits in one native pool. With identical complete post-filter honest
+rows, fixed honest stake \(s\), fixed outside credits and coalition credit
+sum \(c\), the maximum coalition miner incentive is
+\(c/[s+(1-s)c]\). It depends on the sum rather than the internal A/B
+split. The experiment checks 3,245,130 malicious-row cases and explicit
+maximizers. This invariant concerns the optimized miner-incentive
+envelope; it does not establish total economic receipts~\cite{sharedpoolgameability}.
+
+Historical validator dividends give a counterexample with 20\% coalition
+stake and distinct miner and validator UIDs. Moving honest A/B credits
+from \((.05,.15)\) to \((.15,.05)\), while outside credit stays \(.8\),
+preserves combined miner incentive but increases the dividend of a
+coalition validator with an asymmetric bond history. The replay uses
+unchanged production math function bodies from pinned Subtensor
+revision \texttt{67dcf7f}, explicit sparse-branch orchestration, stored
+bond quantization and integer epoch allocation. In a synthetic budget
+of one billion units, coalition miner-plus-validator allocation rises
+from 126,786,990 to 137,501,008 under legacy bonds. A separate Yuma3
+fixture with Liquid Alpha disabled rises from 125,824,352 to
+131,439,278. These are function-level replays with supplied histories,
+not SDK runtime executions or observed operator profits. The coalition
+is assumed to economically own the modeled validator receipts.
+
+Using current, fully clipped legacy bonds removes the displayed history
+attack. The ideal maximum combined share is \((c+1-s)/2\) when
+\(c\le s\), and \(c(2-s)/[2(s+(1-s)c)]\) otherwise. A finite grid and
+explicit maximizers support this calculation. The native swap fixtures
+give identical units under that configuration, but a 19-split sweep
+retains rounding sensitivity: the matching-row strategy spans 4,884
+units out of one billion. This is not a bound over all native rows.
+The proposed settings remain a candidate, with native filtering,
+registration changes, integer encoding and future incentives still to
+establish.
+
+Separate bounded-cost pot fixtures test irreversible funding and
+per-ticket default bonds. They deter the enumerated independently
+attributable defaults under the declared cost bound; an unobservable
+private execution shortcut remains outside that result. Nine focused
+tests, formatting and Clippy pass. These findings constrain settlement
+claims and motivate the selected public A policy. They do not test its
+artifact runner, copying incentives or detector qualification.
 
 The project does not yet demonstrate a reliable sub-10\% rewriting
 model, calibrated production-origin service, reviewed commercial

@@ -1,9 +1,10 @@
 # Adversarial text-revision subnet
 
-The [three-task mechanism proposal](subnet-mechanisms.md) extends this direction
-to author/origin detection, author transformation and writing improvement. It
-describes a future competition; the contract below remains the implemented
-offline revision benchmark.
+The [two-task mechanism proposal](subnet-mechanisms.md) specifies public A
+author/origin detectors and private B author-directed transformation.
+Preservation, readability and tone are constraints on B. That design uses B
+self-scores with independent validator execution of A artifacts; the contract
+below remains the earlier implemented offline revision benchmark.
 
 The target service is a miner that revises prose under a preservation contract: retain the argument, details, and intended tone; improve readability; and repeatedly score below 10% AI plus assisted text. Competing miners may use word and grammar statistics, rules, prompted models, trained models, or combinations. We can compare all of them against the same frozen challenges and validator rules.
 

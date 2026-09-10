@@ -9,25 +9,34 @@ Planned domain: **slop.ninja**.
 
 Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
-The draft surveys related work and defines private miner models, training data,
+The draft surveys related work and defines public A detector artifacts,
+private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
 Customer inputs are encrypted for the assigned
 miner; customers can separately share evidence with a specific validator.
 Task A detects author and origin; Task B transforms text toward an author's
-style under a source and brief, with optional detector evasion. Both share
-bounded training and benchmark services as an emission-eligibility obligation,
-free to the assigned requester and funded by the serving miner's expected
-emissions.
+style under a source and brief, with optional detector evasion. B miners train
+and search against published A models locally, then submit self-scores bound to
+their final text and assigned panel. Validators rerun A to verify those scores;
+no A inference endpoint or replay of B's generator is required.
+The aim is freely accessible detection competitive with Pangram, supporting
+better private transformers. Detection parity remains to be demonstrated;
+running or hosting an A model still costs compute.
+Bounded training tickets assign A as requester and B as rewrite provider,
+free to the requester and funded by the provider's expected emissions.
 Deterministic hash assignments pair training counterparts on released,
 authorized text. Each B comparison batch faces Pangram and a common three-A
-panel, including the strongest qualified prior-round origin detector. Three
+panel, including the strongest qualified prior-round origin detector. Its
+artifacts and thresholds are validated, cached and frozen before B task issue.
+Three
 hash-assigned preparers organize each submission's evidence. Final semantic
 certificates require agreeing weight `3w > 2W` from the frozen eligible validator
 set; every signer inspects the authorized encrypted benchmark evidence. The
 conditional assumption is dishonest eligible weight below `W/3`, with no
 denominator reduction for missing or abstaining validators.
-Active evaluation feedback remains private until retirement. The whitepaper's
+Hidden labels, other miners' candidates and detailed review material remain
+private until retirement; B can calculate its own public A scores. The whitepaper's
 [reward rules](whitepaper/sections/07-rewards.tex) define fixed budgets,
 mandatory assignments, aggregate/interface/role availability gates and recovery
 deficits for earned A and B emissions. The [service-evidence rules](docs/service-evidence.md)
@@ -41,10 +50,15 @@ with reproducible Rust simulations. It records both blocked strategies and
 attacks that pass availability checks while corrupting scores.
 The [settlement hypothesis](docs/settlement-gameability.md) conserves complementary
 policy credits but finds a counterexample after simplified native weight
-normalization. That credit proposal is not adopted. The monetary connection
-between private A responses and B rewards remains unresolved; the
-[funded-alpha option](docs/alpha-match-reserve.md) awaits a funding decision and
-resolution of failure/refund incentives.
+normalization. That credit proposal and the [funded-alpha option](docs/alpha-match-reserve.md)
+are retained as unadopted research into the earlier private-score design.
+The [shared-pool experiment](docs/shared-pool-gameability.md) removes the earlier
+miner-incentive counterexample under fixed-state assumptions, but reproduces a
+historical-dividend attack using pinned Subtensor math. Current-only legacy
+bonds remove that attack in the fixtures; native rounding and broader economic
+claims remain unresolved. The selected [public-model design](docs/public-model-evaluation.md)
+removes private A reports from scoring authority. Artifact replay, detector
+qualification and copying incentives still need implementation and evaluation.
 
 Research toward an adversarial Bittensor subnet for text revision: make writing easier to read while preserving its arguments, details, qualifications, and intended tone, with less than 10% AI-generated **plus AI-assisted** content on repeated detector checks.
 
@@ -370,10 +384,11 @@ detection in on-chain mechanism 0 and author-directed transformation under the
 source and brief, including optional detector evasion, in mechanism 1. Each receives
 50% of pilot emissions. Fidelity, readability and the requested audience and
 style controls remain transformation gates and brief requirements.
-The [private model plan](docs/miner-models-and-data.md) specifies starter
+The [model plan](docs/miner-models-and-data.md) specifies starter
 classifiers and an editing adapter, with a [training-source plan](docs/miner-training-sources.md)
-covering Global Voices, PLOS and consented writing. Miners keep their weights
-and can earn customer fees through [asynchronous inference](docs/paid-inference.md)
+covering Global Voices, PLOS and consented writing. A artifacts are public,
+B weights remain private, and miners can earn customer fees through
+[asynchronous inference](docs/paid-inference.md)
 with proposed on-chain job settlement and private execution.
 Pangram is the required external benchmark. The [API funding and verification
 design](docs/pangram-oracle.md) separates the cost of independent measurement

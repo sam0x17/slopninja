@@ -1,10 +1,13 @@
 \section{Participants and the two kinds of
 work}\label{participants-and-the-two-kinds-of-work}
 
-Miners register signed service endpoints and capabilities and retain
-their models. Customers buy detection and transformation jobs through
-separately quoted offers. Validators evaluate subnet-owned
-benchmark tasks and submit weights. Benchmark curators maintain
+A miners publish immutable, complete detector artifacts. B miners may
+retain private transformation models and register signed rewrite endpoints.
+Both register capabilities and authenticated protocol identities. A miners
+may separately offer paid detector hosting. Customers buy detection and transformation
+jobs through separately quoted offers. Validators execute the frozen A
+artifacts for authoritative benchmark scores, evaluate B outputs, and
+submit weights. Benchmark curators maintain
 permitted source material, production records, and hidden evaluation
 labels. A customer-facing gateway may relay ciphertext, but receives no
 decryption key.
@@ -33,8 +36,8 @@ B: transformation \\
 Source of text & Customer & Authorized benchmark collection \\
 Default input recipients & Customer and assigned miner & Curator,
 assigned service miners, validators, commissioned reviewers \\
-Evaluation & Customer acceptance & Fixed scoring policy and independent
-review \\
+Evaluation & Customer acceptance & Validator execution of frozen A
+artifacts; independent B output review \\
 Pangram submission & Excluded from the confidential job protocol &
 Required for evasion tasks \\
 Payment & Customer's quoted fee & Performance-dependent emissions \\
@@ -43,6 +46,10 @@ release terms \\
 \bottomrule
 \end{tabularx}
 \par\medskip
+
+Publishing an A artifact does not grant its publisher access to private
+benchmark text. Validators execute it on authorized evaluation inputs;
+miners receive only the inputs required for their assigned tasks.
 
 \begin{figure}[H]
 \centering
@@ -61,8 +68,12 @@ detection and transformation requests. An author's uploaded reference collection
 than the query itself and receives the same protection.
 
 Miners may advertise specialties, prices, length limits, and delivery
-times. The network evaluates their observable service performance. It
-cannot infer how many GPU hours they used, whether they own every
-component, or which private weights produced a response. Emissions
-create an incentive to improve training; they do not reimburse
+times. Mandatory training tickets assign an A requester to a B rewrite
+provider on authorized text. A contributes published artifacts; B runs
+them locally for training and submits its benchmark self-scores for
+independent validator replay. A operates no required scoring endpoint.
+The network evaluates observable service performance and published A
+computation. It cannot infer how many GPU hours a miner used, ownership
+of every component, or which private B weights produced a revision.
+Emissions create an incentive to improve training; they do not reimburse
 unverifiable training claims.

@@ -32,20 +32,33 @@ jobs remain outside this benchmark; a customer's optional disclosure to
 one chosen validator does not authorize wider benchmark disclosure.
 
 Pangram states that it does not train Pangram 4 on customer API data.
-Private miner weights prevent direct downloading, but do not prevent
+Private B weights prevent direct downloading, but do not prevent
 independent black-box study through purchased outputs or leaked
 examples. The subnet must not assert otherwise. Provider verification
 and any reuse of provider labels also need suitable service terms.
 Pangram model card~\cite{pangramcard}.
 
-For required subnet-detector calls, retain signed responses binding the
-round, service identity and settings, request nonce, text commitment,
-and full origin-probability vector. The coordinator obtains the common
-panel's complete source/candidate response matrix after B candidate
-commitments. Miner-selected search results cannot replace it. The
-coordinator relays work under committed assignments; validators can
-verify that it followed the allocation rule. A signature establishes a
-service's response, not execution of particular private weights.
+Public A artifacts can be inspected by Pangram and other providers.
+Pangram remains an independent external origin check when a subnet
+detector is unavailable, but its result cannot stand in for author
+attribution, preservation or a missing A result in the joint benchmark.
+Report external and subnet-detector outcomes separately; missing A
+evidence cannot become an adversarial pass. Customer text is not sent
+to Pangram without the customer's separate authorization.
+
+B submits self-scores bound to its final candidate, the assigned panel,
+artifact hashes, reference settings, full probability vectors and scalar
+projections. Validators execute the public, qualified artifacts cached
+before B task issue, compare the claims and use the verified results.
+Retain signed execution records binding the round, artifact content and
+manifest hashes, reference runtime and settings, text commitment, and
+full origin-probability vector. Execute the complete source/candidate
+matrix after B candidate commitments. Miner-selected local search
+records cannot replace it. Every final signer replays the required
+computations; a coordinator's signature alone does not verify execution.
+No A endpoint supplies authoritative probabilities, and B's generator
+need not be replayed. Published model behavior can still be inaccurate
+or designed to favor an allied B.
 Section~\ref{service-evidence} specifies complete on-chain ciphertext
 publication, separate confidential generation witnesses, and fixed
 validity/closure certificates. A report URL, response hash, or recipient
@@ -54,7 +67,7 @@ implementation still needs validation independently of the report reader.
 
 \subsection{Assignment and audit sequence}\label{audit-sequence}
 
-Reciprocal partners are determined by the lifetime interaction counter
+A training requesters and B providers are paired by the lifetime interaction counter
 and frozen eligible roster. Benchmark batches, common detector panels,
 and preparer assignments use a separate, shared comparison counter and
 distinct hash domains. These schedules are publicly predictable. At
@@ -93,7 +106,7 @@ Nonresponse, recusal, missing keys, and later role changes never reduce
   submissions, complete evidence, preparer commitments, private openings,
   dispute resolution, and weight submission.
 \item
-  Issue reciprocal-service tickets in the protocol schedule. Consume
+  Issue A-requester/B-provider rewrite tickets in the protocol schedule. Consume
   consecutive lifetime indices, derive their ordered peers from the
   pinned roster, and record responses, declines, expiries, and fixed
   fallbacks. Training feedback uses released, authorized material;
@@ -101,17 +114,20 @@ Nonresponse, recusal, missing keys, and later role changes never reduce
 \item
   Use the shared comparison index to determine the common A panel and B
   batch under the frozen policy. Exclude every B UID from A reserves
-  before freezing replacement capacity. Commit every selected service version,
-  threshold, and reserve order. Accept one final B candidate and selected
+  before freezing pre-issue artifact reserves. Validate and cache the
+  complete selected A artifacts, reference runtimes and thresholds
+  before revealing the B task or starting generation. Accept one final B candidate and selected
   Pangram-report commitment per assigned task. The predictable opponent
   schedule does not allow a second draw or a revised submission after
   commitment.
 \item
-  Obtain the required common panel matrix through the blinded grading
-  interface, retaining control outcomes and service failures. Apply a
-  justified fixed replacement to every affected source/candidate cell
-  for the batch, or void the shared comparison. Record any missing
-  strongest-service comparison. Finalize all evidence commitments before
+  Execute the required common panel matrix in the restricted reference
+  runner, retaining control outcomes and execution failures. A failed
+  runner can be replaced only by one executing the same frozen
+  artifact. Do not substitute a detector or threshold after issue.
+  An unresolved reference computation voids the common comparison
+  under the closure rule; it is not B nonresponse or an automatic pass.
+  Record any missing strongest-detector comparison. Finalize all evidence commitments before
   the fixed evidence deadline; a favorable score is never grounds to
   switch provider or discard an observation.
 \item
@@ -125,8 +141,9 @@ Nonresponse, recusal, missing keys, and later role changes never reduce
   signs the exact verdict under the strict weighted threshold. Close
   unresolved records under the fixed rule before the declared settlement
   cycle; missing evidence never grants approval.
-  Withhold detailed active-test feedback from revision miners until
-  retirement; each scoring service necessarily knows its own response.
+  Withhold hidden labels, other miners' candidates and detailed review
+  material until retirement. B can calculate its own public A scores
+  throughout local training and search.
 \end{enumerate}
 
 Retain every review and disagreement. A missing preparer follows its fixed

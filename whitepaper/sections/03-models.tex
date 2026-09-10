@@ -5,8 +5,15 @@ The two launch interfaces, A for detection and B for transformation,
 define compatible jobs and outputs. Miners may
 change their internal architectures, grammatical representations, search
 methods, and training data without changing those interfaces. Sharing a
-foundation model between tasks is permitted. Publishing a winning model
-is optional.
+foundation model between tasks is permitted. A detectors must be published
+as complete immutable artifacts; an update enters a later qualification
+round. B models and generation methods may remain private. A training
+recipes and data need not be public, subject to the publication rights
+required for the resulting artifact.
+Those terms must permit free access, local inference and reuse for
+training private B models; an artifact available only behind a paid
+inference API does not qualify. Optional A hosting may still charge for
+compute and delivery.
 
 \subsection{Author and origin
 detection}\label{author-and-origin-detection}
@@ -33,6 +40,36 @@ a 149M encoder, is a concrete starter candidate. Selection must compare
 it with the existing metric on new authors, topics, and registers. The
 subnet does not require that checkpoint or assume it will win.
 
+Each A artifact binds weights, features, tokenizer, preprocessing and
+postprocessing, calibration, reference pooling, executable dependencies,
+runtime, numerical precision, hardware requirements and output rules.
+Pin prompts and random generators where used. Qualification must establish
+a reproducible reference execution, including fixed tolerances and a
+resolution rule for numerical boundary cases. Validate and cache the
+qualified panel, its artifact hashes and thresholds before revealing the
+B task or allowing candidate generation. Validators execute
+that panel themselves for authoritative benchmark probabilities; a miner's
+reported score is not the scoring oracle.
+
+The panel uses distinct UIDs and distinct inference-content hashes,
+excluding owner and signature metadata from the content identity. Identical
+content receives one model-credit entry and one possible panel seat; the
+earliest finalized accepted commitment wins, with canonical UID order for
+ties. Small changes and equivalent implementations remain a qualification
+problem. Select any reserve artifact before task issue. After issue, a
+runner outage permits execution of the same artifact on a reserved runner,
+not substitution of another detector or threshold. An unresolved reference
+execution voids the common comparison under the closure rules; it is
+neither B nonresponse nor an automatic pass.
+
+Independent hidden author and production labels qualify each artifact.
+Include targeted-trigger controls: a published model can faithfully execute
+a rule designed to favor a colluding B. Publication verifies computation,
+not reliable detection or independent ownership. The isolated runner
+provides no network or undeclared state and excludes miner identities
+and assignment metadata from model inputs; text itself
+can still reveal task roles, so this does not prove blindness.
+
 \subsection{Author transformation and detector
 evasion}\label{author-transformation-and-detector-evasion}
 
@@ -53,6 +90,27 @@ deviations can condition the first version. A learned profile prefix is
 a later comparison, contingent on better results for unseen authors.
 Deterministic Rust edit rules can propose small changes; the decoder can
 propose broader restructuring.
+
+Public A artifacts let B miners run local training queries without a
+protocol query quota, at their own compute cost. They can use published
+ensembles and retired A snapshots instead of depending on a peer's
+availability for every search step. Direct gradients are available only
+where the architecture permits them; differentiable feedback does not
+guarantee useful discrete text edits. Training tickets serve authorized
+rewrite requests from A to B under bounded limits. Benchmark submissions retain the frozen
+candidate and deadline rules. B's private generation process is judged by
+its submitted text, not by a claimed internal model execution.
+B can compute its own candidates' A scores before and after commitment;
+these public-model scores are not hidden feedback. The official comparison
+uses the one committed candidate and the frozen panel. Hidden labels,
+other miners' candidates and preservation-review evidence remain restricted.
+
+B submits the complete self-scored probability vectors and declared scalar
+projections for every assigned A artifact, binding its hash, settings,
+exact source inputs and final candidate. Validators independently run
+those artifacts on the same inputs and compare the canonical outputs;
+they do not reproduce B's private generation process. A miners need not
+serve inference calls or help calculate these benchmark scores.
 
 Train first on reviewed source/reference/brief/revision tuples. Then
 learn preferences among candidates that pass preservation review.

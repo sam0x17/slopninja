@@ -1,16 +1,42 @@
 \section{Mandatory-service evidence and closure}\label{service-evidence}
 
-The proposed \texttt{service-evidence-v1} mailbox covers protocol-assigned
-A detection and B transformation. The two-ticket exercise below validates
-transport and review of its B output; its sequential A fallbacks do not
-constitute the complete common detector panel. An emission-bearing
-benchmark needs a separately frozen schedule for that matrix and its
-dependent requests. Private customer jobs retain their paid
-lifecycle and never enter mandatory-service counts. Full encrypted payloads
+The proposed \texttt{service-evidence-v1} mailbox covers bounded,
+protocol-assigned rewrite requests from A requesters to B providers.
+A models are public; B generators remain private. Authoritative benchmark
+probabilities come from validators executing complete, frozen qualified
+A artifacts. There are no mandatory A-provider inference calls or
+B-requester inference tickets. The one-ticket exercise below specifies
+transport and review of a B rewrite. It implements neither an artifact runner nor the
+complete common source/candidate matrix. An emission-bearing benchmark
+needs a separate frozen execution schedule and capacity budget.
+Private customer jobs retain their paid lifecycle and never enter
+mandatory-service counts. Inputs remain encrypted only to the selected
+miner; a customer may separately disclose evidence to a chosen validator.
+Full encrypted payloads
 are published on chain; a hash or HTTP locator alone is insufficient.
 Publication establishes bytes, sender authentication, and timing. Private
 validity and quality require the certificates below. This mailbox is a
 specified pilot, not an implemented throughput result.
+
+Freeze the qualified epoch roster and cache complete A panel artifacts before
+B task disclosure or candidate generation. Execution receipts bind the model manifest and
+artifact hashes, canonical runtime and settings, input commitment, and
+full probability output. B's scored submission includes its full locally
+computed vectors, the protocol-assigned model and settings, and the exact
+candidate-input commitment. Validators re-execute and compare canonical
+outputs; local claims cannot replace those results. Hidden
+independently labeled qualification and targeted-trigger controls remain
+necessary: replay can reproduce a deliberately defective model.
+Validator execution has its own funded capacity, separate from rewrite
+service tickets. B miners may run the public artifacts on their own
+candidates during search. Their resulting scores are not secret; hidden
+labels, other miners' candidates, unreleased sources, and semantic
+review evidence retain their access restrictions.
+After issue, no model, version, or threshold can change. A validator-node
+outage permits execution of the same cached artifact on a reserved approved
+runner. Canonical reference failure leaves the whole comparison unresolved
+or void under fixed closure; it cannot supply a pass or become B nonresponse.
+Deliberately triggered execution errors remain a pilot attack case.
 
 \paragraph{Frozen authority.}
 Before revealing task contents, exclude the exact assigned A/B UIDs from
@@ -38,8 +64,9 @@ The instance manifest supplies actual chain/contract addresses, verified
 snapshots, authorizations, service/schema hashes, and funded reservations.
 Missing bindings, zero eligible weight, or insufficient qualified key and
 verification capacity prevent issue. At native epoch start \(H\), issue at most
-two tickets, one A and one B, in a 360-block measurement epoch. Each has
-three prescribed providers total. Freeze these settings before issue:
+one authorized rewrite ticket from an A requester to a B provider in a
+360-block measurement epoch, with three prescribed B providers total.
+Freeze these settings before issue:
 
 \begin{center}
 \begin{tabular}{@{}ll@{}}
@@ -50,7 +77,7 @@ Input / output cap & 4,096 / 8,192 bytes \\
 Ciphertext chunk / publication cap & 4 KiB / 8 MiB per stage \\
 Global epoch publication cap & 64 MiB, including all witness copies \\
 Request publication / certificate & \(H+12\) / \(H+24\) \\
-Provider A / B response window & 12 / 36 blocks \\
+B provider response window & 36 blocks \\
 Certificate window per attempt & 12 blocks \\
 Preparer commitment / private opening & \(H+180\) / \(H+192\) \\
 Final verdict and incident close & \(H+204\) \\
@@ -58,13 +85,14 @@ Final verdict and incident close & \(H+204\) \\
 \end{tabular}
 \end{center}
 
-For response window \(r\), attempt \(j\in\{1,2,3\}\) starts at
-\(H+24+(j-1)(r+12)\), publishes by start plus \(r\), and certifies by
-start plus \(r+12\). Final A/B attempt cutoffs are \(H+96\)/\(H+168\).
+Attempt \(j\in\{1,2,3\}\) starts at
+\(H+24+48(j-1)\), publishes by start plus 36 blocks, and certifies by
+start plus 48 blocks. The final B attempt cutoff is \(H+168\).
 Early declines do not advance later windows. Reserve all possible bytes,
 gas, response and verification capacity; insufficiency prevents issue and
-does not authorize another draw. Two tickets provide a bounded transport
-pilot, not availability evidence for every UID. Settlement names a later
+does not authorize another draw. One ticket provides a bounded transport
+pilot, not availability evidence for every UID. Earlier two-ticket fixtures
+remain historical evidence for the prior design. Settlement names a later
 native payout cycle and its actual commit/reveal configuration; no claim
 is made that reveal delays fit within the unused part of this epoch.
 
@@ -113,20 +141,26 @@ Complete publication without a global validity verdict closes unresolved;
 recipient accusation alone cannot assign fault. Keys must be qualified
 before the snapshot. Key loss afterward cannot blame a sender whose
 encryption was certified correct; rotations and UID reuse cannot change
-issued tickets. A timely dishonest answer may satisfy service availability
-while failing quality. Insufficient final review evidence voids the shared
+issued tickets. Certified delivery of a B response does not establish
+its revision quality. A request-publication failure remains in its
+requester ledger and cannot alter a benchmark artifact or computed result.
+Validator runner failures never enter this rewrite-service ledger.
+B rewards evaluate the submitted revision without requiring replay of
+the private generator. Insufficient final review evidence voids the shared
 quality comparison consistently, without deleting attributable service
 failures. The detailed record and certificate rules are specified in the
 companion service-evidence document.
 
 \paragraph{Counts and finality.}
-For each mandatory interface/role, retain activated obligations
+For each applicable A-requester or B-provider class, retain activated obligations
 \(A=S+F+U+V\): success, attributable failure, unresolved, and platform void.
 Unused reservations are separate. Let \(N=S+F\); require \(U=0\), \(N>0\),
 and \(10F\leq N\) for the class and aggregate availability gates. Publish
 all counts. Keep \(D_e=\max(0,D_{e-1}+10F-N)\); neither unresolved nor void
 work retires a deficit. Require zero outstanding deficits and current
 qualification; customer jobs and other classes cannot dilute these gates.
+The removed A-provider and B-requester classes create no zero-work failure.
+A artifact publication and qualification are separate eligibility gates.
 
 Only canonical finalized inclusion counts, with deadline equality timely.
 Subtensor separates block production from GRANDPA
