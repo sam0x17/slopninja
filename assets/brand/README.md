@@ -1,4 +1,4 @@
-# slopninja brand assets
+# Slop Ninja brand assets
 
 Original SVGs supplied by the project owner on 2026-09-09, copied unchanged.
 

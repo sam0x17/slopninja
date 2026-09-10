@@ -1,8 +1,9 @@
 # Project conventions
 
-The project is named **slopninja**, with **slop.ninja** as the planned domain.
-Use that name in new project-facing prose. The local repository directory is
-`slop_ninja/`. Existing `unslop` command names, package names and versioned
+The project is named **Slop Ninja**, with **slop.ninja** as the planned domain.
+Use **Slop Ninja** in project-facing prose and `slopninja` for technical and
+repository identifiers. The local repository directory is `slop_ninja/`.
+Existing `unslop` command names, package names and versioned
 artifact schemas remain compatibility identifiers. Historical experiment
 records retain their original paths and hashes.
 

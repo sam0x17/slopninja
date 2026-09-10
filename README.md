@@ -1,9 +1,9 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/brand/slop-ninja-full-logo.svg">
-  <img src="assets/brand/slop-ninja-icon.svg" alt="slopninja" width="280">
+  <img src="assets/brand/slop-ninja-icon.svg" alt="Slop Ninja" width="280">
 </picture>
 
-# slopninja
+# Slop Ninja
 
 Planned domain: **slop.ninja**.
 

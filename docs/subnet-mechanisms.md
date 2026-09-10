@@ -1,4 +1,4 @@
-# slopninja subnet mechanisms
+# Slop Ninja subnet mechanisms
 
 Status: design proposal, 2026-09-09. We have enough evidence to define an
 offline competition. Paid validation still needs a suitable private benchmark,

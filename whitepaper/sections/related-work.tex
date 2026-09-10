@@ -20,7 +20,7 @@ generators that try to fool them~\cite{itsai,itsaifaq,bitmindgas}.
 \par\medskip\noindent
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}LL@{}}
 \toprule
-Project & Documented approach & Relevance to slopninja \\
+Project & Documented approach & Relevance to Slop Ninja \\
 \midrule
 It's AI (SN32) & Human/AI text detection, including sentence-level
 probabilities, through miner endpoints~\cite{itsai,itsaifaq} & Direct
@@ -33,7 +33,7 @@ incentives; text revision adds source-preservation and requested-voice
 constraints \\
 Macrocosmos Finetuning (SN37) & Miners publish competition models on
 public Hugging Face repositories for validator evaluation~\cite{finetuning} & Precedent for
-rewarding model improvements through submitted weights; slopninja
+rewarding model improvements through submitted weights; Slop Ninja
 proposes private model serving \\
 Chutes (SN64) & Serverless model inference and metered service, with
 documented confidential-serving options~\cite{chutes,chutesprivacy} &
@@ -51,7 +51,7 @@ These projects establish that detection competition, adversarial
 generation, language-model training rewards, and paid private inference
 already have Bittensor precedents. Their documented mechanisms evaluate
 different properties. For example, GAS requires submitted detector
-weights, whereas slopninja permits private detector services. Chutes
+weights, whereas Slop Ninja permits private detector services. Chutes
 documents confidential serving and request/response encryption, and
 Targon describes hardware attestation and key release.
 Those hardware assumptions differ from this paper's default trust in
@@ -104,7 +104,7 @@ obfuscation intended to avoid it, offering a prior benchmark for an
 adversarial loop. DIPPER demonstrated paraphrase attacks on several
 then-current detectors and studied a retrieval-based defense. Those
 results motivate adaptive opponents and held-out evaluation; they do
-not establish performance against Pangram 4 or slopninja's future
+not establish performance against Pangram 4 or Slop Ninja's future
 incumbents~\cite{pan2024,dipper}.
 
 The proposed contribution is a text-focused protocol connecting

@@ -1,7 +1,7 @@
 # Pangram benchmark, verification and API funding
 
 Design proposal, 2026-09-09. Pangram is the required external benchmark for
-slopninja. Evasion must also target the strongest eligible independent subnet
+Slop Ninja. Evasion must also target the strongest eligible independent subnet
 origin detector from the previous completed detection round. Neither result
 substitutes for the other.
 

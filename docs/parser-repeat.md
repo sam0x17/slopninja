@@ -1,7 +1,7 @@
 # Identical-text parser controls
 
 This study checks whether repeated annotation of identical full texts changes
-the evidence used by slopninja's dative comparisons. The preceding
+the evidence used by Slop Ninja's dative comparisons. The preceding
 [argument-policy study](dative-arguments.md) compared source posts with edited
 candidates. Those inputs differ in their bytes and linguistic context. The
 present control holds each text fixed while varying repetition, interpreter
