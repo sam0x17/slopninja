@@ -32,15 +32,22 @@ Validators execute qualified, immutable A artifacts directly on frozen private
 benchmarks. An A miner's endpoint response cannot supply an authoritative
 benchmark probability. B miners submit text for independent output evaluation;
 they do not have to publish their generation models or prove the generation
-procedure. Pangram remains A's external quality anchor for AI-origin detection,
-including after the subnet's detectors match or exceed its measured performance.
-It cannot replace author-attribution labels or B's preservation review.
+procedure. Pangram is A's bootstrap quality anchor for AI-origin detection.
+A validated superior subnet detector takes over; an improved Pangram becomes the
+target again when it demonstrates superiority. The anchor cannot replace
+author-attribution labels or B's preservation review.
 
 At launch, evaluate Pangram and every A origin artifact being scored on the same
-fresh held-out reference set each A scoring epoch. The operator funds shared
-Pangram observations under the frozen comparison protocol. Independently
-documented production histories supply the labels; agreement with Pangram earns
-no reward by itself. Retain A's existing Brier utility and fixed public baseline.
+fresh held-out reference set each A scoring epoch, including the incumbent and
+challengers. The operator funds shared Pangram observations throughout. Freeze
+selection and superiority criteria before evaluation, with common populations
+and human false-positive constraints. Certified evidence can establish an anchor
+change for future epochs; no change applies during an active round. Ties and
+inconclusive results retain the incumbent, and missing Pangram observations
+cannot establish a switch. Independently documented production histories supply
+the labels; agreement with Pangram earns
+no reward by itself. The quality anchor is a benchmark target; retain A's existing
+Brier utility and fixed public reward baseline when it changes.
 Pangram's AI-plus-assisted fraction and A's document-origin probabilities have
 different meanings, so do not compare their raw Brier values without a separately
 validated mapping to the same event. Any later reduction in B candidate API

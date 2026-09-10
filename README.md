@@ -52,12 +52,16 @@ required.
 The aim is freely accessible detection competitive with Pangram, supporting
 better private transformers. Detection parity remains to be demonstrated;
 running or hosting an A model still costs compute.
-Pangram remains A's external quality anchor for AI-origin detection, including
-after subnet detectors match or exceed it. At launch, compare Pangram and the
-evaluated A origin artifacts on a fresh shared held-out reference set each A
-scoring epoch, using independently documented production histories. The operator
-funds the shared Pangram observations. Those histories supply the origin labels;
-Pangram supplies neither ground truth nor named-author labels.
+Pangram is A's bootstrap quality anchor for AI-origin detection. A subnet detector
+takes over after demonstrating superiority; an improved Pangram becomes the
+target again if it proves superior under the same frozen comparison protocol.
+Certified changes apply to future epochs. At launch, compare Pangram and the
+A origin artifacts on a fresh shared held-out reference set each A scoring epoch,
+including the incumbent and challengers, with independently documented production
+histories and common human false-positive constraints. The operator funds the
+shared Pangram observations throughout. Those histories supply the origin labels;
+Pangram supplies neither ground truth nor named-author labels. The moving target
+does not change A's Brier utility or fixed public reward baseline.
 Bounded training tickets assign A as requester and B as rewrite provider,
 free to the requester and funded by the provider's expected emissions.
 Deterministic hash assignments pair training counterparts on released,

@@ -1,20 +1,37 @@
 # Pangram benchmark, verification and API funding
 
-Design decision, 2026-09-10. Pangram is the permanent external quality anchor
-for A's origin detection and the required external benchmark for B's evasion.
+Design decision, 2026-09-10. A's origin-detection quality anchor follows the
+strongest validated detector under the frozen comparison policy. Pangram is
+the initial target; a superior subnet detector takes over, and improved Pangram
+can regain that role. Pangram remains the required external benchmark for B's evasion.
 A artifacts are public and immutable; B generation remains
 private. Validators execute a common three-artifact subnet origin panel,
 including the strongest qualified artifact from the previous completed A round.
 Pangram cannot replace author-specific A evaluation or preservation review.
 
-In each A scoring epoch, compare all admitted A artifacts with Pangram on the
-same fresh, independently labeled hidden origin set. The operator funds the
+In each A scoring epoch, compare all admitted A origin artifacts and the incumbent
+quality anchor with Pangram on the same fresh, independently labeled hidden
+origin set. The operator funds the
 shared provider observations; this API cost does not multiply with the number
 of A artifacts. Freeze the reference set, provider version, repeat policy,
 operating points, analysis and budget before evaluation. Publish the performance
 gaps, uncertainty and coverage, including missing observations. Missing provider
-evidence cannot support a current parity finding. Matching or beating Pangram
-does not retire A's continuing external quality comparison.
+evidence cannot support a current parity finding or anchor switch. Continue
+this comparison while a subnet detector holds the anchor role.
+
+Before opening evaluation data, freeze the incumbent, contender versions and a
+primary statistic based on sensitivity at the declared human false-positive
+operating points. Freeze population weights, required slice limits, a practical
+superiority margin and uncertainty analysis. Both detectors use model-only or
+mixed production as the positive event and human-only production as the negative
+event. Nominate the highest-scoring
+admissible contender before opening fresh confirmation data; account for
+selection among multiple artifacts. It must exceed the incumbent by the frozen
+margin without violating the limits. Ties, inconclusive results and missing
+evidence retain the incumbent. The frozen validator quorum certifies a switch
+with the exact version, policy, evidence and future activation epoch. A provider
+update or observed performance change prompts renewed comparison; an announcement
+alone cannot switch the anchor. No switch changes an issued task or its panel.
 
 Every B benchmark jointly measures author-style matching and evasion against
 Pangram and the subnet panel. The launch schedule is one joint B round per
@@ -45,8 +62,10 @@ rates alongside detection performance. Agreement with Pangram is not ground
 truth and earns no separate reward. Author identification retains its own known
 author labels because Pangram is not our author-attribution reference.
 The fixed public probabilistic baseline remains A's reward normalization
-reference. Pangram's content fractions cannot directly replace those
-probability vectors. Reuse B reports only when their exact text and observations
+reference. Selecting the quality anchor does not change that normalization or
+the B panel's origin-Brier ranking, which can select a different detector.
+Pangram's content fractions cannot directly replace those probability vectors.
+Reuse B reports only when their exact text and observations
 satisfy the independent origin-evaluation protocol; selected successful
 evasions alone cannot replace the labeled reference set.
 

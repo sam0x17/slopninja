@@ -104,18 +104,24 @@ date or resemblance to a person cannot establish those labels. A transformed
 model draft retains its recorded production history even if every detector
 misclassifies it.
 
-Pangram remains the external quality anchor for A's AI-origin detection, even
-after subnet detectors match or exceed it. At launch, each A scoring epoch uses
-a fresh shared held-out origin reference set. Evaluate Pangram and every A origin
-artifact being scored on that set under the frozen comparison protocol; the
-operator funds shared Pangram observations. Compare performance against the
+Pangram is the bootstrap quality anchor for A's AI-origin detection. A subnet
+detector takes over after demonstrating superiority; an improved Pangram becomes
+the target again when it proves superior. At launch, each A scoring epoch uses
+a fresh shared held-out origin reference set. Evaluate Pangram and A origin
+artifacts, including the incumbent and challengers, on that set under the frozen
+comparison protocol; the operator funds shared Pangram observations throughout.
+Freeze anchor selection and superiority criteria before evaluation, with common
+populations and human false-positive constraints. Require certified evidence and
+apply any change to future epochs. Ties and inconclusive results retain the
+incumbent; missing Pangram observations cannot establish a switch. Compare
+performance against the
 independently documented production histories, with human false-positive rates,
 sensitivity and difficult slices reported under the
 [anchor and parity policy](../whitepaper/sections/08-pangram-audits.tex).
 Matching Pangram predictions alone earns no reward, and Pangram supplies no
-named-author labels. A's own Brier utility and fixed public reward baseline
-remain unchanged. Any future reduction in B candidate API frequency leaves this
-ongoing external comparison in place.
+named-author labels. The quality anchor is a benchmark target; A's own Brier
+utility and fixed public reward baseline remain unchanged. Any future reduction
+in B candidate API frequency leaves this ongoing external comparison in place.
 
 Use the multiclass Brier score for each task:
 

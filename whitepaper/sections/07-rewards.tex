@@ -47,16 +47,18 @@ human false-positive rates separately. Fix operating thresholds on
 development data. Unknown or weak production records cannot become hard
 labels merely because Pangram agrees with a miner.
 
-Pangram remains the external quality anchor for A's origin task.
-Compare the evaluated A artifacts and Pangram on the same independently
-labeled hidden origin set under
-Section~\ref{pangram-cadence-and-parity}, and publish their performance
-gap and uncertainty. Continue this comparison after parity or
-superiority. Documented production histories determine reward labels;
+The quality anchor for A's origin task follows the strongest validated
+detector under Section~\ref{pangram-cadence-and-parity}. Start with
+Pangram; a superior subnet detector takes over, and an improved Pangram
+can regain that role. Compare A artifacts and Pangram on the same
+independently labeled hidden origin set and publish performance gaps
+and uncertainty regardless of who anchors the comparison. Documented
+production histories determine reward labels;
 agreement with Pangram earns no separate utility. The fixed public
 probabilistic baseline above remains the reward normalization reference.
 Pangram's content fraction cannot directly replace that probability
-vector or supply author labels.
+vector or supply author labels. Selecting this quality target does not
+change the B panel's origin-Brier ranking or an issued round's artifacts.
 
 \subsection{The adversarial feedback loop}\label{adversarial-feedback-loop}
 

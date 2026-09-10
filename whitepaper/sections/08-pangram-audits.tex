@@ -58,7 +58,7 @@ validity/closure certificates. A report URL, response hash, or recipient
 accusation alone cannot satisfy that service-evidence contract. Its runtime
 implementation still needs validation independently of the report reader.
 
-\subsection{Pangram cadence and detector parity}\label{pangram-cadence-and-parity}
+\subsection{Quality anchor, Pangram cadence and parity}\label{pangram-cadence-and-parity}
 
 At launch, schedule one joint B benchmark round in each scoring epoch.
 Freeze its admitted miner cohort, comparison coverage, report budget and
@@ -79,9 +79,9 @@ Pangram observation. Apply the existing evidence and closure rules when
 required reports are unavailable, and apply current service-availability
 and recovery gates at settlement.
 
-Pangram also remains A's permanent external origin-detection quality
-anchor. In each A scoring epoch, compare all admitted A artifacts with
-Pangram on the same fresh, independently labeled hidden origin set.
+In each A scoring epoch, compare all admitted A origin artifacts and
+the incumbent quality anchor with Pangram on the same fresh,
+independently labeled hidden origin set.
 The operator funds the shared Pangram observations and reserves their
 budget before issue; this cost does not multiply with the number of A
 artifacts. Freeze the reference set, provider version, repeat policy,
@@ -90,8 +90,35 @@ gaps between A and Pangram, uncertainty and coverage, including missing provider
 evidence. Missing evidence cannot support a current parity finding.
 Reuse a B report only when its exact text and observation satisfy this
 independent evaluation protocol; a set of miner-selected successful
-evasions cannot replace the labeled reference set. Matching or exceeding
-Pangram does not retire this continuing A evaluation.
+evasions cannot replace the labeled reference set. Continue measuring
+Pangram when a subnet detector holds the anchor role.
+
+Pangram is the initial anchor. A qualified subnet detector takes over
+after demonstrating superiority to the incumbent; a later Pangram
+improvement can make Pangram the target again. Before opening evaluation
+data, freeze the incumbent, contender versions and a primary comparison
+statistic based on detection sensitivity at the declared human
+false-positive operating points. Freeze population weights, required
+slice limits, a practical superiority margin and uncertainty analysis.
+Use model-only or mixed production as the positive event and human-only
+production as the negative event for both detectors. A contender's
+improvement over the incumbent must exceed the margin without violating
+the limits.
+Nominate the highest-scoring admissible contender before opening fresh
+confirmation data. Confirm its superiority on that unreleased set; account for
+selection among multiple artifacts in the analysis. Ties, inconclusive
+results and missing evidence retain the incumbent. This rule selects
+the strongest validated reference under the declared comparison policy;
+the B panel's origin-Brier ranking can select a different detector.
+
+Certify each anchor change under the frozen validator quorum, binding
+its artifact or provider version, comparison policy, evidence and future
+activation epoch. A switch cannot alter an issued task, its reward
+normalization or its assigned detector panel. Provider updates and
+observed performance changes prompt renewed comparison; a provider
+announcement alone cannot change the target. Anchor selection leaves
+independent production histories as ground truth and preserves the
+fixed public probabilistic baseline used for A reward normalization.
 
 Reducing B's per-candidate Pangram checks requires demonstrated
 detection parity.

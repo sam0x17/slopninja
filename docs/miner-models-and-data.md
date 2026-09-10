@@ -180,8 +180,9 @@ Train the origin head from recorded writing workflows. Start with human-only,
 model-only, and mixed human/model production; keep generation, editing order
 and revision logs alongside that coarse label. Model-to-model rewriting remains
 model-only. Historical publication alone receives weaker provenance status.
-Pangram remains the external quality anchor for A's origin detection, including
-after subnet detectors match or exceed it. Documented production histories
+Pangram is the bootstrap quality anchor for A's origin detection. A validated
+superior subnet detector takes over; an improved Pangram becomes the target again
+when it demonstrates superiority. Documented production histories
 supply the labels; matching Pangram's predictions alone earns no reward. A future
 span head needs separately validated alignments; workflow labels do not justify
 invented token-level truth.
@@ -190,11 +191,16 @@ output's assistance history. Retain unknown provenance when the production
 record is insufficient.
 
 At launch, compare Pangram and every A origin artifact being scored on a fresh
-shared held-out reference set each A scoring epoch. The operator funds shared
-Pangram observations under the frozen
+shared held-out reference set each A scoring epoch, including the incumbent and
+challengers. The operator funds shared Pangram observations throughout. Freeze
+selection and superiority criteria before evaluation, with common populations
+and human false-positive constraints. Certified changes apply to future epochs;
+ties and inconclusive results retain the incumbent, and missing Pangram evidence
+cannot establish a switch. Follow the
 [anchor and parity policy](../whitepaper/sections/08-pangram-audits.tex).
-Keep the existing A Brier utility and fixed public baseline; Pangram's text
-fraction cannot directly substitute for an A document-origin probability.
+The quality anchor is a benchmark target. Keep the existing A Brier utility and
+fixed public reward baseline when it changes; Pangram's text fraction cannot
+directly substitute for an A document-origin probability.
 Author evaluation still needs independent author labels. A's ongoing external
 comparison remains required if a future policy reduces B candidate API frequency.
 
@@ -271,7 +277,7 @@ is retained as an unadopted alternative for the earlier private-score design.
 Validator replay establishes the declared A computation;
 it cannot establish detector accuracy or rule out a committed trigger that
 favors an allied B model. Hidden labels, source separation and targeted
-collusion tests remain necessary. Pangram remains A's external origin quality anchor and
+collusion tests remain necessary. Pangram remains an external origin check and
 cannot replace author-specific A evaluation or preservation review.
 
 The [adjudication specification](reward-adjudication.md) separately fixes `V`

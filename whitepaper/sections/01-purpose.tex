@@ -43,9 +43,11 @@ The model-publication split is intentional. A should make strong
 author/origin detection available for anyone to run and use in training,
 including external detector providers. Matching Pangram-level origin
 detection is an evaluation target, not an achieved result. Pangram
-remains A's external origin-detection quality anchor after parity or
-superiority. Continue comparing both against independent production
-records; author identification retains its own known-author labels. Public A
+initially sets A's origin-detection quality target. A subnet detector
+takes over after confirmed superiority, and Pangram becomes the target
+again if it later outperforms the incumbent. Continue comparing both
+against independent production records; author identification retains
+its own known-author labels. Public A
 models give B immediate local feedback while B miners retain their
 transformation models. A submissions must permit free artifact access,
 local inference and reuse for training private B models. Hosting still
