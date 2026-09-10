@@ -2,7 +2,7 @@
 
 This representative survey covers direct task competitors and relevant
 evaluation and inference infrastructure. It uses project-maintained
-documentation and research publications checked on September 9, 2026.
+documentation and research publications checked on September 9--10, 2026.
 Subnet numbers below follow the projects' own documentation; this is
 not an independent audit of live chain state. Published service claims
 are distinguished from results measured by this project.
@@ -34,7 +34,7 @@ constraints \\
 Macrocosmos Finetuning (SN37) & Miners publish competition models on
 public Hugging Face repositories for validator evaluation~\cite{finetuning} & Precedent for
 rewarding model improvements through submitted weights; Slop Ninja
-proposes private model serving \\
+pairs public A artifacts with private B serving \\
 Chutes (SN64) & Serverless model inference and metered service, with
 documented confidential-serving options~\cite{chutes,chutesprivacy} &
 Paid inference and private serving infrastructure; writing quality
@@ -88,6 +88,43 @@ substitute for that comparison. Hosted service comparisons use
 authorized benchmark text and do not create an exception to confidential
 customer delivery.
 
+\Needspace{10\baselineskip}
+\subsection{Adoption and demand}\label{adoption-and-demand}
+
+Model providers and publishing platforms are bringing provenance checks
+into ordinary writing workflows. Anthropic announced text watermarking
+on August 14, 2026. Its coverage documentation says Claude models
+launched on or after August 2 receive marking at launch, while support
+for older models remains in rollout. Supported outputs are marked
+worldwide across Claude products, the API and partner
+platforms~\cite{claudewatermark,claudemarking}. Google announced SynthID text
+watermarking in the Gemini app and web experience in May
+2024~\cite{synthidtext}. Substack now offers Pangram-powered reader
+scans for posts and notes published on or after July 21, 2026, with
+author controls to disable scanning on individual
+items~\cite{substackdetection}.
+
+These deployments support a market thesis for both subnet tasks.
+Publishers and readers may want affordable, independently evaluated
+detection as provenance checks become more common. Writers using model
+assistance may want stronger control over their own voice and a way to
+remove unwanted generic phrasing without losing substance. Public A
+models support accessible detection and local evaluation; private B
+services compete on the resulting revisions. We expect broader
+provenance checking to increase demand for these capabilities. The
+size of that increase, willingness to pay and repeat use remain to be
+measured through customer pilots.
+
+Anthropic distinguishes keyed watermark detection from classifiers
+such as Pangram that infer origin from linguistic patterns. Its
+watermark detector is in private preview for eligible
+organizations~\cite{claudewatermark}. Passing Pangram and public A
+models therefore does not establish removal of a Claude watermark.
+Watermark detectability, inferred origin, prose quality and author fit
+require separate measurements. The proposed B product remains cleanup
+in the requested writer's voice; any future watermark benchmark would
+need access to the relevant detector and its own evaluation protocol.
+
 \subsection{Research foundations and proposed contribution}\label{related-research}
 
 Gero et al. model style through controls over function-word frequencies
@@ -109,13 +146,16 @@ not establish performance against Pangram 4 or Slop Ninja's future
 incumbents~\cite{pan2024,dipper}.
 
 The proposed contribution is a text-focused protocol connecting
-origin-detection competition to author-directed transformation, with
-independent preservation, readability, and requested-voice review.
-Transformation miners face Pangram and qualified subnet detectors;
+origin-detection competition to cleanup in a particular writer's voice,
+with independent preservation, readability, and requested-voice review.
+The transformation target combines removal of unwanted writing patterns
+with retention of the writer's individual habits. For evasion tasks,
+transformation miners also face Pangram and qualified subnet detectors;
 retired, authorized rewrites supply later detector-training examples,
 with source families kept separate from private evaluation.
-Miners retain their models and can sell detection and transformation jobs through an
-alpha-denominated market with explicit recipient encryption. This
+A artifacts are public; B miners retain their private transformation
+models. Both can sell hosted inference through an alpha-denominated
+market with explicit recipient encryption. This
 combination requires validation against the precedents above. The
 survey establishes neither uniqueness across all subnets nor superior
 performance by an implementation that has not yet been built.

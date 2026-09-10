@@ -2,7 +2,12 @@
 
 Slop Ninja proposes a Bittensor subnet launching with two tasks:
 author and AI-origin detection (A), and author-directed text
-transformation (B).
+transformation (B). B's primary goal is to remove unwanted generic and
+formulaic writing while retaining the source's arguments, details,
+qualifications and intended tone, and producing text consistent with a
+particular authorized writer's profile. Indistinguishability from that
+writer's own work is a target for blinded evaluation, not an achieved
+result. Detector evasion is an optional additional objective.
 Miners publish complete, immutable A inference artifacts and keep B
 generation models private. They compete on the usefulness of their
 outputs. They receive network emissions for benchmark performance and
@@ -37,9 +42,8 @@ validator weight, assuming less than one-third is dishonest and each
 signer inspects the evidence.
 This draft specifies the proposed architecture, training data, reward
 rules, and trust assumptions. It also reports the limits of the existing
-prototype. Shared-pool experiments show why complementary credits alone
-do not prevent collusion; the design instead removes private A score
-reports from benchmark authority. Published detectors still require
-independent qualification and checks for behavior that favors allied B
-models. A reliable rewriting model, private inference service, and live
-reward mechanism remain to be demonstrated.
+prototype. Public A artifacts permit reproducible scoring; their
+accuracy and resistance to behavior that favors allied B models still
+require independent evaluation. Reliable cleanup in the requested writer's
+voice, private inference, and live reward settlement remain to be
+demonstrated.

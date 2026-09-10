@@ -3,8 +3,8 @@ mapping}\label{benchmark-scoring-and-mechanism-mapping}
 
 The initial subnet has two logical tasks and two chain mechanisms:
 A, author/origin detection, maps to mechanism 0; B, author-directed
-transformation and detector evasion, maps to mechanism 1. Writing
-quality and meaning preservation are requirements within B, not a
+cleanup and transformation with optional detector evasion, maps to
+mechanism 1. Writing quality and meaning preservation are requirements within B, not a
 separate launch reward pool. Deployment must respect the documented
 joint UID/mechanism capacity constraint~\cite{mechanisms}.
 
@@ -339,7 +339,11 @@ Each editing task has a preservation brief and hidden review material
 covering claims, participants, quantities, negation, uncertainty,
 citations, attribution, and argument relationships. Review the entire
 revision. Validators also check readability and the requested tone under
-the fixed rubric in Section~\ref{reward-adjudication}. These are B
+the fixed rubric in Section~\ref{reward-adjudication}. Before issue, the
+brief identifies required cleanup of unwanted filler, repetition or
+formulaic phrasing under \(R\), and intentional voice features to
+preserve under \(T\), including any specified informality or
+idiosyncrasies. Cleanup must retain the protected information. These are B
 acceptance constraints. A certified failure sets \(G=0\); certificates
 for all required passes set \(G=1\).
 

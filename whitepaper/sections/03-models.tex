@@ -74,10 +74,16 @@ can still reveal task roles, so this does not prove blindness.
 evasion}\label{author-transformation-and-detector-evasion}
 
 Inputs are the source, independent target-author samples, requested
-style changes, and a preservation brief. The task declares author
+style changes, and a preservation brief. The brief identifies unwanted
+writing patterns to remove and intentional voice features to retain.
+Author matching covers lexical, grammatical and rhetorical habits in
+the requested register; generic polish alone does not satisfy it.
+The task declares author
 matching, evasion against Pangram and the common subnet AI-origin
 panel, or both objectives. The miner returns exact revised text or an
-abstention. Opponent selection and scoring are fixed by the benchmark,
+abstention. Evasion-only tasks isolate the adversarial benchmark; they
+do not demonstrate the primary product goal of cleanup in a particular
+writer's voice. Opponent selection and scoring are fixed by the benchmark,
 independently of the submitting miner. Author-directed revision of
 one's own or licensed writing and authorized detector-robustness research
 motivate this mode. A detector pass does not replace the documented
@@ -115,7 +121,9 @@ serve inference calls or help calculate these benchmark scores.
 Train first on reviewed source/reference/brief/revision tuples. Then
 learn preferences among candidates that pass preservation review.
 Include originals, failed rewrites, copied reference passages, and
-fluent meaning-breaking edits as controls. A miner's own style score may
+fluent meaning-breaking edits as controls. Also include polished
+revisions that erase the writer's voice and detector-passing revisions
+that retain unwanted filler or formulaic phrasing. A miner's own style score may
 guide its search, but cannot approve its output for benchmark rewards.
 
 Transformation briefs may specify audience, clarity, accessibility,

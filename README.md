@@ -7,6 +7,27 @@
 
 Planned domain: **slop.ninja**.
 
+Slop Ninja aims to clean up prose until it is consistent with a particular
+writer's profile. A transformation should remove unwanted generic or mechanical
+patterns while preserving every argument, detail, qualification and intended
+tone. The target comes from authorized examples of the writer's own work:
+their word choices, grammatical constructions and rhetorical habits, including
+deliberate informality and quirks. Use the writer's style as the standard for
+cleanup.
+
+The product thesis is that readers object to slop because the writing is weak
+and recognizably generic. Remove those defects while retaining the substance
+and individual voice, and the result should be good writing that sounds like
+its author. That is what successful cleanup must demonstrate to readers.
+
+The empirical goal is writing that readers cannot reliably distinguish from
+that writer's own work in the same register. Blinded comparisons and independent
+author-profile tests on held-out writing must establish how close we get, with
+uncertainty and failures reported. This result remains to be demonstrated and
+would not establish human authorship. Detector evasion is an optional secondary
+objective; preservation and consistency with the writer define successful
+cleanup.
+
 Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
 The draft surveys related work and defines public A detector artifacts,
@@ -15,11 +36,12 @@ two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
 Customer inputs are encrypted for the assigned
 miner; customers can separately share evidence with a specific validator.
-Task A detects author and origin; Task B transforms text toward an author's
-style under a source and brief, with optional detector evasion. B miners train
-and search against published A models locally, then submit self-scores bound to
-their final text and assigned panel. Validators rerun A to verify those scores;
-no A inference endpoint or replay of B's generator is required.
+Task A detects author and origin; Task B cleans up text toward the authorized
+writer's profile under the source and brief, with optional detector evasion.
+B miners train and search against published A models locally, then submit
+self-scores bound to their final text and assigned panel. Validators rerun A to
+verify those scores; no A inference endpoint or replay of B's generator is
+required.
 The aim is freely accessible detection competitive with Pangram, supporting
 better private transformers. Detection parity remains to be demonstrated;
 running or hosting an A model still costs compute.
@@ -60,7 +82,9 @@ claims remain unresolved. The selected [public-model design](docs/public-model-e
 removes private A reports from scoring authority. Artifact replay, detector
 qualification and copying incentives still need implementation and evaluation.
 
-Research toward an adversarial Bittensor subnet for text revision: make writing easier to read while preserving its arguments, details, qualifications, and intended tone, with less than 10% AI-generated **plus AI-assisted** content on repeated detector checks.
+For the optional evasion objective, the adversarial benchmark targets less than
+10% AI-generated **plus AI-assisted** content on repeated detector checks.
+Those observations accompany separate preservation and author-profile results.
 
 The local repository lives in `slop_ninja/`. CLI commands and artifact schemas
 use the original `unslop` name. Historical experiment records retain their

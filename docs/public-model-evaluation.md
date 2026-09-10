@@ -5,6 +5,23 @@ B generation remains private. The runner and revised benchmark protocol still
 need implementation and evaluation before launch. Scope remains A detection
 and B transformation.
 
+B's primary product is cleanup toward an authorized writer's profile. Remove
+unwanted generic or mechanical patterns while retaining every source argument,
+detail, qualification and the intended tone. Match the writer's characteristic
+word choices, grammatical constructions and rhetorical habits from authorized
+reference writing. Preserve deliberate informality and quirks; the brief can
+request a change of register, audience or rhetorical strength without imposing
+a generic polished style on every writer.
+
+The empirical target is consistency with the writer's own work, eventually to
+the point that readers cannot reliably distinguish a revision from that work in
+the same register. Assess this through blinded comparisons and independent
+author-profile tests on held-out writing, with declared acceptance margins,
+enough samples to test them, uncertainty and failure cases. No such result is
+claimed today, and profile agreement would not establish human authorship.
+Detector evasion remains an optional secondary objective. A low detector score
+alone cannot establish successful cleanup or preserved meaning.
+
 Validators execute qualified, immutable A artifacts directly on frozen private
 benchmarks. An A miner's endpoint response cannot supply an authoritative
 benchmark probability. B miners submit text for independent output evaluation;

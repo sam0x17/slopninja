@@ -103,11 +103,16 @@ readability requirements, and tone/audience constraints. The rubric and evidence
 include the full source and candidate; a checklist does not authorize ignoring
 other material claims. Each final semantic ballot is `PASS`, `FAIL` or `ABSTAIN`.
 
+Before task issue, the brief identifies required cleanup of unwanted filler,
+repetition or formulaic phrasing under `R`, and intentional voice features to
+preserve under `T`, including any specified informality or idiosyncrasies.
+Cleanup must retain the protected information.
+
 | Field | PASS condition | FAIL condition |
 | --- | --- | --- |
 | `P`, preservation | Required claims, entities, quantities, negation, uncertainty, citations, attribution and argument relations remain correct; changes stay within the brief | Any unauthorized material omission, change, unsupported addition or prohibited reference copying |
-| `R`, readability | No material readability regression against the source, and every stated readability requirement is satisfied | A material regression or a violated readability requirement |
-| `T`, tone | Every declared tone and audience constraint is satisfied | Any declared constraint is violated |
+| `R`, readability | No material readability regression against the source, and every stated readability requirement, including required cleanup, is satisfied | A material regression or a violated readability requirement |
+| `T`, tone | Every declared tone and audience constraint, including intentional voice features to preserve, is satisfied | Any declared constraint is violated |
 
 Insufficient evidence or unresolved interpretation requires `ABSTAIN`. An empty
 tone/audience constraint list satisfies `T` deterministically and needs no

@@ -1,12 +1,33 @@
+\Needspace{12\baselineskip}
 \section{Purpose and scope}\label{purpose-and-scope}
 
-A useful writing model should retain a writer's argument while allowing
-changes to expression. The same person may want a passage closer to
-their own voice, more accessible to a general audience, or more forceful
-without becoming less accurate. An authorship model can help describe
-those differences. A detector can measure one aspect of how the result
-is classified. Neither measurement alone establishes that the revision
-is good.
+Slop Ninja's primary transformation goal is to remove unwanted generic
+and mechanically patterned writing while preserving the source's full
+argumentation, details, qualifications and intended tone. The result
+should read naturally in a particular authorized writer's voice, with
+their characteristic word choices, grammatical constructions and
+rhetorical habits. Here, \emph{slop} means unwanted filler, vague or
+formulaic phrasing, needless repetition and other patterns that weaken
+the intended writing. Intentional informality, unusual constructions
+and recognizable personal habits belong to the target profile when
+appropriate to the brief.
+
+The product thesis is that readers object to slop because it combines
+weak writing with a recognizable generic model voice. Removing those
+defects should produce good writing that sounds like its author.
+Successful cleanup therefore means the result has ceased to be slop
+under this definition. Reader judgments of the writing and author fit
+must test that thesis alongside any requested detector benchmark.
+
+The desired endpoint is a revision that readers familiar with the
+writer cannot reliably distinguish from that writer's own comparable
+work, while the required substance remains intact and the unwanted
+patterns have been removed. This is an empirical target. Evaluate it
+through blinded comparisons in the same register, independent tests on
+held-out author samples, and full preservation review. A favorable
+detector score or proximity to a learned profile alone cannot establish
+that result. A writer may also request greater accessibility or
+rhetorical force; those changes must respect the source and brief.
 
 The model-publication split is intentional. A should make strong
 author/origin detection available for anyone to run and use in training,
@@ -27,12 +48,13 @@ The initial subnet evaluates two tasks separately:
 \item
   Identify authors and documented human/model production histories.
 \item
-  Transform writing toward a requested voice, optionally reducing
-  detection by Pangram and qualified subnet AI-origin detectors,
-  while preserving the source's meaning, readability, and intended tone.
+  Clean up unwanted writing patterns and match an authorized writer's
+  profile while preserving meaning, detail and intended tone, with
+  optional evasion of Pangram and qualified subnet AI-origin detectors.
 \end{enumerate}
 
-The joint evasion target requires Pangram's reported AI-generated
+For tasks requesting detector evasion, the additional joint target
+requires Pangram's reported AI-generated
 \textbf{plus AI-assisted} fraction strictly below 10\%, a majority pass
 against the common three-detector panel, and a pass against the actual
 strongest qualified prior-round detector at its calibrated threshold,
@@ -52,6 +74,6 @@ The initial scope is English prose, document-level author/origin
 predictions, and bounded asynchronous editing jobs. Span-level origin
 labels, multilingual rewards, and arbitrary-length manuscripts need
 their own validated datasets. There is no requirement for token
-streaming or interactive latency. A separate writing-improvement service
-is deferred beyond the initial launch; audience and editorial controls
-remain part of transformation briefs and preservation review.
+streaming or interactive latency. Writer-directed cleanup belongs to B;
+there is no separate writing-improvement mechanism at launch. Audience
+and editorial controls remain part of B's briefs and preservation review.
