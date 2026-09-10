@@ -52,6 +52,12 @@ required.
 The aim is freely accessible detection competitive with Pangram, supporting
 better private transformers. Detection parity remains to be demonstrated;
 running or hosting an A model still costs compute.
+Pangram remains A's external quality anchor for AI-origin detection, including
+after subnet detectors match or exceed it. At launch, compare Pangram and the
+evaluated A origin artifacts on a fresh shared held-out reference set each A
+scoring epoch, using independently documented production histories. The operator
+funds the shared Pangram observations. Those histories supply the origin labels;
+Pangram supplies neither ground truth nor named-author labels.
 Bounded training tickets assign A as requester and B as rewrite provider,
 free to the requester and funded by the provider's expected emissions.
 Deterministic hash assignments pair training counterparts on released,
@@ -101,8 +107,9 @@ implementation work.
 The proposed launch cadence is one joint B benchmark round per scoring epoch,
 with Pangram reports for every credited candidate. Miners fund candidate reports;
 the operator funds shared source baselines and independent detector-parity
-studies. Reducing external checks requires demonstrated parity and a future
-policy that retains periodic Pangram evaluation. The
+studies. Reducing B candidate checks requires demonstrated parity and a future
+policy that retains periodic Pangram evaluation. A's ongoing Pangram comparison
+remains required independently of any change to B's API frequency. The
 [cadence and parity specification](whitepaper/sections/08-pangram-audits.tex)
 defines that evidence; epoch throughput still needs measurement.
 

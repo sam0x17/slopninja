@@ -1,10 +1,20 @@
 # Pangram benchmark, verification and API funding
 
-Design decision, 2026-09-10. Pangram is the required external origin benchmark
-for Slop Ninja. A artifacts are public and immutable; B generation remains
+Design decision, 2026-09-10. Pangram is the permanent external quality anchor
+for A's origin detection and the required external benchmark for B's evasion.
+A artifacts are public and immutable; B generation remains
 private. Validators execute a common three-artifact subnet origin panel,
 including the strongest qualified artifact from the previous completed A round.
 Pangram cannot replace author-specific A evaluation or preservation review.
+
+In each A scoring epoch, compare all admitted A artifacts with Pangram on the
+same fresh, independently labeled hidden origin set. The operator funds the
+shared provider observations; this API cost does not multiply with the number
+of A artifacts. Freeze the reference set, provider version, repeat policy,
+operating points, analysis and budget before evaluation. Publish the performance
+gaps, uncertainty and coverage, including missing observations. Missing provider
+evidence cannot support a current parity finding. Matching or beating Pangram
+does not retire A's continuing external quality comparison.
 
 Every B benchmark jointly measures author-style matching and evasion against
 Pangram and the subnet panel. The launch schedule is one joint B round per
@@ -16,13 +26,15 @@ outside this disclosure and scoring process.
 
 The [whitepaper cadence and parity policy](../whitepaper/sections/08-pangram-audits.tex)
 requires operator-funded, independently labeled comparisons on held-out authors,
-production histories and fresh B revisions before reducing external checks.
+production histories and fresh B revisions before reducing B's per-candidate
+external checks.
 Freeze the A champion and proposed panel policy, human false-positive limits,
 noninferiority margins and analysis plan before opening evaluation data.
 Confirm on successive unreleased sets; agreement with Pangram is insufficient.
 Launch scoring retains Pangram even after parity. A later policy must specify
-the reduced interval, periodic external checks, unchecked-candidate scoring and
-drift response before activation. Old reports cannot certify new text.
+the reduced B interval, periodic B checks, unchecked-candidate scoring and drift
+response before activation. It must preserve A's continuing Pangram quality
+comparison. Old reports cannot certify new text.
 
 ## What we measure
 
@@ -32,6 +44,11 @@ documented production histories. Report calibration and human false-positive
 rates alongside detection performance. Agreement with Pangram is not ground
 truth and earns no separate reward. Author identification retains its own known
 author labels because Pangram is not our author-attribution reference.
+The fixed public probabilistic baseline remains A's reward normalization
+reference. Pangram's content fractions cannot directly replace those
+probability vectors. Reuse B reports only when their exact text and observations
+satisfy the independent origin-evaluation protocol; selected successful
+evasions alone cannot replace the labeled reference set.
 
 For evasion, use the explicit `pangram-4` selector and retain the returned
 version, exact submitted text, task IDs and complete results. Measure

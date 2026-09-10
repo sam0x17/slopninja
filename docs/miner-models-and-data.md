@@ -180,11 +180,23 @@ Train the origin head from recorded writing workflows. Start with human-only,
 model-only, and mixed human/model production; keep generation, editing order
 and revision logs alongside that coarse label. Model-to-model rewriting remains
 model-only. Historical publication alone receives weaker provenance status.
-Pangram supplies a comparison, not the label. A future span head needs separately
-validated alignments; workflow labels do not justify invented token-level truth.
+Pangram remains the external quality anchor for A's origin detection, including
+after subnet detectors match or exceed it. Documented production histories
+supply the labels; matching Pangram's predictions alone earns no reward. A future
+span head needs separately validated alignments; workflow labels do not justify
+invented token-level truth.
 Neither public A probabilities nor private B endpoint responses establish an
 output's assistance history. Retain unknown provenance when the production
 record is insufficient.
+
+At launch, compare Pangram and every A origin artifact being scored on a fresh
+shared held-out reference set each A scoring epoch. The operator funds shared
+Pangram observations under the frozen
+[anchor and parity policy](../whitepaper/sections/08-pangram-audits.tex).
+Keep the existing A Brier utility and fixed public baseline; Pangram's text
+fraction cannot directly substitute for an A document-origin probability.
+Author evaluation still needs independent author labels. A's ongoing external
+comparison remains required if a future policy reduces B candidate API frequency.
 
 ### Transformation
 
@@ -259,7 +271,7 @@ is retained as an unadopted alternative for the earlier private-score design.
 Validator replay establishes the declared A computation;
 it cannot establish detector accuracy or rule out a committed trigger that
 favors an allied B model. Hidden labels, source separation and targeted
-collusion tests remain necessary. Pangram is an external origin check and
+collusion tests remain necessary. Pangram remains A's external origin quality anchor and
 cannot replace author-specific A evaluation or preservation review.
 
 The [adjudication specification](reward-adjudication.md) separately fixes `V`

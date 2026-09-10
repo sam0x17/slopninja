@@ -45,10 +45,11 @@ pays for the shared three-report source baseline and detector-parity studies.
 Reserve capacity before issue and measure whether the workload fits the epoch.
 The [Pangram cadence and parity policy](../whitepaper/sections/08-pangram-audits.tex)
 requires comparisons on independently documented production histories and fresh
-B revisions before reducing external checks. The launch policy keeps Pangram
+B revisions before reducing B candidate checks. The launch policy keeps Pangram
 in every scored B round even after a parity finding. Any later reduction needs
 a prospective policy with periodic checks, rules for unchecked candidates and
-a response to drift; old reports cannot supply missing current evidence.
+a response to drift; old reports cannot supply missing current evidence. It
+cannot retire A's ongoing Pangram comparison.
 
 The standard A/B native pools remain the proposed launch settlement. The
 [settlement hypothesis](settlement-gameability.md) conserves complementary policy
@@ -102,6 +103,19 @@ workflows require different provenance records. A detector verdict, publication
 date or resemblance to a person cannot establish those labels. A transformed
 model draft retains its recorded production history even if every detector
 misclassifies it.
+
+Pangram remains the external quality anchor for A's AI-origin detection, even
+after subnet detectors match or exceed it. At launch, each A scoring epoch uses
+a fresh shared held-out origin reference set. Evaluate Pangram and every A origin
+artifact being scored on that set under the frozen comparison protocol; the
+operator funds shared Pangram observations. Compare performance against the
+independently documented production histories, with human false-positive rates,
+sensitivity and difficult slices reported under the
+[anchor and parity policy](../whitepaper/sections/08-pangram-audits.tex).
+Matching Pangram predictions alone earns no reward, and Pangram supplies no
+named-author labels. A's own Brier utility and fixed public reward baseline
+remain unchanged. Any future reduction in B candidate API frequency leaves this
+ongoing external comparison in place.
 
 Use the multiclass Brier score for each task:
 
