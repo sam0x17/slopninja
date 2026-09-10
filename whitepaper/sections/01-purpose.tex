@@ -1,7 +1,9 @@
 \Needspace{12\baselineskip}
 \section{Purpose and scope}\label{purpose-and-scope}
 
-Slop Ninja's primary transformation goal is to remove unwanted generic
+Slop Ninja's transformation mechanism jointly targets author-style
+matching and evasion of Pangram and qualified subnet AI-origin detectors.
+Both are primary objectives of B. The aim is to remove unwanted generic
 and mechanically patterned writing while preserving the source's full
 argumentation, details and qualifications. The result
 should read naturally in a particular authorized writer's voice, with
@@ -18,7 +20,14 @@ weak writing with a recognizable generic model voice. Removing those
 defects should produce good writing that sounds like its author.
 Successful cleanup therefore means the result has ceased to be slop
 under this definition. Reader judgments of the writing and author fit
-must test that thesis alongside any requested detector benchmark.
+must test that thesis alongside the required detector benchmark.
+
+The requested writer's profile supplies a direction for lexical,
+grammatical and rhetorical changes. Adversarial detector feedback adds
+pressure to remove patterns recognized as model-generated. B uses both
+signals to guide the same rewrite. Their practical reinforcement is a
+testable hypothesis; author fit and detector evasion each retain their
+own measurements.
 
 The desired endpoint is a revision that readers familiar with the
 writer cannot reliably distinguish from that writer's own comparable
@@ -50,11 +59,11 @@ The initial subnet evaluates two tasks separately:
   Identify authors and documented human/model production histories.
 \item
   Clean up unwanted writing patterns and match an authorized writer's
-  profile while preserving meaning, detail and intended tone, with
-  optional evasion of Pangram and qualified subnet AI-origin detectors.
+  profile while evading Pangram and qualified subnet AI-origin detectors,
+  preserving meaning, detail and target tonal intent.
 \end{enumerate}
 
-The strict success target for detector-evasion tasks requires the
+The detector component of B's strict success target requires the
 preservation and quality checks, a score strictly below 10\% on
 Pangram's reported AI-generated \textbf{plus AI-assisted} fraction,
 a majority pass against a common panel of three qualified subnet origin

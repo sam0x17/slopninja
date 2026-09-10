@@ -9,6 +9,14 @@ Customers can separately buy [asynchronous inference](paid-inference.md).
 The [public-model contract](public-model-evaluation.md) replaces authoritative
 private A endpoint responses.
 
+B jointly targets author-style matching and evasion against Pangram and the
+subnet's qualified AI detectors. Both are main launch objectives, measured for
+every B benchmark candidate. Cleanup, full meaning preservation, readability
+and the frozen target tonal intent are hard requirements. We test whether
+removing generic model habits improves both author fit and detector evasion;
+neither result guarantees the other. Earlier single-objective modes remain
+research ablations and do not define the launch interface.
+
 The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)) is the canonical design draft. Customer
 sources, references, profiles and briefs are encrypted only for the assigned
@@ -45,7 +53,7 @@ from leaking plaintext it receives.
 | Task | Starter model and publication | Inputs | Outputs |
 | --- | --- | --- | --- |
 | A: Author and origin detection | Public full sparse word/grammar metric baseline; compare a public 149M text encoder with author and origin heads | Query, optional reference gallery, versioned origin-label definition | Validator-computed author probabilities, origin probabilities, calibrated abstention |
-| B: Author-directed transformation, with optional detector evasion | Private 8B decoder with a style adapter, deterministic edit proposals and candidate selection | Source, target writing samples, audience, purpose, tone, allowed edits, preservation brief and optional evasion mode | Exact revision, unchanged text or abstention; private change notes; detector reports only for authorized benchmark tasks |
+| B: Author-style matching and detector evasion | Private 8B decoder with a style adapter, deterministic edit proposals and candidate selection | Source, target writing samples, audience, purpose, target tone, allowed edits and preservation brief; frozen style evaluator and detector panel for benchmarks | Exact revision, unchanged text or abstention; private change notes; author-fit and Pangram/subnet detector evidence for authorized benchmark tasks |
 
 Miners choose the architecture within each interface's published execution and
 resource limits; only A requires public artifacts. Validators replay A and
@@ -53,7 +61,7 @@ independent validator judges evaluate B outputs on benchmark-owned
 tasks under their authorized access rules. Customer evidence reaches a chosen
 validator only through a separate customer-directed disclosure.
 The [two-mechanism mapping](subnet-mechanisms.md) assigns author/origin detection
-to mechanism 0 and author-directed transformation to mechanism 1, each with 50%
+to mechanism 0 and joint author-style matching and detector evasion to mechanism 1, each with 50%
 of pilot emissions. Fidelity, readability and the requested audience and style
 controls are Task B gates and brief requirements. A separate writing-improvement
 service is deferred beyond the initial launch.
@@ -180,8 +188,10 @@ record is insufficient.
 
 ### Transformation
 
-Use a single generator conditioned on the source, the target's independent
-samples, the editorial brief and a style profile. The first version serializes
+Use a single generator to pursue both objectives, conditioned on the source,
+the target's independent samples, the editorial brief and a style profile.
+Evaluate author fit and Pangram/subnet detector outcomes on every authorized
+B benchmark task. The first version serializes
 named word/grammar deviations and their support counts into the prompt. Compare
 that with a learned profile prefix only if it improves evaluation on new authors.
 Do not ask a model to interpret thousands of unexplained coordinates.
@@ -235,9 +245,11 @@ from each panel member's
 paired source-minus-candidate improvements. Joint evasion utility averages
 Pangram and median panel improvement only when neither aggregate axis regresses.
 The median's outlier protection assumes fewer than half the panel UIDs collude.
-Strict joint success requires preservation, Pangram below 10% under the committed
+This detector component accompanies mandatory author-fit measurement; a lower
+detector score alone cannot establish the full B result.
+Strict detector success requires the semantic gate, Pangram below 10% under the committed
 repeat policy, a majority of panel artifacts below their own frozen thresholds,
-and a pass against the actual strongest reference artifact. Report strongest-A
+and a pass against the strongest qualified prior-round origin artifact. Report strongest-A
 and panel success separately. The [reward rules](../whitepaper/sections/07-rewards.tex)
 define the exact aggregation and treatment of missing strongest-artifact evidence.
 The [settlement hypothesis](settlement-gameability.md) shows that complementary
@@ -261,6 +273,11 @@ it may differ from source tone. Tone review is mandatory even without a
 separate tone instruction. A certified failure sets `G=0`; absent a failure, every required field must
 pass for `G=1`. Unresolved judgments void the matched comparison for the B batch
 without erasing independently attributable service failures.
+Launch B scoring uses the combined author-fit and evasion objectives, with
+the semantic gate applying to the whole revision. Single-objective studies
+remain diagnostic ablations. The [reward rules](../whitepaper/sections/07-rewards.tex)
+define combined utility and the distinction between incremental improvement
+and strict detector success.
 
 The validator runner withholds submitting B UIDs, source/candidate roles and
 hidden labels from A's declared inference inputs, mixes controls and commits
@@ -289,6 +306,9 @@ near-threshold stability or general determinism.
 Confidential customer jobs use local checks and the customer's review, with no
 automatic submission to Pangram, the subnet opponent or external judges. A
 customer can separately provide evidence to a chosen validator.
+B still pursues author fit and detector evasion for those jobs. A verified
+Pangram result requires a separate customer-authorized disclosure flow outside
+the confidential job protocol.
 Rhetorical strength and accessibility are requested controls, with examples
 and ratings in training, rather than assumed directions in the author space.
 
@@ -386,7 +406,9 @@ Pangram's [model card](https://www.pangram.com/research/model-card/pangram-4)
 says it does not train on customer API data. That does not make submissions
 private from Pangram: the provider sees submitted text, and report readers may
 see it too. Use it for authorized benchmark-owned text. Confidential customer
-sources and outputs cannot be submitted or exposed through public reports.
+sources and outputs cannot be submitted or exposed through public reports
+within the confidential job protocol; a customer may initiate a separate
+disclosure outside that protocol.
 Keeping B weights private blocks direct downloads but cannot prevent black-box
 study through purchased jobs or leaked examples. A supported agreement must
 cover benchmark report retrieval and any proposed reuse of detector labels;

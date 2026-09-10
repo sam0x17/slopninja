@@ -7,10 +7,12 @@
 
 Planned domain: **slop.ninja**.
 
-Slop Ninja aims to clean up prose until it is consistent with a particular
-writer's profile. A transformation should remove unwanted generic or mechanical
-patterns while preserving every argument, detail, qualification and intended
-tone. The target comes from authorized examples of the writer's own work:
+Slop Ninja aims to clean up prose so it matches a particular writer's profile
+and evades both Pangram and the subnet's qualified AI detectors. These are
+complementary goals of every B transformation. Remove unwanted generic or
+mechanical patterns while preserving every argument, detail and qualification
+and satisfying the target tonal intent. The target comes from the brief and
+authorized examples of the writer's own work:
 their word choices, grammatical constructions and rhetorical habits, including
 deliberate informality and quirks. Use the writer's style as the standard for
 cleanup.
@@ -23,10 +25,12 @@ its author. That is what successful cleanup must demonstrate to readers.
 The empirical goal is writing that readers cannot reliably distinguish from
 that writer's own work in the same register. Blinded comparisons and independent
 author-profile tests on held-out writing must establish how close we get, with
-uncertainty and failures reported. This result remains to be demonstrated and
-would not establish human authorship. Detector evasion is an optional secondary
-objective; preservation and consistency with the writer define successful
-cleanup.
+uncertainty and failures reported. The benchmark also measures evasion against
+Pangram and subnet AI detectors. We test whether removing generic model habits
+improves both author fit and resistance to detection; neither outcome guarantees
+the other. The joint result remains to be demonstrated and would not establish
+human authorship. Meaning preservation, readability, required cleanup and target
+tonal intent remain hard acceptance requirements.
 
 Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
@@ -36,8 +40,11 @@ two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
 Customer inputs are encrypted for the assigned
 miner; customers can separately share evidence with a specific validator.
-Task A detects author and origin; Task B cleans up text toward the authorized
-writer's profile under the source and brief, with optional detector evasion.
+Task A detects author and origin; Task B jointly matches the authorized writer's
+profile and evades Pangram and subnet AI detectors under the source and brief.
+Private customer jobs pursue the same goals without automatically sending text
+to Pangram. External measurement requires a separate customer-authorized
+disclosure flow outside the confidential job protocol.
 B miners train and search against published A models locally, then submit
 self-scores bound to their final text and assigned panel. Validators rerun A to
 verify those scores; no A inference endpoint or replay of B's generator is
@@ -82,9 +89,22 @@ claims remain unresolved. The selected [public-model design](docs/public-model-e
 removes private A reports from scoring authority. Artifact replay, detector
 qualification and copying incentives still need implementation and evaluation.
 
-For the optional evasion objective, the adversarial benchmark targets less than
-10% AI-generated **plus AI-assisted** content on repeated detector checks.
-Those observations accompany separate preservation and author-profile results.
+Every launch B benchmark measures author fit and detector evasion. Strict
+detector success requires less than 10% AI-generated **plus AI-assisted** content
+on the committed Pangram reports, a majority pass against the subnet panel, and
+a pass against its strongest qualified prior-round origin detector at their
+frozen thresholds. Report those outcomes alongside author fit and the semantic
+gate. Historical single-objective experiments and optional-mode proposals are
+ablations, not the launch policy; adapting the existing offline contract remains
+implementation work.
+
+The proposed launch cadence is one joint B benchmark round per scoring epoch,
+with Pangram reports for every credited candidate. Miners fund candidate reports;
+the operator funds shared source baselines and independent detector-parity
+studies. Reducing external checks requires demonstrated parity and a future
+policy that retains periodic Pangram evaluation. The
+[cadence and parity specification](whitepaper/sections/08-pangram-audits.tex)
+defines that evidence; epoch throughput still needs measurement.
 
 The local repository lives in `slop_ninja/`. CLI commands and artifact schemas
 use the original `unslop` name. Historical experiment records retain their
@@ -405,7 +425,8 @@ outside the prototype.
 
 The [two-task mechanism proposal](docs/subnet-mechanisms.md) defines author/origin
 detection in on-chain mechanism 0 and author-directed transformation under the
-source and brief, including optional detector evasion, in mechanism 1. Each receives
+source and brief, jointly targeting author fit and evasion against Pangram and
+subnet AI detectors, in mechanism 1. Each receives
 50% of pilot emissions. Fidelity, readability and the requested audience and
 style controls remain transformation gates and brief requirements.
 The [model plan](docs/miner-models-and-data.md) specifies starter

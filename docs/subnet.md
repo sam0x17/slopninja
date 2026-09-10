@@ -1,12 +1,25 @@
 # Adversarial text-revision subnet
 
 The [two-task mechanism proposal](subnet-mechanisms.md) specifies public A
-author/origin detectors and private B author-directed transformation.
-Preservation, readability and tone are constraints on B. That design uses B
-self-scores with independent validator execution of A artifacts; the contract
-below remains the earlier implemented offline revision benchmark.
+author/origin detectors and private B transformation that jointly targets an
+authorized writer's style and evasion against Pangram and subnet AI detectors.
+Both objectives are mandatory for launch benchmarks. Meaning preservation,
+readability, required cleanup and target tonal intent are hard constraints.
+That design uses B self-scores with independent validator execution of A
+artifacts. Customer inputs remain encrypted to the assigned miner; Pangram
+measurement requires authorized benchmark text or a separate customer-authorized
+disclosure flow outside the confidential job protocol.
 
-The target service is a miner that revises prose under a preservation contract: retain the argument, details, and intended tone; improve readability; and repeatedly score below 10% AI plus assisted text. Competing miners may use word and grammar statistics, rules, prompted models, trained models, or combinations. We can compare all of them against the same frozen challenges and validator rules.
+The rest of this page documents the earlier implemented offline revision
+benchmark. Its single-detector binary contract does not implement the launch
+policy's combined author-fit and detector objectives. Historical single-objective
+experiments remain ablations; their results cannot establish that improving
+one objective improves the other.
+
+The earlier contract evaluates a miner that retains the argument, details and
+intended tone, improves readability, and repeatedly scores below 10% AI plus
+assisted text. Miners can use word and grammar statistics, rules, prompted
+models, trained models or combinations under its frozen challenges.
 
 [src/subnet.rs](../src/subnet.rs) implements the first **offline reference contract in Rust**. It validates challenge/submission bindings and calculates a binary benchmark reward from recorded detector observations and a human quality audit. There is no network server, wallet, registration, signing, or weight submission in this module. Automated semantic preservation is not established.
 

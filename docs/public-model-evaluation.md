@@ -5,9 +5,11 @@ B generation remains private. The runner and revised benchmark protocol still
 need implementation and evaluation before launch. Scope remains A detection
 and B transformation.
 
-B's primary product is cleanup toward an authorized writer's profile. Remove
-unwanted generic or mechanical patterns while retaining every source argument,
-detail, qualification and the intended tone. Match the writer's characteristic
+B jointly targets cleanup toward an authorized writer's profile and evasion
+against Pangram and the subnet's qualified AI detectors. Every launch B
+benchmark evaluates both goals. Remove unwanted generic or mechanical patterns
+while retaining every source argument, detail and qualification and satisfying
+the target tonal intent. Match the writer's characteristic
 word choices, grammatical constructions and rhetorical habits from authorized
 reference writing. Preserve deliberate informality and quirks; the brief can
 request a change of register, audience or rhetorical strength without imposing
@@ -19,8 +21,12 @@ the same register. Assess this through blinded comparisons and independent
 author-profile tests on held-out writing, with declared acceptance margins,
 enough samples to test them, uncertainty and failure cases. No such result is
 claimed today, and profile agreement would not establish human authorship.
-Detector evasion remains an optional secondary objective. A low detector score
-alone cannot establish successful cleanup or preserved meaning.
+The joint thesis is that removing generic model habits can improve author fit
+and resistance to detection together. Measure both: author fit does not establish
+detector evasion, and low detector scores do not establish successful cleanup.
+Meaning preservation, readability, required cleanup and target tonal intent
+remain hard acceptance requirements. Earlier single-objective modes are research
+ablations rather than launch options.
 
 Validators execute qualified, immutable A artifacts directly on frozen private
 benchmarks. An A miner's endpoint response cannot supply an authoritative
@@ -90,7 +96,7 @@ evaluation, restrict active evidence to authorized validators, and retire tasks
 before releasing hidden labels, other miners' candidates and detailed review
 material. Evaluate artifact updates on fresh hidden material. Public weights
 do not establish common ownership, original training,
-truthful provenance or absence of targeted backdoors. Every B mode requires
+truthful provenance or absence of targeted backdoors. Every B task requires
 independent adjudication of meaning, readability and target tonal intent.
 Fix that intent before generation from the brief and any requested authorial
 style and reference samples; a style shift may call for different tone from the
@@ -161,10 +167,13 @@ problem that hash deduplication does not solve. Separate payment for measured
 serving work from model-performance rewards. New artifact versions qualify for
 later rounds and cannot replace a frozen version during evaluation.
 
-Public artifacts do not require public customer inputs. Paid customer jobs can
-retain encrypted requests to the selected provider, or use local execution if
-the customer chooses. Their plaintext, keys and outputs must not enter the
-benchmark replay process automatically.
+Public artifacts do not require public customer inputs. Paid customer jobs use
+encrypted requests to the assigned miner; customers can also choose local
+execution outside that service. B pursues author fit and detector evasion in
+private jobs without automatically uploading text to Pangram. External
+measurement requires a separate customer-authorized disclosure flow outside
+the confidential job protocol. Customer plaintext, keys and outputs must not
+enter the benchmark replay process automatically.
 
 Before launch, test the public A/private B design on hidden tasks, including
 synthetic colluding-trigger controls. Report reference-execution agreement,

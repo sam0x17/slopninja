@@ -9,11 +9,14 @@ The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 and audit access below apply to subnet-owned benchmarks. Customer inference
 inputs are encrypted only for their assigned miner; a customer may separately
 send evidence to a specific validator. Those disclosures do not authorize
-general validator access or automatic benchmark reuse.
+general validator access, automatic benchmark reuse or sending private text
+to Pangram.
 
 The initial subnet develops two capabilities: recognizing authors and production
-histories, and transforming text toward a requested voice while preserving its
-meaning and readability. Miners can improve the grammar and word representation,
+histories, and transforming text toward a requested voice while evading Pangram
+and qualified subnet detectors, preserving meaning and readability, and meeting
+target tonal intent. Author matching and detector evasion are complementary
+requirements of B. Miners can improve the grammar and word representation,
 the task models, or the editing process. The existing model supplies a baseline;
 we do not need to perfect it before testing these incentives.
 
@@ -35,6 +38,18 @@ agreement nor a public peer identity supplies ground truth. The
 [API verification and funding design](pangram-oracle.md) specifies the
 external dependency and its remaining trust assumptions.
 
+At launch, schedule one joint B benchmark round per scoring epoch. Every
+credited candidate needs its own three Pangram reports alongside author-fit
+and subnet-detector results. The miner pays for candidate reports; the operator
+pays for the shared three-report source baseline and detector-parity studies.
+Reserve capacity before issue and measure whether the workload fits the epoch.
+The [Pangram cadence and parity policy](../whitepaper/sections/08-pangram-audits.tex)
+requires comparisons on independently documented production histories and fresh
+B revisions before reducing external checks. The launch policy keeps Pangram
+in every scored B round even after a parity finding. Any later reduction needs
+a prospective policy with periodic checks, rules for unchecked candidates and
+a response to drift; old reports cannot supply missing current evidence.
+
 The standard A/B native pools remain the proposed launch settlement. The
 [settlement hypothesis](settlement-gameability.md) conserves complementary policy
 credits but finds a counterexample after simplified native normalization; that
@@ -54,7 +69,7 @@ separately scored subtasks of A.
 | Logical task | Miner produces | Main evaluation | Proposed chain mechanism |
 | --- | --- | --- | --- |
 | A: Detection | Public immutable author/origin inference artifact | Validators execute it against known authors and documented production histories | 0 |
-| B: Transformation | A revision from a private model matching a requested author/style, optionally with detector evasion | Preservation, independent style assessment, Pangram and validator execution of the common three-artifact origin panel | 1 |
+| B: Transformation | A revision from a private model matching a requested author/style and evading Pangram plus qualified subnet detectors | Full meaning, readability and target-tone certification, independent style assessment, Pangram and validator execution of the common three-artifact origin panel | 1 |
 
 Keep independent score tables and fixed task allocations before combining
 weights. Otherwise cheap detection requests or a permissive quality judge could
@@ -125,13 +140,16 @@ input/output bindings. Reward measured performance rather than dimension count.
 
 ## 2. Author transformation and detector evasion
 
-A challenge supplies source text, target reference samples, intended tone,
-audience, allowed style changes and preservation requirements. It declares
-`author_style`, `detector_evasion` or `both`; these modes retain separate results.
+A challenge supplies source text, authorized target reference samples, the
+frozen style evaluator and calibration, target tonal intent, audience, allowed
+style changes and preservation requirements. Every B benchmark evaluates both
+author matching and detector evasion, with Pangram observations and the frozen
+three-detector subnet panel. Isolated ablations are diagnostics and earn no B
+emissions.
 The output is exact revised text bound to the source and submitted model version.
 Its candidate envelope also commits the protocol-assigned A panel artifact
 hashes, reference settings and seed schedule, every candidate origin-probability
-vector, source baselines where required, and scalar projections. The panel is
+vector, source baselines, and scalar projections. The panel is
 pinned for the full batch before B task disclosure. B cannot choose an easier
 model, omit cells or use a score for another text or seed. Validators rerun A
 and compare canonical outputs; they do not replay B's private generator.
@@ -139,15 +157,15 @@ and compare canonical outputs; they do not replay B's private generator.
 The [adjudication specification](reward-adjudication.md) defines the whole-revision
 preservation, readability and tone fields. A valid global failure certificate for
 any required field sets `G=0`; otherwise every required field needs a pass
-certificate for `G=1`. Every mode requires preservation of source meaning.
+certificate for `G=1`. Every B task requires preservation of source meaning.
 Match target tonal intent, fixed before generation from the brief and any
 requested authorial style and reference samples. That target can differ from source tone.
 An empty list of additional tone constraints still requires tone review.
 If no field has a failure certificate and a required pass certificate is missing,
-`G` remains unset and the matched source/brief/mode comparison is void for the
+`G` remains unset and the matched source/brief comparison is void for the
 entire B batch. Conflicting certificates halt settlement.
 None of these outcomes erases independently attributable service failures.
-The semantic gate multiplies every mode's utility; detector success and author
+The semantic gate multiplies B's sole utility; detector success and author
 fit cannot compensate for a meaning or tone failure.
 
 Among revisions that pass, measure two independent improvements over leaving
@@ -156,14 +174,16 @@ the source unchanged:
 - `V`: exact positive improvement in a public frozen author-distance rank,
   divided by the source's remaining rank headroom. The development calibration
   multiset, target references and evaluator are shared by source and candidate.
-- `E`: joint improvement against Pangram and the pinned subnet origin detector,
+- `E`: joint improvement against Pangram and the frozen subnet origin panel,
   retaining both raw score changes and both pass rates separately.
 
-For style tasks, [the exact rank rule](reward-adjudication.md#frozen-numerical-inputs)
+[The exact rank rule](reward-adjudication.md#frozen-numerical-inputs)
 uses `Q=1,000,000`, half credit for calibration ties before flooring, and
-`V=max(0,q_z-q_x)/(Q-q_x)` when `q_x<Q`. A saturated source earns zero.
-Retain exact reduced rationals through aggregation. Evasion-only tasks record
-style as `not_requested`. Private miner scores never define this evaluator.
+`V=max(0,q_z-q_x)/(Q-q_x)` when `q_x<Q`. A saturated source has zero style headroom.
+Retain exact reduced rationals through aggregation and require `q_z >= q_x`
+for every B comparison. A declared unscorable candidate earns zero B utility;
+missing shared evidence follows common closure. Private miner scores never
+define this evaluator.
 
 For source `x` and revision `z`, the research evasion formula is:
 
@@ -179,7 +199,7 @@ E = (E_P + E_S) / 2 if D_P >= 0 and D_S >= 0; otherwise 0
 completed committed reports per text. Validator execution of each A artifact produces
 `H_j = p_j(model-only) + p_j(mixed)`, a document-origin probability.
 Take the median of the three paired improvements, retaining all raw responses.
-A strict joint pass requires preservation, `max_r F_r(z) < 0.10`, a majority
+A strict detector pass additionally requires `G=1`, `max_r F_r(z) < 0.10`, a majority
 of panel artifacts with `H_j(z) < tau_j`, and a pass against the actual strongest
 qualified prior-round artifact. Each threshold is calibrated on held-out
 development data and frozen before scoring; it is not automatically 10%.
@@ -193,9 +213,20 @@ found equal document fractions across fresh calls for three texts, with
 auxiliary-score variation, but no near-10% observation or general determinism
 guarantee. A strict pass describes the committed observations.
 
-For a first simulation, use `G*V`, `G*E` or `G*(V+E)/2` for the declared mode,
-where `G` is the preservation/quality pass and each improvement is bounded in
-`[0,1]`. The combined mode also requires no regression on either requested axis.
+When required evidence is resolved, the sole B utility is:
+
+```text
+U_B = G * (V + E) / 2 if q_z >= q_x and D_P >= 0 and D_S >= 0; otherwise 0
+```
+
+Here `G` requires full meaning, readability and target-tone certification, and
+each improvement is bounded in `[0,1]`. Check all three raw differences before
+awarding credit. A clipped zero `E` cannot conceal detector regression and
+allow the style component to earn a reward. Both components are always
+evaluated; an improvement on one with the others unchanged can earn
+incremental credit. This does not certify an absolute author-fit threshold
+or the strict detector target. A strict pass must also meet these raw
+nonregression conditions.
 The standard A/B native pools remain separate; shared-pool experiments do not
 change that settlement. A public model can contain behavior that favors an
 allied B miner, and validators will reproduce it. Publication removes private
@@ -211,7 +242,7 @@ adding unrelated text reversed some local phrasing preferences.
 [Edit counterexamples](edit-utility-matrix.md),
 [author-score comparison](preference-score-comparison.md).
 
-Judge the complete revision, with the same source constraints in every mode.
+Judge the complete revision under its frozen source and target constraints.
 Copying target samples, dropping difficult passages, adding unrelated prose or
 changing uncertainty must not buy a detector advantage. Miner-authored comments
 inside a revision are data, not instructions to the evaluator.
@@ -346,7 +377,8 @@ availability are admission requirements. Insufficient validator capacity prevent
 no participant chooses a batch. Only exact UID exclusion is claimed.
 
 Reserve validator execution for the complete common source/candidate matrix,
-with identical sources, briefs, modes and inference settings for all B entries.
+with identical sources, briefs, target references, calibration and inference
+settings for all B entries.
 Validators execute the fixed artifacts after candidate commitment, retaining
 artifact hashes, exact input bindings and reference-execution outputs. They
 compare the full canonical outputs and derived projections with B's committed

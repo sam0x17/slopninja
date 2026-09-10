@@ -11,9 +11,15 @@ hardware. This repository
 has no deployed job contract or paid serving endpoint yet.
 
 Initial paid offers cover two task interfaces: A for author/origin detection,
-and B for author-directed transformation under the source and brief, including
-optional detector evasion. Audience, tone, readability and fidelity belong in
+and B for joint author-style transformation and detector evasion under the source
+and brief. B targets both author fit and evasion of Pangram and the subnet's
+qualified detectors. Audience, tone, readability and fidelity belong in
 the transformation brief and its acceptance criteria.
+
+Confidential B jobs pursue both objectives through local generation and
+evaluation. Direct Pangram verification uses authorized benchmarks; a private
+job cannot claim its own verified Pangram result without a separately authorized
+disclosure. The joint objective grants no additional recipient access.
 
 Both interfaces can earn hosted inference fees. A customers pay for compute
 and delivery and can instead run the published model themselves. This outside

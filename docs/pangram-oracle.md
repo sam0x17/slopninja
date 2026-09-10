@@ -6,6 +6,24 @@ private. Validators execute a common three-artifact subnet origin panel,
 including the strongest qualified artifact from the previous completed A round.
 Pangram cannot replace author-specific A evaluation or preservation review.
 
+Every B benchmark jointly measures author-style matching and evasion against
+Pangram and the subnet panel. The launch schedule is one joint B round per
+scoring epoch, with three candidate reports paid by the submitting miner and
+a shared three-report source baseline paid by the operator. Reserve cohort,
+comparison coverage, report budget, deadlines and validator capacity before
+issue; epoch throughput remains to be measured. Private customer jobs remain
+outside this disclosure and scoring process.
+
+The [whitepaper cadence and parity policy](../whitepaper/sections/08-pangram-audits.tex)
+requires operator-funded, independently labeled comparisons on held-out authors,
+production histories and fresh B revisions before reducing external checks.
+Freeze the A champion and proposed panel policy, human false-positive limits,
+noninferiority margins and analysis plan before opening evaluation data.
+Confirm on successive unreleased sets; agreement with Pangram is insufficient.
+Launch scoring retains Pangram even after parity. A later policy must specify
+the reduced interval, periodic external checks, unchecked-candidate scoring and
+drift response before activation. Old reports cannot certify new text.
+
 ## What we measure
 
 
@@ -21,8 +39,8 @@ version, exact submitted text, task IDs and complete results. Measure
 `0.10`, after preservation and quality review. Record the unchanged source
 under the same round policy. Improvement before crossing the threshold is
 useful development feedback; it must not be reported as a successful sub-10%
-revision. Every B revision must also satisfy its preservation and readability
-requirements.
+revision. Every B revision must also satisfy full meaning preservation,
+readability and target tonal intent, with mandatory author-fit measurement.
 
 The two launch tasks are A detection and B transformation. The deterministic
 comparison schedule includes the strongest qualified prior-round A artifact,
@@ -33,8 +51,8 @@ distinct A UIDs and inference-content hashes, excluding owner/signature metadata
 an identical hash gets one credit entry and panel seat, selected by earliest
 finalized accepted commitment and canonical UID tie-break. Near copies remain
 an evaluation problem. Reserve full validator replay capacity before issue.
-Every B entry receives the same panel, sources, briefs,
-modes and frozen settings. Only exact UID exclusion is asserted; common
+Every B entry receives the same panel, sources, briefs, authorized target-author
+references, style calibration and frozen settings. Only exact UID exclusion is asserted; common
 ownership remains possible. The [mechanism proposal](subnet-mechanisms.md)
 defines persistent counters, domains, roster commitments and reserved capacity.
 
@@ -43,10 +61,16 @@ probability `H_j = p_j(model-only) + p_j(mixed)`. Use
 `D_P = min_r F_r(source) - max_r F_r(revision)` and
 `D_S = median_j(H_j(source) - H_j(revision))` over the three validator-executed A artifacts.
 Evasion utility is `(D_P + D_S)/2` only when both differences are nonnegative,
-otherwise zero. Strict joint success requires preservation, Pangram below
+otherwise zero. Strict detector success requires the semantic gate, Pangram below
 `0.10`, a majority of panel artifacts below their own calibrated thresholds,
 and a pass against the actual strongest artifact. Report its result separately;
 it has one vote in the median, without a unilateral incremental-utility veto.
+The sole B utility combines this detector component with mandatory author-fit
+improvement. Raw regression in author fit, Pangram or the aggregate subnet
+detector result sets the whole utility to zero under the
+[reward rules](../whitepaper/sections/07-rewards.tex). A strict pass also requires
+those nonregression checks; incremental utility does not establish absolute
+author-fit success or a strict detector pass.
 
 After issue, no model or threshold substitution is allowed. A validator-node
 outage can use another approved runner executing the same artifact. An actual
@@ -128,7 +152,8 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
 ## Initial measurement protocol
 
 1. Freeze the epoch roster, global quotas, common panel/batch schedule, source
-   baselines, settings and fixed deadlines. Qualify and cache complete immutable
+   baselines, target references, style evaluator/calibration, settings and fixed
+   deadlines. Qualify and cache complete immutable
    A artifacts, including all inference dependencies and reference-execution
    rules, before B generation. Before task disclosure, exclude the
    exact participating A/B UIDs and freeze the complete remaining validator set

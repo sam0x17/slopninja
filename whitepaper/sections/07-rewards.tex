@@ -3,16 +3,18 @@ mapping}\label{benchmark-scoring-and-mechanism-mapping}
 
 The initial subnet has two logical tasks and two chain mechanisms:
 A, author/origin detection, maps to mechanism 0; B, author-directed
-cleanup and transformation with optional detector evasion, maps to
+cleanup and transformation with detector evasion, maps to
 mechanism 1. Writing quality and meaning preservation are requirements within B, not a
 separate launch reward pool. Deployment must respect the documented
 joint UID/mechanism capacity constraint~\cite{mechanisms}.
 
 For an initial offline tournament, give A and B equal budget shares.
-Within A, balance author and origin tasks equally; within B, retain
-separate author-style, evasion, and combined modes. These are pilot
+Within A, balance author and origin tasks equally. Every B comparison
+jointly evaluates author-style matching and evasion of Pangram and the
+qualified subnet detector panel. These are pilot
 allocations, not an economically optimized split. Publish any live
 allocation and change policy before the scoring epoch.
+Isolated style or detector ablations remain diagnostics and earn no B emissions.
 
 \subsection{Detection}\label{detection}
 
@@ -278,8 +280,10 @@ exact UID exclusion is asserted; different UIDs may share ownership.
 Rank the strongest A service by held-out origin Brier performance,
 subject to the declared calibration and human false-positive limits.
 Author-retrieval rank does not qualify an origin service. Every B entry
-faces the same three detectors, source texts, briefs, task modes,
-source-baseline evidence, and frozen settings. Validate and cache the
+faces the same three detectors, source texts, briefs, authorized target-author
+references, style artifact and calibration, Pangram policy,
+source-baseline evidence, and frozen settings. Every B benchmark requires
+these inputs. Validate and cache the
 entire selected A panel before revealing the B task or starting its
 generation window. Artifact reserves may be used only before that issue
 point. Execute a complete source and candidate matrix after B candidate
@@ -423,7 +427,8 @@ utility is
  0,&\text{otherwise}.
  \end{cases}
 \end{equation}
-The strict joint pass requires preservation, \(\max_r F_r(z)<0.10\),
+The strict detector pass additionally requires \(G=1\),
+\(\max_r F_r(z)<0.10\),
 a majority of panel detectors satisfying \(H_j(z)<\tau_j\), and a pass
 against the strongest qualified prior-round origin detector at its own threshold.
 Calibrate each \(\tau_j\) on independent development data at the
@@ -433,17 +438,31 @@ and panel pass rates separately; the strongest-A result is not a sole
 veto on incremental utility. Neither Pangram improvement nor panel
 improvement compensates for regression on the other aggregate axis.
 
-Pilot transformation utilities are \(GV\), \(GE\), and
-\(G(V+E)/2\) for the three modes. Combined mode also requires no
-regression on either requested axis. The semantic gate multiplies every
-mode's utility: author fit or detector success cannot compensate for a
-meaning or tone failure. Unresolved semantic evidence follows the
-closure rule and earns no positive score. Report sub-10\% success separately
-from incremental improvement. An already suitable source can stay
-unchanged without receiving an invented improvement bonus.
+When the required evidence is resolved, the sole B utility is
+\begin{equation}\label{eq:transformation-utility}
+ U_B(x,z)=\begin{cases}
+ G(V+E)/2,&q_z\geq q_x,\ \Delta_P\geq0,\ \Delta_S\geq0,\\
+ 0,&\text{otherwise}.
+ \end{cases}
+\end{equation}
+Check these raw conditions before awarding credit: clipping a negative
+improvement to zero in \(V\) or \(E\) cannot conceal a regression and
+allow the other component to earn a reward. Both author fit and detector
+evasion are mandatory parts of every comparison. The semantic gate
+requires preservation of full meaning, readability and target tonal intent;
+neither component can compensate for a failed field. Unresolved evidence
+follows the common closure rule. A declared unscorable candidate earns
+zero B utility under Section~\ref{reward-adjudication}.
 
-Validate these proposed utilities against blinded reader comparisons
-before live reward use. They must order useful revisions above omissions,
+Incremental utility can reward improvement in one component while the
+others remain unchanged. It does not certify an absolute author-fit
+threshold or the strict detector target. Report author fit and detector
+passes separately from incremental utility; a strict pass must also meet
+the raw nonregression conditions above. An already suitable source can
+stay unchanged without receiving an invented improvement bonus.
+
+Validate this proposed utility against blinded reader comparisons
+before live reward use. It must order useful revisions above omissions,
 unsupported strengthening, irrelevant padding, and needless edits.
 
 \subsection{Aggregation and failure

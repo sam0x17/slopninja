@@ -36,9 +36,10 @@ unresolved or void under fixed closure; it cannot become a pass or B nonresponse
 
 ## Frozen numerical inputs
 
-This measurement applies when the task requests target-author fit. Evasion-only
-tasks record `not_requested`, with absent numeric style fields; they need no
-target-reference or calibration input.
+Every B benchmark requires target-author style measurement, Pangram observations
+and the frozen subnet detector panel. Authorized target references and style
+calibration are mandatory inputs before issue. Isolated style or detector
+ablations are diagnostics with no B emissions.
 
 Before issue, the instance manifest must identify a permitted public
 word/grammar author-distance artifact. Pin its artifact and parameter hashes,
@@ -88,17 +89,26 @@ Store the rational in reduced form, with positive denominator and zero encoded
 as `0/1`; retain exact rational arithmetic through the frozen task aggregation.
 Do not round each candidate into policy credits before aggregation. The final
 allocation rule specifies any conversion to integer credit. Equality earns
-zero. A source already at `Q` has zero reward headroom. A task requiring no
-style regression separately checks `q_z >= q_x`; clipping `V` cannot erase that
-requirement.
+zero. A source already at `Q` has zero style headroom. Every B comparison
+requires no style regression and checks `q_z >= q_x`;
+clipping `V` cannot erase that requirement.
 
-For style-scored tasks, source and reference scoring must succeed before issue. A declared
-deterministic `unscorable_candidate` result yields zero style utility, with its
-status retained. Evaluator disagreement, unavailable shared evidence or an
+Source and reference scoring must succeed before every B task is issued. A declared
+deterministic `unscorable_candidate` result yields zero B utility because style
+nonregression cannot be verified; retain its status. Evaluator disagreement,
+unavailable shared evidence or an
 execution/version failure does not invent a score: it invokes unresolved
 comparison closure. Numerical failure alone does not establish attributable
 service nonresponse. Test copying, topic substitution and meaning-breaking
 candidates before relying on this artifact for rewards.
+
+When all required evidence is resolved, the sole B utility is `G*(V+E)/2`,
+subject to raw `q_z >= q_x`, `Delta_P >= 0` and `Delta_S >= 0`; any regression
+sets the whole utility to zero. These detector improvements and `E` follow
+the [transformation utility](../whitepaper/sections/07-rewards.tex). Check the
+raw differences before scoring: a clipped zero `E` cannot allow style credit
+to compensate for detector regression. Incremental utility is separate from
+the strict detector target and any claim of absolute author-fit success.
 
 Also test adaptive optimization against the published style artifact. Search
 repeatedly for edits that maximize `V` under a predeclared budget; retain query
@@ -234,7 +244,7 @@ else:
 All three fields require certification, including target-tone compliance when
 the request adds no separate tone instruction. A field lacking a quorum does not
 default to either `PASS` or `FAIL`. An unresolved candidate judgment
-voids its matched source/brief/mode comparison for the whole B batch. Preserve
+voids its matched source/brief comparison for the whole B batch. Preserve
 every candidate and review in reporting; do not selectively remove a difficult
 case or draw different reviewers to obtain a preferred verdict. This quality
 void does not erase independently attributable service failures. Missing miner
@@ -276,10 +286,10 @@ restrictions and encrypted publication path as `service-evidence-v1`. It binds:
 - Source, candidate, target-reference, brief and rubric commitments; artifact,
   parameter, runtime, calibration and evidence hashes.
 - Qualified public A panel manifests, canonical execution settings and bound
-  input/output receipts when origin scoring is requested; B's complete submitted
+  input/output receipts; B's complete submitted
   probability vectors and their comparison with canonical validator outputs.
 - Numeric status, `q_x`, `q_z`, reduced `V` numerator/denominator and any required
-  raw nonregression check.
+  raw style and detector nonregression checks, and the sole combined B utility.
 - Frozen validator snapshot root, total `W`, signer UID/generation/key bindings,
   field IDs, ballot commitments/openings, reason codes and evidence byte spans.
 - All stage deadlines, field certificates and agreeing weights; `PASS`, `FAIL`
