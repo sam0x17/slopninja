@@ -82,7 +82,18 @@ pub struct TrainingReport {
     pub development_uncalibrated: MetricSummary,
     pub calibration_uncalibrated: MetricSummary,
     pub calibration_fitted: MetricSummary,
+    #[serde(default)]
+    pub epoch_history: Vec<EpochObservation>,
     pub notes: Vec<String>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct EpochObservation {
+    pub epoch: usize,
+    pub training_log_loss: f64,
+    pub development_log_loss: f64,
+    pub development_accuracy: f64,
+    pub development_recall: [Option<f64>; 3],
 }
 
 impl DetectorArtifact {
@@ -208,6 +219,24 @@ pub fn train(
     let mut best_loss = log_loss(&weights, &bias, &development_x, development, 1.0)?;
     let mut best_epoch = 0;
     let mut epochs_run = 0;
+    let observation =
+        |epoch, weights: &[Vec<f64>; 3], bias: &[f64; 3], loss| -> Result<EpochObservation> {
+            let dev = summarize(&probability_rows(
+                development,
+                &development_x,
+                weights,
+                bias,
+                1.0,
+            )?)?;
+            Ok(EpochObservation {
+                epoch,
+                training_log_loss: log_loss(weights, bias, &training_x, train, 1.0)?,
+                development_log_loss: loss,
+                development_accuracy: dev.accuracy,
+                development_recall: dev.classes.map(|class| class.recall),
+            })
+        };
+    let mut epoch_history = vec![observation(0, &weights, &bias, best_loss)?];
     for epoch in 1..=config.epochs {
         let mut gradient = std::array::from_fn::<_, 3, _>(|_| vec![0.0; dimensions + 1]);
         for (row, x) in train.iter().zip(&training_x) {
@@ -244,6 +273,7 @@ pub fn train(
         }
         let loss = log_loss(&weights, &bias, &development_x, development, 1.0)?;
         ensure!(loss.is_finite(), "training diverged at epoch {epoch}");
+        epoch_history.push(observation(epoch, &weights, &bias, loss)?);
         epochs_run = epoch;
         if loss < best_loss - 1e-9 {
             best_loss = loss;
@@ -298,6 +328,7 @@ pub fn train(
         training_groups: groups(train), development_groups: groups(development), calibration_groups: groups(calibration), dimensions, temperature,
         development_uncalibrated: summarize(&development_predictions)?,
         calibration_uncalibrated: summarize(&calibration_uncalibrated)?, calibration_fitted: summarize(&calibration_fitted)?,
+        epoch_history,
         notes: vec![
             "Linear three-class experimental control; reference status does not establish Pangram parity.".into(),
             "Rows have equal training weight. Source-group counts and group-resampled uncertainty are reported separately.".into(),
@@ -501,6 +532,19 @@ mod tests {
         )
         .unwrap();
         assert!(report.development_uncalibrated.log_loss < 0.2);
+        assert_eq!(report.epoch_history.len(), report.epochs_run + 1);
+        assert_eq!(
+            report.epoch_history[report.best_epoch].development_log_loss,
+            report.development_uncalibrated.log_loss
+        );
+        assert!(
+            report
+                .epoch_history
+                .iter()
+                .all(|e| e.training_log_loss.is_finite()
+                    && e.development_log_loss.is_finite()
+                    && e.development_recall.iter().all(Option::is_some))
+        );
         assert!(
             report.calibration_fitted.log_loss <= report.calibration_uncalibrated.log_loss + 1e-12
         );

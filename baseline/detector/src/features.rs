@@ -26,6 +26,10 @@ pub enum FeatureMode {
 pub struct FeatureConfig {
     pub mode: FeatureMode,
     pub max_coordinates: usize,
+    /// Independent word/bigram budget in combined mode. The remaining total
+    /// budget belongs to grammar; unused capacity is not transferred.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub word_coordinate_cap: Option<usize>,
     pub min_document_frequency: usize,
     pub scale_floor: f64,
 }
@@ -35,6 +39,7 @@ impl Default for FeatureConfig {
         Self {
             mode: FeatureMode::Combined,
             max_coordinates: 8192,
+            word_coordinate_cap: None,
             min_document_frequency: 2,
             scale_floor: 0.01,
         }
@@ -46,6 +51,13 @@ impl Default for FeatureConfig {
 pub enum CoordinateKey {
     Available { family: String },
     Value { family: String, name: String },
+}
+
+impl CoordinateKey {
+    pub fn is_word(&self) -> bool {
+        let (Self::Available { family } | Self::Value { family, .. }) = self;
+        matches!(family.as_str(), "word" | "word_bigram")
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -91,6 +103,12 @@ impl FeatureSpace {
             config.scale_floor.is_finite() && config.scale_floor > 0.0,
             "invalid scale floor"
         );
+        if let Some(cap) = config.word_coordinate_cap {
+            ensure!(
+                config.mode == FeatureMode::Combined && cap > 0 && cap < config.max_coordinates,
+                "independent word budget requires combined mode and positive word/grammar capacity"
+            );
+        }
         let first = &rows[0].features;
         let mut statistics = BTreeMap::<CoordinateKey, (usize, f64)>::new();
         for row in rows {
@@ -134,7 +152,26 @@ impl FeatureSpace {
             config.max_coordinates >= availability_count,
             "coordinate cap excludes family availability indicators"
         );
-        entries.truncate(config.max_coordinates);
+        if let Some(cap) = config.word_coordinate_cap {
+            let (mut word, mut grammar): (Vec<_>, Vec<_>) =
+                entries.into_iter().partition(|(key, _)| key.is_word());
+            for (budget, values) in [(cap, &word), (config.max_coordinates - cap, &grammar)] {
+                ensure!(
+                    budget
+                        >= values
+                            .iter()
+                            .filter(|(key, _)| matches!(key, CoordinateKey::Available { .. }))
+                            .count(),
+                    "independent coordinate budget excludes availability indicators"
+                );
+            }
+            word.truncate(cap);
+            grammar.truncate(config.max_coordinates - cap);
+            word.extend(grammar);
+            entries = word;
+        } else {
+            entries.truncate(config.max_coordinates);
+        }
         entries.sort_by(|a, b| a.0.cmp(&b.0));
         ensure!(
             !entries.is_empty(),
@@ -167,6 +204,23 @@ impl FeatureSpace {
             self.training_rows > 0 && !self.coordinates.is_empty(),
             "empty feature space"
         );
+        ensure!(
+            self.coordinates.len() <= self.config.max_coordinates,
+            "coordinate count exceeds budget"
+        );
+        if let Some(cap) = self.config.word_coordinate_cap {
+            ensure!(
+                self.config.mode == FeatureMode::Combined
+                    && cap > 0
+                    && cap < self.config.max_coordinates,
+                "invalid independent word budget"
+            );
+            let words = self.coordinates.iter().filter(|c| c.key.is_word()).count();
+            ensure!(
+                words <= cap && self.coordinates.len() - words <= self.config.max_coordinates - cap,
+                "coordinate count exceeds an independent budget"
+            );
+        }
         let mut seen = BTreeSet::new();
         for coordinate in &self.coordinates {
             ensure!(
@@ -364,5 +418,99 @@ pub(crate) mod tests {
         let result = space.transform(&unavailable).unwrap();
         assert!(result.values.is_empty());
         assert_eq!(result.unavailable_families, ["word"]);
+    }
+
+    #[test]
+    fn independent_budgets_preserve_the_entire_word_control_space() {
+        let mut rows: Vec<_> = (0..6)
+            .map(|i| row(&format!("r{i}"), i % 3, ["alpha", "beta", "gamma"][i % 3]))
+            .collect();
+        for row in &mut rows {
+            row.features.families.insert(
+                "syntax_pos".into(),
+                Family::Distribution {
+                    counts: (0..9).map(|i| (format!("pos{i}"), 1)).collect(),
+                    opportunities: 9,
+                },
+            );
+        }
+        let word = FeatureSpace::fit(
+            &rows,
+            &FeatureConfig {
+                mode: FeatureMode::Word,
+                max_coordinates: 3,
+                ..Default::default()
+            },
+        )
+        .unwrap();
+        let grammar = FeatureSpace::fit(
+            &rows,
+            &FeatureConfig {
+                mode: FeatureMode::Grammar,
+                max_coordinates: 5,
+                ..Default::default()
+            },
+        )
+        .unwrap();
+        let config = FeatureConfig {
+            max_coordinates: 8,
+            word_coordinate_cap: Some(3),
+            ..Default::default()
+        };
+        let combined = FeatureSpace::fit(&rows, &config).unwrap();
+        combined.validate().unwrap();
+        for (is_word, reference) in [(true, &word), (false, &grammar)] {
+            let observed: Vec<_> = combined
+                .coordinates
+                .iter()
+                .filter(|c| c.key.is_word() == is_word)
+                .collect();
+            assert_eq!(
+                serde_json::to_value(observed).unwrap(),
+                serde_json::to_value(&reference.coordinates).unwrap()
+            );
+        }
+        let legacy = FeatureSpace::fit(
+            &rows,
+            &FeatureConfig {
+                max_coordinates: 8,
+                ..Default::default()
+            },
+        )
+        .unwrap();
+        assert_eq!(
+            legacy
+                .coordinates
+                .iter()
+                .filter(|c| c.key.is_word())
+                .count(),
+            1
+        );
+        for cap in [0, 8, 9] {
+            assert!(
+                FeatureSpace::fit(
+                    &rows,
+                    &FeatureConfig {
+                        word_coordinate_cap: Some(cap),
+                        ..config.clone()
+                    }
+                )
+                .is_err()
+            );
+        }
+        assert!(
+            FeatureSpace::fit(
+                &rows,
+                &FeatureConfig {
+                    mode: FeatureMode::Word,
+                    ..config
+                }
+            )
+            .is_err()
+        );
+        assert_eq!(
+            serde_json::to_string(&FeatureConfig::default()).unwrap(),
+            r#"{"mode":"combined","max_coordinates":8192,"min_document_frequency":2,"scale_floor":0.01}"#
+        );
     }
 }

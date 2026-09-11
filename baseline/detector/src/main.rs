@@ -108,6 +108,9 @@ enum Command {
         output_dir: PathBuf,
         #[arg(long, default_value_t = 8192)]
         max_coordinates: usize,
+        /// In combined mode, reserve this many coordinates for words/bigrams.
+        #[arg(long)]
+        word_coordinate_cap: Option<usize>,
         #[arg(long, default_value_t = 2)]
         min_document_frequency: usize,
         #[arg(long, default_value_t = 300)]
@@ -197,6 +200,7 @@ fn main() -> Result<()> {
             mode,
             output_dir,
             max_coordinates,
+            word_coordinate_cap,
             min_document_frequency,
             epochs,
             learning_rate,
@@ -207,6 +211,7 @@ fn main() -> Result<()> {
                 features: FeatureConfig {
                     mode: mode.into(),
                     max_coordinates,
+                    word_coordinate_cap,
                     min_document_frequency,
                     ..Default::default()
                 },
