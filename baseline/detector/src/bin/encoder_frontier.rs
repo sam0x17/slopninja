@@ -1,4 +1,4 @@
-//! Execute the declared v4 encoder fits and select using Development alone.
+//! Execute a frozen encoder frontier and select using Development alone.
 use anyhow::{Context, Result, ensure};
 use clap::Parser;
 use serde_json::{Value, json};
@@ -23,11 +23,31 @@ struct Args {
     output_dir: PathBuf,
     #[arg(long, default_value = "mps", value_parser = ["cpu", "mps"])]
     device: String,
+    /// Freeze all rates before fitting. Lower rates win exact loss ties.
+    #[arg(long, value_delimiter = ',', default_value = "0.00001,0.00002")]
+    learning_rates: Vec<f64>,
+    #[arg(long, default_value_t = 5, value_parser = clap::value_parser!(u32).range(1..=20))]
+    epochs: u32,
 }
 
 fn main() -> Result<()> {
-    let args = Args::parse();
+    let mut args = Args::parse();
     ensure!(!args.output_dir.exists(), "Use a new frontier directory");
+    ensure!(
+        (1..=8).contains(&args.learning_rates.len())
+            && args
+                .learning_rates
+                .iter()
+                .all(|rate| rate.is_finite() && *rate > 0.0 && *rate <= 0.001),
+        "Declare 1..8 finite learning rates in (0, 0.001]"
+    );
+    args.learning_rates.sort_by(f64::total_cmp);
+    ensure!(
+        args.learning_rates
+            .windows(2)
+            .all(|pair| pair[0] != pair[1]),
+        "Duplicate learning rate"
+    );
     let audit: Value = serde_json::from_slice(&fs::read(&args.token_audit)?)?;
     ensure!(
         audit["fits_configured_token_limit"] == true
@@ -53,7 +73,7 @@ fn main() -> Result<()> {
     let train_path = args.runner_dir.join("train.py");
     let protocol = json!({
         "schema":"slop_ninja_encoder_frontier_v1",
-        "learning_rates":[0.00001,0.00002],"epochs":5,"batch_size":4,"seed":17,
+        "learning_rates":args.learning_rates,"epochs":args.epochs,"batch_size":4,"seed":17,
         "sample_weighting":"source_origin","class_weights":"none",
         "selection":"positive Development recall for every origin, then minimum uncalibrated Development log loss; earlier epoch and lower learning rate break exact ties",
         "partition_sha256":hashes,"checkpoint_pin_sha256":checkpoint_hash,
@@ -72,8 +92,9 @@ fn main() -> Result<()> {
     )?;
     let mut candidates = Vec::new();
     let mut selected: Option<(f64, f64, PathBuf, String)> = None;
-    for (name, rate) in [("lr-0.00001", 0.00001), ("lr-0.00002", 0.00002)] {
-        let output = args.output_dir.join(name);
+    for &rate in &args.learning_rates {
+        let name = format!("lr-{rate}");
+        let output = args.output_dir.join(&name);
         let log_path = args.output_dir.join(format!("{name}.log"));
         let log = fs::File::create_new(&log_path)?;
         let mut command = Command::new(&args.python);
@@ -94,8 +115,6 @@ fn main() -> Result<()> {
                 "1024",
                 "--batch-size",
                 "4",
-                "--epochs",
-                "5",
                 "--seed",
                 "17",
                 "--weight-decay",
@@ -108,6 +127,8 @@ fn main() -> Result<()> {
                 "--learning-rate",
             ])
             .arg(rate.to_string())
+            .arg("--epochs")
+            .arg(args.epochs.to_string())
             .env("HF_HUB_OFFLINE", "1")
             .env("TRANSFORMERS_OFFLINE", "1")
             .env("PYTHONUNBUFFERED", "1");

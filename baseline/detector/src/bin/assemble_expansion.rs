@@ -13,6 +13,12 @@ use std::{
 struct Args {
     #[arg(long)]
     prior: PathBuf,
+    /// Exact prior corpus declared before assembly; defaults to the v4 experiment's v2 input.
+    #[arg(
+        long,
+        default_value = "6377d431b570a53cb9e5cfa97adb28627c24eb8fa68be263df6c86f94065fa06"
+    )]
+    expected_prior_sha256: String,
     #[arg(long, required = true)]
     generation_dir: Vec<PathBuf>,
     #[arg(long)]
@@ -23,9 +29,8 @@ fn main() -> Result<()> {
     let args = Args::parse();
     ensure!(!args.output_dir.exists(), "Use a new assembly directory");
     ensure!(
-        sha256(fs::read(&args.prior)?)
-            == "6377d431b570a53cb9e5cfa97adb28627c24eb8fa68be263df6c86f94065fa06",
-        "Expected the frozen v2 primary corpus"
+        sha256(fs::read(&args.prior)?) == args.expected_prior_sha256,
+        "Prior corpus does not match its declared SHA256"
     );
     let prior = dataset::read_records(&args.prior)?;
     let retired: BTreeSet<_> = prior

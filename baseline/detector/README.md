@@ -25,6 +25,11 @@ accuracy from 52.9% to 78.4% and recovered mixed-class predictions. It remains
 experimental and still trails Pangram on the previously scored Development texts.
 Download the [v4 weights and inference bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-corpus-v0.4.0).
 
+The [v5 narrative experiment](ENCODER_NARRATIVE_V5.md) adds 289 admitted historical
+plot summaries and reserves Phi-4 for an unseen-generator Test. Its generation,
+selection and comparison rules are frozen before fitting; v4 remains the latest
+measured and published detector.
+
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
 provenance, splitting, word/grammar features, linear models and evaluation.

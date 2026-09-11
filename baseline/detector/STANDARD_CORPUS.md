@@ -192,5 +192,7 @@ The [narrative source review](CMU_SOURCE_REVIEW.md) now specifies a fixed
 100-summary historical match sample and preservation of both the CMU collection
 license and upstream Wikipedia notices. `resolve_books` performs that review;
 `admit_books` rechecks the captures and exports qualifying historical proxies.
-The [first admission](CMU_SOURCE_RESULTS.md) retained 75 of 100 summaries and
-declared an extension to 400 sampled sources before generation or scoring.
+The [completed admission](CMU_SOURCE_RESULTS.md) retained 289 of 400 summaries,
+including all 75 admitted in the initial 100-source sample. All initial partitions
+were preserved. The [v5 protocol](ENCODER_NARRATIVE_V5.md) defines the next
+generation campaign and reserves Phi-4 for Test-only transfer evaluation.
