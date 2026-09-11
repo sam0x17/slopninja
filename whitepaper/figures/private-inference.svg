@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="580" viewBox="0 0 1200 580" role="img" aria-labelledby="title desc">
   <title id="title">Private B weights and private customer text</title>
-  <desc id="desc">The model owner and customer independently verify the protected runtime before providing encrypted model material and text. Only that runtime computes on both plaintexts. The customer receives an encrypted revision. A separate host obtains neither secret. The chain receives only permitted metadata.</desc>
+  <desc id="desc">The model owner and customer independently verify the protected runtime before providing encrypted model material and text. Only that runtime computes on both plaintexts. Only the customer can decrypt the revision. A separate host obtains neither secret. The chain receives ciphertext, signed receipts and public job state; validators certify delivery without decryption keys.</desc>
   <defs>
     <marker id="green" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#087f5b"/></marker>
     <marker id="blue" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#2563eb"/></marker>
@@ -31,7 +31,7 @@
     <text x="600" y="302" font-size="20">Private weights + private text</text>
     <text x="600" y="332" font-size="17">No operator log, debug or export access</text>
     <text x="600" y="441" font-size="21">Chain / transport</text>
-    <text x="600" y="468" font-size="18">Permitted metadata and commitments only</text>
+    <text x="600" y="468" font-size="18">Ciphertext, receipts and public job state</text>
   </g>
   <g font-family="Arial, Helvetica, sans-serif" font-size="19" fill="#334155" text-anchor="middle" style="paint-order:stroke;stroke:white;stroke-width:7px;stroke-linejoin:round">
     <text x="200" y="171">Encrypted model package</text>
@@ -39,7 +39,7 @@
     <text x="966" y="168">Encrypted customer input</text>
     <text x="977" y="291">Encrypted revision</text>
     <text x="989" y="346">Only the customer can decrypt</text>
-    <text x="600" y="387">Public job state</text>
+    <text x="600" y="387">Encrypted delivery</text>
   </g>
   <g font-family="Arial, Helvetica, sans-serif" text-anchor="middle" fill="#334155">
     <text x="600" y="522" font-size="21">A separate compute host receives neither secret. Paid B has no ordinary-hosting fallback.</text>

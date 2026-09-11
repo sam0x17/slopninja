@@ -1,6 +1,6 @@
 # Public A models, private B models and training data
 
-Design update, September 11, 2026, whitepaper draft 0.16.
+Design update, September 11, 2026, whitepaper draft 0.17.
 A inference artifacts are public. B weights remain private; B emissions,
 mandatory rewrite service and paid jobs require a qualified attested runtime
 and receipts bound to the registered model and workload profile. The runtime
@@ -354,11 +354,12 @@ not a quality target. Retain uncertain and tied reader judgments.
 
 The miner's preference scorer can rank its own candidates. Benchmark validators
 use the frozen public evaluator and certified semantic fields; a miner cannot
-award itself emissions. Confidential customer payment follows acknowledgment and the agreed
-timeout policy. A chosen validator's inspection can be advisory; its signed
-opinion affects escrow only if both parties accepted that validator's authority
-and dispute terms before accepting the job. Choosing a reviewer cannot change
-deadlines or redirect funds. External detector measurement requires a separately
+award itself emissions. Paid B settlement requires a TEE execution receipt,
+complete customer-encrypted delivery and a strict weighted validator certificate.
+Customer acknowledgment is unnecessary. Validators inspect receipt evidence and
+ciphertext, with no customer plaintext access. Chosen-validator editorial
+inspection is advisory by default; additional refunds or revisions follow
+separately accepted terms and cannot reopen settled escrow or change deadlines. External detector measurement requires a separately
 customer-initiated disclosure flow outside the default private job.
 
 ## Training material to provide

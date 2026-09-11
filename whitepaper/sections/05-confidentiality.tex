@@ -188,7 +188,9 @@ bounded scheduling reduce some leakage without proving its absence.
 The design does not claim protection against every side channel,
 physical attack or future hardware exploit. A miner can refuse service
 or withhold ciphertext. Attestation does not prove writing quality,
-guarantee availability or solve private fair exchange. Paid B launch
+guarantee availability or settle payment alone. B settlement additionally
+requires complete ciphertext publication and a strict weighted delivery
+certificate under Section~\ref{receipt-certified-payment}. Paid B launch
 depends on an independent security review and the measured
 acceptance criteria in Section~\ref{development-and-launch-criteria}.
 
@@ -266,9 +268,10 @@ the supplied material within the customer's disclosure scope. This grants
 no access to other customer text and does not independently reproduce private B weights. An attested
 job's receipt may also be checked within the disclosed scope.
 
-Inspection is advisory by default. A signed decision affects escrow only
-if the job's original terms gave that validator or selection policy
-authority and both parties accepted those terms. Choosing a reviewer
-does not itself change payment rights or extend deadlines. This route
-permits voluntary inspection while preserving the accepted runtime and
-customer-controlled input boundary.
+Inspection is advisory by default. The initial B escrow settles through
+execution and encrypted-delivery evidence under
+Section~\ref{receipt-certified-payment}. Editorial refunds or revisions
+require separately accepted terms; refunds are separate transfers and
+cannot reopen settled escrow. Choosing a reviewer does not redirect
+principal, extend deadlines or grant automatic disclosure. This route
+preserves the accepted runtime and customer-controlled input boundary.

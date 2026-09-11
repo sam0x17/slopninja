@@ -73,9 +73,15 @@ contribution or owner \\
 Pangram changes or serves conflicting records & Pin the reported
 interface/version, retain observations, and suspend affected comparisons
 under a fixed policy \\
-Customer consumes work and withholds payment & Bounded pilot exposure
-and explicit miner nonpayment risk; private fair exchange remains
-unresolved \\
+Customer consumes B work and withholds acknowledgment & TEE completion
+receipt, complete ciphertext publication and strict delivery certificate
+release payment without customer acknowledgment \\
+Miner claims B delivery with a receipt or URL alone & Require the exact
+complete customer ciphertext on chain and a bound valid runtime receipt;
+validators cannot waive contract checks \\
+Paid validators withhold certification & Fixed roster and deadlines;
+certification timeout refunds the customer even after valid delivery,
+leaving bounded miner risk under quorum and chain-liveness assumptions \\
 Miner manufactures paid demand & Keep customer revenue separate from
 emission scoring \\
 \end{longtable}

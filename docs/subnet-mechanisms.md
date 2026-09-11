@@ -1,6 +1,6 @@
 # Slop Ninja subnet mechanisms
 
-Design update, September 11, 2026, whitepaper draft 0.16.
+Design update, September 11, 2026, whitepaper draft 0.17.
 A and B remain the only reward pools. A inference artifacts are public;
 B weights remain private. B emissions, mandatory rewrite service and paid jobs
 require qualified attested execution. Attestation is an admission gate, with

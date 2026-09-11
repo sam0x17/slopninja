@@ -1,6 +1,6 @@
 # Mandatory A/B service evidence
 
-Design update, September 11, 2026, whitepaper draft 0.16. B emissions,
+Design update, September 11, 2026, whitepaper draft 0.17. B emissions,
 mandatory rewrites and paid B jobs require qualified attested execution.
 The DATA/witness transport below serves curator-authorized training tickets.
 It must never export customer instance keys or grant automatic customer access.

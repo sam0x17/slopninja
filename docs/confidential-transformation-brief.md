@@ -1,6 +1,6 @@
 # Slop Ninja: private editing for writers and media teams
 
-Design proposal, September 11, 2026. Companion to [whitepaper draft 0.16](../whitepaper/slop_ninja.pdf).
+Design proposal, September 11, 2026. Companion to [whitepaper draft 0.17](../whitepaper/slop_ninja.pdf).
 
 B transformation is the primary commercial product we propose: editing
 model-written drafts toward an authorized writer's voice while preserving
@@ -111,9 +111,13 @@ client-side verification, protected GPU execution, private-model binding,
 denied egress, isolated job state and no downgrade to ordinary hosting.
 Hardware vulnerabilities, side channels, verifier compromise and denial of
 service remain risks. Attestation does not prove editorial quality or resolve
-payment disputes over secret text. The first pilot's customer-acknowledgment
-policy also permits consuming a result and claiming a timeout refund; payment
-terms need resolution before commercial launch. Until those requirements are
-demonstrated,
+editorial disputes over secret text. Paid B settlement requires the runtime's
+signed execution receipt, the complete customer-encrypted result on chain and
+a delivery certificate exceeding two-thirds of frozen validator weight.
+Validators check that evidence without reading the draft. Customer acknowledgment
+is unnecessary; missed execution, delivery or certification deadlines permit a
+refund. Validator outages can therefore still cause miner loss after valid
+delivery. Editorial refunds are separate agreed transfers. Until the runtime,
+verification capacity and settlement requirements are demonstrated,
 this remains a proposed product. The [consistency review](design-consistency-review.md)
 records the remaining economic and qualification questions.

@@ -119,88 +119,171 @@ remain separate from job principal. The adapter and its accounting
 policy require validation before paid launch. Neither an alpha price
 feed nor an assumed ERC-20 interface substitutes for that work.
 
-The proposed lifecycle is:
+The B lifecycle is:
 
 \begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{Offer and reserve.} The customer selects a miner's signed
-  offer, pins its execution mode, version and job terms, and escrows the
-  quoted alpha amount for a bounded input/output. Attested jobs verify
-  fresh instance evidence and its job key before any input disclosure;
-  failed verification permits cancellation/refund under the offer.
+  \textbf{Verify and reserve.} The customer verifies fresh instance evidence,
+  the registered model/profile and the job encryption and receipt-signing
+  keys. Its signed reservation pins those keys, the accepted security
+  policy, validator snapshot, terms and quoted alpha principal.
 \item
-  \textbf{Encrypt and submit.} The customer posts the salted input
-  commitment and encrypted-delivery hash, then delivers the envelope to
-  the selected recipient key, including the attested instance binding
-  where required.
+  \textbf{Submit and accept.} The customer delivers the input envelope
+  and salted commitment. The protected runtime validates the opening,
+  schema, limits and customer-authorized output key, then signs acceptance.
+  The host relays that acceptance to the contract by the fixed cutoff.
 \item
-  \textbf{Accept.} The selected runtime decrypts, checks the opening and limits,
-  and accepts before the acceptance deadline. In attested mode this
-  occurs inside the protected application, without operator access. Failure to accept permits
-  a refund.
+  \textbf{Execute and publish.} The approved runtime runs the agreed
+  computation, encrypts the result to the customer and signs its completion
+  receipt. The host publishes that receipt and the complete padded
+  ciphertext through the job contract within the agreed release window.
 \item
-  \textbf{Execute and deliver.} The selected runtime runs the private service,
-  commits the result, and makes its customer-encrypted envelope
-  available before the delivery deadline. Attested execution also returns
-  the bound receipt from its protected signing key; the host only relays
-  the ciphertext and permitted settlement metadata.
-\item
-  \textbf{Acknowledge or expire.} A customer acknowledgment releases
-  payment. If there is no timely acceptance or delivery claim, the
-  customer may claim a refund. A
-  delivery claim without acknowledgment follows the bounded timeout
-  policy below.
+  \textbf{Certify and settle.} Validators verify execution evidence and
+  encrypted delivery. A timely strict-weight certificate releases
+  payment under the checks below. Customer acknowledgment is unnecessary.
+  Failure to meet the fixed acceptance, delivery or certification cutoff
+  permits the specified refund.
 \end{enumerate}
 
-Bind acknowledgments and state transitions to chain, contract, job ID,
-role, nonce, and assignment generation. Bind the alpha asset's subnet ID
-and amount in native units as well. Authenticate the association
-between a Bittensor hotkey and its settlement identity. A hash or
-truncated address is not an authorization method. Enforce exactly one
-terminal settlement and explicit finality rules. A customer, miner, or
-keeper must submit timeout transactions; deadlines do not execute
-themselves.
+Bind every signature and state transition to protocol version, chain,
+subnet, contract, job ID, participant roles, nonce and assignment
+generation. Authenticate the hotkey-to-settlement-identity association;
+a copied or truncated address is insufficient. Pin the canonical
+receipt encoding, signature suite and contract verification test vectors.
+Subtensor exposes signature-verification primitives, not a completed TEE
+verifier or job escrow~\cite{evmkeys}.
 
-Customers may deliver ciphertext through authenticated asynchronous
-endpoints and redundant encrypted storage. Small envelopes could instead
-travel through on-chain calldata or events, so miners can discover and
-complete jobs entirely through chain messaging. Payload-size, gas, and
-retention measurements must precede that choice. Storing ciphertext
-on-chain does not hide metadata or provide permanent secrecy after key
-compromise.
+Input may travel through authenticated encrypted transport; validators
+receive only its salted commitment and the runtime's acceptance binding.
+For the initial bounded B pilot, a single completion transaction supplies
+the entire customer ciphertext and receipt. The contract checks its
+length and hash against the receipt, records completion and retains the
+retrievable bytes in transaction data or events. A URL, hash, partial
+upload or enclave signature alone cannot establish delivery. Invalid
+publication must not consume the valid completion slot. Any party may
+relay the exact signed completion without changing its recipient or payee.
 
-\subsection{Payment without disclosing the
-job}\label{payment-without-disclosing-the-job}
+Measure 4, 16 and 64 KiB padded result envelopes, receipt overhead, gas,
+finalized-history retrieval and client recovery before freezing the
+maximum job size. Admit only jobs that fit the qualified bound.
+On-chain ciphertext exposes metadata and remains vulnerable to later
+key compromise. Off-chain availability requires a separately specified
+and qualified protocol; it is not an equivalent pilot fallback.
 
-A customer can consume a useful result and refuse acknowledgment. A
-miner can claim delivery of useless or undecryptable bytes. Public
-commitments alone do not distinguish those cases. Validators who cannot
-read the job also cannot adjudicate its meaning or writing quality.
+\subsection{Receipt-certified B payment}\label{payment-without-disclosing-the-job}
+\label{receipt-certified-payment}
 
-For the first private-job pilot, use customer acknowledgment for payment
-and a fixed, bounded refund timeout for unacknowledged jobs. Publish
-that policy in the offer before acceptance. This assigns nonpayment risk
-to the miner, including when a customer has already consumed a valid
-result. Cap pilot job values and record the loss rate. It is an explicit
-service tradeoff, not trustless fair exchange. Public protocol evidence
-can resolve duplicate or late transactions; it cannot resolve a secret
-editorial disagreement.
+B payment purchases the agreed bounded computation and retrievable
+customer-encrypted result. Validators certify these facts without
+receiving source text, result plaintext, private weights or commitment
+openings. Customer satisfaction is not a default payment predicate.
+The attestation verifier evaluates evidence against the accepted policy;
+a hardware signature alone does not approve the application~\cite{rats}.
 
-Benchmark reputation can help customers choose a service without
-exposing their own work. It does not prove any particular unknown-input
-prediction correct. The customer-directed inspection route in
-Section~\ref{customer-directed-evidence-disclosure} can support an agreed
-dispute policy. Its effect on payment must be
-fixed before job acceptance; a customer-selected opinion alone cannot
-redirect escrow. The initial pilot retains acknowledgment and bounded
-timeout refunds. This payment choice remains open before paid launch. A proposed
-alternative would release payment on verified agreed execution and complete
-customer-encrypted delivery, with editorial refunds under separately
-accepted terms. It requires a specified receipt-verification and
-ciphertext-availability path; a hash or delivery claim is insufficient.
-That alternative is not the adopted pilot settlement rule.
+\paragraph{Execution evidence.}
+The protected runtime signs acceptance only after checking the submitted
+input and output key. Its completion receipt binds that acceptance,
+the input commitment, job and offer, miner and settlement payee, model
+content digest, runtime/policy and workload profile, instance evidence,
+customer output key, padded ciphertext length and hash, and deadlines.
+Only a successful run of the agreed procedure may produce a completion
+receipt. The runtime must generate and encrypt the result itself; it
+cannot attest arbitrary miner-supplied text, truncated execution or a
+model-selected error as completed work. A model's poor revision can
+still be the valid output of that procedure.
+
+Customer authorization fixes both instance keys before disclosure.
+Validators check their binding to the approved loader and complete
+CPU/GPU path, the measured model, freshness, disabled debug access and
+the job's accepted revocation collateral. The reservation pins an
+authenticated security-policy/revocation snapshot, maximum evidence age
+and bounded job duration, all still valid at acceptance. Later updates
+stop new acceptances and do not retroactively rewrite the settlement
+test for accepted jobs. A newly discovered vulnerability remains a
+security incident; payment cannot repair an earlier exposure. Restart,
+key substitution or a changed model/profile cannot silently replace an
+accepted job.
+
+\paragraph{Validator authority and certificate.}
+Before reservation, derive the complete paid-certifier roster from the
+epoch's protocol-defined validator eligibility and a proof-verified
+finalized native snapshot. Do not select a subset by responses to this
+job or customer/miner preference. Bind each identity,
+registration generation, signing key and integer effective consensus
+stake, with total \(W>0\), using the snapshot authentication rules in
+Section~\ref{service-evidence}. Exclude the serving miner's exact UID
+and any customer UID linked by authenticated chain identity. Different
+keys do not establish independent owners; assume dishonest weight is
+strictly below \(W/3\) in this conditional set.
+
+The paid roster and signing keys serve public receipt checks.
+They grant no benchmark-style customer envelopes or decryption access.
+Reserve verification capacity and identify its funder before accepting
+jobs; a relayer or a small preparer group cannot choose a payment quorum.
+Missing, abstaining, recused and offline validators remain in \(W\).
+Every signer independently checks the instance evidence, acceptance and
+completion receipts, exact offer bindings, and the complete ciphertext
+in finalized chain publication.
+
+A \texttt{DELIVERED} certificate requires distinct eligible signers with
+agreeing weight \(w\) satisfying \(3w>2W\). It binds the job, offer,
+snapshot, accepted policy, receipt digest, completion transaction and
+ciphertext hash/length. The contract verifies the frozen signer weights
+and signatures, the pinned runtime receipt signature and job bindings,
+matching recorded ciphertext publication and all deadlines. A validator
+certificate cannot waive those contract checks. No new receipt,
+output or validator set may replace an accepted completion after issue.
+Retries of identical evidence are idempotent.
+
+\paragraph{Deadlines and failure.}
+Each funded job fixes acceptance height \(H_a\), delivery cutoff \(H_d\)
+and certificate cutoff \(H_c\), with \(H_a<H_d<H_c\), a fixed padded
+response-release slot and a bounded publication window. The qualified
+policy supplies minimum execution, inclusion and verification windows;
+missing capacity or incompatible deadlines prevent reservation. The
+runtime releases its padded envelope at the fixed slot; late host
+relay does not change its hash or extend \(H_d\).
+
+Successful canonical transaction inclusion at a cutoff is timely.
+Validators wait for finalized acceptance and completion evidence before
+certifying. A certificate must itself be included by \(H_c\); the
+decision becomes terminal when that inclusion is final. No timely
+acceptance permits refund after \(H_a\); no timely valid completion
+permits refund after \(H_d\); timely completion without a certificate
+permits refund after \(H_c\). Refund decisions wait for finality of the
+relevant cutoff. A late certificate cannot recover refunded principal.
+The contract records exactly one payment or refund; retries cannot pay
+twice, and neither replacement evidence nor a dispute extends deadlines.
+A miner, customer or keeper submits settlement transactions. Relaying
+evidence does not change the beneficiary.
+
+With honest, available quorum and timely chain inclusion, a customer
+cannot consume a result and veto payment by withholding acknowledgment.
+Validator outages, censorship or insufficient agreeing weight can still
+cause a refund after valid delivery. The miner bears that bounded risk;
+retain a \texttt{CERTIFICATION\_TIMEOUT} record distinct from proven
+execution failure. No paid-job timeout automatically becomes a mandatory
+service failure or changes emission credit. Finality stalls can delay
+terminal settlement; they cannot justify drawing new judges or shrinking
+\(W\). These dependencies prevent an unconditional fair-exchange claim.
+
+\paragraph{Editorial disputes and A hosting.}
+A completion certificate establishes no semantic fidelity, author-fit
+success or Pangram pass. Benchmark evaluation remains independent.
+A customer may separately send evidence to one chosen validator under
+Section~\ref{customer-directed-evidence-disclosure}. Inspection is advisory
+unless both parties accepted specific refund or revision terms beforehand.
+The initial B escrow uses the receipt/certificate rule; additional
+editorial refunds are separate transfers under those terms and do not
+reopen settled escrow or authorize automatic plaintext disclosure.
+
+Ordinary A hosting cannot supply a protected generation receipt. Its
+explicitly separate pilot mode retains customer acknowledgment and bounded
+timeout refunds, with disclosed miner nonpayment risk. A hosted in a
+qualified attested runtime may use the B delivery-settlement procedure
+for its declared A computation. A artifact publication and emission
+eligibility do not require this hosting mode.
 
 \subsection{Revenue and costs}\label{revenue-and-costs}
 

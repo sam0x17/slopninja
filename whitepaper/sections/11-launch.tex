@@ -87,14 +87,21 @@ candidate-triggered error as shared evidence failure. Publish these
 counterfactuals as diagnostics. This bounded study cannot establish
 resistance to all adaptive attacks or native payout manipulation.
 
-In parallel, use synthetic jobs and test funds to verify instance-key
-input encryption, customer-only result delivery, key substitution rejection,
-replay prevention, expiry, acknowledgment, and exactly one settlement.
-Exercise miner outage, wrong keys, unacknowledged consumed results, and
-attempted automatic reassignment. Neither a validator nor a gateway
-should have a decryption path. Measure encrypted payload sizes and chain
-costs before enabling on-chain transport. No real customer text is
-needed for that pilot.
+In parallel, use synthetic paid B jobs and test funds to verify instance-key
+input encryption, customer-only result delivery and exactly one settlement.
+Require valid receipt plus complete on-chain ciphertext plus a timely strict
+weighted certificate. Test payment with no customer acknowledgment; fake,
+stale, replayed or wrong-model receipts; substituted input/output keys;
+missing, partial or altered ciphertext; duplicate or insufficient signer
+weight; and certificate-only attempts to bypass contract checks. Test every
+cutoff equality and refund/payment race, certificate delay after valid
+delivery, revoked-at-acceptance keys, later policy updates and changed
+instances. Invalid uploads must not block a valid completion, and any
+relayer must preserve the fixed payee. Keep certification timeouts distinct
+from proven execution failure. Neither validators nor gateways receive
+plaintext or keys. Measure gas, finalized-history retrieval and verification
+capacity for 4, 16 and 64 KiB padded result envelopes before freezing the
+maximum. Ordinary A acknowledgment remains a separate hosting mode.
 
 Use the writer pilot to establish acquisition and review costs. Refit
 public starter models only on data cleared for the intended release.
@@ -136,8 +143,10 @@ and persistent recovery deficits, including same-class probation and resistance
 to resets through key or service-version changes. Verify settlement
 under native weight-reveal delays and payout cycles; already distributed
 emissions cannot be clawed back by this proposal. Before paid customer launch, separately establish
-acceptable nonpayment losses, retention terms, encrypted delivery
-reliability, and alpha escrow behavior under finality and timeouts.
+bounded certification-timeout exposure, retention terms, encrypted delivery
+reliability, and alpha escrow behavior under finality and timeouts. Verify
+paid-roster state proofs, frozen security policy and revocation collateral,
+full ciphertext checks and verification funding before accepting a job.
 Verify quote expiry, capacity reservations, exact alpha accounting,
 release and refund permissions, and fee handling. These
 requirements must be concrete protocol parameters or measured acceptance

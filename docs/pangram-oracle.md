@@ -1,6 +1,6 @@
 # Pangram benchmark, verification and API funding
 
-Design update, September 11, 2026, whitepaper draft 0.16.
+Design update, September 11, 2026, whitepaper draft 0.17.
 B emissions and paid jobs require qualified attested execution. Version-bound
 receipts establish execution under that policy; separate Pangram observations
 measure authorized benchmark text. Customer text is never automatically sent

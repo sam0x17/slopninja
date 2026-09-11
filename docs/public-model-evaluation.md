@@ -1,6 +1,6 @@
 # Public A models and private B generation
 
-Design update, September 11, 2026, whitepaper draft 0.16.
+Design update, September 11, 2026, whitepaper draft 0.17.
 A artifacts are public and validators execute them independently. B weights
 remain private; every credited B candidate, mandatory rewrite and paid B job
 requires qualified attested execution. Validators verify its version-bound

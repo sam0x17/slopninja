@@ -76,7 +76,10 @@ The [confidential inference design](whitepaper/sections/05-confidentiality.tex)
 specifies key release, runtime isolation and remaining hardware assumptions.
 The [investor brief](docs/confidential-transformation-brief.md) describes proposed
 media workflows, an editorial pilot, miner and application revenue, and the
-requirements for private B paid launch.
+requirements for private B paid launch. B payment requires a TEE execution
+receipt, complete encrypted result publication and a strict weighted validator
+delivery certificate. Customer acknowledgment is unnecessary; validators receive
+no customer decryption capability. Missed certification deadlines permit a refund.
 The aim is freely accessible detection competitive with Pangram, supporting
 better private transformers. Detection parity remains to be demonstrated;
 running or hosting an A model still costs compute.
@@ -473,7 +476,7 @@ classifiers and an editing adapter, with a [training-source plan](docs/miner-tra
 covering Global Voices, PLOS and consented writing. A artifacts are public,
 B weights remain private, and miners can earn customer fees through
 [asynchronous inference](docs/paid-inference.md)
-with proposed on-chain job settlement and private execution. Draft 0.16 requires
+with proposed on-chain job settlement and private execution. Draft 0.17 requires
 qualified attestation for B emissions and paid service, with independent key
 release and version-bound receipts. The [consistency review](docs/design-consistency-review.md)
 records the incentive corrections and remaining launch requirements.

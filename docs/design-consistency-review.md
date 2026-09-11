@@ -1,7 +1,7 @@
 # Design consistency and incentives review
 
 September 11, 2026. Reviewed whitepaper draft 0.15 at `c0c9ed6`; corrections
-appear in draft 0.16. Scope covers the LaTeX paper, investor brief and current
+appear in draft 0.16; draft 0.17 adopts receipt-certified B payment. Scope covers the LaTeX paper, investor brief and current
 model, payment, reward and evidence specifications. Historical experiment reports
 remain descriptions of their implemented policies.
 
@@ -10,7 +10,8 @@ questions at the specification level. It requires qualified private B execution
 for emissions as well as customer jobs, links advertised performance to the
 served model and budget, and limits unresolved-candidate withholding to that
 candidate. It does not establish a secure implementation, profitable operation
-or collusion-resistant native payouts. Paid settlement still needs a decision.
+or collusion-resistant native payouts. Paid settlement is now specified and
+still needs implementation and qualification.
 
 ## Investor questions
 
@@ -109,25 +110,47 @@ and benchmark subsidies. Native owner allocation and UID renumbering behavior
 are documented in the [Bittensor subnet guide](https://www.bittensor.com/docs/guides/subnets);
 neither establishes an investor's ownership or revenue rights.
 
-## Remaining payment decision
+## B payment decision, adopted in draft 0.17
 
-The paper retains the first pilot's acknowledgment-and-timeout policy. A customer
-can consume a useful revision, withhold acknowledgment, and reclaim escrow.
-Small job caps limit loss but leave that incentive intact. This cannot support
-a claim of trustless paid exchange.
+Paid B now settles on a TEE-signed execution receipt, complete customer-encrypted
+result publication and a validator delivery certificate. No customer
+acknowledgment is required. The runtime signs only the result it generated and
+encrypted for the accepted input under the agreed model/profile. Validators
+check attestation and receipt bindings and the complete finalized ciphertext;
+they receive no plaintext, weights, commitment openings or customer keys.
 
-The recommended replacement would pay for verified agreed execution and complete
-customer-encrypted delivery, with no customer acknowledgment needed. Editorial
-quality refunds would follow separately accepted terms. It is a proposal, not
-the adopted settlement rule in draft 0.16.
+The paid-certifier roster is frozen from authenticated native state before
+reservation, excluding the exact serving-miner UID and an authenticated linked
+customer UID. The certificate requires `3w>2W`, with missing signers retained in
+`W` and the same conditional dishonest-weight assumption below `W/3`.
+Contract checks still enforce the runtime signature, job bindings, complete
+ciphertext and deadlines; a quorum cannot waive them.
 
-Before adopting it, specify how the contract authenticates the attested receipt,
-binds the exact accepted job and output key, verifies complete ciphertext
-availability by the deadline, handles revocation/finality and executes exactly
-one payment or refund. A receipt hash or HTTP locator alone is insufficient.
-The runtime must validate input and encrypt the result itself. No settlement
-path may grant automatic plaintext access to validators or a gateway.
-Customer-chosen inspection remains a separate, scoped disclosure.
+The bounded pilot publishes the full padded output in one completion transaction.
+The job fixes acceptance, delivery and certificate cutoffs, with exactly one
+payment or refund. Failure to certify a timely delivered result refunds the
+customer at the final cutoff; retain `CERTIFICATION_TIMEOUT` separately from
+proven execution failure. This removes the customer's unilateral payment veto
+under honest, available quorum, but leaves miner exposure to certification
+outages and chain censorship. Verification capacity and funding must be reserved
+before accepting a job.
+
+The accepted security-policy/revocation snapshot and job limits fix the
+verification test. Later updates stop new acceptances and do not rewrite settled
+or accepted job terms. Newly discovered vulnerabilities remain security incidents.
+A changed key, instance or model cannot silently replace the accepted job.
+
+Receipts certify computation and encrypted availability; editorial quality still
+requires independent evaluation. Optional customer-chosen inspection follows a
+separate explicit disclosure. Any additional editorial refund is a separate
+transfer under agreed terms and does not reopen the initial B escrow.
+Ordinary A hosting retains its separately disclosed acknowledgment policy;
+qualified attested A hosting may use the receipt procedure.
+
+The [paid-inference specification](paid-inference.md) and
+[whitepaper settlement section](../whitepaper/sections/06-paid-inference.tex)
+define the adopted rule. The alpha adapter, receipt verifier, publication,
+certificate handling and client still require implementation and testing.
 
 ## Required evidence before launch
 
@@ -144,8 +167,9 @@ Customer-chosen inspection remains a separate, scoped disclosure.
 - Validate the complete scheduling and review budget, Pangram integration,
   mandatory rewrite quotas, persistent recovery deficits and native payout lag.
   Preserve protocol counters and deficits across native UID renumbering.
-- Resolve paid settlement, alpha custody/accounting, delivery availability and
-  commercial purchase terms before accepting customer funds.
+- Implement and qualify paid settlement, alpha custody/accounting, complete
+  encrypted delivery, frozen validator authority, deadline races and commercial
+  purchase terms before accepting customer funds.
 - Run a scoped editorial pilot with authorized material and independent writer
   judgments; measure both required detector outcomes only where external
   disclosure is authorized. Do not present benchmark success as a private
@@ -155,7 +179,8 @@ Customer-chosen inspection remains a separate, scoped disclosure.
 
 This is a document and design review. The fixed-credit counterexample was
 checked arithmetically; no new simulation, TEE deployment, escrow execution,
-model training or live Pangram experiment was performed. Draft 0.16 is built
-from the checked-in LaTeX and reviewed for layout and reference consistency.
-The existing Rust experiments retain their recorded scope and do not implement
-the revised launch protocol.
+model training or live Pangram experiment was performed. Draft 0.17 builds
+from the checked-in LaTeX as a 41-page PDF with no build warnings. Changed
+payment, participant and trust pages were inspected, 179 local links resolved,
+and the diff passed whitespace checks. The existing Rust experiments retain
+their recorded scope and do not implement the revised launch protocol.

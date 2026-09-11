@@ -8,7 +8,8 @@ Both register capabilities and authenticated protocol identities. A miners
 may separately offer paid detector hosting. Customers buy detection and transformation
 jobs through separately quoted offers. Validators execute the frozen A
 artifacts for authoritative benchmark scores, evaluate B outputs, and
-submit weights. Benchmark curators maintain
+submit weights. For paid B, they verify TEE receipts and complete encrypted
+delivery without reading customer text. Benchmark curators maintain
 permitted source material, production records, and hidden evaluation
 labels. A customer-facing gateway may relay ciphertext, but receives no
 decryption key.
@@ -51,7 +52,8 @@ Source of text & Customer & Authorized benchmark collection \\
 Default input recipients & B: customer and attested instance.
 A: operator too if ordinary hosting is selected & Curator,
 assigned service miners, validators, commissioned reviewers \\
-Evaluation & Customer acceptance & Validator execution of frozen A
+Evaluation & Customer judges quality; validators certify paid B execution
+and encrypted delivery & Validator execution of frozen A
 artifacts; independent B output review and required attested receipts \\
 Pangram submission & Excluded from the confidential job protocol &
 Required for every B benchmark \\
@@ -72,7 +74,8 @@ miners receive only the inputs required for their assigned tasks.
 \caption{Private B inference. The model owner and customer independently
 verify the runtime before provisioning their secrets. Only that runtime
 processes both in plaintext; the customer receives the encrypted result.
-A separate customer disclosure can authorize validator inspection.}
+Validators check the receipt and complete ciphertext without keys.
+A separate customer disclosure can authorize editorial inspection.}
 \end{figure}
 
 Customer tasks do not become benchmark examples automatically.
