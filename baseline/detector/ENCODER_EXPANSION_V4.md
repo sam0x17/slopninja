@@ -104,3 +104,37 @@ fitting, and writes `selection.json` before any final Test evaluation. Each
 candidate retains its own log and calibration. An ineligible run retains its
 epoch history without producing a selected artifact. Other training failures
 stop the frontier and preserve the partial logs.
+
+`encoder_evaluation` runs each artifact's bundled CPU inference code. First use
+`freeze-thresholds` with that artifact's original Calibration shard; the command
+checks its hash against the frozen training report. It preserves the calibrated
+probabilities and freezes the two operating points in `thresholds.json`.
+Use `evaluate` with that file for Development or final Test. Final Test requires
+`--open-final-test`; the command rejects Calibration overlap and never updates
+temperature or thresholds. Provider slices include the human roots paired with
+that provider's generated texts. Evaluation outputs must use a new directory
+outside the artifact, under an existing parent directory.
+
+For an existing detector, preserve its archived Calibration export with
+`--calibration-predictions` and `--expected-predictions-sha256`. Recomputing v2's
+Calibration scores locally changed probabilities by up to `1.1841e-7` and moved
+its strict cutoff by about `1e-8`. Those observations fit within the declared
+`1e-6` reference-vector tolerance, but the original decision threshold must stay
+fixed. The comparison therefore uses the original v2 export. Reports flag
+decisions within twice the reference-vector tolerance of a cutoff; this is a
+diagnostic margin, not a proven error bound for arbitrary texts or hardware.
+
+For example, from `baseline/detector/`, with the selected artifact and its
+original Calibration shard:
+
+```sh
+cargo run --release --bin encoder_evaluation -- \
+  --artifact /path/to/selected-artifact --python .venv/bin/python \
+  --output-dir /path/to/comparison/thresholds \
+  freeze-thresholds --calibration-jsonl /path/to/original/calibration.jsonl
+cargo run --release --bin encoder_evaluation -- \
+  --artifact /path/to/selected-artifact --python .venv/bin/python \
+  --output-dir /path/to/comparison/development \
+  evaluate --records /path/to/assembly/records.jsonl \
+  --thresholds /path/to/comparison/thresholds/thresholds.json --split development
+```
