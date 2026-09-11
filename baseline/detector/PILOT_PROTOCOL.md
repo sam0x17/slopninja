@@ -38,6 +38,10 @@ failed generations or omit only the difficult class.
 An additional Mistral-Small-3.2-24B-Instruct-2506 cohort uses only the frozen test
 sources with the same operations. It measures a limited change of generator.
 Neither those outputs nor their scores enter fitting, selection or calibration.
+The Mistral holdout uses native MLX on the local M5 Max; the Qwen cohort uses
+LM Studio MLX on the Studio M3 Ultra. This comparison changes serving runtime
+and hardware together with the checkpoint, so it cannot isolate a generator-only
+effect. This execution detail was recorded before any detector fitting.
 
 ## Prespecified candidates
 

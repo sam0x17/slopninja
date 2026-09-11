@@ -50,7 +50,7 @@ baseline/detector/.venv/bin/python baseline/detector/ml/audit.py \
   --development-jsonl data/baseline-detector/export/development.jsonl \
   --calibration-jsonl data/baseline-detector/export/calibration.jsonl \
   --test-jsonl data/baseline-detector/export/test.jsonl \
-  --max-tokens 1024 --output data/baseline-detector/export/token-audit.json
+  --max-tokens 2048 --output data/baseline-detector/export/token-audit.json
 ```
 
 The audit reports class/group counts, evidence counts, token-length percentiles
@@ -67,7 +67,7 @@ baseline/detector/.venv/bin/python baseline/detector/ml/train.py \
   --development-jsonl data/baseline-detector/export/development.jsonl \
   --calibration-jsonl data/baseline-detector/export/calibration.jsonl \
   --output data/baseline-detector/runs/encoder-001 \
-  --device mps --max-tokens 1024 --batch-size 4 --epochs 3 --seed 17
+  --device mps --max-tokens 2048 --batch-size 4 --epochs 3 --seed 17
 ```
 
 The model trains only on `train`; the best epoch minimizes unweighted development

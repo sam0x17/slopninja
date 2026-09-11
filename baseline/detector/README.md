@@ -43,8 +43,8 @@ weights against that spec before using an export.
 ```sh
 cargo run --release --bin generate_samples -- \
   --input ../../data/baseline-detector/acquisition-v1/frozen-roots.jsonl \
-  --model-spec ../../data/baseline-detector/generators/qwen.json \
-  --output-dir ../../data/baseline-detector/qwen-v1 \
+  --model-spec ../../data/baseline-detector/generators/qwen-pilot.json \
+  --output-dir ../../data/baseline-detector/qwen-pilot \
   --base-url http://127.0.0.1:18123/v1 --concurrency 4 --max-calls 320 \
   --complete-families-only
 ```
@@ -59,7 +59,7 @@ attempted and reports every family excluded because an output failed admission.
 To pause generation, create `PAUSE` in that run's output directory:
 
 ```sh
-touch ../../data/baseline-detector/qwen-v1/PAUSE
+touch ../../data/baseline-detector/qwen-pilot/PAUSE
 ```
 
 Workers stop taking new tasks when they observe the file. Requests already in
@@ -71,7 +71,7 @@ the file in place until the process exits, then remove it and rerun the same
 generation command to resume from validated cached responses:
 
 ```sh
-rm ../../data/baseline-detector/qwen-v1/PAUSE
+rm ../../data/baseline-detector/qwen-pilot/PAUSE
 ```
 
 The pause file also blocks new invocations until removed. Pausing does not change
@@ -84,11 +84,11 @@ the existing environment is `../../.venv/bin/python`.
 
 ```sh
 cargo run --release --bin slop_ninja_detector -- featurize \
-  --input ../../data/baseline-detector/qwen-v1/records.jsonl \
-  --output ../../data/baseline-detector/qwen-v1/features.jsonl \
+  --input ../../data/baseline-detector/qwen-pilot/records.jsonl \
+  --output ../../data/baseline-detector/qwen-pilot/features.jsonl \
   --mode combined --python ../../.venv/bin/python
 cargo run --release --bin slop_ninja_detector -- train \
-  --features ../../data/baseline-detector/qwen-v1/features.jsonl \
+  --features ../../data/baseline-detector/qwen-pilot/features.jsonl \
   --mode combined --max-coordinates 8192 \
   --output-dir ../../data/baseline-detector/runs/linear-combined-v1
 ```
@@ -101,7 +101,7 @@ after candidate selection:
 
 ```sh
 cargo run --release --bin slop_ninja_detector -- evaluate \
-  --features ../../data/baseline-detector/qwen-v1/features.jsonl \
+  --features ../../data/baseline-detector/qwen-pilot/features.jsonl \
   --artifact ../../data/baseline-detector/runs/linear-combined-v1/model.json \
   --output ../../data/baseline-detector/runs/linear-combined-v1-test.json \
   --open-final-test
