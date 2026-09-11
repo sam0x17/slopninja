@@ -38,10 +38,20 @@ failed generations or omit only the difficult class.
 An additional Mistral-Small-3.2-24B-Instruct-2506 cohort uses only the frozen test
 sources with the same operations. It measures a limited change of generator.
 Neither those outputs nor their scores enter fitting, selection or calibration.
-The Mistral holdout uses native MLX on the local M5 Max; the Qwen cohort uses
-LM Studio MLX on the Studio M3 Ultra. This comparison changes serving runtime
-and hardware together with the checkpoint, so it cannot isolate a generator-only
-effect. This execution detail was recorded before any detector fitting.
+Both adopted cohorts use native MLX-LM 0.31.3 / MLX 0.32.2 on the M5 Max, with
+separate recorded checkpoint and tokenizer configurations. The Mistral tokenizer
+requires its recorded regex correction. The comparison does not isolate a
+checkpoint-only effect from those tokenizer differences.
+
+Before fitting, we moved Qwen generation to native MLX after the laptop became
+available on AC power. An actual unseeded, temperature-0.7 HTTP smoke produced
+128 tokens in 1.86 seconds; the Studio runtime was substantially slower. The
+adopted `qwen-native-v3` run starts all 320 tasks afresh. Preserve the earlier
+GGUF and Studio MLX runs in full as operational preflights, without incorporating
+their outputs into this pilot. This decision uses measured runtime and compute
+availability, with no fitted detector or test predictions available. Prompts,
+source families, partitions, sampling settings and admission rules are unchanged.
+Training and evaluation remain on the Studio after a verified corpus transfer.
 
 ## Prespecified candidates
 

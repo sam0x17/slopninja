@@ -39,6 +39,8 @@ model-spec JSON binds the model ID, immutable revision/file hash, Apache-2.0
 license evidence, quantization, runtime, temperature and token limit. See the
 struct in `src/bin/generate_samples.rs` for the exact fields. Verify the loaded
 weights against that spec before using an export.
+The [native generation notes](ml/GENERATION_RUNTIME.md) describe the separate
+MLX environment and the pinned Mistral tokenizer correction.
 
 ```sh
 cargo run --release --bin generate_samples -- \

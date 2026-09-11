@@ -6,6 +6,9 @@ cap of 128 tokens. No benchmark output enters the training corpus. Each row is
 a single run, except where stated; the timings are operational checks, not a
 controlled hardware comparison.
 
+These measurements preceded the final corpus runtime choice. The
+[pilot protocol](../PILOT_PROTOCOL.md) records the adopted native M5 run.
+
 | Runtime and weights | Requests at once | Completion tokens / elapsed seconds | Aggregate tokens/second |
 | --- | ---: | ---: | ---: |
 | LM Studio llama.cpp 2.28.2, Qwen Q6_K, server parallel 4 | 1 | 128 / 15.92 | 8.04 |
