@@ -1,5 +1,5 @@
 //! Prepare exact-input Pangram bulk requests without making network calls.
-use anyhow::{Result, ensure};
+use anyhow::{Context, Result, ensure};
 use clap::Parser;
 use serde_json::{Value, json};
 use slop_ninja_detector::dataset::{Evidence, OriginRecord, read_records, sha256};
@@ -15,9 +15,16 @@ struct Args {
     /// Repeated observations are distinct requests, never substitutes.
     #[arg(long, default_value_t = 1)]
     repeats: usize,
+    /// Start after existing observations when scheduling deliberate repeats.
+    #[arg(long, default_value_t = 0)]
+    repeat_start: usize,
 }
 
-fn plan(records: &[OriginRecord], repeats: usize) -> Result<(Value, Vec<Value>)> {
+fn plan(
+    records: &[OriginRecord],
+    repeats: usize,
+    repeat_start: usize,
+) -> Result<(Value, Vec<Value>)> {
     ensure!(
         (1..=10).contains(&repeats),
         "Use between one and ten repeats"
@@ -63,7 +70,10 @@ fn plan(records: &[OriginRecord], repeats: usize) -> Result<(Value, Vec<Value>)>
     let mut members = Vec::new();
     // All repeats use the same stable text order. Each member retains every
     // source label, even when multiple records refer to identical input bytes.
-    for repeat in 0..repeats {
+    let repeat_end = repeat_start
+        .checked_add(repeats)
+        .context("Repeat index overflow")?;
+    for repeat in repeat_start..repeat_end {
         for (hash, (text, provenance)) in &unique {
             let words = text.split_whitespace().count();
             let billable = words.div_ceil(100);
@@ -91,7 +101,7 @@ fn plan(records: &[OriginRecord], repeats: usize) -> Result<(Value, Vec<Value>)>
         "schema":"slop_ninja_pangram_annotation_plan_v1",
         "model_selector":"pangram-4", "status":"prepared_not_submitted",
         "record_count":records.len(), "unique_texts":unique.len(),
-        "repeats":repeats,"request_items":members.len(),"request_batches":batches.len(),
+        "repeats":repeats,"repeat_start":repeat_start,"request_items":members.len(),"request_batches":batches.len(),
         "estimated_submitted_words":total_words,"estimated_billable_units":total_units,
         "estimated_bulk_usd_cents":total_units * 4,
         "estimated_realtime_usd_cents":total_units * 5,
@@ -121,7 +131,7 @@ fn main() -> Result<()> {
     ensure!(!args.output_dir.exists(), "Use a new output directory");
     let input = fs::read(&args.input)?;
     let records = read_records(&args.input)?;
-    let (mut manifest, batches) = plan(&records, args.repeats)?;
+    let (mut manifest, batches) = plan(&records, args.repeats, args.repeat_start)?;
     ensure!(
         fs::read(&args.input)? == input,
         "Corpus changed while preparing"
@@ -206,7 +216,9 @@ mod tests {
         let large = record("large", 99_801);
         let mut duplicate = small.clone();
         duplicate.id = "same-bytes".into();
-        let (manifest, batches) = plan(&[small.clone(), large, duplicate], 2).unwrap();
+        let (manifest, batches) = plan(&[small.clone(), large, duplicate], 2, 1).unwrap();
+        assert_eq!(manifest["members"][0]["repeat_index"], 1);
+        assert_eq!(manifest["members"][3]["repeat_index"], 2);
         assert_eq!(manifest["record_count"], 3);
         assert_eq!(manifest["unique_texts"], 2);
         assert_eq!(manifest["request_items"], 4);
@@ -240,6 +252,6 @@ mod tests {
         );
         let mut denied = small;
         denied.rights.external_evaluation = false;
-        assert!(plan(&[denied], 1).is_err());
+        assert!(plan(&[denied], 1, 0).is_err());
     }
 }

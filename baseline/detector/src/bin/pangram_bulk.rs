@@ -43,6 +43,9 @@ enum Command {
     Collect {
         #[arg(long)]
         job_dir: PathBuf,
+        /// Record whitespace-only echo changes separately; all other changes fail.
+        #[arg(long)]
+        allow_whitespace_echo: bool,
     },
 }
 
@@ -224,6 +227,13 @@ fn submit(plan_dir: &Path, batch: usize, budget_dir: &Path, reserve_cents: u64) 
         .as_u64()
         .context("Missing cap")?;
     let used = budget_used(budget_dir)?;
+    for entry in fs::read_dir(budget_dir.join("jobs"))? {
+        let previous = entry?.path().join("request.json");
+        ensure!(
+            !previous.exists() || fs::read(previous)? != payload,
+            "This exact request already has a reservation; collect that job instead"
+        );
+    }
     ensure!(
         used.checked_add(reserve_cents).is_some_and(|v| v <= cap),
         "Cumulative budget exhausted"
@@ -273,7 +283,12 @@ fn submit(plan_dir: &Path, batch: usize, budget_dir: &Path, reserve_cents: u64) 
         "estimated_bulk_usd_cents":units*4,"cumulative_reserved_usd_cents":used+reserve_cents,"cap_usd_cents":cap}))
 }
 
-fn validate_result(item: &Value, expected: &Value, task_id: &str) -> Result<()> {
+fn validate_result(
+    item: &Value,
+    expected: &Value,
+    task_id: &str,
+    allow_whitespace: bool,
+) -> Result<&'static str> {
     ensure!(
         item["id"] == expected["id"] && item["task_id"] == task_id,
         "Result identity mismatch"
@@ -283,10 +298,17 @@ fn validate_result(item: &Value, expected: &Value, task_id: &str) -> Result<()> 
         "Unexpected non-success result"
     );
     let result = &item["result"];
-    ensure!(
-        result["text"] == expected["text"],
-        "Provider returned different input text"
-    );
+    let returned = field(result, "text")?;
+    let submitted = field(expected, "text")?;
+    let echo_match = if returned == submitted {
+        "exact"
+    } else {
+        ensure!(
+            allow_whitespace && returned.split_whitespace().eq(submitted.split_whitespace()),
+            "Provider returned different input text"
+        );
+        "whitespace_only"
+    };
     ensure!(
         !field(result, "version")?.is_empty(),
         "Missing provider version"
@@ -304,10 +326,10 @@ fn validate_result(item: &Value, expected: &Value, task_id: &str) -> Result<()> 
         (sum - 1.0).abs() < 1e-5,
         "Content fractions do not sum to one"
     );
-    Ok(())
+    Ok(echo_match)
 }
 
-fn collect(job: &Path) -> Result<Value> {
+fn collect(job: &Path, allow_whitespace: bool) -> Result<Value> {
     let receipt = read(&job.join("receipt.json"))?;
     let bulk_id = field(&receipt, "bulk_id")?;
     ensure!(
@@ -410,6 +432,7 @@ fn collect(job: &Path) -> Result<Value> {
                         item,
                         &items[index],
                         accepted.get(&index).context("Unaccepted success")?,
+                        allow_whitespace,
                     )?;
                 } else {
                     ensure!(item["stage"] == "STAGE_FAILED", "Unresolved failed item");
@@ -443,14 +466,20 @@ fn collect(job: &Path) -> Result<Value> {
         .collect();
     let mut annotations = Vec::new();
     let mut versions = BTreeSet::new();
+    let mut echo_counts = BTreeMap::<&str, usize>::new();
     let mut succeeded = 0;
     for (index, item) in &observations {
+        let mut echo_match = "failed";
         if item["stage"] == "STAGE_SUCCESS" {
             succeeded += 1;
             versions.insert(field(&item["result"], "version")?);
+            echo_match = validate_result(item, &items[*index], accepted[index], allow_whitespace)?;
         }
+        *echo_counts.entry(echo_match).or_default() += 1;
         let annotation = json!({"schema":"slop_ninja_pangram_corpus_annotation_v1","bulk_id":bulk_id,
             "member":members.get(index).context("Missing source member")?,"model_selector":"pangram-4",
+            "echo_match":echo_match,"submitted_text_sha256":sha256(field(&items[*index],"text")?),
+            "returned_text_sha256":item["result"]["text"].as_str().map(sha256),
             "collected_at":chrono::Utc::now().to_rfc3339(),"observation":item});
         serde_json::to_writer(&mut annotations, &annotation)?;
         annotations.push(b'\n');
@@ -463,6 +492,7 @@ fn collect(job: &Path) -> Result<Value> {
     let summary = json!({"schema":"slop_ninja_pangram_corpus_collection_v1","status":"complete",
         "bulk_id":bulk_id,"items":items.len(),"succeeded":succeeded,"failed":items.len()-succeeded,
         "returned_versions":versions,"annotations_sha256":sha256(&annotations),"collection_dir":attempt,
+        "echo_counts":echo_counts,"whitespace_echo_allowed":allow_whitespace,
         "billing":"unverified; retain the full reservation until account usage is reconciled"});
     save(&attempt.join("summary.json"), &summary)?;
     Ok(summary)
@@ -492,7 +522,10 @@ fn main() -> Result<()> {
             budget_dir,
             reserve_cents,
         } => submit(&plan_dir, batch, &budget_dir, reserve_cents)?,
-        Command::Collect { job_dir } => collect(&job_dir)?,
+        Command::Collect {
+            job_dir,
+            allow_whitespace_echo,
+        } => collect(&job_dir, allow_whitespace_echo)?,
     };
     println!("{}", serde_json::to_string_pretty(&result)?);
     Ok(())
@@ -506,14 +539,21 @@ mod tests {
         let expected = json!({"id":"row","text":"An invented fixture."});
         let good = json!({"id":"row","task_id":"task","stage":"STAGE_SUCCESS","result":{
             "text":"An invented fixture.","version":"test","fraction_human":0.2,"fraction_ai":0.5,"fraction_ai_assisted":0.3}});
-        validate_result(&good, &expected, "task").unwrap();
+        validate_result(&good, &expected, "task", false).unwrap();
+        let mut whitespace = good.clone();
+        whitespace["result"]["text"] = json!("An\n invented fixture.");
+        assert!(validate_result(&whitespace, &expected, "task", false).is_err());
+        assert_eq!(
+            validate_result(&whitespace, &expected, "task", true).unwrap(),
+            "whitespace_only"
+        );
         let mut changed = good.clone();
         changed["result"]["text"] = json!("Different text");
-        assert!(validate_result(&changed, &expected, "task").is_err());
-        assert!(validate_result(&good, &expected, "other-task").is_err());
+        assert!(validate_result(&changed, &expected, "task", true).is_err());
+        assert!(validate_result(&good, &expected, "other-task", false).is_err());
         let mut changed = good;
         changed["result"]["fraction_ai"] = json!(0.7);
-        assert!(validate_result(&changed, &expected, "task").is_err());
+        assert!(validate_result(&changed, &expected, "task", false).is_err());
     }
     #[test]
     fn uncertain_jobs_still_consume_budget() {

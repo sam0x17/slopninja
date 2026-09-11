@@ -41,3 +41,34 @@ texts. Do not use these Development annotations as new training labels. Any
 repeats or further source batches need their own predeclared sample and must
 charge the same cumulative ledger. Actual account billing remains unverified
 until provider usage evidence is available; reported costs are estimates.
+
+## Transport amendment after first receipt
+
+The first result collection stopped before import because Pangram changed
+whitespace in its returned text. An inspection limited to identity, field names
+and text equality found 20 exact echoes and 37 whitespace-only echoes. Every
+returned text has the same whitespace-delimited token sequence as its submitted
+input. No fractions or predicted labels were inspected for this amendment.
+
+Permit whitespace-only echoes through an explicit collection flag, retaining
+both exact hashes and `echo_match` on every observation. All other text changes
+still fail validation. Report exact-echo and whitespace-only slices separately
+alongside the complete cohort; do not silently call all 57 echoes exact. This
+does not establish which representation Pangram used internally. The transmitted
+texts, sample, model selectors, labels and diagnostic threshold remain fixed.
+
+## Full-cohort repeat extension
+
+After completing the first pass, schedule two further passes over all 57 exact
+inputs, using repeat indices one and two. No input selection depends on its
+score. The first pass flagged every model-only/mixed proxy and no human proxy;
+the extension measures repeatability and does not create independent accuracy
+evidence. Submit the 114 observations as one additional bulk job. The posted
+price estimate is $14.08, or $21.12 including the first pass. Reserve headroom
+against the same cumulative budget. No additional rows or model fits enter this
+extension.
+
+Compare document fractions, native labels, echoed text and complete result
+objects across the three observations per source. Report all ranges and threshold
+crossings, preserving raw observations and failures. Same-account, same-day
+repeatability cannot establish cross-account or future-version determinism.
