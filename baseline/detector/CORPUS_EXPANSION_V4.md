@@ -1,9 +1,9 @@
 # Corpus expansion v4
 
-Generation and corpus assembly are complete. The
-[v4 encoder experiment](ENCODER_EXPANSION_V4.md) is training on the frozen corpus;
-no new reference has been promoted. No further Pangram calls are planned in this
-stage.
+Generation, assembly and both encoder fits are complete. The
+[v4 comparison](ENCODER_EXPANSION_RESULTS.md) improved fresh Test accuracy and
+recovered mixed predictions; no qualified subnet reference has been promoted.
+No further Pangram calls were made in this stage.
 
 ## Source families and generation
 

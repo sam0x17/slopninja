@@ -20,6 +20,9 @@ The [next corpus expansion](CORPUS_EXPANSION_V4.md) adds historical encyclopedia
 sources, prepares narrative summaries and introduces OLMo as a third generator.
 The [v4 encoder experiment](ENCODER_EXPANSION_V4.md) specifies balanced source
 weighting and two learning rates, with Development selection fixed before fitting.
+Its [completed comparison](ENCODER_EXPANSION_RESULTS.md) improved fresh Test
+accuracy from 52.9% to 78.4% and recovered mixed-class predictions. It remains
+experimental and still trails Pangram on the previously scored Development texts.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
