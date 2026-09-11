@@ -1,6 +1,7 @@
 """Fine-tune the three-class encoder from separately exported, admitted Rust shards."""
 
 import argparse
+from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -43,6 +44,16 @@ def use_alternate(group, epoch):
     return (rank + epoch) % 2 == 0
 
 
+def source_origin_weights(rows):
+    """Give each source family and origin equal total loss weight within Train."""
+    counts = Counter((r["source_group"], r["label"]) for r in rows)
+    families = {r["source_group"] for r in rows}
+    if len(counts) != 3 * len(families):
+        raise ValueError("source-origin weighting requires all three origins per family")
+    scale = len(rows) / len(counts)
+    return {r["id"]: scale / counts[r["source_group"], r["label"]] for r in rows}
+
+
 def validate_data_rights(path, shard_paths, partitions):
     """Check the Rust admission handoff before fitting; never infer data rights here."""
     required = {(row["id"], row["hash"]) for rows in partitions.values()
@@ -79,18 +90,23 @@ def main():
     p.add_argument("--learning-rate", type=float, default=2e-5)
     p.add_argument("--weight-decay", type=float, default=0.01)
     p.add_argument("--class-weights", choices=["none", "inverse_frequency"], default="none")
+    p.add_argument("--sample-weighting", choices=["none", "source_origin"], default="none")
+    p.add_argument("--require-class-coverage", action="store_true",
+                   help="Select only epochs with nonzero Development recall for each origin")
     p.add_argument("--seed", type=int, default=17)
     p.add_argument("--freeze-encoder", action="store_true", help="Train the classification layers only as a control")
     p.add_argument("--training-whitespace-view", type=Path,
                    help="Paired Rust whitespace-derived Train shard; alternate raw/collapsed exposure by family and epoch")
     p.add_argument("--synthetic-smoke-only", action="store_true", help="Mark output as an unvalidated synthetic control")
     args = p.parse_args()
-    if args.output.exists():
+    if args.output.exists() or (args.output.parent / (args.output.name + "-no-eligible-epoch.json")).exists():
         p.error("output already exists; use a new immutable run directory")
     if min(args.batch_size, args.epochs, args.max_tokens) < 1 or args.max_tokens > 8192:
         p.error("positive batch/epoch/token limits required; max tokens cannot exceed 8192")
     if args.learning_rate <= 0 or args.weight_decay < 0:
         p.error("invalid optimizer parameters")
+    if args.sample_weighting != "none" and args.class_weights != "none":
+        p.error("choose source-origin sample weights or class weights, not both")
     if args.device == "mps" and not torch.backends.mps.is_available():
         p.error("MPS is unavailable")
     configure_cpu()
@@ -111,6 +127,7 @@ def main():
     if any(row["evidence"] == "synthetic_fixture" for rows in partitions.values() for row in rows) and not args.synthetic_smoke_only:
         raise ValueError("synthetic fixtures require --synthetic-smoke-only")
     counts = {name: class_counts(rows) for name, rows in partitions.items()}
+    sample_weights = source_origin_weights(partitions["train"]) if args.sample_weighting == "source_origin" else None
     if any(n == 0 for values in counts.values() for n in values):
         raise ValueError("all three classes must occur in training, development and calibration")
     if args.freeze_encoder:
@@ -143,7 +160,12 @@ def main():
                 labels = torch.tensor([r["label"] for r in rows], device=args.device)
                 optimizer.zero_grad(set_to_none=True)
                 logits = model(**inputs).logits
-                loss = torch.nn.functional.cross_entropy(logits, labels, weight=weights)
+                if sample_weights is None:
+                    loss = torch.nn.functional.cross_entropy(logits, labels, weight=weights)
+                else:
+                    per_row = torch.nn.functional.cross_entropy(logits, labels, reduction="none")
+                    batch_weights = torch.tensor([sample_weights[r["id"]] for r in rows], device=args.device)
+                    loss = (per_row * batch_weights).mean()
                 if not torch.isfinite(loss):
                     raise ValueError("non-finite training loss")
                 loss.backward()
@@ -154,15 +176,23 @@ def main():
             development = metrics(development_logits, [r["label"] for r in partitions["development"]])
             summary = {"epoch": epoch, "training_loss": loss_total / len(order), "development": development,
                        "elapsed_seconds": time.monotonic() - epoch_start}
+            eligible = not args.require_class_coverage or all(development["per_class"][label]["recall"] > 0 for label in LABELS)
+            summary["selection_eligible"] = eligible
             if alternate:
                 summary["whitespace_view_rows"] = sum(use_alternate(r["source_group"], epoch) for r in order)
             epochs.append(summary)
             print(json.dumps(summary), flush=True)
-            if development["log_loss"] < best_loss:
+            if eligible and development["log_loss"] < best_loss:
                 best_loss = development["log_loss"]
                 best_epoch = epoch
                 save_model(model, selected)
         # Model choice is complete before calibration. Final-test input has no CLI argument here.
+        if best_epoch is None:
+            failure_path = args.output.parent / (args.output.name + "-no-eligible-epoch.json")
+            failure_path.write_text(json.dumps({"status":"no_eligible_epoch","epoch_history":epochs,
+                "criterion":"nonzero Development recall for every origin; then minimum NLL",
+                "final_test_opened":False}, indent=2) + "\n")
+            raise ValueError(f"no epoch met class coverage; diagnostic retained at {failure_path}")
         load_model(model, selected, strict=True, device=args.device)
         model.cpu().eval()
         calibration_logits = logits_for(model, tokenizer, partitions["calibration"], 1, "cpu")
@@ -178,6 +208,9 @@ def main():
             "gradient_norm_limit": 1.0, "batch_size": args.batch_size, "epochs_requested": args.epochs,
             "calibration_batch_size": 1,
             "class_weight_policy": args.class_weights, "class_weights": weights.cpu().tolist() if weights is not None else None,
+            "sample_weight_policy": args.sample_weighting,
+            "sample_weights": {"min":min(sample_weights.values()),"max":max(sample_weights.values()),
+                               "sum":sum(sample_weights.values()),"normalization":"sum equals Train row count; each family-origin has equal total weight"} if sample_weights else None,
             "freeze_encoder": args.freeze_encoder, "trainable_parameters": sum(p.numel() for p in parameters),
             "parameters": sum(p.numel() for p in model.parameters()), "class_counts": counts,
             "source_group_counts": {name: len({r["source_group"] for r in rows}) for name, rows in partitions.items()},
@@ -186,6 +219,8 @@ def main():
                                 for name, rows in partitions.items()},
             "partition_sha256": {name: sha256(getattr(args, f"{name}_jsonl")) for name in partitions},
             "selection_metric": "development_unweighted_log_loss", "selected_epoch": best_epoch,
+            "unrestricted_best_development_epoch": min(epochs, key=lambda e: e["development"]["log_loss"])["epoch"],
+            "requires_nonzero_development_class_recall":args.require_class_coverage,
             "epoch_history": epochs, "elapsed_seconds": time.monotonic() - started,
             "final_test_opened": False,
         }

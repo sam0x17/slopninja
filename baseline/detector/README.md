@@ -18,6 +18,8 @@ flagged all 38 model/mixed Development texts, compared with 20 for the encoder.
 Three passes had identical document fractions; auxiliary window scores varied.
 The [next corpus expansion](CORPUS_EXPANSION_V4.md) adds historical encyclopedia
 sources, prepares narrative summaries and introduces OLMo as a third generator.
+The [v4 encoder experiment](ENCODER_EXPANSION_V4.md) specifies balanced source
+weighting and two learning rates, with Development selection fixed before fitting.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
@@ -82,6 +84,9 @@ the request and model spec. The optional `LM_STUDIO_API_KEY` is read from the
 environment and never written into the request archive. Use an SSH tunnel for a
 remote Studio endpoint. Full-family export requires all tasks to have been
 attempted and reports every family excluded because an output failed admission.
+Before any new request, the generator requires a reachable endpoint with a
+nonempty model catalog. A failed readiness check leaves the run resumable and
+does not count every source as a failed model output.
 
 To pause generation, create `PAUSE` in that run's output directory:
 

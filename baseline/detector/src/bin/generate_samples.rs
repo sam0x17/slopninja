@@ -452,6 +452,32 @@ fn main() -> Result<()> {
     let client = reqwest::blocking::Client::builder()
         .timeout(Duration::from_secs(900))
         .build()?;
+    let needs_request = args.max_calls > 0
+        && tasks.iter().any(|task| {
+            let dir = args.output_dir.join("calls").join(&task.key);
+            !dir.join("record.json").exists()
+                && !dir.join("error.txt").exists()
+                && !dir.join("response.json").exists()
+        });
+    if needs_request {
+        let mut request = client
+            .get(format!("{}/models", args.base_url.trim_end_matches('/')))
+            .timeout(Duration::from_secs(15));
+        if let Ok(key) = std::env::var("LM_STUDIO_API_KEY") {
+            request = request.bearer_auth(key);
+        }
+        let catalog: Value = request
+            .send()
+            .context("Model server is not ready; no generation task was attempted")?
+            .error_for_status()?
+            .json()?;
+        ensure!(
+            catalog["data"]
+                .as_array()
+                .is_some_and(|items| !items.is_empty()),
+            "Empty model catalog; no generation task was attempted"
+        );
+    }
     std::thread::scope(|scope| {
         for _ in 0..args.concurrency {
             let (tasks, args, spec, client, attempts, cursor, completed, pause) = (

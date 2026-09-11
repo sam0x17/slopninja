@@ -176,13 +176,20 @@ fn main() -> Result<()> {
         Command::SelectRoots { input, output_dir } => {
             ensure!(!output_dir.exists(), "Use a new selection directory");
             let mut records = dataset::read_records(&input)?;
-            ensure!(
-                records.iter().all(|r| r.split.is_some()
-                    && r.parent_id.is_none()
-                    && r.evidence == Evidence::HistoricalProxy),
-                "Expected already frozen historical roots"
-            );
             let input_count = records.len();
+            ensure!(
+                records.iter().all(|r| r.split.is_some()),
+                "Expected already frozen records"
+            );
+            records.retain(|r| r.parent_id.is_none());
+            ensure!(
+                !records.is_empty()
+                    && records
+                        .iter()
+                        .all(|r| r.evidence == Evidence::HistoricalProxy),
+                "Expected historical source roots"
+            );
+            let input_roots = records.len();
             records.sort_by_cached_key(|r| (dataset::sha256(&r.id), r.id.clone()));
             let mut seen = BTreeSet::new();
             let mut omitted = Vec::new();
@@ -198,7 +205,8 @@ fn main() -> Result<()> {
             let output = output_dir.join("frozen-roots.jsonl");
             dataset::write_records(&output, &records)?;
             let report = json!({"schema":"slop_ninja_family_representatives_v1","input_sha256":dataset::sha256(fs::read(input)?),
-                "input_rows":input_count,"selection":"one record per frozen source family, ascending SHA256(record ID), then ID; retain existing splits",
+                "input_rows":input_count,"input_roots":input_roots,"descendants_ignored":input_count-input_roots,
+                "selection":"one record per frozen source family, ascending SHA256(record ID), then ID; retain existing splits",
                 "omitted":omitted,"output_sha256":dataset::sha256(fs::read(output)?),"summary":dataset::summarize(&records)});
             fs::write(
                 output_dir.join("selection.json"),
