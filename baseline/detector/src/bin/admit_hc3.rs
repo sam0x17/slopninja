@@ -1,13 +1,12 @@
 //! Admit source-verified HC3 human excerpts with explicit attribution obligations.
 use anyhow::{Context, Result, ensure};
 use clap::Parser;
-use regex::Regex;
 use serde_json::{Value, json};
 use slop_ninja_detector::{
     acquire::Collector,
     dataset::{self, Evidence, Origin, OriginRecord, RECORD_SCHEMA, Rights, Source, sha256},
     rights::{self, ShareAlike},
-    wikipedia::{lead_text, literal_text, normalize},
+    wikipedia::{captured_json, screen_revision},
 };
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -41,98 +40,11 @@ fn str_at<'a>(v: &'a Value, key: &str) -> Result<&'a str> {
     v[key].as_str().with_context(|| format!("Missing {key}"))
 }
 fn capture(root: &Path, meta: &Value) -> Result<Value> {
-    let relative = Path::new(str_at(meta, "raw_path")?);
-    ensure!(
-        relative
-            .components()
-            .all(|c| matches!(c, std::path::Component::Normal(_))),
-        "Unsafe capture path"
-    );
-    let bytes = fs::read(root.join(relative))?;
-    ensure!(
-        meta["status"] == 200 && meta["body_sha256"] == sha256(&bytes),
-        "Capture status/hash mismatch"
-    );
-    Ok(serde_json::from_slice(&bytes)?)
+    captured_json(root, meta)
 }
 
 fn screen(review: &Value, raw: &Value, rendered: &Value, text: &str) -> Result<()> {
-    let page = &raw["query"]["pages"][0];
-    let revision = &page["revisions"][0];
-    ensure!(
-        page["pageid"] == review["page_id"]
-            && revision["revid"] == review["revision_id"]
-            && rendered["parse"]["revid"] == review["revision_id"],
-        "Source revision mismatch"
-    );
-    ensure!(
-        str_at(revision, "timestamp")? <= "2022-11-01T00:00:00Z",
-        "Source after historical cutoff"
-    );
-    let wikitext = str_at(&revision["slots"]["main"], "content")?;
-    let html = str_at(&rendered["parse"], "text")?;
-    let normalized = normalize(text);
-    ensure!(
-        !normalized.is_empty()
-            && literal_text(wikitext).contains(&normalized)
-            && lead_text(html).contains(&normalized),
-        "Full historical text mismatch"
-    );
-    let words = grammar_core::features::words(text).len();
-    ensure!(
-        (80..=500).contains(&words),
-        "Outside 80..=500 lexical-word range"
-    );
-    let lowered = wikitext.to_lowercase();
-    // Quarantine any detected extra notice instead of dropping it from an export.
-    // False positives are acceptable here; this is a conservative source screen,
-    // not a claim to detect every possible copyright or quotation issue.
-    for term in [
-        "copyvio",
-        "copyright",
-        "fair use",
-        "fairuse",
-        "cc-notice",
-        "cc-by",
-        "attribution",
-        "copied",
-        "public domain",
-        "pd-notice",
-        "eb1911",
-        "gfdl",
-        "plagiar",
-        "permission=",
-    ] {
-        ensure!(
-            !lowered.contains(term),
-            "Source notice requires separate review: {term}"
-        );
-    }
-    let doc = scraper::Html::parse_fragment(html);
-    let boxes = scraper::Selector::parse(".ambox .mbox-text").unwrap();
-    ensure!(
-        !doc.select(&boxes).any(|element| {
-            let warning = element.text().collect::<String>().to_lowercase();
-            [
-                "copyright",
-                "copied",
-                "attribution",
-                "license",
-                "permission",
-            ]
-            .iter()
-            .any(|term| warning.contains(term))
-        }),
-        "Rendered copyright warning"
-    );
-    let quotes = Regex::new(r#"["“«]([^"”»\n]+)["”»]"#)?;
-    ensure!(
-        !quotes
-            .captures_iter(text)
-            .any(|c| c[1].split_whitespace().count() >= 8),
-        "Long quotation requires separate review"
-    );
-    Ok(())
+    screen_revision(review, raw, rendered, text, "2022-11-01T00:00:00Z")
 }
 
 fn main() -> Result<()> {

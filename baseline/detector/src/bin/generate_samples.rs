@@ -72,6 +72,8 @@ fn prompt(parent: &OriginRecord, operation: &str, profile: Option<&Provenance>) 
         "a scientific abstract for a research journal"
     } else if parent.source.collection == "hc3-wiki-historical" {
         "an encyclopedic explanation for general readers, preserving technical qualifications"
+    } else if parent.source.collection == "cmu-books-historical" {
+        "a narrative plot summary for general readers, preserving character relationships, event order, qualifications and intended tone"
     } else {
         "a factual news report for general readers"
     };

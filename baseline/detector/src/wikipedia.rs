@@ -1,6 +1,116 @@
 //! Conservative historical Wikipedia text matching.
+use anyhow::{Context, Result, ensure};
 use regex::Regex;
 use scraper::{ElementRef, Html, Node, Selector};
+use serde_json::Value;
+use std::{fs, path::Path};
+
+/// Recheck an archived capture without trusting paths or hashes in a review.
+pub fn captured_bytes(root: &Path, meta: &Value) -> Result<Vec<u8>> {
+    let relative = Path::new(meta["raw_path"].as_str().context("Missing capture path")?);
+    ensure!(
+        relative
+            .components()
+            .all(|c| matches!(c, std::path::Component::Normal(_))),
+        "Unsafe capture path"
+    );
+    let bytes = fs::read(root.join(relative))?;
+    ensure!(
+        meta["status"] == 200 && meta["body_sha256"] == crate::dataset::sha256(&bytes),
+        "Capture status/hash mismatch"
+    );
+    Ok(bytes)
+}
+
+pub fn captured_json(root: &Path, meta: &Value) -> Result<Value> {
+    Ok(serde_json::from_slice(&captured_bytes(root, meta)?)?)
+}
+
+/// Conservative admission screen shared by historical lead and plot excerpts.
+pub fn screen_revision(
+    review: &Value,
+    raw: &Value,
+    rendered: &Value,
+    text: &str,
+    cutoff: &str,
+) -> Result<()> {
+    let page = &raw["query"]["pages"][0];
+    let revision = &page["revisions"][0];
+    ensure!(
+        page["pageid"] == review["page_id"]
+            && revision["revid"] == review["revision_id"]
+            && rendered["parse"]["revid"] == review["revision_id"],
+        "Source revision mismatch"
+    );
+    let timestamp = revision["timestamp"]
+        .as_str()
+        .context("Missing revision timestamp")?;
+    ensure!(timestamp <= cutoff, "Source after historical cutoff");
+    let wiki = revision["slots"]["main"]["content"]
+        .as_str()
+        .context("Missing revision text")?;
+    let html = rendered["parse"]["text"]
+        .as_str()
+        .context("Missing rendered text")?;
+    let normalized = normalize(text);
+    ensure!(
+        !normalized.is_empty()
+            && literal_text(wiki).contains(&normalized)
+            && lead_text(html).contains(&normalized),
+        "Full historical text mismatch"
+    );
+    ensure!(
+        (80..=500).contains(&grammar_core::features::words(text).len()),
+        "Outside 80..=500 lexical-word range"
+    );
+    let lowered = wiki.to_lowercase();
+    for term in [
+        "copyvio",
+        "copyright",
+        "fair use",
+        "fairuse",
+        "cc-notice",
+        "cc-by",
+        "attribution",
+        "copied",
+        "public domain",
+        "pd-notice",
+        "eb1911",
+        "gfdl",
+        "plagiar",
+        "permission=",
+    ] {
+        ensure!(
+            !lowered.contains(term),
+            "Source notice requires separate review: {term}"
+        );
+    }
+    let doc = Html::parse_fragment(html);
+    let boxes = Selector::parse(".ambox .mbox-text").unwrap();
+    ensure!(
+        !doc.select(&boxes).any(|element| {
+            let warning = element.text().collect::<String>().to_lowercase();
+            [
+                "copyright",
+                "copied",
+                "attribution",
+                "license",
+                "permission",
+            ]
+            .iter()
+            .any(|t| warning.contains(t))
+        }),
+        "Rendered copyright warning"
+    );
+    let quotes = Regex::new(r#"["“«]([^"”»\n]+)["”»]"#)?;
+    ensure!(
+        !quotes
+            .captures_iter(text)
+            .any(|c| c[1].split_whitespace().count() >= 8),
+        "Long quotation requires separate review"
+    );
+    Ok(())
+}
 
 pub fn normalize(text: &str) -> String {
     text.split_whitespace().collect::<Vec<_>>().join(" ")

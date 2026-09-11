@@ -187,3 +187,10 @@ Wikipedia rights. Source-specific historical checks remain before admission;
 the book's publication date does not date its summary. See the
 [capture manifest](manifests/cmu-books-staging-v1.json) and
 [CMU collection page](https://www.cs.cmu.edu/~dbamman/booksummaries.html).
+
+The [narrative source review](CMU_SOURCE_REVIEW.md) now specifies a fixed
+100-summary historical match sample and preservation of both the CMU collection
+license and upstream Wikipedia notices. `resolve_books` performs that review;
+`admit_books` rechecks the captures and exports qualifying historical proxies.
+The [first admission](CMU_SOURCE_RESULTS.md) retained 75 of 100 summaries and
+declared an extension to 400 sampled sources before generation or scoring.
