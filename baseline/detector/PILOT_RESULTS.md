@@ -65,8 +65,11 @@ The grammar and combined controls both selected epoch zero. Neither improved
 development log loss over the initial uniform predictor in 25 attempted epochs.
 Their fitted weights are zero. This is a failed training result under the fixed
 recipe; it does not establish that grammatical features contain no useful signal.
-Per-epoch linear losses were not retained, so the specific numerical cause cannot
-be reconstructed from these reports.
+Per-epoch linear losses were not retained in the original reports. A later
+[training/development replay](LINEAR_FIT_DIAGNOSTIC.md) reproduced the failed
+selection and found overconfident development predictions from the first update.
+A smaller-step diagnostic improved development loss without producing new test
+results or changing the released controls.
 
 Each linear control has an 8,192-coordinate cap. The word control retains 5,283
 word and 2,909 word-bigram coordinates. The combined control retains 3,007 lexical
