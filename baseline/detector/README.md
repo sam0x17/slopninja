@@ -23,6 +23,7 @@ weighting and two learning rates, with Development selection fixed before fittin
 Its [completed comparison](ENCODER_EXPANSION_RESULTS.md) improved fresh Test
 accuracy from 52.9% to 78.4% and recovered mixed-class predictions. It remains
 experimental and still trails Pangram on the previously scored Development texts.
+Download the [v4 weights and inference bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-corpus-v0.4.0).
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,

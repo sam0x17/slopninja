@@ -11,6 +11,12 @@ The candidate remains experimental. On the previously scored Development texts,
 it still trails Pangram: 29/38 detections versus 38/38. No additional Pangram
 calls or provider-derived training targets were used in this experiment.
 
+Download the [v4 model bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-corpus-v0.4.0).
+It includes weights, the CPU runner, source credits and all aggregate comparisons.
+The uploaded 557,435,341-byte archive has SHA256
+`c1a2093ebf3ca669db4b0f3cbf497569c7aaf724ec45b6ae8fe9c85d5f7eca2b`;
+GitHub's asset digest matches the locally verified archive.
+
 ## Data and selection
 
 The [frozen experiment](ENCODER_EXPANSION_V4.md) changed corpus coverage and the
