@@ -6,8 +6,10 @@ The first trained candidate is a ModernBERT origin classifier. Read the
 It passed inference checks after transfer from the Studio, but has substantial
 generator-transfer and formatting weaknesses. The release includes the selected
 encoder, all three linear controls and all 16 aggregate evaluations.
-The [next pilot protocol](STYLE_PILOT_PROTOCOL.md) fixes a comparison using fresh
-sources, two teachers, varied styles and matched whitespace exposure during training.
+The [style-diverse pilot](STYLE_PILOT_RESULTS.md) added fresh sources, two teachers,
+varied instructions and matched whitespace exposure. Its candidate improved
+pooled log loss but never chose the mixed class on any test view. It is available
+as a separate experimental release, with all comparisons and exclusions reported.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,

@@ -1,9 +1,10 @@
 # Generation prompt profiles
 
 `generate_samples --prompt-profile-set style-mix-v1` adds a frozen mix of style
-instructions to source-conditioned drafting and copyediting. This prepares a
-broader origin-detection corpus; no new generations or detector results accompany
-this change. Omitting the option retains the original pilot prompts, task IDs,
+instructions to source-conditioned drafting and copyediting. The
+[style-diverse pilot](https://github.com/sam0x17/slopninja/blob/main/baseline/detector/STYLE_PILOT_RESULTS.md)
+records the first generated cohorts and detector comparisons using these profiles.
+Omitting the option retains the original pilot prompts, task IDs,
 run metadata and admission rules.
 
 | Profile ID | Requested variation |
