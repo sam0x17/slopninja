@@ -56,3 +56,31 @@ matters: a detector may mistake wholly model-written revisions for mixed origin,
 and a rewrite may preserve named facts while introducing false implications or
 an unintended tone. Correct production labels establish origin. They do not
 certify successful cleanup, meaning preservation or detector evasion.
+
+## Completed training-only integration sample
+
+The [integration report](results/model-revision-integration-v1.json) records a
+two-pass run over eight existing Train drafts. Four were originally written by
+Qwen and four by Mistral. Qwen revised all eight with the Anti-AI instruction,
+then revised each result with the Fix Slop instruction. All 16 calls completed
+and passed admission; no output was repaired, retried or selected by a detector.
+
+The resulting corpus retains eight historical human references, eight initial
+model drafts and 16 model-only revisions across eight source families. There
+are 12 same-model revision steps and four cross-model steps. All 32 rows pass
+lineage validation and fit the 1,024-token encoder contract; the longest has
+488 tokens. The source attribution and ShareAlike notices remain attached.
+
+The first pass retained a mean 38.9% of its parent's words in longest-common-
+subsequence order; every first-pass revision retained less than half. The second
+pass retained a mean 53.0%. Neither pass returned an unchanged word sequence.
+These surface measurements show substantial rewriting, without certifying
+meaning, tone, authorship resemblance or detector evasion. No detector was run.
+V4 has already trained on these source families, so this sample cannot measure
+unseen-source performance. It remains available for a future declared corpus.
+
+The amended generator also replayed the completed Qwen narrative cache with
+zero new calls. Its 819-row export and terminal summary matched the original
+bytes exactly. The revision implementation passed the required Rust tests,
+formatting and clippy checks. The current v5 corpus, frozen binaries and fit
+inputs remained unchanged.

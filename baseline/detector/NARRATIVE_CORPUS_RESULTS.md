@@ -1,7 +1,7 @@
 # Narrative corpus generation
 
-The v5 campaign is in progress. Qwen's cohort is complete; the other declared
-providers remain pending. No v5 detector has been fitted or evaluated.
+The v5 campaign is in progress. Qwen and Mistral's cohorts are complete; OLMo
+and Phi-4 remain pending. No v5 detector has been fitted or evaluated.
 The [target amendment](ENCODER_NARRATIVE_V5_TARGET.md) prioritizes fully
 model-written drafts under style steering. Copyedits remain auxiliary examples.
 
@@ -31,6 +31,31 @@ truncated or removed by the tokenizer audit. All six profiles remain represented
 in each partition. The [cohort report](results/narrative-qwen-cohort-v1.json)
 contains the planned and admitted profile counts and exact corpus bindings.
 Qwen and Mistral's assignment-plan files are identical.
+
+## Completed Mistral cohort
+
+All 578 calls were attempted, with 531 individually accepted outputs and 47
+failures. Of the failures, 41 were below the 80-word minimum, five drafts copied
+long source spans, and one output changed length by more than a factor of two.
+There were no transport failures or token-limit finishes. The failures affected
+26 drafts and 21 edits across 33 source families.
+
+The complete-pair rule retains 256 families and 768 rows. It also excludes seven
+accepted drafts and 12 accepted edits whose siblings failed. Every attempt and
+successful sibling remains archived. No detector score affected admission.
+
+| Partition | Source families | Retained rows | Maximum tokens |
+| --- | ---: | ---: | ---: |
+| Train | 178 | 534 | 643 |
+| Development | 24 | 72 | 584 |
+| Calibration | 32 | 96 | 676 |
+| Test, unopened | 22 | 66 | 587 |
+
+All 768 rows fit the 1,024-token contract without truncation or filtering. All
+six profiles remain represented in each partition, but only two of the four
+planned Fix Slop Development families survive pair admission. The
+[Mistral cohort report](results/narrative-mistral-cohort-v1.json) preserves the
+full profile counts, exclusions and corpus bindings.
 
 ## Development diagnostics
 
@@ -78,3 +103,29 @@ the attempted steering did not evade either frozen operating threshold.
 The result supplies a baseline for the planned narrative training. It changes
 neither the fit recipe nor the unopened Test assignments. A revised detector
 must improve human discrimination as well as recognize fully model-written prose.
+
+## V4 on Mistral narrative Development
+
+The [Mistral Development report](results/narrative-v4-mistral-development-v1.json)
+uses the same immutable v4 artifact and original thresholds. At both operating
+points, v4 detects 23 of 24 fully model-written drafts and falsely flags nine
+of 24 human sources (37.5%). The source-family bootstrap interval for this
+false-positive rate is 20.8% to 58.3%. Human/model binary log loss is 0.7729 and
+binary Brier score is 0.2387. The auxiliary edit sensitivity is 22 of 24.
+
+| Writing instruction | Model drafts detected | Human sources falsely flagged |
+| --- | ---: | ---: |
+| Anti-AI | 4/4 | 3/4 |
+| Fix Slop | 2/2 | 0/2 |
+| Direct | 5/5 | 2/5 |
+| Informal | 5/5 | 2/5 |
+| Plain | 4/4 | 2/4 |
+| Source matched | 3/4 | 0/4 |
+
+All 24 human sources are shared with the Qwen Development cohort. The human
+measurements are therefore correlated; they do not supply another independent
+sample of 24 writers or passages. The differing denominators follow admission
+failures. The one missed Mistral draft used source-matched instructions, while
+the small Anti-AI and Fix Slop slices were fully detected. These observations
+do not establish broad resistance to deliberate style steering. They preserve
+the declared baseline comparison without changing the frozen v5 fit or Test.
