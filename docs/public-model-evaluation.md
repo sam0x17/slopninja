@@ -1,6 +1,7 @@
 # Public A models and private B generation
 
-Design update, September 11, 2026: Draft 0.14 keeps validator execution of public A models and independent review
+Design update, September 11, 2026: Draft 0.15 requires attestation for paid B customer jobs.
+It keeps validator execution of public A models and independent review
 of B outputs. An attested B entry additionally requires a verified private-version
 execution receipt; validators do not download or replay private B weights.
 Mandatory monthly B publication from draft 0.13 is superseded.

@@ -22,12 +22,14 @@ past the incumbent.
 Training recipes and source data need not be published merely to
 reproduce A inference.
 
-For sensitive customer work, inputs are encrypted directly to a verified
+For every paid B customer job, inputs are encrypted directly to a verified
 TEE instance serving the assigned miner's private model. The customer
 releases no input key until it has checked fresh hardware evidence and
 the accepted application policy. CPU, GPU and their transfer path must
-all satisfy that policy. Ordinary hosting remains explicitly identified
-as granting the operator plaintext access.
+all satisfy that policy. The model owner separately provisions encrypted
+weights to the approved runtime; it receives no customer input key.
+Ordinary A hosting grants the operator plaintext access when the customer
+accepts that mode. It is not eligible for paid B jobs.
 The customer's source text, reference writing, style profile, and
 editorial brief are not automatically disclosed to validators, routing
 services, or other miners. Customers receive encrypted results and may

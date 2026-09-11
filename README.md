@@ -51,11 +51,13 @@ The whitepaper surveys related work and defines public A detector artifacts,
 private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
-Sensitive B jobs use an attested execution track: customers verify the
+All paid B jobs require attested execution: customers verify the
 approved application, CPU/GPU evidence and instance key before encrypting
 input. The miner retains its weights but receives no customer plaintext key.
-Ordinary hosting explicitly grants operator access and cannot be an automatic
-fallback. Customers can separately share evidence with a specific validator.
+The owner separately provisions encrypted model weights to the approved runtime;
+its key service cannot authorize customer decryption. Ordinary hosting grants
+operator access and is available only for A customer jobs, with explicit
+acceptance. Customers can separately share evidence with a specific validator.
 Task A detects author and origin; Task B jointly matches the authorized writer's
 profile and evades Pangram and subnet AI detectors under the source and brief.
 Private customer jobs pursue the same goals without automatically sending text
@@ -71,8 +73,9 @@ B transformation is the primary paid product; A is an open detector resource
 with optional hosting. There is no mandatory monthly B weight release.
 The [confidential inference design](whitepaper/sections/05-confidentiality.tex)
 specifies key release, runtime isolation and remaining hardware assumptions.
-The [investor brief](docs/confidential-transformation-brief.md) explains the
-commercial rationale and what must be demonstrated before sensitive paid launch.
+The [investor brief](docs/confidential-transformation-brief.md) describes proposed
+media workflows, an editorial pilot, miner and application revenue, and the
+requirements for private B paid launch.
 The aim is freely accessible detection competitive with Pangram, supporting
 better private transformers. Detection parity remains to be demonstrated;
 running or hosting an A model still costs compute.
@@ -469,8 +472,9 @@ classifiers and an editing adapter, with a [training-source plan](docs/miner-tra
 covering Global Voices, PLOS and consented writing. A artifacts are public,
 B weights remain private, and miners can earn customer fees through
 [asynchronous inference](docs/paid-inference.md)
-with proposed on-chain job settlement and private execution. Draft 0.14 adds
-attested serving and version receipts; older companion specifications below
+with proposed on-chain job settlement and private execution. Draft 0.15 requires
+private weights and text for paid B, with independent key release and version
+receipts; older companion specifications below
 retain the ordinary transport design and point to the current whitepaper.
 Pangram is the required external benchmark. The [API funding and verification
 design](docs/pangram-oracle.md) separates the cost of independent measurement

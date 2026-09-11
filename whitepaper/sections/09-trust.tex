@@ -19,11 +19,14 @@ Risk & Proposed response and remaining assumption \\
 \endfoot
 Customer text reaches another miner or gateway & Encrypt locally to the
 pinned assignment; no alternate keys or automatic reassignment \\
-Ordinary hosted miner leaks decrypted text & This mode grants operator
-access; require the separately qualified attested mode for sensitive jobs \\
-Host reads sensitive B text, logs or GPU buffers & Attest the complete
+Ordinary A host leaks decrypted text & This mode grants operator access
+and requires customer acceptance; paid B requires attestation \\
+Host reads B text, logs or GPU buffers & Attest the complete
 CPU/GPU path and approved application before customer key release;
 disable debug, logging, external tools and operator administration \\
+Customer or separate compute host obtains private B weights & Release
+model keys only to an approved loader; expose no weight or debug interface.
+Paid-query extraction and behavioral imitation remain possible \\
 A real enclave runs malicious miner code & Public reviewed runtime and
 measured policy, constrained private model data and denied egress.
 Hardware identity alone does not approve an application \\

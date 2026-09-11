@@ -28,10 +28,12 @@ gateway fee needs explicit customer terms; none is assumed in the
 protocol's economics. Alpha-denominated demand alone establishes no
 token-price or investor-return guarantee.
 
-Offers identify ordinary or attested execution, model/version evidence
-and the accepted runtime policy. Sensitive B jobs require attestation
-under Section~\ref{attested-customer-inference}; a customer must explicitly
-choose ordinary hosting to grant the operator plaintext access. Public A
+Offers identify execution mode, model/version evidence and the accepted
+runtime policy. All paid B jobs require attestation under
+Section~\ref{attested-customer-inference}. Ordinary B customer offers are
+ineligible even when an operator describes the text as non-sensitive.
+A customers may explicitly choose ordinary hosting and grant the operator
+plaintext access. Public A
 and voluntarily published B models can run locally, without a subnet
 job or fee. No public copy of the best private B model is promised.
 
@@ -51,7 +53,7 @@ Subtensor EVM guide~\cite{evm}.
 Miners publish signed offers for bounded jobs. Each offer specifies a
 total alpha price, task, service version and execution mode, input/output limits,
 delivery deadline, available capacity, quote expiry, and settlement
-terms. Attested sensitive-job offers also bind the padded workload bucket
+terms. Attested offers also bind the padded workload bucket
 and fixed response-release slot; charge the reserved job price without
 publishing content-dependent token usage. Customers select among compatible offers using price, benchmark
 performance, and delivery time. A higher-quality model or faster service
@@ -76,7 +78,7 @@ other offers change.
 Quote discovery uses public service descriptions and the size/deadline
 information the customer chooses to reveal. Source text, reference
 writing, and the full brief remain encrypted to the selected instance
-or, for explicitly ordinary hosting, its operator-controlled key.
+or, for explicitly ordinary A hosting, its operator-controlled key.
 Obtaining competing offers does not distribute the plaintext to
 prospective bidders. If the selected miner cannot serve the bounded
 request, the job follows its rejection/refund terms; it cannot silently

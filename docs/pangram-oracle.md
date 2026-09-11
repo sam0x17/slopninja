@@ -1,6 +1,7 @@
 # Pangram benchmark, verification and API funding
 
-Design update, September 11, 2026: Draft 0.14 retains private B weights and external benchmark reports. Attested
+Design update, September 11, 2026: Draft 0.15 requires private weights and text for paid B jobs
+and retains external reports on authorized benchmark material. Attested
 version receipts do not establish Pangram scores or authorize forwarding customer
 text to Pangram. Mandatory monthly public B releases are no longer proposed.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its

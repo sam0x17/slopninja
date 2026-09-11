@@ -19,11 +19,13 @@ existing figure, run `latexmk -xelatex -outdir=build main.tex` from this
 directory, or configure a TeX editor for XeLaTeX with BibTeX.
 The source and rendered paper are design proposals, not a deployed protocol.
 
-Draft 0.14 replaces mandatory monthly B releases with private weights and an
-[attested inference track](sections/05-confidentiality.tex). Customers verify
-the protected application and instance key before disclosing sensitive text.
+Draft 0.15 requires private weights and private text for every paid B job using
+[attested inference](sections/05-confidentiality.tex). Model owners and customers
+independently verify the protected runtime before provisioning their secrets.
+Ordinary hosting remains available for A with customer acceptance; ordinary B
+execution is limited to authorized research and benchmarks.
 [Private model version receipts](sections/03-models.tex) associate attested
 benchmark outputs with that version; independent quality review remains required.
 The [commercial section](sections/06-paid-inference.tex) treats B as the primary
 paid product and A as an open resource with optional hosting. This has not yet
-been implemented or qualified for sensitive customer use.
+been implemented or qualified for paid B customer use.

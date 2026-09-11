@@ -3,7 +3,7 @@ work}\label{participants-and-the-two-kinds-of-work}
 
 A miners publish immutable, complete detector artifacts. B miners may
 retain private transformation models and register signed rewrite endpoints,
-including qualified attested instances for sensitive customer work.
+with qualified attested instances required for paid B customer work.
 Both register capabilities and authenticated protocol identities. A miners
 may separately offer paid detector hosting. Customers buy detection and transformation
 jobs through separately quoted offers. Validators execute the frozen A
@@ -48,8 +48,8 @@ Purpose & Serve a customer's request & Measure miners for emissions \\
 Launch services & A: detection; B: transformation & A: detection;
 B: transformation \\
 Source of text & Customer & Authorized benchmark collection \\
-Default input recipients & Customer and attested instance; operator too
-in ordinary hosting & Curator,
+Default input recipients & B: customer and attested instance.
+A: operator too if ordinary hosting is selected & Curator,
 assigned service miners, validators, commissioned reviewers \\
 Evaluation & Customer acceptance & Validator execution of frozen A
 artifacts; independent B output review and required attested receipts \\
@@ -69,9 +69,10 @@ miners receive only the inputs required for their assigned tasks.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figures/private-inference.pdf}
-\caption{Attested customer inference. The client verifies the instance
-before encrypting input; the model owner receives no customer key.
-Ordinary hosting has a different operator-access boundary.}
+\caption{Private B inference. The model owner and customer independently
+verify the runtime before provisioning their secrets. Only that runtime
+processes both in plaintext; the customer receives the encrypted result.
+A separate customer disclosure can authorize validator inspection.}
 \end{figure}
 
 Customer tasks do not become benchmark examples automatically.

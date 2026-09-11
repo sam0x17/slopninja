@@ -1,9 +1,10 @@
 # Paid asynchronous inference
 
-Design update, September 11, 2026: Draft 0.14 makes B the primary paid product and adds attested execution for
-sensitive jobs. The customer verifies the application and CPU/GPU evidence before
-sending input to an instance key. Ordinary hosting below grants operator access
-and cannot be an automatic fallback. No monthly B weight release is required.
+Design update, September 11, 2026: Draft 0.15 requires attested execution for all
+paid B jobs, protecting both private weights and customer text through independent
+key release. Ordinary hosting below grants operator access and is ineligible for
+paid B. It remains an A option with customer acceptance. No monthly B weight
+release is required.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its
 [model policy](../whitepaper/sections/03-models.tex) and
 [attested customer protocol](../whitepaper/sections/05-confidentiality.tex),

@@ -1,6 +1,7 @@
 # Public A models, private B models and training data
 
-Design update, September 11, 2026: Draft 0.14 keeps B weights private and removes mandatory monthly publication.
+Design update, September 11, 2026: Draft 0.15 keeps B weights private with no mandatory monthly publication.
+All paid B jobs require independent model/customer key release to a verified runtime.
 Attested serving requires a reviewed public runtime, constrained private model
 data and receipts binding benchmark outputs to the loaded version.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its

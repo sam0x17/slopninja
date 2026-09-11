@@ -149,7 +149,7 @@ public-detector feedback must be available during the pilot; measure
 transfer to fresh source families, later A versions and Pangram.
 
 
-Before sensitive paid B launch, demonstrate attested inference with the
+Before any paid B launch, demonstrate attested inference with the
 private starter model on a pinned CPU/GPU configuration. Independently
 review the client verifier, reproducible runner, measured policy, private
 model loader and complete input/output path. Test host and guest
@@ -165,15 +165,19 @@ binding, metadata leakage, restart/rollback, replay and revoked instances.
 Include malicious weights that encode source facts in early stopping,
 errors or workload shape; verify padded output and fixed release slots
 under the accepted graph and bucket policy.
-Check that no model-owner key broker receives customer keys. Measure
+Test independent model-owner and customer key release, including an owner
+trying to substitute its own recipient after provisioning. Check that no
+model-owner key broker receives customer keys and no customer or separate
+host can retrieve weights through storage, logs or application interfaces. Measure
 attestation freshness, maximum job duration, startup time, throughput,
 cost per accepted revision and supported model size before freezing the
 launch policy. Include customer refusal of a policy update and loss of
 attestation service availability. No attested request may silently become
-ordinary hosting; a failed confidential-compute pilot delays that product
+ordinary hosting; ordinary B customer offers must be rejected. A failed
+confidential-compute pilot delays paid B
 instead of advertising ordinary encryption as operator confidentiality.
 
-Apply the same B utility to attested and ordinary entries, with no
+Apply the same B benchmark utility to attested and ordinary entries, with no
 attestation bonus. Test invalid and missing required receipts, private
 version copying, benchmark-only behavior, post-issue downgrade and
 mixed-mode allocation. Ordinary performance remains an output-service

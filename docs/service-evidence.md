@@ -1,6 +1,7 @@
 # Mandatory A/B service evidence
 
-Design update, September 11, 2026: Draft 0.14 adds a separate attested customer path. The curator-authorized
+Design update, September 11, 2026: Draft 0.15 requires a separate attested path for all paid B customer jobs.
+Model and customer keys have independent release policies. The curator-authorized
 DATA/witness transport below must never export customer instance keys or supply
 validators with automatic customer access. It remains a training-ticket pilot,
 not an attestation implementation.

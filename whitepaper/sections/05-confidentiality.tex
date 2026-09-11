@@ -1,6 +1,6 @@
 \section{Confidential customer inference}\label{confidential-customer-inference}
 
-\subsection{Two execution modes}\label{customer-execution-modes}
+\subsection{Public A models and private B inference}\label{customer-execution-modes}
 
 An ordinary hosted job encrypts text to an operator-controlled miner key.
 That miner sees plaintext and could leak or exploit an unpublished
@@ -8,15 +8,16 @@ acquisition announcement, earnings release or funding announcement.
 Recipient encryption and contractual promises cannot prevent that
 authorized endpoint from copying the input.
 
-For sensitive B work, the proposed product uses attested inference:
+All paid B customer jobs require attested inference:
 the customer encrypts to an ephemeral key generated inside a verified
 trusted execution environment (TEE). The operator supplies compute and
 holds its model weights, but has no protocol key for the customer's
-plaintext. This replaces mandatory public B releases as the proposed
-privacy route. Ordinary hosting remains an explicitly identified option
-for customers accepting operator access; an attested job must never
-silently downgrade to it. Attestation is an execution mode for A or B,
-not an additional task or reward pool.
+plaintext. Both the weights and customer content must remain private
+under the accepted hardware and software assumptions. Ordinary hosting
+is available for A when the customer explicitly accepts operator access;
+it is ineligible for paid B customer jobs. Authorized B benchmarks and
+research may still use ordinary execution on separately permitted data.
+Attestation is an execution requirement, with no additional reward pool.
 
 A remains downloadable for local use. Customers may run a voluntarily
 published B model locally, but the subnet promises no public copy of
@@ -24,6 +25,40 @@ the strongest private B model. Local inference uses the customer's
 compute and creates no subnet job or fee. Attested hosting instead
 depends on qualified hardware, accepted software measurements and the
 customer's verifier. Its guarantees are conditional on those components.
+
+\subsection{Independent model and customer key release}\label{independent-key-release}
+
+The B model owner and customer authorize different secrets. The owner
+encrypts its versioned model package before uploading it to storage or
+a compute host. Its key service verifies fresh evidence for an approved
+loader, runtime and protected CPU/GPU path, then releases the model key
+through a channel bound to that instance. The loader decrypts and checks
+the package inside protected memory and authenticates the loaded version
+under Section~\ref{attested-b-models}. The customer's later verification
+must bind that loaded version to its job key and accepted policy.
+
+Model-key release does not authorize customer-key release. The customer
+independently verifies the instance before encrypting its input. The
+model owner's key service has no role in decrypting customer jobs; it
+receives no customer key or content-bearing job state. The owner can
+withhold future provisioning but cannot use that authority to change the
+customer's accepted runtime or recipient. Provision model material before
+customer secrets arrive and close provisioning interfaces for the job.
+
+The same protected runtime holds both plaintext inputs during computation.
+The miner may own the hardware or rent confidential compute from another
+operator. A separate host obtains neither secret; a miner that owns the
+model still knows its original weights but obtains no customer plaintext.
+Customers receive encrypted revisions, with no weight download, tensor
+inspection or debug interface. Keep the execution code public and
+reproducible while treating private weights and prompts as constrained
+data. Paid queries can still support behavioral imitation or model
+extraction; confidentiality does not promise immunity to those attacks.
+
+Encrypted model provisioning with attestation-gated key release has an
+existing confidential-computing reference architecture~\cite{nvidiacoco}.
+The independent customer channel and restrictions on miner-controlled
+model data remain requirements for our implementation and security review.
 
 \subsection{Attestation and customer key release}\label{attested-customer-inference}
 
@@ -102,7 +137,7 @@ data and restrict their operator graph and execution budget. Malicious
 weights can influence outputs or timing; encryption of returned text
 does not prove absence of every covert channel.
 
-The initial sensitive-job profile must therefore use a qualified fixed
+The initial private B profile must therefore use a qualified fixed
 operator graph, fixed tensor-size and token-budget buckets, padding after
 early completion, and one padded response at the offer's fixed release
 slot. Keep success and failure envelopes the same public size and expose
@@ -137,8 +172,8 @@ bounded scheduling reduce some leakage without proving its absence.
 The design does not claim protection against every side channel,
 physical attack or future hardware exploit. A miner can refuse service
 or withhold ciphertext. Attestation does not prove writing quality,
-guarantee availability or solve private fair exchange. Sensitive paid
-launch depends on an independent security review and the measured
+guarantee availability or solve private fair exchange. Paid B launch
+depends on an independent security review and the measured
 acceptance criteria in Section~\ref{development-and-launch-criteria}.
 
 \subsection{Envelope, assignment and recovery}\label{assigned-miner-encryption}
@@ -148,7 +183,7 @@ Use HPKE with X25519/HKDF-SHA256, HKDF-SHA256 and ChaCha20Poly1305,
 plus a separate customer signature; HPKE Base does not authenticate the
 sender~\cite{hpke}. Bind protocol, chain, subnet, contract, job and
 assignment generation, offer hash, recipient key, execution mode and
-policy, model version, output key and expiry. For ordinary hosting,
+policy, model version, output key and expiry. For ordinary A hosting,
 a hotkey-signed miner key record supplies the recipient binding; that
 mode grants the operator plaintext access. In attested mode the key
 binding additionally requires the evidence above. No alternative

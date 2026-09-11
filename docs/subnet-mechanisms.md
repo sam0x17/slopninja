@@ -1,7 +1,8 @@
 # Slop Ninja subnet mechanisms
 
-Design update, September 11, 2026: Draft 0.14 retains the two A/B pools and private B weights. Attestation is an
-execution mode with no quality bonus or third reward pool. Attested benchmark
+Design update, September 11, 2026: Draft 0.15 retains the two A/B pools and private B weights.
+All paid B jobs require attestation and independent model/customer key release,
+with no quality bonus or third reward pool. Attested benchmark
 claims require version-bound receipts; ordinary private generation remains
 unverified. The monthly public B release policy from draft 0.13 is superseded.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its
