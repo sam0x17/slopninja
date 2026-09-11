@@ -8,6 +8,16 @@ pub const POLICY: &str = "slop_ninja_wikipedia_share_alike_v1";
 pub const LICENSE: &str = "CC-BY-SA-4.0";
 pub const LICENSE_URL: &str = "https://creativecommons.org/licenses/by-sa/4.0/";
 
+/// Preserve the original Apache lane; add only the individually reviewed Phi-4 grant.
+pub fn generator_admitted(license: &str, revision: &str, url: &str, grant_hash: &str) -> bool {
+    license == "Apache-2.0"
+        || (license == "MIT"
+            && revision == "mlx-community/phi-4-4bit@fc0f8f23d369dc29b55cad1d65cb5bf0dcbee910"
+            && url
+                == "https://huggingface.co/microsoft/phi-4/resolve/2db69c1c3e91a05d2c64a3185acfbaf36f744e25/LICENSE"
+            && grant_hash == "c49419617a6070bcb197cfe272f7007fdec3e790dbb529cb995473bd69c0bd51")
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ShareAlike {
     pub policy: String,

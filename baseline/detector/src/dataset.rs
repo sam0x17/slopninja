@@ -227,8 +227,12 @@ impl OriginRecord {
                 self.id
             );
             ensure!(
-                g.model_license == "Apache-2.0"
-                    && !g.model_license_url.is_empty()
+                crate::rights::generator_admitted(
+                    &g.model_license,
+                    &g.model_revision,
+                    &g.model_license_url,
+                    &g.model_license_sha256,
+                ) && !g.model_license_url.is_empty()
                     && !g.quantization.is_empty()
                     && !g.runtime.is_empty(),
                 "{}: generator license/runtime requires admission",

@@ -381,7 +381,12 @@ fn main() -> Result<()> {
     );
     let spec: ModelSpec = serde_json::from_slice(&fs::read(&args.model_spec)?)?;
     ensure!(
-        spec.license == "Apache-2.0",
+        slop_ninja_detector::rights::generator_admitted(
+            &spec.license,
+            &spec.revision,
+            &spec.license_url,
+            &spec.license_sha256,
+        ),
         "Generator license requires separate admission"
     );
     let input_sha256 = dataset::sha256(fs::read(&args.input)?);
