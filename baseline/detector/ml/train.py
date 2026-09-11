@@ -1,9 +1,11 @@
 """Fine-tune the three-class encoder from separately exported, admitted Rust shards."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import random
+import re
 import tempfile
 import time
 
@@ -13,6 +15,32 @@ from safetensors.torch import load_model, save_model
 from common import (LABELS, batch_tensors, check_partition_separation, class_counts,
                     configure_cpu, fit_temperature, load_checkpoint, load_partition,
                     logits_for, metrics, package_artifact, sha256, software)
+
+
+def paired_training_view(original, alternate):
+    """Require exact family/label coverage for alternate formatting exposures."""
+    by_id = {r["id"]: r for r in alternate}
+    if len(by_id) != len(alternate) or set(by_id) != {r["id"] for r in original}:
+        raise ValueError("training formatting view must cover each original ID exactly once")
+    for row in original:
+        other = by_id[row["id"]]
+        if any(row[k] != other[k] for k in ["source_group", "label", "evidence"]):
+            raise ValueError("training formatting view changed family, label or evidence")
+    return by_id
+
+
+def verify_whitespace_only(original_path, alternate_path):
+    whitespace = re.compile(r"[\u0009-\u000d\u0020\u0085\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]+")
+    originals = {r["id"]: r for r in map(json.loads, original_path.read_text().splitlines())}
+    for other in map(json.loads, alternate_path.read_text().splitlines()):
+        expected = whitespace.sub(" ", originals[other["id"]]["text"]).strip(" ")
+        if other["text"] != expected:
+            raise ValueError("training view changes more than the fixed whitespace transformation")
+
+
+def use_alternate(group, epoch):
+    rank = hashlib.sha256(("slop-ninja-format-exposure-v1:" + group).encode()).digest()[0]
+    return (rank + epoch) % 2 == 0
 
 
 def main():
@@ -30,6 +58,8 @@ def main():
     p.add_argument("--class-weights", choices=["none", "inverse_frequency"], default="none")
     p.add_argument("--seed", type=int, default=17)
     p.add_argument("--freeze-encoder", action="store_true", help="Train the classification layers only as a control")
+    p.add_argument("--training-whitespace-view", type=Path,
+                   help="Paired Rust whitespace-derived Train shard; alternate raw/collapsed exposure by family and epoch")
     p.add_argument("--synthetic-smoke-only", action="store_true", help="Mark output as an unvalidated synthetic control")
     args = p.parse_args()
     if args.output.exists():
@@ -47,6 +77,12 @@ def main():
     partitions = {name: load_partition(getattr(args, f"{name}_jsonl"), name, tokenizer, args.max_tokens)
                   for name in ["train", "development", "calibration"]}
     check_partition_separation(partitions)
+    alternate = None
+    if args.training_whitespace_view:
+        alternate_rows = load_partition(args.training_whitespace_view, "train", tokenizer, args.max_tokens)
+        alternate = paired_training_view(partitions["train"], alternate_rows)
+        verify_whitespace_only(args.train_jsonl, args.training_whitespace_view)
+        check_partition_separation({**partitions, "train": partitions["train"] + alternate_rows})
     if any(row["evidence"] == "synthetic_fixture" for rows in partitions.values() for row in rows) and not args.synthetic_smoke_only:
         raise ValueError("synthetic fixtures require --synthetic-smoke-only")
     counts = {name: class_counts(rows) for name, rows in partitions.items()}
@@ -70,6 +106,8 @@ def main():
         selected = Path(temporary) / "selected.safetensors"
         for epoch in range(1, args.epochs + 1):
             order = list(partitions["train"])
+            if alternate:
+                order = [alternate[r["id"]] if use_alternate(r["source_group"], epoch) else r for r in order]
             rng.shuffle(order)
             model.train()
             loss_total = 0.0
@@ -91,6 +129,8 @@ def main():
             development = metrics(development_logits, [r["label"] for r in partitions["development"]])
             summary = {"epoch": epoch, "training_loss": loss_total / len(order), "development": development,
                        "elapsed_seconds": time.monotonic() - epoch_start}
+            if alternate:
+                summary["whitespace_view_rows"] = sum(use_alternate(r["source_group"], epoch) for r in order)
             epochs.append(summary)
             print(json.dumps(summary), flush=True)
             if development["log_loss"] < best_loss:
@@ -124,6 +164,14 @@ def main():
             "epoch_history": epochs, "elapsed_seconds": time.monotonic() - started,
             "final_test_opened": False,
         }
+        if alternate:
+            training["formatting_augmentation"] = {
+                "method": "slop-ninja-format-exposure-v1",
+                "alternate_train_sha256": sha256(args.training_whitespace_view),
+                "policy": "one exposure per row per epoch; alternate raw/collapsed by source-family hash parity and epoch; all siblings share exposure",
+                "raw_rows": len(partitions["train"]), "alternate_rows": len(alternate),
+                "development_and_calibration": "unchanged original text",
+            }
         manifest = package_artifact(args.output, tokenizer, model, calibration, training, args.max_tokens, args.checkpoint)
         print(json.dumps({"artifact": str(args.output), "artifact_id": manifest["artifact_id"], "status": training["status"]}))
 

@@ -11,6 +11,12 @@ struct Args {
     plos: usize,
     #[arg(long, default_value_t = 80)]
     wikinews: usize,
+    /// Offset into DOI-sorted PLOS discovery; retained in run configuration.
+    #[arg(long, default_value_t = 0)]
+    plos_start: usize,
+    /// First Wikinews discovery title; retained in run configuration.
+    #[arg(long, default_value = "A")]
+    wikinews_from: String,
     /// Export public attribution and content hashes, without corpus text.
     #[arg(long)]
     manifest: Option<PathBuf>,
@@ -18,7 +24,13 @@ struct Args {
 
 fn main() -> Result<()> {
     let args = Args::parse();
-    let report = slop_ninja_detector::acquire::acquire(&args.output, args.plos, args.wikinews)?;
+    let report = slop_ninja_detector::acquire::acquire_from(
+        &args.output,
+        args.plos,
+        args.wikinews,
+        args.plos_start,
+        &args.wikinews_from,
+    )?;
     if let Some(path) = args.manifest {
         slop_ninja_detector::acquire::export_source_manifest(
             &args.output.join("human-records.jsonl"),

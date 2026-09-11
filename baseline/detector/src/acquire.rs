@@ -594,12 +594,33 @@ fn record_attempt(
 /// Acquire a frozen, bounded pilot. Existing captures are hash-checked and reused.
 /// `human-candidates.jsonl` uses the raw acquisition schema, before dataset import.
 pub fn acquire(output: &Path, plos_target: usize, wikinews_target: usize) -> Result<Value> {
+    acquire_from(output, plos_target, wikinews_target, 0, "A")
+}
+
+/// Use recorded discovery offsets for a fresh bounded collection. This changes
+/// discovery only; item-level rights and extraction checks remain identical.
+pub fn acquire_from(
+    output: &Path,
+    plos_target: usize,
+    wikinews_target: usize,
+    plos_start: usize,
+    wikinews_from: &str,
+) -> Result<Value> {
     ensure!(
         plos_target <= 100 && wikinews_target <= 100,
         "initial source review is capped at 100 admitted works per source"
     );
+    ensure!(plos_start <= 100_000, "PLOS discovery offset exceeds bound");
+    ensure!(
+        !wikinews_from.trim().is_empty() && wikinews_from.len() <= 200,
+        "Invalid Wikinews discovery start"
+    );
     let mut collector = Collector::new(output)?;
-    let config = json!({"schema":EXTRACTOR,"plos_target":plos_target,"wikinews_target":wikinews_target,"plos_candidate_limit":350,"wikinews_candidate_limit":600,"plos_publication_year":2019,"wikinews_revision_cutoff":CUTOFF,"whitespace_word_range":[180,500],"user_agent":USER_AGENT,"request_interval_ms":500,"retries":0});
+    let mut config = json!({"schema":EXTRACTOR,"plos_target":plos_target,"wikinews_target":wikinews_target,"plos_candidate_limit":350,"wikinews_candidate_limit":600,"plos_publication_year":2019,"wikinews_revision_cutoff":CUTOFF,"whitespace_word_range":[180,500],"user_agent":USER_AGENT,"request_interval_ms":500,"retries":0});
+    if plos_start != 0 || wikinews_from != "A" {
+        config["discovery_offsets"] =
+            json!({"plos_start":plos_start,"wikinews_from":wikinews_from});
+    }
     let config_path = output.join("config.json");
     if config_path.exists() {
         ensure!(
@@ -622,6 +643,10 @@ pub fn acquire(output: &Path, plos_target: usize, wikinews_target: usize) -> Res
         );
         let mut url = Url::parse("https://api.plos.org/search")?;
         url.query_pairs_mut().extend_pairs([("q","publication_date:[2019-01-01T00:00:00Z TO 2019-12-31T23:59:59Z] AND doc_type:full AND journal_key:PLoSONE"),("fl","id,title,publication_date"),("rows","350"),("sort","id asc"),("wt","json")]);
+        if plos_start != 0 {
+            url.query_pairs_mut()
+                .append_pair("start", &plos_start.to_string());
+        }
         let listing = collector.get(&url)?;
         let values: Value = serde_json::from_slice(&listing.bytes)?;
         for doc in values["response"]["docs"]
@@ -655,7 +680,7 @@ pub fn acquire(output: &Path, plos_target: usize, wikinews_target: usize) -> Res
             String::from_utf8_lossy(&rights.bytes).contains("2.5"),
             "Wikinews rights policy changed or was not retrieved"
         );
-        let mut continuation = "A".to_owned();
+        let mut continuation = wikinews_from.to_owned();
         let mut candidates = 0;
         while candidates < 600
             && counts.get("wikinews:admitted").copied().unwrap_or(0) < wikinews_target

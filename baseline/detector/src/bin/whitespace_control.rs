@@ -19,6 +19,9 @@ struct Args {
     input: PathBuf,
     #[arg(long)]
     output_dir: PathBuf,
+    /// Derive all frozen partitions for a separately declared training experiment.
+    #[arg(long)]
+    all_splits: bool,
 }
 
 fn is_white_space(c: char) -> bool {
@@ -35,6 +38,7 @@ fn collapse_whitespace(text: &str) -> String {
 fn derive_views(
     records: &[OriginRecord],
     original_manifest_sha256: &str,
+    all_splits: bool,
 ) -> Result<(Vec<OriginRecord>, Vec<Value>)> {
     dataset::validate_records(records)?;
     ensure!(
@@ -43,11 +47,11 @@ fn derive_views(
     );
     let selected: Vec<_> = records
         .iter()
-        .filter(|r| r.split == Some(Split::Test))
+        .filter(|r| all_splits || r.split == Some(Split::Test))
         .collect();
     ensure!(
         !selected.is_empty() && selected.len() <= 10_000,
-        "Formatting control requires 1..10000 frozen test records"
+        "Formatting control requires 1..10000 selected frozen records"
     );
     let mut views = Vec::new();
     let mut bindings = Vec::new();
@@ -55,7 +59,8 @@ fn derive_views(
         let mut view = original.clone();
         view.text = collapse_whitespace(&original.text);
         view.text_sha256 = dataset::sha256(&view.text);
-        view.evidence_notes.push_str(&format!(" Formatting-derived test view {TRANSFORMATION}. {RULE} Original text SHA256: {}. Original manifest SHA256: {original_manifest_sha256}. Origin/evidence labels and source/generation metadata describe the original writing and are retained as lineage; no new writing or model invocation occurred. The derived text is not asserted to be the raw model response.",original.text_sha256));
+        let scope = if all_splits { "all-split" } else { "test" };
+        view.evidence_notes.push_str(&format!(" Formatting-derived {scope} view {TRANSFORMATION}. {RULE} Original text SHA256: {}. Original manifest SHA256: {original_manifest_sha256}. Origin/evidence labels and source/generation metadata describe the original writing and are retained as lineage; no new writing or model invocation occurred. The derived text is not asserted to be the raw model response.",original.text_sha256));
         view.validate()?;
         bindings.push(json!({"id":view.id,"parent_id":view.parent_id,"source_group":view.source_group,"split":view.split,"origin":view.origin,"original_text_sha256":original.text_sha256,"derived_text_sha256":view.text_sha256,"original_record_sha256":dataset::sha256(serde_json::to_vec(original)?),"derived_record_sha256":dataset::sha256(serde_json::to_vec(&view)?),"text_changed":original.text!=view.text}));
         views.push(view);
@@ -91,7 +96,7 @@ fn main() -> Result<()> {
         dataset::sha256(fs::read(&args.input)?) == original_manifest_sha256,
         "Input manifest changed while reading; wait for the admitted cohort to be frozen"
     );
-    let (views, bindings) = derive_views(&records, &original_manifest_sha256)?;
+    let (views, bindings) = derive_views(&records, &original_manifest_sha256, args.all_splits)?;
     fs::create_dir_all(&args.output_dir)?;
     let output = args.output_dir.join("records.jsonl");
     if output.exists() {
@@ -107,7 +112,7 @@ fn main() -> Result<()> {
     } else {
         dataset::write_records(&output, &views)?;
     }
-    let summary = json!({"schema":"slop-ninja-formatting-control-summary-v1","transformation":TRANSFORMATION,"rule":RULE,"original_manifest_sha256":original_manifest_sha256,"derived_manifest_sha256":dataset::sha256(fs::read(&output)?),"record_hash_encoding":"SHA256 of serde_json::to_vec(OriginRecord); manifest hashes cover exact file bytes","selection":"all and only existing Split::Test records; preserve ancestor closure","identity_policy":"IDs are preserved within a separate derived-view manifest. Do not concatenate with the original corpus or treat the views as new independent observations.","lineage_policy":"Original source and generation metadata remain lineage evidence. They do not describe new writing or a new raw model response.","changed_texts":bindings.iter().filter(|b|b["text_changed"]==true).count(),"summary":dataset::summarize(&views),"records":bindings});
+    let summary = json!({"schema":"slop-ninja-formatting-control-summary-v1","transformation":TRANSFORMATION,"rule":RULE,"original_manifest_sha256":original_manifest_sha256,"derived_manifest_sha256":dataset::sha256(fs::read(&output)?),"record_hash_encoding":"SHA256 of serde_json::to_vec(OriginRecord); manifest hashes cover exact file bytes","selection":if args.all_splits { "all frozen records; preserve partitions and ancestor closure" } else { "all and only existing Split::Test records; preserve ancestor closure" },"identity_policy":"IDs are preserved within a separate derived-view manifest. Do not concatenate with the original corpus or treat the views as new independent observations.","lineage_policy":"Original source and generation metadata remain lineage evidence. They do not describe new writing or a new raw model response.","changed_texts":bindings.iter().filter(|b|b["text_changed"]==true).count(),"summary":dataset::summarize(&views),"records":bindings});
     write_identical_or_new(
         &args.output_dir.join("summary.json"),
         &serde_json::to_vec_pretty(&summary)?,
@@ -183,7 +188,8 @@ mod tests {
             Split::Train,
         );
         let original = vec![root, child, train];
-        let (views, bindings) = derive_views(&original, &dataset::sha256("manifest")).unwrap();
+        let (views, bindings) =
+            derive_views(&original, &dataset::sha256("manifest"), false).unwrap();
         assert_eq!(views.len(), 2);
         assert_eq!(views[0].text, "A small check. Keep punctuation—exactly!");
         assert_eq!(views[1].parent_id.as_deref(), Some("test-root"));
@@ -212,6 +218,16 @@ mod tests {
             );
         }
         assert_eq!(bindings.len(), 2);
-        assert!(derive_views(&original[1..], &dataset::sha256("incomplete manifest")).is_err());
+        let (all_views, _) = derive_views(&original, &dataset::sha256("manifest"), true).unwrap();
+        assert_eq!(all_views.len(), 3);
+        assert_eq!(all_views[2].split, Some(Split::Train));
+        assert!(
+            derive_views(
+                &original[1..],
+                &dataset::sha256("incomplete manifest"),
+                false
+            )
+            .is_err()
+        );
     }
 }
