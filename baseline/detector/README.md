@@ -1,5 +1,12 @@
 # Reference detector
 
+The first trained candidate is a ModernBERT origin classifier. Read the
+[pilot results](PILOT_RESULTS.md) and download the
+[experimental release](https://github.com/sam0x17/slopninja/releases/tag/detector-pilot-v0.1.0).
+It passed inference checks after transfer from the Studio, but has substantial
+generator-transfer and formatting weaknesses. The release includes the selected
+encoder, all three linear controls and all 16 aggregate evaluations.
+
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
 provenance, splitting, word/grammar features, linear models and evaluation.

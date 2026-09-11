@@ -35,13 +35,16 @@ tonal intent remain hard acceptance requirements.
 Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
 
-The first reference detector is being built under `baseline/detector/`. Its
-[commands](baseline/detector/README.md),
+The first experimental reference detector is trained and available under
+`baseline/detector/`. Read the [measured results](baseline/detector/PILOT_RESULTS.md)
+and download the [model bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-pilot-v0.1.0).
+Generator transfer and formatting sensitivity remain substantial weaknesses.
+Its [commands](baseline/detector/README.md),
 [implementation plan](baseline/detector/PLAN.md) and
 [commercial-use source register](baseline/detector/SOURCES.md) cover acquisition,
 training, evaluation and release. The [pilot protocol](baseline/detector/PILOT_PROTOCOL.md)
 fixes the initial comparison and its evidence limits before training.
-The draft surveys related work and defines public A detector artifacts,
+The whitepaper surveys related work and defines public A detector artifacts,
 private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
