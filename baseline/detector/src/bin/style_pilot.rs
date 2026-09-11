@@ -17,6 +17,13 @@ struct Args {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Keep one representative per already frozen family, ranked without scores.
+    SelectRoots {
+        #[arg(long)]
+        input: PathBuf,
+        #[arg(long)]
+        output_dir: PathBuf,
+    },
     /// Exclude previously used sources, freeze partitions and balance teachers.
     Plan {
         #[arg(long)]
@@ -166,6 +173,40 @@ fn plan(input: PathBuf, prior: Vec<PathBuf>, output: PathBuf, seed: String) -> R
 
 fn main() -> Result<()> {
     match Args::parse().command {
+        Command::SelectRoots { input, output_dir } => {
+            ensure!(!output_dir.exists(), "Use a new selection directory");
+            let mut records = dataset::read_records(&input)?;
+            ensure!(
+                records.iter().all(|r| r.split.is_some()
+                    && r.parent_id.is_none()
+                    && r.evidence == Evidence::HistoricalProxy),
+                "Expected already frozen historical roots"
+            );
+            let input_count = records.len();
+            records.sort_by_cached_key(|r| (dataset::sha256(&r.id), r.id.clone()));
+            let mut seen = BTreeSet::new();
+            let mut omitted = Vec::new();
+            records.retain(|r| {
+                if seen.insert(r.source_group.clone()) {
+                    true
+                } else {
+                    omitted.push(json!({"id":r.id,"source_group":r.source_group}));
+                    false
+                }
+            });
+            fs::create_dir(&output_dir)?;
+            let output = output_dir.join("frozen-roots.jsonl");
+            dataset::write_records(&output, &records)?;
+            let report = json!({"schema":"slop_ninja_family_representatives_v1","input_sha256":dataset::sha256(fs::read(input)?),
+                "input_rows":input_count,"selection":"one record per frozen source family, ascending SHA256(record ID), then ID; retain existing splits",
+                "omitted":omitted,"output_sha256":dataset::sha256(fs::read(output)?),"summary":dataset::summarize(&records)});
+            fs::write(
+                output_dir.join("selection.json"),
+                serde_json::to_vec_pretty(&report)?,
+            )?;
+            println!("{}", serde_json::to_string_pretty(&report["summary"])?);
+            Ok(())
+        }
         Command::Plan {
             input,
             prior,

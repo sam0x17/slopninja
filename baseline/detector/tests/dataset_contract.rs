@@ -38,6 +38,7 @@ fn fixture(id: &str, group: &str, text: &str) -> OriginRecord {
             model_release: true,
             external_evaluation: false,
             redistribute_text: true,
+            share_alike: None,
         },
         parent_id: None,
         generation: None,
@@ -112,6 +113,40 @@ fn normalized_duplicates_cannot_cross_partitions() {
     second.split = Some(Split::Test);
     let error = validate_records(&[first, second]).unwrap_err().to_string();
     assert!(error.contains("duplicate crosses splits"), "{error}");
+}
+
+#[test]
+fn share_alike_requires_notices_and_descendants_cannot_drop_them() {
+    use slop_ninja_detector::rights::{POLICY, ShareAlike};
+    let mut parent = fixture(
+        "parent-sa",
+        "source-sa",
+        "A synthetic violet window stands beside the painted clock.",
+    );
+    parent.evidence = Evidence::HistoricalProxy;
+    parent.rights.license = "CC-BY-SA-3.0".into();
+    assert!(parent.validate().is_err());
+    parent.rights.share_alike = Some(ShareAlike {
+        policy: POLICY.into(),
+        source_title: "Synthetic source contract".into(),
+        article_url: "https://en.wikipedia.org/w/index.php?oldid=1".into(),
+        history_url: "https://en.wikipedia.org/w/index.php?curid=1&action=history".into(),
+        source_license: "CC-BY-SA-3.0".into(),
+        source_license_url: "https://creativecommons.org/licenses/by-sa/3.0/".into(),
+        review_sha256: sha256("synthetic review"),
+        notices: vec!["Synthetic notice".into()],
+        changes: "Synthetic fixture, no real source text.".into(),
+    });
+    parent.validate().unwrap();
+    let mut child = parent.clone();
+    child.id = "child-sa".into();
+    child.parent_id = Some(parent.id.clone());
+    validate_records(&[parent.clone(), child.clone()]).unwrap();
+    child.rights.share_alike.as_mut().unwrap().notices.clear();
+    assert!(validate_records(&[parent.clone(), child.clone()]).is_err());
+    child.rights.share_alike = None;
+    child.rights.license = "CC-BY-4.0".into();
+    assert!(validate_records(&[parent, child]).is_err());
 }
 
 #[test]

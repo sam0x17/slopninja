@@ -23,10 +23,10 @@ cannot establish that a provider never trained on the benchmark.
 
 The initial import work should stage pinned RAID/HC3 subsets under ignored
 `data/`, produce source joins and license evidence, and report exclusions before
-admission. The existing detector loader deliberately does not yet admit CC BY-SA
-records. Add a specific attribution/distribution policy before enabling those
-records; changing an allowlist alone would leave the work unfinished. A book's
-author is not the author of its Wikipedia plot summary.
+admission. The detector loader now admits verified Wikipedia excerpts with the
+explicit [ShareAlike policy](SHARE_ALIKE_POLICY.md), attribution and change notices.
+Those obligations pass through generation, feature extraction and model release.
+A book's author is not the author of its Wikipedia plot summary.
 
 ## Corpus contract
 
@@ -157,3 +157,33 @@ historical source joins for further admission work; it exports no training
 records. Wikimedia accepts article links as one route to contributor attribution
 and requires preservation of additional imported-text notices where present.
 [Wikimedia reuse terms](https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use#7._Licensing_of_Content).
+
+## Admission and corpus expansion
+
+The complete 842-question historical review is finished. `admit_hc3` rechecks
+capture hashes, revision identity and full text containment before applying the
+declared rights, quotation and length rules. It admitted 261 human excerpts from
+243 Wikipedia source families. The frozen partitions contain 190 Train, 28
+Development, 26 Calibration and 17 Test records. Multiple HC3 questions can map to
+one article; keep those rows in one family and select one representative per
+family for the first generation run.
+
+The importer excluded 405 historical mismatches, 112 length failures, 16 long
+quotations, 43 source notices and five unresolved sources. It admitted no upstream
+ChatGPT answers. These are historical proxies, with the source and label limits
+described in the policy. The corpus hash is
+`178b2c9ab55a74107fb6792b72a5d69e369a9bd103b17fa3343caeaac989c23d`.
+The [admission summary](results/hc3-admitted-v1.json) binds every review batch,
+exclusion corpus, decision log and the importer executable. Raw records are in
+ignored `data/baseline-detector/standard-corpora/hc3-admitted-v1/`.
+
+The separate `stage_books` command captured CMU Book Summaries: 16,559 unique
+Wikipedia page IDs and 43,461,583 extracted bytes, SHA256
+`94516c64d1b4ac6b8b397ef106ee598b43d0e5364ffd8305edc945dce04f4305`.
+There are 9,368 summaries in the current 80-500 lexical-word range and five empty
+summaries. Its download returned a 2013 Last-Modified timestamp. The collection
+page links to CC BY-SA 3.0 **US**, which must be preserved alongside upstream
+Wikipedia rights. Source-specific historical checks remain before admission;
+the book's publication date does not date its summary. See the
+[capture manifest](manifests/cmu-books-staging-v1.json) and
+[CMU collection page](https://www.cs.cmu.edu/~dbamman/booksummaries.html).

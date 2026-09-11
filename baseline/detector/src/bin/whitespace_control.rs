@@ -59,6 +59,9 @@ fn derive_views(
         let mut view = original.clone();
         view.text = collapse_whitespace(&original.text);
         view.text_sha256 = dataset::sha256(&view.text);
+        if let Some(rights) = &mut view.rights.share_alike {
+            rights.changes.push_str(" Later formatting view: Unicode whitespace collapsed; non-whitespace characters preserved.");
+        }
         let scope = if all_splits { "all-split" } else { "test" };
         view.evidence_notes.push_str(&format!(" Formatting-derived {scope} view {TRANSFORMATION}. {RULE} Original text SHA256: {}. Original manifest SHA256: {original_manifest_sha256}. Origin/evidence labels and source/generation metadata describe the original writing and are retained as lineage; no new writing or model invocation occurred. The derived text is not asserted to be the raw model response.",original.text_sha256));
         view.validate()?;
@@ -161,6 +164,7 @@ mod tests {
                 model_release: true,
                 external_evaluation: false,
                 redistribute_text: true,
+                share_alike: None,
             },
             parent_id: None,
             generation: None,

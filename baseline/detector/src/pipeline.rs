@@ -34,6 +34,8 @@ struct FeatureHeader {
     word_count: usize,
     source_manifest_sha256: String,
     features_sha256: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    share_alike_rights: Option<dataset::Rights>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -92,7 +94,10 @@ pub fn export_shards(input: &Path, output: &Path) -> Result<Value> {
             json!({"rows":selected.len(), "sha256":sha256(fs::read(&path)?)}),
         );
     }
-    let summary = json!({"schema":"slop_ninja_origin_shards_v1", "source_manifest_sha256":sha256(fs::read(input)?), "partitions":manifest});
+    let rights =
+        slop_ninja_detector::rights::release_manifest(&records, &serde_json::to_value(&manifest)?);
+    write_json(&output.join("data_rights.json"), &rights)?;
+    let summary = json!({"schema":"slop_ninja_origin_shards_v1", "source_manifest_sha256":sha256(fs::read(input)?), "partitions":manifest,"data_rights_sha256":sha256(fs::read(output.join("data_rights.json"))?)});
     write_json(&output.join("manifest.json"), &summary)?;
     Ok(summary)
 }
@@ -212,6 +217,11 @@ pub fn featurize(
                     word_count: word_counts[batch_index * batch_size + offset],
                     source_manifest_sha256: source_manifest_sha256.clone(),
                     features_sha256: sha256(serde_json::to_vec(&features)?),
+                    share_alike_rights: record
+                        .rights
+                        .share_alike
+                        .as_ref()
+                        .map(|_| record.rights.clone()),
                 },
                 features,
             });
@@ -286,6 +296,13 @@ fn load_features(input: &Path, selected: &[Split]) -> Result<BTreeMap<Split, Vec
         let header: FeatureHeader = serde_json::from_str(&line)
             .with_context(|| format!("feature header at line {}", line_number + 1))?;
         validate_header(&header)?;
+        if let Some(rights) = &header.share_alike_rights {
+            slop_ninja_detector::rights::validate(rights)?;
+            ensure!(
+                rights.share_alike.is_some(),
+                "Missing feature attribution obligations"
+            );
+        }
         ensure!(
             ids.insert(header.id.clone()),
             "duplicate feature record ID: {}",
@@ -350,10 +367,33 @@ pub fn train(input: &Path, output: &Path, config: &model::TrainConfig) -> Result
         config,
     )?;
     fs::create_dir_all(output)?;
+    let mut notices = Vec::new();
+    for line in BufReader::new(File::open(input)?).lines() {
+        let line = line?;
+        if line.trim().is_empty() {
+            continue;
+        }
+        let header: FeatureHeader = serde_json::from_str(&line)?;
+        if header.split != Split::Test
+            && let Some(rights) = &header.share_alike_rights
+        {
+            notices.extend(slop_ninja_detector::rights::notice(
+                &header.id,
+                &header.text_sha256,
+                rights,
+            ));
+        }
+    }
+    let data_rights = slop_ninja_detector::rights::manifest_for_notices(
+        notices,
+        &json!({"feature_file_sha256":sha256(fs::read(input)?)}),
+    );
+    write_json(&output.join("data_rights.json"), &data_rights)?;
     write_json(&output.join("model.json"), &artifact)?;
     write_json(&output.join("training_report.json"), &report)?;
     let contract = json!({
         "schema":"slop_ninja_detector_runtime_contract_v1", "artifact_sha256":artifact.content_sha256,
+        "data_rights_sha256":sha256(fs::read(output.join("data_rights.json"))?),
         "classes":model::CLASS_NAMES, "model_file_sha256":sha256(fs::read(output.join("model.json"))?),
         "feature_file_sha256":sha256(fs::read(input)?), "input_language_scope":"English; no language detector is fitted",
         "min_words":MIN_WORDS,"max_words":MAX_WORDS,"max_utf8_bytes":MAX_BYTES,"truncation":false,
@@ -589,6 +629,7 @@ mod tests {
                 normalized_text_sha256: sha256(words(&text).join(" ")),
                 word_count: MIN_WORDS,
                 source_manifest_sha256: sha256("synthetic test manifest"),
+                share_alike_rights: None,
                 features_sha256: sha256(serde_json::to_vec(&features).unwrap()),
             },
             features,

@@ -204,6 +204,7 @@ mod tests {
                 model_release: true,
                 external_evaluation: true,
                 redistribute_text: false,
+                share_alike: None,
             },
             parent_id: None,
             generation: None,

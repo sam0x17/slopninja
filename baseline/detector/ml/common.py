@@ -122,6 +122,7 @@ def load_partition(path, split, tokenizer, max_tokens):
                 "id": row["id"], "source_group": row["source_group"], "hash": digest,
                 "ids": token_ids(tokenizer, row["text"], max_tokens),
                 "label": LABELS.index(row["origin"]), "evidence": row["evidence"],
+                "share_alike": row["rights"]["license"].startswith("CC-BY-SA-"),
             })
     if not rows:
         raise ValueError(f"empty {split} partition")
@@ -193,7 +194,7 @@ def fit_temperature(logits, labels):
             "class_priors": [float((labels == i).double().mean()) for i in range(3)]}
 
 
-def package_artifact(output, tokenizer, model, calibration, training, max_tokens, checkpoint):
+def package_artifact(output, tokenizer, model, calibration, training, max_tokens, checkpoint, data_rights=None):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     model.cpu().eval().save_pretrained(output / "classifier", safe_serialization=True)
@@ -204,6 +205,8 @@ def package_artifact(output, tokenizer, model, calibration, training, max_tokens
         shutil.copyfile(Path(__file__).parent / name, runner / name)
     write_json(output / "calibration.json", calibration)
     write_json(output / "training.json", training)
+    if data_rights is not None:
+        write_json(output / "DATA_RIGHTS.json", data_rights)
     if torch.get_num_threads() != 1:
         raise ValueError("package reference vectors using the single-threaded CPU runtime")
     reference_vectors = []
@@ -220,6 +223,8 @@ def package_artifact(output, tokenizer, model, calibration, training, max_tokens
         "status": training["status"], "architecture": "ModernBERT-base with a three-class classification head",
         "upstream_model": MODEL_ID, "upstream_revision": REVISION, "upstream_weight_license": "Apache-2.0",
         "upstream_url": f"https://huggingface.co/{MODEL_ID}/tree/{REVISION}",
+        "fine_tuned_weight_license": data_rights["content"]["model_release_license"] if data_rights else None,
+        "data_attribution_file": "DATA_RIGHTS.json" if data_rights else None,
         "labels": LABELS, "language_scope": "English", "max_tokens_including_special_tokens": max_tokens,
         "limitations": ["No Pangram parity claim.", "No subnet qualification claim.",
                         "Production history can be ambiguous from text alone.",
@@ -230,6 +235,14 @@ def package_artifact(output, tokenizer, model, calibration, training, max_tokens
     checkpoint = Path(checkpoint)
     for name in ["LICENSE", "UPSTREAM_README.md", "checkpoint.json"]:
         shutil.copyfile(checkpoint / name, output / name)
+    if data_rights and data_rights["content"]["model_release_license"] == "CC-BY-SA-4.0":
+        (output / "LICENSE").rename(output / "UPSTREAM_LICENSE")
+        (output / "LICENSE").write_text(
+            "Fine-tuned weights: Creative Commons Attribution-ShareAlike 4.0 International.\n"
+            "https://creativecommons.org/licenses/by-sa/4.0/\n"
+            "Copyright Slop Ninja Research, where applicable. No warranties.\n"
+            "See DATA_RIGHTS.json for source attribution and changes, and UPSTREAM_LICENSE\n"
+            "for base-model terms. Runtime code retains its separate license.\n")
     metadata = {
         "schema": SCHEMA, "labels": LABELS, "max_tokens": max_tokens,
         "preprocessing": "exact_utf8_hf_tokenizer_no_truncation_v1",

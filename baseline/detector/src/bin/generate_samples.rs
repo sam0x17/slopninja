@@ -70,6 +70,8 @@ fn prompt(parent: &OriginRecord, operation: &str, profile: Option<&Provenance>) 
     let words = grammar_core::features::words(&parent.text).len();
     let register = if parent.source.collection.to_lowercase().contains("plos") {
         "a scientific abstract for a research journal"
+    } else if parent.source.collection == "hc3-wiki-historical" {
+        "an encyclopedic explanation for general readers, preserving technical qualifications"
     } else {
         "a factual news report for general readers"
     };
@@ -328,6 +330,13 @@ fn execute(
     }.into();
     record.text_sha256 = dataset::sha256(&text);
     record.text = text;
+    if let Some(obligations) = &mut record.rights.share_alike {
+        record.rights.license = slop_ninja_detector::rights::LICENSE.into();
+        obligations.changes.push_str(&format!(
+            " Model {} operation by {}; see generation provenance.",
+            task.operation, spec.revision
+        ));
+    }
     record.generation = Some(Generation {
         model_id: spec.id.clone(),
         response_model: response_model.into(),

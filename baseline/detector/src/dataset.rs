@@ -73,6 +73,8 @@ pub struct Rights {
     pub model_release: bool,
     pub external_evaluation: bool,
     pub redistribute_text: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub share_alike: Option<crate::rights::ShareAlike>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -152,6 +154,8 @@ impl OriginRecord {
                 "CC-BY-2.5",
                 "CC-BY-3.0",
                 "CC-BY-4.0",
+                "CC-BY-SA-3.0",
+                "CC-BY-SA-4.0",
                 "Public-Domain-US",
                 "Explicit-Contributor-Grant",
                 "Synthetic-Original"
@@ -160,6 +164,7 @@ impl OriginRecord {
             "{}: license requires a separate admission policy",
             self.id
         );
+        crate::rights::validate(&self.rights)?;
         for hash in [&self.rights.evidence_sha256, &self.source.raw_sha256] {
             ensure!(
                 hash.len() == 64 && hash.bytes().all(|b| b.is_ascii_hexdigit()),
@@ -325,6 +330,30 @@ pub fn validate_records(records: &[OriginRecord]) -> Result<()> {
             let parent = ids
                 .get(parent_id)
                 .with_context(|| format!("{}: missing parent {}", record.id, parent_id))?;
+            if let Some(obligations) = &parent.rights.share_alike {
+                let child = record
+                    .rights
+                    .share_alike
+                    .as_ref()
+                    .context("Descendant dropped ShareAlike obligations")?;
+                ensure!(
+                    child.source_title == obligations.source_title
+                        && child.article_url == obligations.article_url
+                        && child.history_url == obligations.history_url
+                        && child.source_license == obligations.source_license
+                        && child.source_license_url == obligations.source_license_url
+                        && child.review_sha256 == obligations.review_sha256
+                        && child.notices == obligations.notices,
+                    "Descendant changed source attribution or notices"
+                );
+                if record.generation.is_some() {
+                    ensure!(
+                        record.rights.license == "CC-BY-SA-4.0"
+                            && child.changes != obligations.changes,
+                        "Generated adaptation needs CC-BY-SA-4.0 and a change notice"
+                    );
+                }
+            }
             ensure!(
                 parent.id != record.id
                     && parent.source_group == record.source_group

@@ -43,9 +43,32 @@ def use_alternate(group, epoch):
     return (rank + epoch) % 2 == 0
 
 
+def validate_data_rights(path, shard_paths, partitions):
+    """Check the Rust admission handoff before fitting; never infer data rights here."""
+    required = {(row["id"], row["hash"]) for rows in partitions.values()
+                for row in rows if row["share_alike"]}
+    if path is None:
+        if required:
+            raise ValueError("ShareAlike training requires Rust-exported attribution and the declared release license")
+        return None
+    manifest = json.loads(path.read_text())
+    content = manifest["content"]
+    encoded = json.dumps(content, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode()
+    if content["schema"] != "slop_ninja_data_release_obligations_v1" or hashlib.sha256(encoded).hexdigest() != manifest["content_sha256"]:
+        raise ValueError("invalid data-rights manifest")
+    for name, shard in shard_paths.items():
+        if content["partitions"][name]["sha256"] != sha256(shard):
+            raise ValueError("data rights do not bind the actual training/development/calibration shards")
+    observed = {(row["record_id"], row["text_sha256"]) for row in content["share_alike_notices"]}
+    if required and (content["model_release_license"] != "CC-BY-SA-4.0" or not required.issubset(observed)):
+        raise ValueError("ShareAlike manifest is missing the release license or a source notice")
+    return manifest
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--checkpoint", required=True, type=Path)
+    p.add_argument("--data-rights", type=Path, help="Rust-exported attribution and release obligations")
     for name in ["train", "development", "calibration"]:
         p.add_argument(f"--{name}-jsonl", required=True, type=Path)
     p.add_argument("--output", required=True, type=Path)
@@ -77,6 +100,8 @@ def main():
     partitions = {name: load_partition(getattr(args, f"{name}_jsonl"), name, tokenizer, args.max_tokens)
                   for name in ["train", "development", "calibration"]}
     check_partition_separation(partitions)
+    data_rights = validate_data_rights(args.data_rights,
+        {name: getattr(args, f"{name}_jsonl") for name in partitions}, partitions)
     alternate = None
     if args.training_whitespace_view:
         alternate_rows = load_partition(args.training_whitespace_view, "train", tokenizer, args.max_tokens)
@@ -172,7 +197,9 @@ def main():
                 "raw_rows": len(partitions["train"]), "alternate_rows": len(alternate),
                 "development_and_calibration": "unchanged original text",
             }
-        manifest = package_artifact(args.output, tokenizer, model, calibration, training, args.max_tokens, args.checkpoint)
+        if args.data_rights:
+            training["data_rights_sha256"] = sha256(args.data_rights)
+        manifest = package_artifact(args.output, tokenizer, model, calibration, training, args.max_tokens, args.checkpoint, data_rights)
         print(json.dumps({"artifact": str(args.output), "artifact_id": manifest["artifact_id"], "status": training["status"]}))
 
 

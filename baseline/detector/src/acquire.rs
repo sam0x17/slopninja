@@ -504,6 +504,7 @@ fn origin_record(value: &Value, root: &Path) -> Result<OriginRecord> {
             model_release: true,
             external_evaluation: true,
             redistribute_text: true,
+            share_alike: None,
         },
         parent_id: None,
         generation: None,
@@ -522,6 +523,10 @@ pub fn export_source_manifest(input: &Path, output: &Path) -> Result<()> {
             "source manifest expects historical source roots"
         );
         let value = json!({"schema":"slop-ninja-public-source-manifest-v1","id":record.id,"source_group":record.source_group,"collection":record.source.collection,"source_url":record.source.url,"source_version":record.source.version,"published_at":record.source.published_at,"attributed_authors":record.source.author_ids,"raw_sha256":record.source.raw_sha256,"text_sha256":record.text_sha256,"extraction_version":record.source.extraction,"origin_evidence":record.evidence,"origin_notes":record.evidence_notes,"license":record.rights.license,"license_evidence_url":record.rights.evidence_url,"license_evidence_sha256":record.rights.evidence_sha256,"attribution":record.rights.attribution,"commercial_training":record.rights.commercial_training,"model_release":record.rights.model_release,"external_evaluation":record.rights.external_evaluation,"redistribute_text":record.rights.redistribute_text});
+        let mut value = value;
+        if let Some(obligations) = record.rights.share_alike {
+            value["share_alike"] = serde_json::to_value(obligations)?;
+        }
         serde_json::to_writer(&mut bytes, &value)?;
         bytes.push(b'\n');
     }
