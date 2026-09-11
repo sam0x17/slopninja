@@ -34,6 +34,11 @@ rewriting in Qwen's requested copyedits. The [clarified main target](ENCODER_NAR
 is fully model-written prose deliberately steered away from the model's usual
 voice. Selection now prioritizes human-versus-model-draft detection, with explicit
 writing-profile slices. No v5 detector has been evaluated yet.
+The [narrative corpus report](NARRATIVE_CORPUS_RESULTS.md) records completed
+provider cohorts and all exclusions as generation proceeds.
+Its first Development comparison found that v4 flags nine of 26 historical human
+narrative sources, despite detecting all 26 model-written drafts. Human false
+positives on this new register remain an unresolved limitation.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
