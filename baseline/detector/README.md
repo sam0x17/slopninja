@@ -1,0 +1,98 @@
+# Reference detector
+
+The first reference candidate estimates three document-origin classes:
+`human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
+provenance, splitting, word/grammar features, linear models and evaluation.
+The optional [ModernBERT path](ml/README.md) uses PyTorch for encoder training
+and inference. Neither path infers a percentage of AI-written words.
+
+Read the [implementation plan](PLAN.md), [source register](SOURCES.md) and
+[frozen pilot protocol](PILOT_PROTOCOL.md) for the scope and evidence limits.
+The initial corpus uses licensed historical human proxies, recorded
+source-conditioned model drafts and model copyedits of those proxies. It does
+not contain verified contemporary human/model collaborations.
+
+## Build and collect
+
+Run these commands from this directory:
+
+```sh
+cargo build --release
+cargo run --release --bin slop-ninja-detector -- acquire \
+  --output-dir ../../data/baseline-detector/acquisition-v1 --plos 80 --wikinews 80
+cargo run --release --bin slop-ninja-detector -- split \
+  --input ../../data/baseline-detector/acquisition-v1/human-records.jsonl \
+  --output ../../data/baseline-detector/acquisition-v1/frozen-roots.jsonl \
+  --seed slop-ninja-origin-pilot-v1
+```
+
+Acquisition retains raw source and license captures, extraction decisions and
+rejections. Records bind exact text hashes, source versions, attribution and
+origin evidence. The splitter refuses to reshuffle assigned partitions. An
+original and all of its generated descendants belong to one source family.
+Identical and normalized duplicates are joined before splitting.
+
+## Generate recorded examples
+
+`generate_samples` calls an explicitly configured local model endpoint. Its
+model-spec JSON binds the model ID, immutable revision/file hash, Apache-2.0
+license evidence, quantization, runtime, temperature and token limit. See the
+struct in `src/bin/generate_samples.rs` for the exact fields. Verify the loaded
+weights against that spec before using an export.
+
+```sh
+cargo run --release --bin generate_samples -- \
+  --input ../../data/baseline-detector/acquisition-v1/frozen-roots.jsonl \
+  --model-spec ../../data/baseline-detector/generators/qwen.json \
+  --output-dir ../../data/baseline-detector/qwen-v1 \
+  --base-url http://127.0.0.1:18123/v1 --concurrency 4 --max-calls 320 \
+  --complete-families-only
+```
+
+Requests and responses stay in ignored `data/`. Calls are capped, failed attempts
+are retained, and completed responses are reused only after validation against
+the request and model spec. The optional `LM_STUDIO_API_KEY` is read from the
+environment and never written into the request archive. Use an SSH tunnel for a
+remote Studio endpoint. Full-family export requires all tasks to have been
+attempted and reports every family excluded because an output failed admission.
+
+## Train and evaluate the Rust controls
+
+Install the repository's pinned spaCy environment first. From this directory,
+the existing environment is `../../.venv/bin/python`.
+
+```sh
+cargo run --release --bin slop-ninja-detector -- featurize \
+  --input ../../data/baseline-detector/qwen-v1/records.jsonl \
+  --output ../../data/baseline-detector/qwen-v1/features.jsonl \
+  --mode combined --python ../../.venv/bin/python
+cargo run --release --bin slop-ninja-detector -- train \
+  --features ../../data/baseline-detector/qwen-v1/features.jsonl \
+  --mode combined --max-coordinates 8192 \
+  --output-dir ../../data/baseline-detector/runs/linear-combined-v1
+```
+
+Use `--mode word` and `--mode grammar` with the same feature file for the two
+controls. Vocabulary/scaling fit on training data; development log loss selects
+the checkpoint; calibration data fit the temperature and operating thresholds.
+Test feature values never enter the fitting function. Open a frozen test only
+after candidate selection:
+
+```sh
+cargo run --release --bin slop-ninja-detector -- evaluate \
+  --features ../../data/baseline-detector/qwen-v1/features.jsonl \
+  --artifact ../../data/baseline-detector/runs/linear-combined-v1/model.json \
+  --output ../../data/baseline-detector/runs/linear-combined-v1-test.json \
+  --open-final-test
+```
+
+Check `--help` for inference, shard export and audit commands. The runner rejects
+unsupported lengths and schema/parser mismatches instead of truncating text or
+changing preprocessing. Artifacts bind class order, preprocessing, source code,
+dependencies and numerical rules. Later source edits may require rebuilding an
+artifact under a new identity.
+
+Corpus text, invocation logs, fitted checkpoints and run caches stay in `data/`.
+Publish a reference candidate only with its model manifest, provenance, exact
+runtime and measured limitations. Low observed false-positive counts in this
+small pilot cannot establish a reliable 1% or 5% population bound.

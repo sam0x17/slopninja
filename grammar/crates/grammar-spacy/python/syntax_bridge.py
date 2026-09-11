@@ -2,9 +2,39 @@
 
 import argparse
 from functools import lru_cache
+import hashlib
 import json
+from pathlib import Path
 import sys
 from typing import Any
+
+
+def _model_files_sha256(root: Path) -> str:
+    """Bind model weights, tokenizer, config and loader source across installs.
+
+    Relative file names and byte hashes are canonical; installation paths and
+    generated Python bytecode do not enter the model identity.
+    """
+    if not root.is_dir():
+        raise OSError(f"Parser model directory does not exist: {root}")
+    records = []
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root)
+        if not path.is_file() or "__pycache__" in relative.parts or path.suffix in {".pyc", ".pyo"}:
+            continue
+        digest = hashlib.sha256()
+        size = 0
+        with path.open("rb") as source:
+            for chunk in iter(lambda: source.read(1024 * 1024), b""):
+                digest.update(chunk)
+                size += len(chunk)
+        records.append([relative.as_posix(), size, digest.hexdigest()])
+    if not records:
+        raise OSError("Parser model directory contains no hashable files")
+    payload = json.dumps(
+        ["grammar-spacy-model-files-v1", records], ensure_ascii=True, separators=(",", ":")
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
 
 
 @lru_cache(maxsize=4)
@@ -18,12 +48,18 @@ def _load_parser(model: str) -> tuple[Any, str]:
             "spaCy and en_core_web_sm in the selected Python interpreter."
         ) from exc
     try:
+        model_root = spacy.util.get_package_path(model) if spacy.util.is_package(model) else Path(model)
+        model_files = _model_files_sha256(model_root)
         nlp = spacy.load(model, exclude=["ner"])
     except (OSError, ImportError) as exc:
         raise RuntimeError(
             f"Cannot load spaCy model {model!r}. Install that model with "
             "python -m spacy download en_core_web_sm (or supply an installed model)."
         ) from exc
+    if nlp.path is None or not nlp.path.resolve().is_relative_to(model_root.resolve()):
+        raise ValueError("Loaded parser assets are outside the fingerprinted model directory.")
+    if model_files != _model_files_sha256(model_root):
+        raise ValueError("Parser model files changed while loading; retry from a stable installation.")
     if nlp.lang != "en":
         raise ValueError("Syntax annotation requires an English spaCy model.")
     if "parser" not in nlp.pipe_names or "lemmatizer" not in nlp.pipe_names:
@@ -32,7 +68,10 @@ def _load_parser(model: str) -> tuple[Any, str]:
     model_version = nlp.meta.get("version", "unknown")
     if model_version == "unknown":
         raise ValueError("The spaCy model must declare a version for reproducible features.")
-    identity = f"spacy={spacy.__version__};model={nlp.lang}_{model_name}@{model_version}"
+    identity = (
+        f"spacy={spacy.__version__};model={nlp.lang}_{model_name}@{model_version}"
+        f";model-files-sha256={model_files}"
+    )
     return nlp, identity
 
 def annotate(text: str, nlp: Any, loaded_identity: str) -> dict[str, Any]:

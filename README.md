@@ -35,10 +35,12 @@ tonal intent remain hard acceptance requirements.
 Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
 
-The first reference detector is planned under `baseline/detector/`. Its
+The first reference detector is being built under `baseline/detector/`. Its
+[commands](baseline/detector/README.md),
 [implementation plan](baseline/detector/PLAN.md) and
-[commercial-use source register](baseline/detector/SOURCES.md) define acquisition,
-training, evaluation and release work before implementation begins.
+[commercial-use source register](baseline/detector/SOURCES.md) cover acquisition,
+training, evaluation and release. The [pilot protocol](baseline/detector/PILOT_PROTOCOL.md)
+fixes the initial comparison and its evidence limits before training.
 The draft surveys related work and defines public A detector artifacts,
 private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices

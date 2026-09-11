@@ -102,11 +102,22 @@ pub fn parse_batch(
     texts: &[&str],
     python: &str,
 ) -> Result<Vec<std::result::Result<Document, String>>> {
+    let bridge = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("python/syntax_bridge.py");
+    parse_batch_with_bridge(texts, python, &bridge)
+}
+
+/// Parse with a caller-supplied copy of the versioned annotation bridge.
+/// This lets an executable embed the bridge without depending on its build
+/// machine's source directory. Validation and annotation semantics are unchanged.
+pub fn parse_batch_with_bridge(
+    texts: &[&str],
+    python: &str,
+    bridge: &std::path::Path,
+) -> Result<Vec<std::result::Result<Document, String>>> {
     if texts.is_empty() {
         return Ok(Vec::new());
     }
     let input = serde_json::to_vec(texts).context("Cannot encode syntax batch input")?;
-    let bridge = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("python/syntax_bridge.py");
     let mut child = Command::new(python)
         .arg(bridge)
         .arg("--batch")
@@ -560,6 +571,49 @@ mod tests {
     }
 
     #[test]
+    fn model_fingerprint_ignores_install_path_and_detects_asset_changes() {
+        let Some(python) = installed_python() else {
+            eprintln!("parser fingerprint test skipped: no configured Python interpreter");
+            return;
+        };
+        let bridge =
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("python/syntax_bridge.py");
+        let script = r#"
+import importlib.util
+from pathlib import Path
+import sys
+import tempfile
+spec = importlib.util.spec_from_file_location("syntax_bridge", sys.argv[1])
+bridge = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(bridge)
+with tempfile.TemporaryDirectory() as directory:
+    roots = [Path(directory) / "first", Path(directory) / "second"]
+    for root in roots:
+        root.mkdir()
+        (root / "config.cfg").write_bytes(b"synthetic parser config")
+        (root / "weights").write_bytes(b"synthetic parser weights")
+    original = bridge._model_files_sha256(roots[0])
+    assert original == bridge._model_files_sha256(roots[1])
+    (roots[0] / "__pycache__").mkdir()
+    (roots[0] / "__pycache__" / "generated.pyc").write_bytes(b"generated cache")
+    assert original == bridge._model_files_sha256(roots[0])
+    (roots[1] / "weights").write_bytes(b"modified synthetic weights")
+    assert original != bridge._model_files_sha256(roots[1])
+"#;
+        let output = Command::new(python)
+            .arg("-c")
+            .arg(script)
+            .arg(bridge)
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+
+    #[test]
     fn installed_parser_preserves_raw_text_and_produces_valid_typed_features() {
         let Some(python) = installed_python() else {
             eprintln!(
@@ -572,6 +626,7 @@ mod tests {
         assert_eq!(doc.text, text);
         assert!(doc.parser_identity.starts_with(ANNOTATION_VERSION));
         assert!(doc.parser_identity.contains(";spacy="));
+        assert!(doc.parser_identity.contains(";model-files-sha256="));
         assert!(!doc.parser_identity.contains("grammar-rules-v1"));
         assert!(doc.tokens.iter().any(|token| token.text == "cafe\u{301}"));
         assert!(doc.tokens.iter().any(|token| token.text == "n’t"));
