@@ -124,6 +124,14 @@ fixed. The comparison therefore uses the original v2 export. Reports flag
 decisions within twice the reference-vector tolerance of a cutoff; this is a
 diagnostic margin, not a proven error bound for arbitrary texts or hardware.
 
+`compare_encoder_reports` compares the two frozen reports for the same corpus
+and partition. It verifies matching prediction IDs, source families and origin
+labels, then resamples complete families in 512 paired bootstrap replicates.
+Report candidate-minus-v2 changes in log loss, Brier score and accuracy with
+percentile intervals. Degenerate intervals are omitted. These intervals describe
+variation across the observed families; they do not certify performance across
+new registers or generators. Each detector retains its own operating thresholds.
+
 For example, from `baseline/detector/`, with the selected artifact and its
 original Calibration shard:
 
