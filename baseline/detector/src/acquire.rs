@@ -36,12 +36,13 @@ fn digest(bytes: &[u8]) -> String {
 }
 
 #[derive(Clone)]
-struct Capture {
-    bytes: Vec<u8>,
-    metadata: Value,
+pub struct Capture {
+    pub bytes: Vec<u8>,
+    pub metadata: Value,
 }
 
-struct Collector {
+/// Bounded, hash-checked capture cache shared by public-source importers.
+pub struct Collector {
     client: Client,
     root: PathBuf,
     fetched: usize,
@@ -49,7 +50,7 @@ struct Collector {
 }
 
 impl Collector {
-    fn new(root: &Path) -> Result<Self> {
+    pub fn new(root: &Path) -> Result<Self> {
         fs::create_dir_all(root.join("raw"))?;
         fs::create_dir_all(root.join("extractions"))?;
         let client = Client::builder()
@@ -64,7 +65,7 @@ impl Collector {
         })
     }
 
-    fn get(&mut self, url: &Url) -> Result<Capture> {
+    pub fn get(&mut self, url: &Url) -> Result<Capture> {
         let key = digest(url.as_str().as_bytes());
         let meta_path = self.root.join("raw").join(format!("{key}.json"));
         let body_path = self.root.join("raw").join(format!("{key}.body"));
