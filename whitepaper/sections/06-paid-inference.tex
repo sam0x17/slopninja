@@ -1,12 +1,21 @@
 \section{Paid asynchronous jobs and on-chain
 coordination}\label{paid-asynchronous-jobs-and-on-chain-coordination}
 
-The launch market offers A detection and B transformation jobs.
-A customers pay for compute and delivery while retaining the option to
-run the public model themselves. That alternative can constrain hosted
-A prices; the protocol prescribes neither a discount nor a price ratio
-between A and B. Both use the alpha-denominated market and the same
-customer privacy rules.
+The launch market offers hosted A detection and B transformation jobs.
+Customers can instead run a public A artifact or the monthly B reference
+locally at their own compute cost. Hosted services sell execution,
+capacity and delivery; B miners can also offer newer private models
+between releases. The public alternative can constrain hosted prices;
+the protocol prescribes neither a discount nor a price ratio between
+A and B. Both hosted services use the alpha-denominated market and the
+same assigned-miner privacy boundary. Local inference creates no
+subnet job, per-request fee or on-chain payment.
+
+An offer identifies whether it serves a named public checkpoint or a
+separately benchmarked private service version. It must not imply that
+the monthly reference is the same model as a private endpoint, or that
+hosted execution hides plaintext from its operator. A customer requiring
+that boundary uses local execution in Section~\ref{local-customer-inference}.
 B jobs pursue author matching and detector evasion through local
 generation and evaluation. A private job has no verified Pangram result
 unless the customer separately authorizes external disclosure; its

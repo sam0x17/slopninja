@@ -62,7 +62,8 @@ change the B panel's origin-Brier ranking or an issued round's artifacts.
 
 \subsection{The adversarial feedback loop}\label{adversarial-feedback-loop}
 
-Participation includes public A artifacts and a bounded training-service
+Participation includes public A artifacts, qualified monthly B checkpoints,
+and a bounded training-service
 obligation. A miners request authorized training rewrites; assigned B
 miners provide revisions that follow the source and brief. The request
 is free at the point of use, with the
@@ -78,8 +79,10 @@ have no protocol per-query quota. This local access does not create
 additional benchmark submissions or discharge an assigned service
 obligation. Validators separately reserve their own compute to grade the
 official comparison matrix. A earns quality credit from independent
-evaluation of its published artifact; B earns it from the committed
-revision. Section~\ref{a-artifact-execution} defines canonical A execution.
+evaluation of its published artifact; B earns it from revisions reproduced
+with its nominated public checkpoint. Sections~\ref{a-artifact-execution}
+and~\ref{monthly-b-release} define reference execution. Public B releases
+also give A miners generator snapshots for authorized local training.
 
 Use released, authorized training sources and retain the production
 history, brief, and preservation status with each response. A later
@@ -88,7 +91,7 @@ Unknown assistance histories remain weak labels; a private endpoint is
 not itself proof of model generation.
 The source-family splits, release rules and access boundaries in
 Section~\ref{training-data-and-evaluation-separation} govern this exchange.
-Private B weights can still be studied through served outputs;
+Newer private B versions can still be studied through served outputs;
 request quotas limit that exposure without preventing model extraction
 or retention by recipients.
 
@@ -270,11 +273,14 @@ Per-miner peer sets allocate authorized B rewrite service for A training.
 Those training outputs do not replace the common committed benchmark
 or let a requester nominate scoring inputs. The benchmark scheduler reserves validator
 execution capacity for a common comparison batch using published A
-artifacts. This matrix consumes no miner service-ticket quota or lifetime
+artifacts and the nominated monthly B checkpoints. It reserves B generation
+and exact-text replay as well as A scoring. This matrix consumes no miner service-ticket quota or lifetime
 interaction index.
 
 For each shared comparison index, deterministically select three
-qualified A artifacts on distinct UIDs and a B batch from the frozen registry. Include the
+qualified A artifacts on distinct UIDs and a B batch of qualified monthly
+model-credit entries from the frozen registry. Coalesce exact B content
+duplicates before hash-ranking their canonical UIDs. Include the
 strongest qualified origin detector from the previous completed A round
 in the A panel; hash-rank eligible remaining A UIDs under a separate
 comparison domain to select the other two and the reserve order. Then
@@ -297,16 +303,25 @@ faces the same three detectors, source texts, briefs, authorized target-author
 references, style artifact and calibration, Pangram policy,
 source-baseline evidence, and frozen settings. Every B benchmark requires
 these inputs. Validate and cache the
-entire selected A panel before revealing the B task or starting its
-generation window. Artifact reserves may be used only before that issue
-point. Execute a complete source and candidate matrix after B candidate
+entire selected A panel and each nominated B package before revealing the
+B task or starting its generation window. Freeze the B runtime, task seed
+rule and equal compute limits under Section~\ref{monthly-b-release}.
+Artifact reserves may be used only before that issue
+point. Reproduce each submitted candidate with its nominated B artifact,
+then execute a complete source and candidate A matrix after B candidate
 commitments, using the same frozen artifacts and reference runtime. This is
 what matched assignments mean. The three-member pilot is provisional;
 its cost, coverage, and susceptibility to colluding UIDs require
 measurement before live rewards.
 
 Apply the frozen-artifact and runner-recovery rules in
-Section~\ref{a-artifact-execution}. Unresolved execution follows the
+Sections~\ref{a-artifact-execution} and~\ref{monthly-b-release}.
+The same B package may run on reserved equivalent capacity; another
+checkpoint cannot replace it after task disclosure. A mismatch between the
+submitted text and that package's output, certified under the strict
+weighted validity rule, invalidates the submission and earns zero utility
+without substituting a different candidate.
+Unresolved reference execution follows the
 whole-comparison closure in Section~\ref{reward-adjudication}.
 A B miner that fails to submit receives zero on its
 assigned work. A missing strongest-detector result prevents a claim of
@@ -329,7 +344,8 @@ Mix human and model controls. Text itself can still reveal its origin
 or purpose; interface restrictions do not prove blindness. Retain
 validator-signed execution records binding the model, runtime, inputs
 and outputs. Miner-selected local search records cannot replace this
-matrix. B submits self-scores with its final candidate, binding the
+matrix. B submits self-scores with its final candidate, binding its
+nominated B content hash, runtime, task seed and generation budget, and the
 assigned panel hashes, reference settings, full candidate probability
 vectors, required source baselines and scalar projections. These numbers
 record the miner's claimed result under the assigned configuration, so
@@ -410,8 +426,10 @@ be reported separately and cannot widen that success criterion. Use the
 declared provider version and repeat policy for both sides; report
 sensitivity to provider variation.
 
-Miners may pay for additional search and report attempts before
-commitment. Scoring uses the committed reports, including variation in
+Miners may fund development search and additional report attempts before
+commitment. The benchmark candidate must still exactly reproduce under
+the nominated B artifact's fixed seed and budget; report retries cannot
+select a different candidate. Scoring uses the committed reports, including variation in
 their provider results. The protocol does not require disclosure of
 every private attempt or a fresh validator-paid Pangram inference call. A
 reported pass applies only to the committed observations, not to every
@@ -485,7 +503,9 @@ Fix assignments, task mixtures, baselines, and deadlines before
 submissions. Balance related examples within source groups; extra cheap
 submissions do not increase a miner's share. Apply the availability and
 zero-deficit gates to each miner's earned A and B skill for the measured
-epoch. Then normalize eligible positive skill
+epoch. B also requires current monthly publication and qualification under
+Section~\ref{monthly-b-release}; missing publication earns zero B skill.
+Then normalize eligible positive skill
 within each task pool and combine using the published shares. The chain mechanism split carries the corresponding
 aggregate task allocation.
 
@@ -511,7 +531,8 @@ determines the resulting payouts.
 
 \paragraph{Execution and incentive limits.}
 The two native task pools above reward
-independently evaluated A artifact performance and B output utility.
+independently evaluated A artifact performance and utility from the
+nominated public B artifact's reproduced outputs.
 Section~\ref{existing-evidence-and-implementation-status} records earlier
 private-panel and shared-settlement experiments and why they do not
 establish conserved native payouts for this design.

@@ -1,5 +1,12 @@
 # Slop Ninja subnet mechanisms
 
+Publication-policy update, September 11, 2026: [whitepaper draft 0.13](../whitepaper/slop_ninja.pdf)
+supersedes the private-only B policy in these earlier mechanism notes.
+B emissions require monthly public checkpoint nomination, qualification and
+validator generation replay. Newer private versions may serve customers, while
+the public reference supports offline local inference. The two reward pools
+and mandatory author-fit, evasion and semantic requirements remain.
+
 Status: public A/private B design approved, 2026-09-10. We have enough evidence to define an
 offline competition. Paid validation still needs a suitable private benchmark,
 measured judge reliability and an authenticated challenge ledger.

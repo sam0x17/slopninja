@@ -1,9 +1,38 @@
 \section{Confidential customer
 inference}\label{confidential-customer-inference}
 
+\subsection{Local inference for sensitive material}\label{local-customer-inference}
+
+Customers can download the public A artifacts and monthly B reference
+release and run them in an offline environment they control. Source text,
+author samples, style profiles, briefs and results remain in that
+environment. This route creates no miner assignment, input commitment,
+on-chain job or inference payment. Customers supply their own compute.
+It removes the assigned miner's access to plaintext; security still
+depends on the customer's machine and the verified execution package.
+
+For an unpublished acquisition announcement, earnings release or funding
+announcement, use this local route when disclosure to an outside operator
+is unacceptable. A hosted miner necessarily learns the input it decrypts
+and can leak or exploit it before publication. Encryption, reputation,
+service terms and later penalties cannot establish that it has refrained
+from doing so. Publishing a model later cannot undo an earlier disclosure.
+
+The reference runner must work without network access, external model
+APIs, remote tools, telemetry or an inference-time licence check. Verify
+the release's content hashes and dependencies before introducing sensitive
+text. Benchmark certification measures the published artifact on authorized
+evaluation material; it grants no access to a customer's local job.
+There is no automatic hosted fallback if local resources are insufficient.
+
+Pangram comparisons use separately authorized benchmark material. A local
+job may run the public A panel, but cannot claim a fresh Pangram result
+without the customer's separate disclosure to Pangram. A release's
+published benchmark scores do not certify an unseen local document.
+
 \subsection{Assigned-miner encryption}\label{assigned-miner-encryption}
 
-For every customer job, the protocol gives input-decryption capability
+For every hosted customer job, the protocol gives input-decryption capability
 only to its assigned miner. The customer already possesses the input and
 may retain it. Validators, gateways, storage operators, other miners,
 and chain observers receive no input key or alternate recipient
@@ -11,10 +40,10 @@ envelope. Models execute on the assigned miner's infrastructure;
 confidential jobs may not forward plaintext to an external model API,
 detector, or another miner.
 
-Public A artifacts do not make customer inputs public or authorize
+Public A or B artifacts do not make customer inputs public or authorize
 validator replay of customer jobs. Validator execution for emissions uses
 the separately authorized benchmark collection. A customer may choose to
-run a public detector locally; a job sent through this protocol retains
+run a published artifact locally; a job sent through the hosted protocol retains
 the assigned-miner input boundary. Public weights do not authorize sending
 customer text to Pangram or any other external service.
 Paid A hosting is optional and separate from artifact publication and

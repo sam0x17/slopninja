@@ -16,8 +16,9 @@ executing the published A panel under the artifact-freeze and execution
 rules in Sections~\ref{a-artifact-execution}
 and~\ref{common-transformation-evidence}. They
 compare B's submitted vectors with canonical outputs bound to the same
-artifact, runtime and input. B models remain private; rewards assess
-their committed output text. B miners can compute public A scores during
+artifact, runtime and input. Validators also reproduce B's committed text
+with its nominated monthly public checkpoint under
+Section~\ref{monthly-b-release}. B miners can compute public A scores during
 search, while hidden labels and unreleased semantic-review evidence
 remain restricted.
 
@@ -32,7 +33,7 @@ rounding, resource bounds, and test vectors. Its distance function
 \(d_\theta(t,R)\) returns a nonnegative integer for text \(t\) and
 target-author references \(R\). The instance manifest must supply these
 concrete bindings; this specification does not select or claim to have
-trained the artifact. Private B generator weights do not define this
+trained the artifact. B generator weights do not define this
 public style evaluator.
 
 Freeze a nonempty calibration multiset \(C=(c_1,\ldots,c_M)\) of
@@ -212,10 +213,11 @@ deadlines, \(G\), and any unresolved or void reason. Records use the
 canonical encoding and authenticated encrypted evidence paths of
 Section~\ref{service-evidence}. Evidence must reach every authorized
 certifier within the funded publication limits. Customer jobs never
-enter this process automatically. A execution records additionally bind
-the complete published model manifest and canonical runtime configuration.
+enter this process automatically. A and B execution records additionally
+bind the complete published model manifests and canonical runtime
+configurations, including B's task seed, resource budget and exact text.
 Certificates attest scoped judgments and faithful computation. They do
-not prove semantic correctness or require reproduction of private B
-generation. A artifact loading, numerical replay, and full-matrix
+not prove semantic correctness or attest a private hosted model's weights.
+A artifact loading, numerical replay, B generation replay and full-matrix
 capacity require their own implementation checks beyond the one-ticket
 A-requester/B-provider rewrite mailbox pilot.

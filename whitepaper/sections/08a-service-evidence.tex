@@ -2,7 +2,8 @@
 
 The proposed \texttt{service-evidence-v1} mailbox covers bounded,
 protocol-assigned rewrite requests from A requesters to B providers.
-A models are public; B generators remain private. The requester counters,
+A models and nominated monthly B checkpoints are public. B training
+service may use newer private generators. The requester counters,
 provider assignments and availability gates are defined in
 Section~\ref{adversarial-feedback-loop}. The one-ticket exercise below specifies
 transport and review of a B rewrite. It implements neither an artifact runner nor the
@@ -132,8 +133,10 @@ Validator runner failures never enter this rewrite-service ledger.
 Missing service-validity certificates do enter it as unresolved
 obligations, which block epoch eligibility even without miner fault
 (Section~\ref{adversarial-feedback-loop}).
-B rewards evaluate the submitted revision without requiring replay of
-the private generator. Insufficient final review evidence voids the shared
+Training-ticket transport does not require replay of the private service
+generator. The separate common B reward benchmark requires execution of
+the nominated public checkpoint under Section~\ref{monthly-b-release}.
+Insufficient final review evidence voids the shared
 quality comparison consistently, without deleting attributable service
 failures. The detailed record and certificate rules are specified in the
 companion service-evidence document.
@@ -146,7 +149,8 @@ and \(10F\leq N\) for the class and aggregate availability gates. Publish
 all counts. Keep \(D_e=\max(0,D_{e-1}+10F-N)\); neither unresolved nor void
 work retires a deficit. Require zero outstanding deficits and current
 qualification; customer jobs and other classes cannot dilute these gates.
-A artifact publication and qualification are separate eligibility gates.
+A publication and monthly B publication, with artifact qualification,
+are separate eligibility gates.
 
 Only canonical finalized inclusion counts, with deadline equality timely.
 Subtensor separates block production from GRANDPA

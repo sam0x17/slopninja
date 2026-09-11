@@ -1,5 +1,13 @@
 # Public A models, private B models and training data
 
+Publication-policy update, September 11, 2026: [whitepaper draft 0.13](../whitepaper/slop_ninja.pdf)
+supersedes the private-only B policy below. B emissions require a nominated
+monthly public package and validator generation replay; newer private versions
+may serve customers between releases. Training recipes and source data can
+remain private. The [monthly release policy](../whitepaper/sections/03-models.tex)
+and [local inference boundary](../whitepaper/sections/05-confidentiality.tex)
+are authoritative; the earlier architecture notes below await implementation.
+
 Design decision, 2026-09-10. A miners publish complete immutable inference
 artifacts; B miners keep their generation models private. Validators qualify
 and freeze A artifacts before B generation, then execute the common A panel

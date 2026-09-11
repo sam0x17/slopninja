@@ -1,5 +1,11 @@
 # Mandatory A/B service evidence
 
+Publication-policy update, September 11, 2026: [whitepaper draft 0.13](../whitepaper/slop_ninja.pdf)
+requires public monthly B packages and generation replay for the separate
+emission benchmark. This transport pilot may still use a private B generator
+for training tickets; its delivery checks do not implement or replace that
+artifact benchmark. See the [release policy](../whitepaper/sections/03-models.tex).
+
 This specifies the proposed `service-evidence-v1` transport and accounting pilot
 for bounded authorized rewrite requests from A requesters to B providers.
 A models are public; B generators remain private. Validators execute complete

@@ -48,11 +48,14 @@ New corpora can use [recorded style profiles](baseline/detector/PROMPT_PROFILES.
 including anti-AI instructions and a pinned Fix Slop pass. These profiles were
 added after the first pilot and have not yet been evaluated in a fitted detector.
 The whitepaper surveys related work and defines public A detector artifacts,
-private B transformation models, training data,
+monthly public B transformation checkpoints with newer private hosted versions, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
-Customer inputs are encrypted for the assigned
+Hosted customer inputs are encrypted for the assigned
 miner; customers can separately share evidence with a specific validator.
+The assigned miner still sees plaintext. Customers with sensitive material
+can run the public A or monthly B reference offline on their own compute,
+without a subnet job, fee or external disclosure.
 Task A detects author and origin; Task B jointly matches the authorized writer's
 profile and evades Pangram and subnet AI detectors under the source and brief.
 Private customer jobs pursue the same goals without automatically sending text
@@ -60,10 +63,15 @@ to Pangram. External measurement requires a separate customer-authorized
 disclosure flow outside the confidential job protocol.
 B miners train and search against published A models locally, then submit
 self-scores bound to their final text and assigned panel. Validators rerun A to
-verify those scores; no A inference endpoint or replay of B's generator is
-required.
+verify those scores and reproduce the candidate using B's nominated public
+package, fixed seed and compute budget. No A inference endpoint is required.
+B emission eligibility requires monthly publication and qualification, alongside
+the service gates. The reference changes only after independently confirmed
+improvement; a calendar boundary does not force a replacement. Public releases
+are downloadable by Pangram and competing miners too. See the
+[monthly release policy](whitepaper/sections/03-models.tex).
 The aim is freely accessible detection competitive with Pangram, supporting
-better private transformers. Detection parity remains to be demonstrated;
+better transformers for local use and paid hosting. Detection parity remains to be demonstrated;
 running or hosting an A model still costs compute.
 Pangram is A's bootstrap quality anchor for AI-origin detection. A subnet detector
 takes over after demonstrating superiority; an improved Pangram becomes the
@@ -455,8 +463,10 @@ subnet AI detectors, in mechanism 1. Each receives
 style controls remain transformation gates and brief requirements.
 The [model plan](docs/miner-models-and-data.md) specifies starter
 classifiers and an editing adapter, with a [training-source plan](docs/miner-training-sources.md)
-covering Global Voices, PLOS and consented writing. A artifacts are public,
-B weights remain private, and miners can earn customer fees through
+covering Global Voices, PLOS and consented writing. The whitepaper now requires
+public A artifacts and monthly B checkpoints for emissions; newer B versions
+may remain private. These earlier mechanism/model notes predate that release
+policy. Miners can earn customer fees through
 [asynchronous inference](docs/paid-inference.md)
 with proposed on-chain job settlement and private execution.
 Pangram is the required external benchmark. The [API funding and verification

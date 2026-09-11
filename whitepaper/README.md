@@ -18,3 +18,10 @@ part of the build. Temporary files and logs stay in ignored `build/`.
 existing figure, run `latexmk -xelatex -outdir=build main.tex` from this
 directory, or configure a TeX editor for XeLaTeX with BibTeX.
 The source and rendered paper are design proposals, not a deployed protocol.
+
+Draft 0.13 adds [monthly B checkpoint releases](sections/03-models.tex) and
+[offline customer inference](sections/05-confidentiality.tex). B emissions
+depend on validator execution of the nominated public package; newer private
+versions may serve paying customers between releases. Hosted miners still see
+plaintext. Local execution avoids that disclosure, while public releases also
+become available to competing miners and detector providers.

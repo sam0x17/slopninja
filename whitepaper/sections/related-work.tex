@@ -34,7 +34,7 @@ constraints \\
 Macrocosmos Finetuning (SN37) & Miners publish competition models on
 public Hugging Face repositories for validator evaluation~\cite{finetuning} & Precedent for
 rewarding model improvements through submitted weights; Slop Ninja
-pairs public A artifacts with private B serving \\
+pairs public A artifacts and monthly B releases with newer private B serving \\
 Chutes (SN64) & Serverless model inference and metered service, with
 documented confidential-serving options~\cite{chutes,chutesprivacy} &
 Paid inference and private serving infrastructure; writing quality
@@ -51,8 +51,9 @@ These projects establish that detection competition, adversarial
 generation, language-model training rewards, and paid private inference
 already have Bittensor precedents. Their documented mechanisms evaluate
 different properties. GAS requires submitted detector weights; Slop Ninja
-also requires public A artifacts, paired with private B generation and
-independent verification of B's self-scores. Chutes
+also requires public A artifacts and monthly B checkpoints, with
+independent generation replay and verification of B's self-scores.
+Newer private B versions may serve customers between releases. Chutes
 documents confidential serving and request/response encryption, and
 Targon describes hardware attestation and key release.
 Those hardware assumptions differ from this paper's default trust in
@@ -109,8 +110,10 @@ Publishers and readers may want affordable, independently evaluated
 detection as provenance checks become more common. Writers using model
 assistance may want stronger control over their own voice and a way to
 remove unwanted generic phrasing without losing substance. Public A
-models support accessible detection and local evaluation; private B
-services compete on the resulting revisions. We expect broader
+models support accessible detection and local evaluation. Monthly B
+releases permit local transformation without miner access to customer
+text; newer hosted versions compete on performance and convenience.
+We expect broader
 provenance checking to increase demand for these capabilities. The
 size of that increase, willingness to pay and repeat use remain to be
 measured through customer pilots.
@@ -153,9 +156,10 @@ with retention of the writer's individual habits and required evasion
 of Pangram and qualified subnet detectors;
 retired, authorized rewrites supply later detector-training examples,
 with source families kept separate from private evaluation.
-A artifacts are public; B miners retain their private transformation
-models. Both can sell hosted inference through an alpha-denominated
-market with explicit recipient encryption. This
+A artifacts and nominated monthly B checkpoints are public. B miners
+may retain newer private versions for hosted inference. Both tasks can
+sell hosting through an alpha-denominated market with explicit recipient
+encryption, while public artifacts support offline local use. This
 combination requires validation against the precedents above. The
 survey establishes neither uniqueness across all subnets nor superior
 performance by an implementation that has not yet been built.

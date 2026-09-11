@@ -32,9 +32,11 @@ jobs remain outside this benchmark; a customer's optional disclosure to
 one chosen validator does not authorize wider benchmark disclosure.
 
 Pangram states that it does not train Pangram 4 on customer API data.
-Private B weights prevent direct downloading, but do not prevent
+Monthly B releases are downloadable by Pangram and other providers.
+Unreleased private improvements prevent direct weight access, but not
 independent black-box study through purchased outputs or leaked
-examples. The subnet must not assert otherwise. Provider verification
+examples. Publication therefore trades continuing access to released
+models for loss of their weight secrecy. Provider verification
 and any reuse of provider labels also need suitable service terms.
 Pangram model card~\cite{pangramcard}.
 
@@ -50,7 +52,8 @@ For public A scores, use the complete comparison matrix, B self-score
 bindings and signed execution records in
 Section~\ref{common-transformation-evidence}. Every final signer
 independently verifies the required computations under
-Section~\ref{a-artifact-execution}; a coordinator's signature alone is
+Sections~\ref{a-artifact-execution} and~\ref{monthly-b-release}, including
+the generation of B's exact candidate; a coordinator's signature alone is
 insufficient.
 Section~\ref{service-evidence} specifies complete on-chain ciphertext
 publication, separate confidential generation witnesses, and fixed
@@ -199,15 +202,17 @@ preparers have no separate approval authority.
   Use the shared comparison index to determine the common A panel and B
   batch under the frozen policy. Exclude every B UID from A reserves
   before freezing pre-issue artifact reserves. Validate and cache the
-  complete selected A artifacts, reference runtimes and thresholds
+  complete selected A artifacts, nominated monthly B packages, reference
+  runtimes, generation budgets, task-seed rule and A thresholds
   before revealing the B task or starting generation. Accept one final B candidate and selected
   Pangram-report commitment per assigned task. The predictable opponent
   schedule does not allow a second draw or a revised submission after
   commitment.
 \item
-  Execute the required common panel matrix in the restricted reference
+  Reproduce each B candidate with its nominated public package, then
+  execute the required common panel matrix in the restricted reference
   runner, retaining control outcomes and execution failures. Apply
-  Section~\ref{a-artifact-execution} for runner recovery and
+  Sections~\ref{a-artifact-execution} and~\ref{monthly-b-release} for runner recovery and
   Section~\ref{reward-adjudication} for unresolved computations.
   Record any missing strongest-detector comparison. Finalize all evidence commitments before
   the fixed evidence deadline; a favorable score is never grounds to
