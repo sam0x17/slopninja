@@ -56,6 +56,27 @@ environment and never written into the request archive. Use an SSH tunnel for a
 remote Studio endpoint. Full-family export requires all tasks to have been
 attempted and reports every family excluded because an output failed admission.
 
+To pause generation, create `PAUSE` in that run's output directory:
+
+```sh
+touch ../../data/baseline-detector/qwen-v1/PAUSE
+```
+
+Workers stop taking new tasks when they observe the file. Requests already in
+flight finish and checkpoint before the process exits. An incomplete paused run
+has `status: "paused"` and `complete_export_ready: false` in `summary.json`; it
+writes no cohort export, including when partial-export flags were supplied.
+A clean exit means the drain succeeded, not that the cohort is complete. Keep
+the file in place until the process exits, then remove it and rerun the same
+generation command to resume from validated cached responses:
+
+```sh
+rm ../../data/baseline-detector/qwen-v1/PAUSE
+```
+
+The pause file also blocks new invocations until removed. Pausing does not change
+prompts, task identities or admission rules.
+
 ## Train and evaluate the Rust controls
 
 Install the repository's pinned spaCy environment first. From this directory,

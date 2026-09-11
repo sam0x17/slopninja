@@ -111,8 +111,10 @@ pub struct EvaluationReport {
     pub training_prior_control: MetricSummary,
     pub operating_points: Vec<OperatingPointEvaluation>,
     pub predictions: Vec<ProbabilityRow>,
-    pub unknown_coordinates: usize,
-    pub rows_with_unavailable_families: usize,
+    /// These diagnostics apply only to the explicit word/grammar representation.
+    /// Imported encoder probabilities have no observations for either field.
+    pub unknown_coordinates: Option<usize>,
+    pub rows_with_unavailable_families: Option<usize>,
     pub notes: Vec<String>,
 }
 
@@ -133,6 +135,41 @@ pub fn evaluate(artifact: &DetectorArtifact, rows: &[FeatureRow]) -> Result<Eval
             probabilities: prediction.probabilities,
         });
     }
+    let mut report = evaluate_probability_rows(
+        &artifact.content_sha256,
+        &predictions,
+        artifact.content.training_prior,
+        &artifact.content.operating_points,
+    )?;
+    report.unknown_coordinates = Some(unknown_coordinates);
+    report.rows_with_unavailable_families = Some(rows_with_unavailable_families);
+    Ok(report)
+}
+
+/// Apply the same metrics, controls and grouped uncertainty to any frozen
+/// detector's probability rows. This function never fits model parameters,
+/// temperatures or thresholds; callers supply already frozen operating points.
+pub fn evaluate_probability_rows(
+    artifact_id: &str,
+    predictions: &[ProbabilityRow],
+    training_prior: [f64; 3],
+    operating_points: &[OperatingPoint],
+) -> Result<EvaluationReport> {
+    ensure!(
+        !artifact_id.is_empty(),
+        "missing detector artifact identity"
+    );
+    let model_summary = summarize(predictions)?;
+    ensure!(
+        training_prior
+            .iter()
+            .all(|p| p.is_finite() && (0.0..=1.0).contains(p))
+            && (training_prior.iter().sum::<f64>() - 1.0).abs() < 1e-10,
+        "invalid training-prior probabilities"
+    );
+    for point in operating_points {
+        point.validate()?;
+    }
     let control = |probabilities: [f64; 3]| -> Result<MetricSummary> {
         summarize(
             &predictions
@@ -144,28 +181,24 @@ pub fn evaluate(artifact: &DetectorArtifact, rows: &[FeatureRow]) -> Result<Eval
                 .collect::<Vec<_>>(),
         )
     };
-    let operating_points = artifact
-        .content
-        .operating_points
+    let operating_points = operating_points
         .iter()
         .map(|point| OperatingPointEvaluation {
             calibration: point.clone(),
-            human_false_positive_rate: rate_estimate(&predictions, point.threshold, |label| {
+            human_false_positive_rate: rate_estimate(predictions, point.threshold, |label| {
                 label == 0
             }),
-            model_or_mixed_sensitivity: rate_estimate(&predictions, point.threshold, |label| {
+            model_or_mixed_sensitivity: rate_estimate(predictions, point.threshold, |label| {
                 label != 0
             }),
-            model_only_sensitivity: rate_estimate(&predictions, point.threshold, |label| {
-                label == 1
-            }),
-            mixed_sensitivity: rate_estimate(&predictions, point.threshold, |label| label == 2),
+            model_only_sensitivity: rate_estimate(predictions, point.threshold, |label| label == 1),
+            mixed_sensitivity: rate_estimate(predictions, point.threshold, |label| label == 2),
         })
         .collect();
     Ok(EvaluationReport {
-        artifact_sha256: artifact.content_sha256.clone(), model: summarize(&predictions)?,
-        uniform_control: control([1.0 / 3.0; 3])?, training_prior_control: control(artifact.content.training_prior)?,
-        operating_points, predictions, unknown_coordinates, rows_with_unavailable_families,
+        artifact_sha256: artifact_id.into(), model: model_summary,
+        uniform_control: control([1.0 / 3.0; 3])?, training_prior_control: control(training_prior)?,
+        operating_points, predictions: predictions.to_vec(), unknown_coordinates: None, rows_with_unavailable_families: None,
         notes: vec![
             "Probabilities estimate document production-history classes under the dataset's evidence policy; they do not establish provenance or estimate the fraction of AI-written words.".into(),
             "Thresholds and temperature are frozen from calibration. A 1% or 5% target is not a certified population false-positive bound.".into(),

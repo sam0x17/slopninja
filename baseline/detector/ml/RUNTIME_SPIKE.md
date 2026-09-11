@@ -35,6 +35,11 @@ The shard-length audit retained all twelve synthetic fixture rows and reported
 overlength IDs without model execution. Updated bundles include the exact ML
 source, FP64 probability postprocessing and synthetic CPU reference vectors;
 the loader checked those vectors within the declared `1e-6` tolerance.
+A separate synthetic control checked calibration/test probability exports against
+individual reference inference; all six rows matched exactly and summed to one
+within `1e-10`. Export rejected a test without acknowledgement and a calibration
+file whose bytes differed from the recorded training input. Calibration fitting
+and export both use the same single-request CPU contract.
 All synthetic weights and logs remain ignored. A trained detector release still
 requires the admitted corpus, frozen evaluation and release review in the plan.
 

@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::time::Duration;
 
 #[derive(Parser)]
@@ -94,6 +94,41 @@ impl RunLock {
 impl Drop for RunLock {
     fn drop(&mut self) {
         let _ = fs::remove_file(&self.0);
+    }
+}
+
+/// Keep a pause observed by any worker latched until this invocation drains.
+/// The durable file also stops new invocations until the operator removes it.
+struct PauseControl {
+    file: PathBuf,
+    observed: AtomicBool,
+}
+
+impl PauseControl {
+    fn new(directory: &Path) -> Self {
+        Self {
+            file: directory.join("PAUSE"),
+            observed: AtomicBool::new(false),
+        }
+    }
+
+    fn requested(&self) -> bool {
+        if self.observed.load(Ordering::SeqCst) {
+            return true;
+        }
+        if self.file.exists() {
+            self.observed.store(true, Ordering::SeqCst);
+            return true;
+        }
+        false
+    }
+
+    fn next_task(&self, cursor: &AtomicUsize, count: usize) -> Option<usize> {
+        if self.requested() {
+            return None;
+        }
+        let index = cursor.fetch_add(1, Ordering::SeqCst);
+        (index < count).then_some(index)
     }
 }
 
@@ -325,20 +360,18 @@ fn main() -> Result<()> {
     let attempts = AtomicUsize::new(0);
     let cursor = AtomicUsize::new(0);
     let completed = AtomicUsize::new(0);
+    let pause = PauseControl::new(&args.output_dir);
     let client = reqwest::blocking::Client::builder()
         .timeout(Duration::from_secs(900))
         .build()?;
     std::thread::scope(|scope| {
         for _ in 0..args.concurrency {
-            let (tasks, args, spec, client, attempts, cursor, completed) = (
-                &tasks, &args, &spec, &client, &attempts, &cursor, &completed,
+            let (tasks, args, spec, client, attempts, cursor, completed, pause) = (
+                &tasks, &args, &spec, &client, &attempts, &cursor, &completed, &pause,
             );
             scope.spawn(move || {
-                loop {
-                    let index = cursor.fetch_add(1, Ordering::SeqCst);
-                    let Some(task) = tasks.get(index) else {
-                        break;
-                    };
+                while let Some(index) = pause.next_task(cursor, tasks.len()) {
+                    let task = &tasks[index];
                     let dir = args.output_dir.join("calls").join(&task.key);
                     if dir.join("record.json").exists() {
                         completed.fetch_add(1, Ordering::SeqCst);
@@ -351,6 +384,11 @@ fn main() -> Result<()> {
                         && attempts.fetch_add(1, Ordering::SeqCst) >= args.max_calls
                     {
                         continue;
+                    }
+                    // A pause may arrive after claiming this index. A request
+                    // already inside execute is allowed to finish/checkpoint.
+                    if pause.requested() {
+                        break;
                     }
                     match execute(task, spec, args, client) {
                         Ok(record) => {
@@ -432,12 +470,30 @@ fn main() -> Result<()> {
             !failed_roots.contains_key(record.parent_id.as_ref().unwrap_or(&record.id))
         });
     }
-    let report = json!({"requested":tasks.len(),"completed":completed,"missing":missing,"unattempted":unattempted,"excluded_reasons":excluded_reasons,"complete_families_only":args.complete_families_only,"excluded_roots":failed_roots,"excluded_root_count":failed_roots.len(),"summary":dataset::summarize(&records)});
+    let pause_requested = pause.requested();
+    let paused = pause_requested && !unattempted.is_empty();
+    let complete_export_ready = !paused
+        && !records.is_empty()
+        && (missing.is_empty() || (args.complete_families_only && unattempted.is_empty()));
+    let status = if paused {
+        "paused"
+    } else if complete_export_ready {
+        "complete"
+    } else {
+        "incomplete"
+    };
+    let report = json!({"status":status,"pause_requested":pause_requested,"complete_export_ready":complete_export_ready,"requested":tasks.len(),"completed":completed,"missing":missing,"unattempted":unattempted,"excluded_reasons":excluded_reasons,"complete_families_only":args.complete_families_only,"excluded_roots":failed_roots,"excluded_root_count":failed_roots.len(),"summary":dataset::summarize(&records)});
     fs::write(
         args.output_dir.join("summary.json"),
         serde_json::to_vec_pretty(&report)?,
     )?;
     println!("{}", serde_json::to_string_pretty(&report)?);
+    if paused {
+        eprintln!(
+            "Generation paused after in-flight tasks drained; no cohort export written. Remove PAUSE and rerun the same command to resume."
+        );
+        return Ok(());
+    }
     ensure!(
         !args.complete_families_only || unattempted.is_empty(),
         "Complete-family export requires every task to be attempted; resume the remaining calls first"
@@ -493,5 +549,46 @@ mod tests {
         assert!(RunLock::acquire(directory.path()).is_err());
         drop(lock);
         assert!(RunLock::acquire(directory.path()).is_ok());
+    }
+
+    #[test]
+    fn durable_pause_drains_claimed_work_then_blocks_new_tasks_until_restart() {
+        let directory = tempfile::tempdir().unwrap();
+        let pause = PauseControl::new(directory.path());
+        let cursor = AtomicUsize::new(0);
+        let (started_tx, started_rx) = std::sync::mpsc::channel();
+        let (finish_tx, finish_rx) = std::sync::mpsc::channel();
+        std::thread::scope(|scope| {
+            let (pause, cursor, directory) = (&pause, &cursor, &directory);
+            let worker = scope.spawn(move || {
+                assert_eq!(pause.next_task(cursor, 2), Some(0));
+                started_tx.send(()).unwrap();
+                finish_rx.recv().unwrap();
+                // Stand in for an already-started response/checkpoint, with no
+                // network call or production-history claim in this test.
+                write_new(
+                    &directory.path().join("checkpoint"),
+                    b"synthetic checkpoint",
+                )
+                .unwrap();
+                assert_eq!(pause.next_task(cursor, 2), None);
+            });
+            started_rx.recv().unwrap();
+            write_new(&directory.path().join("PAUSE"), b"").unwrap();
+            finish_tx.send(()).unwrap();
+            worker.join().unwrap();
+        });
+        assert!(directory.path().join("checkpoint").exists());
+        assert_eq!(cursor.load(Ordering::SeqCst), 1);
+        assert_eq!(
+            PauseControl::new(directory.path()).next_task(&cursor, 2),
+            None
+        );
+        fs::remove_file(directory.path().join("PAUSE")).unwrap();
+        assert_eq!(pause.next_task(&cursor, 2), None); // Current invocation stays drained.
+        assert_eq!(
+            PauseControl::new(directory.path()).next_task(&cursor, 2),
+            Some(1)
+        );
     }
 }

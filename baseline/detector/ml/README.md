@@ -128,12 +128,25 @@ baseline/detector/.venv/bin/python \
   --artifact data/baseline-detector/runs/encoder-001 \
   --test-jsonl data/baseline-detector/export/test.jsonl \
   --output data/baseline-detector/runs/encoder-001-final-test.json \
+  --probabilities-output data/baseline-detector/runs/encoder-001-test-probabilities.jsonl \
   --acknowledge-final-test
 ```
 
 That command writes point estimates for log loss, multiclass Brier score,
 accuracy, confusion and per-class precision/recall. It cannot change the model
 or its temperature. Keep the output outside the immutable artifact directory.
+The optional probability export contains `id`, the exact UTF-8 `text_sha256`,
+`artifact_id`, `classes`, `probabilities` and `status: "ok"` for every row.
+It uses the frozen CPU reference contract: one request per batch and FP64
+softmax. Overlength or invalid input fails the export without dropping records.
+
+Use `--calibration-jsonl` in place of `--test-jsonl` to export probabilities for
+the Rust operating-point fit, with distinct output paths. No test acknowledgement
+is needed for that command. It requires the exact calibration shard hash recorded
+in the bundle and applies the already fitted temperature; it performs no fitting.
+The test command requires `--acknowledge-final-test` even when only exporting
+probabilities. Each report records its input and probability-export hashes.
+
 Source-cluster uncertainty, prespecified false-positive operating points,
 generator/register slices and paired Pangram comparisons remain part of the
 larger Rust evaluation stage. Reusing a test to guide another model choice

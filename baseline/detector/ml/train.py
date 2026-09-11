@@ -100,7 +100,7 @@ def main():
         # Model choice is complete before calibration. Final-test input has no CLI argument here.
         load_model(model, selected, strict=True, device=args.device)
         model.cpu().eval()
-        calibration_logits = logits_for(model, tokenizer, partitions["calibration"], args.batch_size, "cpu")
+        calibration_logits = logits_for(model, tokenizer, partitions["calibration"], 1, "cpu")
         calibration_labels = [r["label"] for r in partitions["calibration"]]
         calibration = fit_temperature(calibration_logits, calibration_labels)
         calibration["before"] = metrics(calibration_logits, calibration_labels)
@@ -111,6 +111,7 @@ def main():
             "software": software(), "device": args.device, "dtype": "float32", "seed": args.seed,
             "optimizer": "AdamW", "learning_rate": args.learning_rate, "weight_decay": args.weight_decay,
             "gradient_norm_limit": 1.0, "batch_size": args.batch_size, "epochs_requested": args.epochs,
+            "calibration_batch_size": 1,
             "class_weight_policy": args.class_weights, "class_weights": weights.cpu().tolist() if weights is not None else None,
             "freeze_encoder": args.freeze_encoder, "trainable_parameters": sum(p.numel() for p in parameters),
             "parameters": sum(p.numel() for p in model.parameters()), "class_counts": counts,
