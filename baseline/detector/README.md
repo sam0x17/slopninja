@@ -40,6 +40,12 @@ Its first Development comparison found that v4 flags nine of 26 historical human
 narrative sources, despite detecting all 26 model-written drafts. Human false
 positives on this new register remain an unresolved limitation.
 
+The [model-only revision probe](MODEL_ONLY_REVISION_PROBE.md) records strong
+DeepSeek style steering, a Fix Slop pass and a DeepSeek-to-Qwen rewrite. V4
+detected all four synthetic passages, but the rewrites introduced meaning or
+tone problems. Both same-model and cross-model revisions retain model-only
+lineage; these examples remain outside the frozen v5 experiment.
+
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
 provenance, splitting, word/grammar features, linear models and evaluation.
