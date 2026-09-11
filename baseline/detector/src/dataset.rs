@@ -94,6 +94,8 @@ pub struct Generation {
     pub seed: Option<i64>,
     pub max_tokens: usize,
     pub finish_reason: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub prompt_profile: Option<crate::prompt_profiles::Provenance>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -208,6 +210,9 @@ impl OriginRecord {
             self.id
         );
         if let Some(g) = &self.generation {
+            if let Some(profile) = &g.prompt_profile {
+                profile.validate(self, &g.prompt)?;
+            }
             ensure!(
                 !g.model_id.is_empty()
                     && !g.response_model.is_empty()

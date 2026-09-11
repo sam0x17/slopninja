@@ -44,6 +44,9 @@ Its [commands](baseline/detector/README.md),
 [commercial-use source register](baseline/detector/SOURCES.md) cover acquisition,
 training, evaluation and release. The [pilot protocol](baseline/detector/PILOT_PROTOCOL.md)
 fixes the initial comparison and its evidence limits before training.
+New corpora can use [recorded style profiles](baseline/detector/PROMPT_PROFILES.md),
+including anti-AI instructions and a pinned Fix Slop pass. These profiles were
+added after the first pilot and have not yet been evaluated in a fitted detector.
 The whitepaper surveys related work and defines public A detector artifacts,
 private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices

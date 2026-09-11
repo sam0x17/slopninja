@@ -41,6 +41,12 @@ Identical and normalized duplicates are joined before splitting.
 
 ## Generate recorded examples
 
+For new corpora, use the [versioned prompt profiles](PROMPT_PROFILES.md) with
+`--prompt-profile-set style-mix-v1`, fresh frozen input and a new output directory.
+The mix includes varied registers, explicit anti-AI phrasing instructions and an
+adapted Fix Slop snapshot. The command below retains the original pilot prompt
+pair for reproduction; omitting the profile option preserves its cache IDs.
+
 `generate_samples` calls an explicitly configured local model endpoint. Its
 model-spec JSON binds the model ID, immutable revision/file hash, Apache-2.0
 license evidence, quantization, runtime, temperature and token limit. See the
