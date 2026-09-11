@@ -150,6 +150,21 @@ fn main() -> Result<()> {
                 && training["requires_nonzero_development_class_recall"] == true,
             "Unexpected training selection contract"
         );
+        for split in ["train", "development", "calibration"] {
+            ensure!(
+                training["partition_sha256"][split] == protocol["partition_sha256"][split],
+                "Training corpus changed after the frontier was frozen"
+            );
+        }
+        ensure!(
+            training["checkpoint_pin_sha256"] == protocol["checkpoint_pin_sha256"]
+                && training["data_rights_sha256"] == protocol["data_rights_sha256"]
+                && training["formatting_augmentation"]["alternate_train_sha256"]
+                    == protocol["whitespace_train_sha256"]
+                && manifest["files"]["runner/train.py"] == protocol["train_py_sha256"]
+                && manifest["files"]["runner/common.py"] == protocol["common_py_sha256"],
+            "Training inputs or runner changed after the frontier was frozen"
+        );
         let epoch = training["epoch_history"]
             .as_array()
             .context("Missing epoch history")?
