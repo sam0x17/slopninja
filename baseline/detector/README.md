@@ -10,6 +10,10 @@ The [style-diverse pilot](STYLE_PILOT_RESULTS.md) added fresh sources, two teach
 varied instructions and matched whitespace exposure. Its candidate improved
 pooled log loss but never chose the mixed class on any test view. It is available
 as a separate experimental release, with all comparisons and exclusions reported.
+The [word/grammar development probe](LINEAR_STYLE_RESULTS.md) recovered mixed
+predictions with smaller optimization steps and independent coordinate budgets.
+The [standard-corpus plan](STANDARD_CORPUS.md) describes the staged HC3 subset and
+reusable Pangram annotation workflow. Preparation has made no paid provider calls.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
