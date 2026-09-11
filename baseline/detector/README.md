@@ -18,9 +18,9 @@ Run these commands from this directory:
 
 ```sh
 cargo build --release
-cargo run --release --bin slop-ninja-detector -- acquire \
+cargo run --release --bin slop_ninja_detector -- acquire \
   --output-dir ../../data/baseline-detector/acquisition-v1 --plos 80 --wikinews 80
-cargo run --release --bin slop-ninja-detector -- split \
+cargo run --release --bin slop_ninja_detector -- split \
   --input ../../data/baseline-detector/acquisition-v1/human-records.jsonl \
   --output ../../data/baseline-detector/acquisition-v1/frozen-roots.jsonl \
   --seed slop-ninja-origin-pilot-v1
@@ -62,11 +62,11 @@ Install the repository's pinned spaCy environment first. From this directory,
 the existing environment is `../../.venv/bin/python`.
 
 ```sh
-cargo run --release --bin slop-ninja-detector -- featurize \
+cargo run --release --bin slop_ninja_detector -- featurize \
   --input ../../data/baseline-detector/qwen-v1/records.jsonl \
   --output ../../data/baseline-detector/qwen-v1/features.jsonl \
   --mode combined --python ../../.venv/bin/python
-cargo run --release --bin slop-ninja-detector -- train \
+cargo run --release --bin slop_ninja_detector -- train \
   --features ../../data/baseline-detector/qwen-v1/features.jsonl \
   --mode combined --max-coordinates 8192 \
   --output-dir ../../data/baseline-detector/runs/linear-combined-v1
@@ -79,7 +79,7 @@ Test feature values never enter the fitting function. Open a frozen test only
 after candidate selection:
 
 ```sh
-cargo run --release --bin slop-ninja-detector -- evaluate \
+cargo run --release --bin slop_ninja_detector -- evaluate \
   --features ../../data/baseline-detector/qwen-v1/features.jsonl \
   --artifact ../../data/baseline-detector/runs/linear-combined-v1/model.json \
   --output ../../data/baseline-detector/runs/linear-combined-v1-test.json \

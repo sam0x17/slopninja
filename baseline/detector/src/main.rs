@@ -45,7 +45,7 @@ impl From<EvaluationSplit> for dataset::Split {
 
 #[derive(Parser)]
 #[command(
-    name = "slop-ninja-detector",
+    name = "slop_ninja_detector",
     about = "Slop Ninja reference detector and admitted-corpus pipeline"
 )]
 struct Cli {

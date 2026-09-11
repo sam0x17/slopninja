@@ -76,6 +76,24 @@ weak-label, short-text, limited-register and single-training-generator coverage
 limits prominently. No claim about author identity, genuine collaboration,
 meaning preservation, all languages or detector evasion follows from this pilot.
 
+Before fitting, add a secondary formatting control motivated by the eight-output
+generation preflight: paragraph counts fell from 38 to 22 across those pairs.
+For each admitted test cohort, run `whitespace_control` to create a separate view
+of all frozen test roots and descendants. Collapse the fixed Unicode White_Space
+set to single ASCII spaces and trim surrounding whitespace, preserving all words,
+punctuation and their order. Keep record IDs, family membership and origin labels;
+bind original and derived text hashes in the accompanying summary. Retained
+source/generation metadata describes the original writing, and the deterministic
+formatting change is recorded separately. Evaluate each view as a paired
+observation of the same writing, and count each source family once in uncertainty
+estimates.
+
+Evaluate this control only after the model, calibration and thresholds are
+frozen. Report its results separately to expose reliance on paragraph and
+whitespace formatting. The original test remains primary; the control changes
+no partition, admission, fitting, candidate-selection or calibration rule. No
+control results may guide model selection or an adaptive parameter search.
+
 Pangram remains the subnet's initial external quality anchor. This pilot does
 not establish an anchor change. A paired Pangram experiment still needs a
 separately declared sample, repeat rule and API spending cap before execution.
