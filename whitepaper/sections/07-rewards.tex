@@ -67,7 +67,8 @@ obligation. A miners request authorized training rewrites; assigned B
 miners provide revisions that follow the source and brief. The request
 is free at the point of use, with the
 provider bearing its cost in exchange for eligibility for task
-emissions. Expected emissions need not cover every miner's costs. The
+emissions. Every credited B provider uses its qualified attested service
+version for these assigned rewrites, with a bound execution receipt. Expected emissions need not cover every miner's costs. The
 obligation concerns delivered service, not unverifiable training effort.
 Independent preservation, readability, and requested-tone review are
 required for B. A miner cannot approve its own revision for rewards.
@@ -80,7 +81,7 @@ obligation. Validators separately reserve their own compute to grade the
 official comparison matrix. A earns quality credit from independent
 evaluation of its published artifact; B earns it from the committed
 revision. Section~\ref{a-artifact-execution} defines canonical A execution.
-An attested B entry also requires the version-bound execution receipt in
+Every emission-eligible B entry requires the version-bound execution receipt in
 Section~\ref{attested-b-models}; validators check that evidence, not private
 weights. Attestation supplies no additional utility or pool allocation.
 
@@ -278,10 +279,9 @@ interaction index.
 
 For each shared comparison index, deterministically select three
 qualified A artifacts on distinct UIDs and a B batch from the frozen registry.
-Freeze each B entry's execution mode and service version. Coalesce identical
-verified attested B content under Section~\ref{attested-b-models} before
-ranking its canonical UID; ordinary private entries have no equivalent
-verified content identity. Include the
+Admit only qualified attested B entries and freeze each serving profile.
+Coalesce identical verified B content under Section~\ref{attested-b-models}
+before ranking its canonical UID. Include the
 strongest qualified origin detector from the previous completed A round
 in the A panel; hash-rank eligible remaining A UIDs under a separate
 comparison domain to select the other two and the reserve order. Then
@@ -305,9 +305,10 @@ references, style artifact and calibration, Pangram policy,
 source-baseline evidence, and frozen settings. Every B benchmark requires
 these inputs. Validate and cache the
 entire selected A panel before revealing the B task or starting its
-generation window. An attested B entry must have qualified its runtime
-and model manifest before that issue point and bind its final candidate
-to them; it cannot fall back to ordinary execution after issue.
+generation window. Every B entry must have qualified its runtime,
+model manifest and complete bounded generation/selection profile before
+that issue point. Bind its one final candidate to that invocation;
+external generation retries cannot select a better benchmark answer.
 Artifact reserves may be used only before that issue
 point. Execute a complete source and candidate matrix after B candidate
 commitments, using the same frozen artifacts and reference runtime. This is
@@ -317,7 +318,7 @@ measurement before live rewards.
 
 Apply the frozen-artifact and runner-recovery rules in
 Section~\ref{a-artifact-execution}. Unresolved execution follows the
-whole-comparison closure in Section~\ref{reward-adjudication}.
+candidate-specific or shared-evidence closure in Section~\ref{reward-adjudication}.
 A B miner that fails to submit receives zero on its
 assigned work. A missing strongest-detector result prevents a claim of
 success against that detector. Deliberately triggered execution errors
@@ -385,14 +386,15 @@ agreement and failure modes have been measured against separate reader
 judgments. Instructions embedded in a candidate are evaluated text, not
 evaluator instructions.
 
-Unresolved judgments at the fixed close void the matched comparison for
-the whole B batch under Section~\ref{reward-adjudication}. Miner
-nonresponse remains a zero on assigned work. A validator outage can
-still erase comparison credit or block epoch eligibility when a service
-certificate remains unresolved. Section~\ref{reward-adjudication} describes the residual
-risk that a miner induces semantic disagreement to void its batch.
-Publish coverage and missingness
-so that conditional accuracy cannot conceal excluded difficult cases.
+Unresolved candidate judgments at the fixed close receive zero credit
+for their assigned slots under Section~\ref{reward-adjudication}, while
+competitors with complete evidence retain their scores. Miner nonresponse
+also remains zero on assigned work. A certified shared failure affects
+the full declared scope. Keep assigned aggregation weights and publish
+coverage so conditional accuracy cannot conceal difficult cases.
+Unresolved mandatory-service validity is a separate matter and can still
+block epoch eligibility. Selective non-certification and honest semantic
+disagreement remain review risks.
 
 \subsection{Transformation utility}\label{transformation-and-improvement-utility}
 
@@ -422,10 +424,12 @@ be reported separately and cannot widen that success criterion. Use the
 declared provider version and repeat policy for both sides; report
 sensitivity to provider variation.
 
-Miners may pay for additional search and report attempts before
-commitment. Scoring uses the committed reports, including variation in
-their provider results. The protocol does not require disclosure of
-every private attempt or a fresh validator-paid Pangram inference call. A
+The qualified runtime produces one final candidate under the bound
+invocation profile. Miners may pay for additional Pangram report attempts
+on that exact text before commitment. Scoring uses the committed reports,
+including variation in their provider results. The protocol does not
+require disclosure of every provider call or a fresh validator-paid
+Pangram inference call. A
 reported pass applies only to the committed observations, not to every
 future measurement of that text. Selection can bias the submitted set
 when provider results vary. We accept this limitation to keep external
@@ -494,12 +498,14 @@ unsupported strengthening, irrelevant padding, and needless edits.
 policy}\label{aggregation-and-failure-policy}
 
 Fix assignments, task mixtures, baselines, and deadlines before
-submissions. Balance related examples within source groups; extra cheap
-submissions do not increase a miner's share. Apply the availability and
+submissions. Balance related examples within source groups using their
+preassigned weights. Failed, missing, unresolved and scoped-void slots
+contribute zero without disappearing from the denominator; publish their
+distinct statuses. Extra cheap submissions do not increase a miner's share. Apply the availability and
 zero-deficit gates to each miner's earned A and B skill for the measured
-epoch. Attested B entries also require valid qualified-version receipts;
-ordinary entries cannot claim that execution association. There is no
-monthly publication gate for B. Then normalize eligible positive skill
+epoch. B entries additionally require valid qualified-version receipts
+and fulfillment of their reserved attested service obligations. Ordinary
+B entries earn no emissions. There is no monthly publication gate for B. Then normalize eligible positive skill
 within each task pool and combine using the published shares. The chain mechanism split carries the corresponding
 aggregate task allocation.
 

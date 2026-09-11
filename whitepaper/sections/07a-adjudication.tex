@@ -17,8 +17,8 @@ rules in Sections~\ref{a-artifact-execution}
 and~\ref{common-transformation-evidence}. They
 compare B's submitted vectors with canonical outputs bound to the same
 artifact, runtime and input. B models remain private; rewards assess
-their committed output text. For an attested entry, validators also
-check its version-bound execution receipt under Section~\ref{attested-b-models};
+their committed output text. Every credited B entry also requires
+its version-bound execution receipt under Section~\ref{attested-b-models};
 that check cannot substitute for any semantic field. B miners can compute public A scores during
 search, while hidden labels and unreleased semantic-review evidence
 remain restricted.
@@ -75,8 +75,8 @@ A candidate that receives the declared deterministic
 \texttt{unscorable\_candidate} status earns zero B utility, since style
 nonregression cannot be verified.
 Execution disagreement or unavailable shared evidence cannot
-silently supply a score: it remains unresolved under the common
-comparison-closure rule. A numerical failure alone does not establish
+silently supply a score: retain an unresolved status and withhold
+credit under the candidate-specific or certified shared-scope rule below. A numerical failure alone does not establish
 attributable service nonresponse. Validate the frozen artifact against
 copying, topic substitution, and meaning-breaking controls before
 funds depend on it.
@@ -179,32 +179,43 @@ Conflicting certificates take precedence and
 halt settlement. Missing candidate submissions remain attributable
 miner nonresponse under the service-evidence rules.
 
-An unresolved candidate judgment voids that matched source/brief
-comparison for the entire B batch. It cannot selectively remove a
-difficult candidate or erase independently attributable service failures.
-Retain all ballots and disagreements; do not draw replacement judges
-to obtain a preferred verdict. This rule makes outcomes reproducible
-from certified inputs. It does not require honest readers to interpret
-every passage identically or turn quorum agreement into semantic proof.
+At the fixed close, an unresolved candidate contributes zero earned
+credit for its assigned slot. Retain its unresolved status and unknown
+\(G\); do not invent a \texttt{FAIL} certificate. Keep that slot's
+preassigned weight in aggregation. Other candidates with complete evidence
+retain their independently earned credit. Candidate-specific numerical,
+receipt or semantic uncertainty cannot erase their results. Do not draw
+replacement judges or allow a replacement candidate to obtain a preferred
+verdict. An unresolved semantic judgment adds no service failure or
+recovery deficit; independently attributable service failures remain.
 
-Whole-batch closure prevents validators from using unresolved judgments
-to exclude only one competitor's candidate, at the cost of giving B
-submitters a way to disrupt the comparison. A chosen candidate can split
-honest judgments
-or induce abstention so that neither \texttt{PASS} nor \texttt{FAIL}
-exceeds \(2W/3\) on a required field. If no other field receives a
-\texttt{FAIL} certificate, that candidate voids the comparison. Dissent
-alone need not cause a void: enough agreeing failure weight certifies
-\(G=0\). A dishonest minority below \(W/3\) also cannot prevent a
-certificate when all remaining weight agrees and participates.
-An unresolved semantic judgment adds no service failure or recovery
-deficit; the submitter still pays its generation and any report costs. A UID
-expecting zero skill could therefore remove rivals' positive skill from
-one comparison and increase its owner's normalized share through sibling
-UIDs scoring elsewhere. This economic risk remains unresolved. The
-bounded attack study in Section~\ref{development-and-launch-criteria}
-must measure its frequency, collateral loss and owner-level payoff
-before live rewards.
+A common source, frozen evaluator or certified platform failure can make
+shared evidence unavailable for every entry that requires it. Apply the
+same zero-credit/void treatment to that entire declared scope and retain
+its assigned aggregation weights. Establish the shared cause and scope
+under the frozen certificate rules; a candidate-triggered error or a
+minority allegation cannot become a global exception. In the absence of
+such evidence, handle unresolved results individually. Conflicting strict
+certificates still halt affected settlement.
+
+Under the previous whole-batch rule, a zero-credit attacker could induce
+an unresolved judgment and erase a rival's positive score while a sibling
+UID earned elsewhere. For example, credits \((0,1)\) in one batch and
+\((1,1)\) in another give a common owner of the first entry in each batch
+one-third of total positive credit. Voiding the first batch raises that
+share to one-half. Withholding only the unresolved entry leaves the
+share at one-third. This is a fixed-credit arithmetic example; it is not
+a proof about native payouts or all collusion strategies.
+
+The narrower rule retains another risk: selective non-certification can
+withhold a valid candidate's credit. A dishonest minority below \(W/3\)
+cannot prevent a certificate when all remaining weight agrees and
+participates, but semantic disagreement or honest outages can prevent that
+agreement. Publish candidate-level coverage, abstentions and reviewer
+patterns. Validate review reliability, candidate-triggered failures and
+owner-level payoff under the bounded study in
+Section~\ref{development-and-launch-criteria}. Quorum agreement does not
+prove semantic correctness.
 
 The versioned adjudication record binds the task and comparison IDs,
 source/candidate/reference/brief commitments, evaluator and calibration
@@ -216,7 +227,7 @@ Section~\ref{service-evidence}. Evidence must reach every authorized
 certifier within the funded publication limits. Customer jobs never
 enter this process automatically. A execution records additionally bind
 the complete published model manifest and canonical runtime configuration.
-Attested B records also retain their verified receipt, instance evidence
+Every credited B record also retains its verified receipt, instance evidence
 and accepted policy. Certificates attest scoped judgments and faithful computation. They do
 not prove semantic correctness or require reproduction of private B
 generation. A artifact loading, numerical replay, and full-matrix

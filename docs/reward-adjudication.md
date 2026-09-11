@@ -4,7 +4,10 @@ Design specification for the A/B launch. This defines B's target-style utility
 `V`, preservation/readability/tone gate `G`, and judgment closure. It adds no
 writing-improvement service or separate quality bonus. A artifacts are public
 and validators execute them for benchmark probabilities. B generators remain
-private; their committed revisions supply the text evaluated here.
+private; their committed revisions supply the text evaluated here. Every
+credited B entry requires a qualified-runtime receipt binding its registered
+model, search profile and exact candidate. Receipt verification cannot supply
+any of the semantic verdicts below.
 Every B task must preserve the source's full meaning and fulfill the task's
 target tonal intent. Positive utility requires independent semantic certification;
 style proximity and detector evasion cannot compensate for a preservation
@@ -31,8 +34,9 @@ remain restricted to their authorized recipients. Validator execution has its
 own capacity budget, separate from directed A-requester/B-provider rewrite tickets.
 After issue, a validator outage permits only execution of the same cached
 artifact on a reserved approved runner, with no model, version or threshold
-substitution. Canonical reference failure leaves the entire comparison
-unresolved or void under fixed closure; it cannot become a pass or B nonresponse.
+substitution. Candidate-specific reference failure withholds only that entry's
+credit; certified shared failure affects every entry requiring that evidence.
+Retain assigned weights. Neither outcome implies a pass or B nonresponse.
 
 ## Frozen numerical inputs
 
@@ -242,42 +246,39 @@ else:
 ```
 
 All three fields require certification, including target-tone compliance when
-the request adds no separate tone instruction. A field lacking a quorum does not
-default to either `PASS` or `FAIL`. An unresolved candidate judgment
-voids its matched source/brief comparison for the whole B batch. Preserve
-every candidate and review in reporting; do not selectively remove a difficult
-case or draw different reviewers to obtain a preferred verdict. This quality
-void does not erase independently attributable service failures. Missing miner
-submissions retain the service-evidence protocol's nonresponse treatment.
+the request adds no separate tone instruction. An unresolved candidate keeps
+`G=null` and receives zero credit for its assigned slot. Retain that slot's
+fixed aggregation weight and competitors' independently earned credit. Do not
+invent a failure verdict, redraw judges or permit a replacement candidate.
+Semantic uncertainty alone adds no service failure or recovery deficit;
+independently attributable nonresponse still counts.
 
-Whole-batch closure prevents validators from using unresolved judgments to
-exclude only one competitor's candidate. It also gives a B submitter a
-possible disruption strategy.
-A chosen candidate may split honest judgments or induce abstention until
-neither `PASS` nor `FAIL` exceeds `2*W/3` on a required field. If no other
-field has a `FAIL` certificate, the comparison is void. Dissent need not
-cause a void: more than two-thirds agreeing on failure certifies `G=0`.
-A dishonest minority below `W/3` cannot block a certificate when all
-remaining weight agrees and participates.
+A certified failure of common source evidence, a frozen evaluator or shared
+infrastructure affects all entries requiring it. Retain their assigned weights
+and record the full scope. A candidate-triggered error or minority allegation
+cannot authorize a global exception. Without a certified shared cause, withhold
+only the unresolved candidate. Conflicting strict certificates still halt
+affected settlement.
 
-An unresolved semantic judgment adds no service failure or recovery deficit.
-Generation and report costs still apply. A UID expecting zero skill can
-nevertheless remove competitors' positive skill from that comparison and
-increase its owner's normalized share through sibling UIDs scoring elsewhere.
-This economic risk remains unresolved. The [launch pilot](../whitepaper/sections/11-launch.tex)
-reserves four source/brief comparisons covering attribution/negation,
-qualifications, readability and tone, with clear-pass, clear-fail and attempted
-unresolved variants for each. Include a requested dramatic tonal shift as an
-intended pass, and certainty changes, unrequested tone reversal and loss of
-required informality as violations. Briefs without separate tone instructions
-must still receive target-tone certification, using the requested authorial
-style or the source-tone default as appropriate. Preserve field-level weighted ballots, review
-time, candidate/report costs, induced voids and excluded competitor skill.
-Replay the frozen allocation with and without the attack entry to measure
-common-owner share changes against benign-ambiguity and infrastructure-failure
-controls. These counterfactuals are diagnostics; the actual rule remains
-whole-batch closure with strict certificates. Live-reward acceptance must
-address any profitable induced voids observed in the study.
+The former whole-batch policy let an attacker erase rivals' positive credit.
+For fixed credits `(0,1)` and `(1,1)` in two batches, an owner controlling the
+first entry in each has one-third of positive credit. Voiding the first batch
+raises that share to one-half. Candidate-only withholding leaves it at one-third.
+This arithmetic example does not establish native payout behavior or eliminate
+other collusion strategies.
+
+Selective non-certification can still withhold valid work. Dishonest weight
+below `W/3` cannot block a certificate if all remaining weight agrees and
+participates; honest semantic disagreement or outages can prevent agreement.
+Publish coverage, abstentions and reviewer patterns. The
+[launch study](../whitepaper/sections/11-launch.tex) must compare the adopted rule
+with the old batch-void rule, test candidate-triggered errors misclassified as
+shared failures, and measure common-owner payoff under the actual allocation.
+Use clear passes, clear failures and attempted ambiguity across attribution,
+negation, qualifications, readability and tone. Include authorized dramatic
+tone changes as passes and strengthened certainty or lost required informality
+as violations. A brief without separate tone instructions still requires review
+against the resolved target and source-tone defaults.
 
 The proposed `reward-adjudication-v1` record uses the same deterministic CBOR
 restrictions and encrypted publication path as `service-evidence-v1`. It binds:

@@ -51,7 +51,8 @@ The whitepaper surveys related work and defines public A detector artifacts,
 private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
-All paid B jobs require attested execution: customers verify the
+B emissions, mandatory rewrites and all paid B jobs require qualified attested
+execution: customers verify the
 approved application, CPU/GPU evidence and instance key before encrypting
 input. The miner retains its weights but receives no customer plaintext key.
 The owner separately provisions encrypted model weights to the approved runtime;
@@ -66,8 +67,8 @@ disclosure flow outside the confidential job protocol.
 B miners train and search against published A models locally, then submit
 self-scores bound to their final text and assigned panel. Validators rerun A to
 verify those scores; no A inference endpoint or replay of B's generator is
-required. Attested entries also need a verified execution receipt binding
-benchmark output to the named private version. Attestation adds no quality
+required. Every credited B entry needs a verified execution receipt binding
+its output to the named private version and bounded serving profile. Attestation adds no quality
 bonus and never replaces semantic or Pangram checks.
 B transformation is the primary paid product; A is an open detector resource
 with optional hosting. There is no mandatory monthly B weight release.
@@ -472,10 +473,10 @@ classifiers and an editing adapter, with a [training-source plan](docs/miner-tra
 covering Global Voices, PLOS and consented writing. A artifacts are public,
 B weights remain private, and miners can earn customer fees through
 [asynchronous inference](docs/paid-inference.md)
-with proposed on-chain job settlement and private execution. Draft 0.15 requires
-private weights and text for paid B, with independent key release and version
-receipts; older companion specifications below
-retain the ordinary transport design and point to the current whitepaper.
+with proposed on-chain job settlement and private execution. Draft 0.16 requires
+qualified attestation for B emissions and paid service, with independent key
+release and version-bound receipts. The [consistency review](docs/design-consistency-review.md)
+records the incentive corrections and remaining launch requirements.
 Pangram is the required external benchmark. The [API funding and verification
 design](docs/pangram-oracle.md) separates the cost of independent measurement
 from the remaining trust in Pangram and human quality judgments.

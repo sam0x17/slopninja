@@ -1,13 +1,14 @@
 # Public A models, private B models and training data
 
-Design update, September 11, 2026: Draft 0.15 keeps B weights private with no mandatory monthly publication.
-All paid B jobs require independent model/customer key release to a verified runtime.
-Attested serving requires a reviewed public runtime, constrained private model
-data and receipts binding benchmark outputs to the loaded version.
+Design update, September 11, 2026, whitepaper draft 0.16.
+A inference artifacts are public. B weights remain private; B emissions,
+mandatory rewrite service and paid jobs require a qualified attested runtime
+and receipts bound to the registered model and workload profile. The runtime
+code is public and reviewed, with independent model/customer key release.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its
 [model policy](../whitepaper/sections/03-models.tex) and
-[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
-is authoritative over conflicting earlier details below.
+[customer protocol](../whitepaper/sections/05-confidentiality.tex),
+defines the canonical design. The implementation remains unqualified.
 
 Design decision, 2026-09-10. A miners publish complete immutable inference
 artifacts; B miners keep their generation models private. Validators qualify
@@ -27,10 +28,12 @@ neither result guarantees the other. Earlier single-objective modes remain
 research ablations and do not define the launch interface.
 
 The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
-([LaTeX source](../whitepaper/main.tex)) is the canonical design draft. Customer
-sources, references, profiles and briefs are encrypted only for the assigned
-miner, besides the customer's own access. Results return encrypted to the
-customer. The protocol grants validators, auditors, customer-service operators
+([LaTeX source](../whitepaper/main.tex)) is the canonical design draft. For B,
+customer sources, references, profiles and briefs are encrypted to a verified job key
+inside the qualified runtime. The miner and compute host receive no input key
+or plaintext. Results return encrypted to the customer. Ordinary A hosting may
+expose input to the assigned operator with explicit customer acceptance.
+The protocol grants validators, auditors, customer-service operators
 and external providers no automatic access to either. A new miner requires a
 new customer-signed assignment and customer-created envelope.
 
@@ -51,11 +54,11 @@ test vectors and numerical disagreement rules are admission requirements.
 Reserve validator storage and the complete replay budget before issue.
 Publication does not establish training effort, ownership independence,
 accuracy or absence of targeted behavior. A miner can improve a grammar, train
-a network or combine local models. Confidential customer jobs require execution
-on the assigned
-miner's hardware; forwarding content to another miner or hosted API is outside
-that policy. Encryption and private weights cannot prevent the assigned miner
-from leaking plaintext it receives.
+a network or combine models. B serving requires a reviewed public runtime
+and constrained private model data on qualified confidential CPU/GPU hardware,
+owned or rented. The customer and model owner independently authorize key
+release. The runtime must deny content-bearing egress, operator inspection,
+logging and training on customer inputs; this remains to be demonstrated.
 
 ## Two task interfaces
 
@@ -243,8 +246,10 @@ content receives one credit entry and panel seat, by earliest finalized
 accepted commitment and canonical UID tie-break. Near copies remain an
 evaluation problem. Reserves apply only before issue. After issue, neither
 models nor thresholds change: a validator-node outage uses another approved
-runner with the same artifact. Actual reference failure leaves the common
-comparison unresolved or void, with no automatic pass or B nonresponse.
+runner with the same artifact. Candidate-specific reference failure withholds
+only that candidate's assigned
+credit; certified shared failure applies to every entry requiring that evidence.
+Keep fixed assigned weights. Neither outcome implies B nonresponse or a pass.
 Different UIDs can share an owner.
 Select the strongest artifact
 by held-out origin Brier performance subject to calibration and human
@@ -298,8 +303,10 @@ saturated source. Certified preservation, readability and tone fields determine
 generation from the brief and any requested authorial style and reference samples;
 it may differ from source tone. Tone review is mandatory even without a
 separate tone instruction. A certified failure sets `G=0`; absent a failure, every required field must
-pass for `G=1`. Unresolved judgments void the matched comparison for the B batch
-without erasing independently attributable service failures.
+pass for `G=1`. An unresolved candidate retains `G=null` and earns zero for its
+assigned slot; complete competitors retain credit and all assigned weights
+remain in aggregation. Certified shared failures affect their entire prescribed
+scope. Neither outcome erases independently attributable service failures.
 Launch B scoring uses the combined author-fit and evasion objectives, with
 the semantic gate applying to the whole revision. Single-objective studies
 remain diagnostic ablations. The [reward rules](../whitepaper/sections/07-rewards.tex)
@@ -318,8 +325,9 @@ abstaining and recused validators remain in `W`. Security assumes dishonest
 eligible weight below `W/3` in that frozen set and sufficient honest participation
 for closure. Validators commit final ballots before private openings; conflicting
 certificates halt settlement.
-Native chain weight commit-reveal remains unchanged. These checks do not attest
-private B generation or establish honest majorities.
+Native chain weight commit-reveal remains unchanged. Semantic certificates do
+not establish honest majorities or prove private B execution. Every eligible B
+entry separately requires a verified receipt from its qualified runtime/version.
 
 Assigned A-requester to B-provider rewrite calls use the bounded training-service obligation;
 authoritative A benchmark execution uses the separate validator budget. Pangram

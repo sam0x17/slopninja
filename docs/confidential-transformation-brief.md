@@ -1,6 +1,6 @@
 # Slop Ninja: private editing for writers and media teams
 
-Design proposal, September 11, 2026. Companion to [whitepaper draft 0.15](../whitepaper/slop_ninja.pdf).
+Design proposal, September 11, 2026. Companion to [whitepaper draft 0.16](../whitepaper/slop_ninja.pdf).
 
 B transformation is the primary commercial product we propose: editing
 model-written drafts toward an authorized writer's voice while preserving
@@ -43,7 +43,8 @@ receives no customer input key or output copy. A separate compute host, if used,
 receives neither plaintext. The execution code must be public, reviewed and
 verifiable; the weights remain private. A confidential VM alone is insufficient
 if its application can log text, forward requests or use an unprotected GPU.
-Ordinary hosting is ineligible for paid B. A's detector models remain public.
+Ordinary hosting is ineligible for B emissions and paid B. A's detector models
+remain public.
 
 This is a practical direction to prototype. NVIDIA documents confidential
 CPU/GPU configurations and encrypted model provisioning, and Privatemode
@@ -60,7 +61,9 @@ weights that distinguish their service. We no longer require monthly public
 releases of the best B weights. Miners can earn both performance-based emissions
 and customer inference fees while
 retaining their models. A public version commitment and an execution receipt
-associate an attested service with its benchmarked model. Validators still
+associate the service with its benchmarked model and bounded workload profile.
+Every credited B entry and mandatory rewrite must use that qualified profile;
+paid offers cannot inherit a benchmark score after changing the model or budget. Validators still
 check the output's meaning, tone, author fit and detector results independently.
 Attestation earns no quality bonus. Private weights prevent direct downloads
 by Pangram or competitors; they cannot prevent study of legitimately purchased
@@ -71,7 +74,10 @@ under the settlement terms. Network emissions are separate. The protocol does
 not automatically route a royalty to Slop Ninja Research; any later application
 subscription or gateway fee would need its own disclosed terms. Customer demand,
 repeat purchases and revenue after confidential-compute costs determine whether
-the commercial model works.
+the commercial model works. Record paid serving margin separately from training,
+mandatory free rewrites and benchmark costs funded by emissions or research.
+Native subnet-owner emissions are a separate allocation; the supplied subnet
+slot needs explicit ownership, lease and revenue terms.
 
 For a media-facing application, the proposed offer would combine a team editing
 workflow, customer-controlled author profiles, reviewable changes and usage of
@@ -100,10 +106,14 @@ editorial requirement. Track cost per accepted revision and willingness to pay
 for repeat use; emissions must not be counted as customer revenue when assessing
 the commercial case.
 
-Paid B launch requires a working, independently reviewed prototype:
+B emissions and paid launch require a working, independently reviewed prototype:
 client-side verification, protected GPU execution, private-model binding,
 denied egress, isolated job state and no downgrade to ordinary hosting.
 Hardware vulnerabilities, side channels, verifier compromise and denial of
 service remain risks. Attestation does not prove editorial quality or resolve
-payment disputes over secret text. Until those requirements are demonstrated,
-this is a proposed product rather than an available confidentiality guarantee.
+payment disputes over secret text. The first pilot's customer-acknowledgment
+policy also permits consuming a result and claiming a timeout refund; payment
+terms need resolution before commercial launch. Until those requirements are
+demonstrated,
+this remains a proposed product. The [consistency review](design-consistency-review.md)
+records the remaining economic and qualification questions.

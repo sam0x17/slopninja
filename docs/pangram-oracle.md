@@ -1,13 +1,14 @@
 # Pangram benchmark, verification and API funding
 
-Design update, September 11, 2026: Draft 0.15 requires private weights and text for paid B jobs
-and retains external reports on authorized benchmark material. Attested
-version receipts do not establish Pangram scores or authorize forwarding customer
-text to Pangram. Mandatory monthly public B releases are no longer proposed.
+Design update, September 11, 2026, whitepaper draft 0.16.
+B emissions and paid jobs require qualified attested execution. Version-bound
+receipts establish execution under that policy; separate Pangram observations
+measure authorized benchmark text. Customer text is never automatically sent
+to Pangram, and B weights remain private.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its
 [model policy](../whitepaper/sections/03-models.tex) and
-[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
-is authoritative over conflicting earlier details below.
+[customer protocol](../whitepaper/sections/05-confidentiality.tex),
+defines the canonical design. The implementation remains unqualified.
 
 Design decision, 2026-09-10. A's origin-detection quality anchor follows the
 strongest validated detector under the frozen comparison policy. Pangram is
@@ -118,9 +119,10 @@ those nonregression checks; incremental utility does not establish absolute
 author-fit success or a strict detector pass.
 
 After issue, no model or threshold substitution is allowed. A validator-node
-outage can use another approved runner executing the same artifact. An actual
-reference-execution failure leaves the common comparison unresolved or void
-under the fixed closure rule; it grants no B nonresponse or automatic pass.
+outage can use another approved runner executing the same artifact. Candidate-specific
+reference failure withholds only that entry's credit. A certified shared failure
+affects all entries requiring that evidence, retaining fixed assigned weights.
+Neither outcome implies B nonresponse or an automatic pass.
 An A endpoint has no authoritative response or fallback role. Three panel
 entries limit one arbitrary outlier only under a bound of fewer than half
 colluding, which public artifacts and hashes cannot establish. Keep targeted
@@ -211,8 +213,11 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
    reference settings and seed schedule, full candidate origin-probability
    vectors, required source baselines, scalar projections and three selected
    Pangram reports per mandated text. No easier model, omitted panel cell or
-   score from another text or seed is permitted. Other private attempts need not be disclosed; committed
-   reports cannot be replaced afterward. Panel and preparer assignments are
+   score from another text or seed is permitted. The final candidate must come
+   from one qualified invocation, with generation and selection inside its
+   bounded profile and a verified execution receipt. Additional Pangram calls
+   for that same final text may remain undisclosed; committed reports cannot
+   be replaced afterward. Panel and preparer assignments are
    predictable from the committed schedule, not hidden until commitment.
 3. Validators execute the same cached A panel after B commitments. Bind each
    artifact's content hash, reference runner/settings, text commitment and
@@ -257,7 +262,7 @@ Do not append a challenge nonce to the prose and thereby change the benchmark.
 
 The existing offline contract requires three distinct observations for a passing
 full-document result. Keep that policy explicit in cost estimates. Selection
-from undisclosed private attempts can bias the committed set toward favorable
+from undisclosed provider calls can bias the committed set toward favorable
 results, so a pass describes those observations rather than fresh-query success
 probability. Three matching calls are not three independent proofs of a text's
 origin. Disagreement between calls is not by itself evidence of validator fraud;
@@ -268,8 +273,9 @@ under a published rule, without assuming Bittensor supplies custom slashing.
 The [receipt and audit proposal](subnet-receipts-and-audits.md) specifies
 predictable preparer assignment, full review, and strict global weighted
 certification. A certificate attests the specified verdict under the validator
-honesty assumption; it does not prove Pangram's private computation or private
-B generation. A's declared computation is directly replayed, with accuracy and
+honesty assumption; it does not prove Pangram's private computation. Every
+credited B entry separately requires its qualified-runtime execution receipt.
+A's declared computation is directly replayed, with accuracy and
 targeted behavior evaluated separately. Native Bittensor weight
 commit-reveal remains a separate supported chain mechanism.
 The current offline contract has not yet been adapted to public report IDs.
@@ -302,7 +308,8 @@ the fixed evidence deadline. Review assignments follow the published hash schedu
 Deliver openings and evidence encrypted to every frozen certifier. Keep every accepted
 task, failure and unresolved request for separately funded research in its
 budget ledger; this does not require miners to disclose their private
-pre-commitment attempts.
+pre-commitment provider calls for the same final candidate. Those provider
+calls do not authorize generation or selection outside the qualified invocation.
 
 Compare a versioned projection of reward-relevant fields, including successful
 completion, returned version and all three document fractions. Retain task IDs

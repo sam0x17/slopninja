@@ -1,14 +1,14 @@
 # Public A models and private B generation
 
-Design update, September 11, 2026: Draft 0.15 requires attestation for paid B customer jobs.
-It keeps validator execution of public A models and independent review
-of B outputs. An attested B entry additionally requires a verified private-version
-execution receipt; validators do not download or replay private B weights.
-Mandatory monthly B publication from draft 0.13 is superseded.
+Design update, September 11, 2026, whitepaper draft 0.16.
+A artifacts are public and validators execute them independently. B weights
+remain private; every credited B candidate, mandatory rewrite and paid B job
+requires qualified attested execution. Validators verify its version-bound
+receipt and evaluate the output independently, without downloading B weights.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its
 [model policy](../whitepaper/sections/03-models.tex) and
-[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
-is authoritative over conflicting earlier details below.
+[customer protocol](../whitepaper/sections/05-confidentiality.tex),
+defines the canonical design. The implementation remains unqualified.
 
 Status: **adopted design**, September 10, 2026. A detector artifacts are public;
 B generation remains private. The runner and revised benchmark protocol still
@@ -41,8 +41,9 @@ ablations rather than launch options.
 Validators execute qualified, immutable A artifacts directly on frozen private
 benchmarks. An A miner's endpoint response cannot supply an authoritative
 benchmark probability. B miners submit text for independent output evaluation;
-they do not have to publish their generation models or prove the generation
-procedure. Pangram is A's bootstrap quality anchor for AI-origin detection.
+they keep their generation models private and supply the required attested
+execution receipt. Receipt verification cannot replace output evaluation.
+Pangram is A's bootstrap quality anchor for AI-origin detection.
 A validated superior subnet detector takes over; an improved Pangram becomes the
 target again when it demonstrates superiority. The anchor cannot replace
 author-attribution labels or B's preservation review.
@@ -100,16 +101,21 @@ responsibilities. No A inference endpoint is required for training or scoring.
 The remaining mandatory training tickets assign A as requester and B as rewrite
 provider. Benchmark execution consumes reserved validator capacity. If a validator runner
 fails, an approved replacement runs the same artifact. Do not change the model
-or threshold after task issue. A reference execution failure leaves the common
-comparison unresolved or void under the fixed closure rule; it cannot become
-B nonresponse or an automatic pass. Deliberate error-triggering inputs need
+or threshold after task issue. A candidate-specific reference failure withholds
+only that candidate's assigned
+credit. A certified shared failure affects every entry requiring that evidence.
+Retain assigned aggregation weights in either case; a runner failure cannot
+become B nonresponse or an automatic pass. Deliberate error-triggering inputs need
 testing before deployment.
 
-B miners can query published A models locally during training and candidate
-search at their own compute cost. The protocol places no per-query cap on that
-local work. Public A scores for texts B already knows cannot be hidden from B.
-Official evaluation still accepts one committed final candidate per assigned
-task. Later A versions and fresh source families measure transfer beyond the
+B miners can query published A models freely during training at their own
+compute cost. Official evaluation requires one bounded invocation under the
+frozen qualified serving profile. Generation, internal search, scoring and final
+selection run inside the measured application. The task fixes the seed; repeated
+execution, including after restart, must reproduce the same output under the
+qualified profile. External best-of-many selection cannot supply an eligible
+final candidate. Public A scores for texts B knows cannot be hidden from B.
+Later A versions and fresh source families measure transfer beyond the
 training detector ensemble; Pangram checks an independent external target.
 
 Replay establishes the result of the specified computation. It does not
@@ -143,8 +149,8 @@ A weight file alone is insufficient. The signed manifest must bind:
   supported hardware, batching, deterministic settings and resource limits.
 - All random generators, the seed schedule, decoding and stopping rules, and
   any search procedure used within A inference. These bindings govern A's
-  reference computation. B's private generation seeds and internal search
-  budget remain its own choice; its official final-candidate count is fixed.
+  reference computation. B's qualified model manifest separately binds its
+  deterministic task seed schedule and bounded internal search profile.
 - Artifact availability, publication rights, test vectors, update deadlines and
   the exact reference execution used to settle numerical disagreements.
 
@@ -157,8 +163,9 @@ task properties; interface restrictions do not prove blindness.
 For A, prefer a reference execution that produces canonical integer probability
 outputs. If other hardware is allowed, freeze output tolerances and boundary
 resolution before issue; validators must not choose whichever nearby score
-favors their result. For public B, require an exact reference token sequence or
-define how a fixed set of generated samples is evaluated. A seed alone does not
+favors their result. For private B, qualify repeatable execution within the
+declared hardware/runtime
+profile, including repeated instances and restarts. A seed alone does not
 guarantee matching execution across devices or releases, as documented by
 [PyTorch](https://docs.pytorch.org/docs/2.14/notes/randomness.html).
 
@@ -166,7 +173,7 @@ guarantee matching execution across devices or releases, as documented by
 
 | Option | Authoritative benchmark execution | Main tradeoff |
 | --- | --- | --- |
-| Public A, private B (selected) | Validators run A; B submits candidate text for independent evaluation | Removes private A score reporting while retaining B's private models |
+| Public A, attested private B (selected) | Validators run A, verify B execution receipts and independently evaluate B text | Retains private B weights; B requires a qualified confidential runtime |
 | Public A+B | Validators run both immutable artifacts on the benchmark | Funds reusable models, but requires validator generation capacity and a defined generation policy |
 | Artifacts disclosed only to validators | Authorized validators replay the models | Retains restricted distribution, but trusts recipients to keep weights confidential |
 
@@ -176,16 +183,18 @@ candidate needed for evaluation; replaying generation adds a separate execution
 requirement. Publishing both models still leaves independently labeled detection
 tests and semantic review necessary.
 
-An encrypted artifact commitment without validator access does not permit
-replay. Keeping weights secret from the executing validators would require an
-additional confidential-computation or proof design, with its own assumptions.
+An encrypted artifact commitment alone does not prove execution. The selected
+B design adds independently verified confidential execution and version-bound
+receipts, with hardware and audited-runtime assumptions. Validators replay the
+public scoring models; they do not reproduce private B generation.
 
 ## Costs and implementation requirements
 
 Measure artifact storage, distribution, loading and validator inference costs.
-Reserve the full common panel and required review workload before admission;
-public B also requires generating every scheduled candidate. Publication moves
-benchmark computation to validators and does not make it free.
+Reserve the full common panel and required review workload before admission.
+B miners fund qualified generation and mandatory rewrite capacity. Validators
+fund public scoring, attestation checks and independent review. Measure these
+costs separately from any future customer revenue.
 
 Hash the inference-affecting content, excluding owner signatures and wrapper
 metadata. One identical content hash receives at most one A model-credit entry
@@ -197,9 +206,11 @@ problem that hash deduplication does not solve. Separate payment for measured
 serving work from model-performance rewards. New artifact versions qualify for
 later rounds and cannot replace a frozen version during evaluation.
 
-Public artifacts do not require public customer inputs. Paid customer jobs use
-encrypted requests to the assigned miner; customers can also choose local
-execution outside that service. B pursues author fit and detector evasion in
+Public artifacts do not require public customer inputs. Paid B customers encrypt
+to a verified job key inside the qualified runtime, withholding input keys from
+the miner and compute operator. An ordinary paid A endpoint can read its input
+with the customer's explicit acceptance; customers may run public A locally.
+B pursues author fit and detector evasion in
 private jobs without automatically uploading text to Pangram. External
 measurement requires a separate customer-authorized disclosure flow outside
 the confidential job protocol. Customer plaintext, keys and outputs must not

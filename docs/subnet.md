@@ -6,7 +6,8 @@ authorized writer's style and evasion against Pangram and subnet AI detectors.
 Both objectives are mandatory for launch benchmarks. Meaning preservation,
 readability, required cleanup and target tonal intent are hard constraints.
 That design uses B self-scores with independent validator execution of A
-artifacts. Customer inputs remain encrypted to the assigned miner; Pangram
+artifacts and verified B execution receipts. Paid B inputs are encrypted to a
+qualified runtime's verified job key, without miner or host access. Pangram
 measurement requires authorized benchmark text or a separate customer-authorized
 disclosure flow outside the confidential job protocol.
 

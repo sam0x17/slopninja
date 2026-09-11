@@ -1,14 +1,13 @@
 # Mandatory A/B service evidence
 
-Design update, September 11, 2026: Draft 0.15 requires a separate attested path for all paid B customer jobs.
-Model and customer keys have independent release policies. The curator-authorized
-DATA/witness transport below must never export customer instance keys or supply
-validators with automatic customer access. It remains a training-ticket pilot,
-not an attestation implementation.
-The [whitepaper](../whitepaper/slop_ninja.pdf), including its
-[model policy](../whitepaper/sections/03-models.tex) and
-[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
-is authoritative over conflicting earlier details below.
+Design update, September 11, 2026, whitepaper draft 0.16. B emissions,
+mandatory rewrites and paid B jobs require qualified attested execution.
+The DATA/witness transport below serves curator-authorized training tickets.
+It must never export customer instance keys or grant automatic customer access.
+The pilot does not implement attestation; emission eligibility additionally
+requires the model/profile bindings and receipts in the
+[model policy](../whitepaper/sections/03-models.tex).
+The [whitepaper](../whitepaper/slop_ninja.pdf) is the canonical design.
 
 This specifies the proposed `service-evidence-v1` transport and accounting pilot
 for bounded authorized rewrite requests from A requesters to B providers.
@@ -20,8 +19,9 @@ The one-ticket exercise reviews its B rewrite. It implements neither an artifact
 common three-A source/candidate matrix. An emission-bearing benchmark requires
 a separately frozen execution schedule and capacity budget. Private customer
 jobs keep their separate paid lifecycle and never enter mandatory-service
-counts. Their inputs remain encrypted only to the selected miner; a customer
-may separately disclose evidence to a chosen validator. This is a protocol
+counts. B inputs are encrypted to a verified key inside the qualified runtime,
+without miner or host access. A customer may separately disclose evidence to
+a chosen validator. This is a protocol
 design; no mailbox deployment or throughput result is claimed.
 
 The public ledger establishes who published which ciphertext bytes and when.
@@ -50,9 +50,10 @@ authorized recipient restrictions.
 
 After issue, no model, version or threshold can change. A validator-node outage
 permits rerunning the same cached artifact on a reserved approved runner.
-Failure of the canonical reference execution leaves the entire comparison
-unresolved or void under fixed closure. It cannot supply a passing score or
-be counted as B nonresponse. Deliberately triggered execution errors remain a
+Candidate-specific reference failure withholds only that entry's credit.
+Certified shared failure affects every entry requiring that evidence; retain
+assigned weights. Neither outcome implies a passing score or B nonresponse.
+Deliberately triggered execution errors remain a
 required pilot attack case. These execution rules do not change the fixed B
 provider fallbacks on rewrite-service tickets.
 
@@ -134,7 +135,7 @@ A vote/certificate binds the full snapshot hash, stage, DATA and witness digests
 
 The requester obligation activates on issue, including abandonment of an unfavorable assignment. The provider obligation activates at the fixed start only if the input has a timely global `ACCEPT`. An input rejection or unresolved input leaves provider reservations unactivated. Once activated, a provider must publish through its fixed response deadline. Failure permits only the next prescribed provider at its already reserved start. A validity dispute without an attributable failure does not authorize fallback. The request and commitment remain fixed across fallbacks. A later successful provider never erases an earlier provider's failure. Success cancels unused reservations; three failed attempts exhaust the ticket.
 
-Late publication remains late even if its contents are valid. Recipient accusations and unrecorded private messages establish no terminal result. Missing or malformed witness publication is objectively distinguishable from a published witness that a validator cannot decrypt; the latter needs a global verdict or closes unresolved. The verifier's own missing key or local outage is not evidence of sender fault. Quality review stays separate: every scored submission receives all required checks, three preparers retain their commitments/openings and disagreements, and the global strict-weight certificate decides the final verdict. Insufficient evidence by `H+204` voids the shared quality comparison consistently, without deleting already attributable service failures. Native weight commit/reveal is a separate mechanism and adds no assignment beacon.
+Late publication remains late even if its contents are valid. Recipient accusations and unrecorded private messages establish no terminal result. Missing or malformed witness publication is objectively distinguishable from a published witness that a validator cannot decrypt; the latter needs a global verdict or closes unresolved. The verifier's own missing key or local outage is not evidence of sender fault. Quality review stays separate: every scored submission receives all required checks, three preparers retain their commitments/openings and disagreements, and the global strict-weight certificate decides the final verdict. Insufficient candidate-specific quality evidence by `H+204` withholds only that candidate's assigned credit, retaining its unknown judgment and fixed weight. Complete competitors keep credit. Certified shared failures affect the full prescribed scope; neither outcome deletes attributable service failures. Native weight commit/reveal is a separate mechanism and adds no assignment beacon.
 
 An A requester's publication failure remains a service-accounting event; it
 cannot change the frozen benchmark artifact or its canonical result. Validator

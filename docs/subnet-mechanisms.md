@@ -1,14 +1,14 @@
 # Slop Ninja subnet mechanisms
 
-Design update, September 11, 2026: Draft 0.15 retains the two A/B pools and private B weights.
-All paid B jobs require attestation and independent model/customer key release,
-with no quality bonus or third reward pool. Attested benchmark
-claims require version-bound receipts; ordinary private generation remains
-unverified. The monthly public B release policy from draft 0.13 is superseded.
+Design update, September 11, 2026, whitepaper draft 0.16.
+A and B remain the only reward pools. A inference artifacts are public;
+B weights remain private. B emissions, mandatory rewrite service and paid jobs
+require qualified attested execution. Attestation is an admission gate, with
+no quality bonus. No monthly public B release is required.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its
 [model policy](../whitepaper/sections/03-models.tex) and
-[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
-is authoritative over conflicting earlier details below.
+[customer protocol](../whitepaper/sections/05-confidentiality.tex),
+defines the canonical design. The implementation remains unqualified.
 
 Status: public A/private B design approved, 2026-09-10. We have enough evidence to define an
 offline competition. Paid validation still needs a suitable private benchmark,
@@ -16,9 +16,10 @@ measured judge reliability and an authenticated challenge ledger.
 
 The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)) is the current overall design. The scoring
-and audit access below apply to subnet-owned benchmarks. Customer inference
-inputs are encrypted only for their assigned miner; a customer may separately
-send evidence to a specific validator. Those disclosures do not authorize
+and audit access below apply to subnet-owned benchmarks. B customer inputs are encrypted to a verified key inside the qualified runtime, with no
+miner or host access. Ordinary A hosting requires explicit customer acceptance
+of operator access. A customer may separately send evidence to a specific
+validator. Those disclosures do not authorize
 general validator access, automatic benchmark reuse or sending private text
 to Pangram.
 
@@ -96,8 +97,9 @@ also requires fulfilling actually assigned training-service roles. Requests are 
 point of use; serving miners bear the costs from expected emissions. The
 [training-service policy](#how-the-tasks-train-one-another) caps this work
 before admission. A miners may offer paid hosting separately; customer jobs
-retain their quoted fees, assigned-provider encryption and optional disclosure
-to one chosen validator.
+retain their quoted fees, task-specific privacy policy and optional disclosure
+to one chosen validator. Every eligible B provider must serve mandatory rewrites
+through its qualified version/profile and supply a bound execution receipt.
 
 ## 1. Author and origin detection
 
@@ -192,8 +194,10 @@ Match target tonal intent, fixed before generation from the brief and any
 requested authorial style and reference samples. That target can differ from source tone.
 An empty list of additional tone constraints still requires tone review.
 If no field has a failure certificate and a required pass certificate is missing,
-`G` remains unset and the matched source/brief comparison is void for the
-entire B batch. Conflicting certificates halt settlement.
+`G` remains unset and only that candidate's assigned credit is withheld.
+Competitors with complete evidence retain credit; keep all assigned weights
+in aggregation. Certified shared failures affect the full prescribed scope.
+Conflicting certificates halt affected settlement.
 None of these outcomes erases independently attributable service failures.
 The semantic gate multiplies B's sole utility; detector success and author
 fit cannot compensate for a meaning or tone failure.
@@ -419,9 +423,10 @@ isolated runner exposes no undeclared UID, hidden-label, source/candidate-role
 or scheduling inputs. Text may still reveal task properties. An A endpoint
 reply or timeout cannot determine a score or trigger an artifact fallback.
 No model or threshold changes after issue. A validator-node outage uses another
-approved runner with the same artifact; actual reference failure leaves the
-common comparison unresolved or void under fixed batch closure. It cannot
-become B nonresponse or an automatic pass. Missing strongest-artifact evidence prevents
+approved runner with the same artifact. Candidate-specific reference failure
+withholds only that entry's assigned credit. Certified shared failure affects
+all entries requiring that evidence, retaining fixed assigned weights. Neither
+outcome becomes B nonresponse or an automatic pass. Missing strongest-artifact evidence prevents
 the corresponding strict pass. Never mix per-miner panels.
 
 The median limits one arbitrary outlier only when fewer than half the three
@@ -442,7 +447,8 @@ recused, abstaining and nonresponsive validators remain in `W`.
 The conditional assumption is dishonest weight strictly below `W/3` within that
 frozen eligible set, with sufficient honest participation to close. Honest
 signers do not authorize conflicting final verdicts. Certificates attest scoped
-judgments, without proving meaning preservation or private B generation.
+judgments, without proving meaning preservation. Every eligible B entry also
+needs its separately verified qualified-runtime execution receipt.
 The [adjudication deadlines](reward-adjudication.md#fixed-pilot-deadlines) govern
 preparation, final ballots, private openings and closure. Keep hidden labels,
 unreleased sources, other miners' candidates and preservation adjudication

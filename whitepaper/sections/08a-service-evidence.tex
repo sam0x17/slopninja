@@ -8,11 +8,14 @@ Section~\ref{adversarial-feedback-loop}. The one-ticket exercise below specifies
 transport and review of a B rewrite. It implements neither an artifact runner nor the
 complete common source/candidate matrix. An emission-bearing benchmark
 needs a separate frozen execution schedule and capacity budget.
-Attested private customer jobs use a separate instance-key and receipt
-flow; these curator-authorized generation witnesses must never export
-customer keys or override that boundary. Private customer jobs retain their paid lifecycle and never enter
-mandatory-service counts. Inputs remain encrypted only to the selected
-miner; a customer may separately disclose evidence to a chosen validator.
+Emission-bearing B service also needs a qualified-version execution
+receipt under Section~\ref{attested-b-models}; the transport pilot alone
+cannot establish that requirement. Private customer jobs use a separate
+instance-key and receipt flow and never enter mandatory-service counts.
+Their plaintext is restricted to the customer and verified runtime.
+Curator-authorized witnesses below may disclose benchmark text to the
+listed providers and validators, but must never export customer keys
+or override the customer boundary.
 Full encrypted payloads
 are published on chain; a hash or HTTP locator alone is insufficient.
 Publication establishes bytes, sender authentication, and timing. Private
@@ -134,10 +137,12 @@ Validator runner failures never enter this rewrite-service ledger.
 Missing service-validity certificates do enter it as unresolved
 obligations, which block epoch eligibility even without miner fault
 (Section~\ref{adversarial-feedback-loop}).
-B rewards evaluate the submitted revision without requiring replay of
-the private generator. Insufficient final review evidence voids the shared
-quality comparison consistently, without deleting attributable service
-failures. The detailed record and certificate rules are specified in the
+B rewards require a qualified generation receipt and independent review
+of the submitted revision, without validator replay of private weights.
+Insufficient candidate-specific review evidence withholds only that
+entry's credit; certified shared failures affect their complete scope.
+Retain assigned weights and independently attributable service failures
+under Section~\ref{reward-adjudication}. The detailed record and certificate rules are specified in the
 companion service-evidence document.
 
 \paragraph{Counts and finality.}

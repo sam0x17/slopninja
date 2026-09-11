@@ -71,24 +71,24 @@ certification, using the requested authorial style or the source-tone default
 as appropriate. Full meaning preservation remains mandatory in every case.
 Freeze the rubric, validator weights, reviewer assignment and candidate
 budget before generation. Review all variants independently under the
-same field rules; retain their ballots even when common closure voids
-the comparison. This gives twelve candidate evaluations within the fixed
+same field rules; an unresolved variant must not erase a certified
+competitor's result. Keep every assigned slot in aggregation. This gives twelve candidate evaluations within the fixed
 pilot budget, separate from chosen-input execution-failure controls.
 
 Record field-level \texttt{PASS}, \texttt{FAIL} and abstaining weight,
-unresolved and whole-batch void rates, review time, candidate/report
-costs, and positive competitor skill excluded by each void. Replay the
-frozen allocation with and without each attack entry to measure changes
-in a simulated common owner's share when sibling UIDs score in other
-comparisons. Compare with benign ambiguity and infrastructure-only
-non-certification under the same budget. Publish those counterfactuals
-as diagnostics, alongside the actual whole-batch outcome. This bounded
-study cannot establish resistance to adaptive attacks. Live-reward
-acceptance must address any profitable induced voids; naming the risk
-does not supply a defense.
+candidate-specific unresolved rates, shared-failure scope, review time,
+candidate/report costs and retained competitor credit. Replay the frozen
+allocation with and without each attack entry, keeping assigned weights,
+to measure a simulated common owner's share when sibling UIDs score
+elsewhere. Compare the previous whole-batch rule, the adopted individual
+withholding rule, benign ambiguity and infrastructure failures. Test
+selective validator non-certification and attempts to misclassify a
+candidate-triggered error as shared evidence failure. Publish these
+counterfactuals as diagnostics. This bounded study cannot establish
+resistance to all adaptive attacks or native payout manipulation.
 
-In parallel, use synthetic jobs and test funds to verify assigned-miner
-encryption, customer-only result delivery, key substitution rejection,
+In parallel, use synthetic jobs and test funds to verify instance-key
+input encryption, customer-only result delivery, key substitution rejection,
 replay prevention, expiry, acknowledgment, and exactly one settlement.
 Exercise miner outage, wrong keys, unacknowledged consumed results, and
 attempted automatic reassignment. Neither a validator nor a gateway
@@ -126,7 +126,12 @@ an automatic pass or a private request's reassignment. Validate the greater-than
 failure gate in aggregate and on each mandatory service interface and assigned role, with
 exactly 10\% passing and zero workload supplying no automatic eligibility.
 Test requester abandonment, registration changes, deterministic probation,
-and minimum fallback response windows. Demonstrate the zero-credit rule
+and minimum fallback response windows. Subnet UID trimming can renumber
+surviving UIDs~\cite{mechanisms}; pause new protocol issue during such a
+migration and verify the lifetime-slot ledger, registration bindings and
+outstanding deficits before resuming. Native renumbering must not silently
+reset protocol counters or rewrite issued assignments.
+Demonstrate the zero-credit rule
 and persistent recovery deficits, including same-class probation and resistance
 to resets through key or service-version changes. Verify settlement
 under native weight-reveal delays and payout cycles; already distributed
@@ -137,7 +142,8 @@ Verify quote expiry, capacity reservations, exact alpha accounting,
 release and refund permissions, and fee handling. These
 requirements must be concrete protocol parameters or measured acceptance
 criteria before funds depend on them. Reproduce the frozen style scores,
-field certificates and common void decisions from archived inputs.
+field certificates, individual withholding and shared-scope decisions
+from archived inputs.
 Demonstrate proof-verified validator snapshots, complete mailbox and
 witness publication, fault attribution and finality handling. Verify B
 self-scores through independent validator execution. Demonstrate complete
@@ -149,7 +155,7 @@ public-detector feedback must be available during the pilot; measure
 transfer to fresh source families, later A versions and Pangram.
 
 
-Before any paid B launch, demonstrate attested inference with the
+Before either B emissions or paid B launch, demonstrate attested inference with the
 private starter model on a pinned CPU/GPU configuration. Independently
 review the client verifier, reproducible runner, measured policy, private
 model loader and complete input/output path. Test host and guest
@@ -160,7 +166,8 @@ that signs text it did not generate. Validate the same private version's
 benchmark receipts and customer receipts without exposing its weights.
 
 Use synthetic market-sensitive announcements to test denied egress,
-plaintext logs and crash dumps, cache and state isolation, output-key
+plaintext logs and crash dumps, hostile output markup or remote-resource
+fetches in the customer client, cache and state isolation, output-key
 binding, metadata leakage, restart/rollback, replay and revoked instances.
 Include malicious weights that encode source facts in early stopping,
 errors or workload shape; verify padded output and fixed release slots
@@ -174,15 +181,19 @@ cost per accepted revision and supported model size before freezing the
 launch policy. Include customer refusal of a policy update and loss of
 attestation service availability. No attested request may silently become
 ordinary hosting; ordinary B customer offers must be rejected. A failed
-confidential-compute pilot delays paid B
-instead of advertising ordinary encryption as operator confidentiality.
+confidential-compute pilot delays B emissions and paid B. Ordinary
+transport encryption cannot qualify operator confidentiality.
 
-Apply the same B benchmark utility to attested and ordinary entries, with no
-attestation bonus. Test invalid and missing required receipts, private
-version copying, benchmark-only behavior, post-issue downgrade and
-mixed-mode allocation. Ordinary performance remains an output-service
-claim, while attested claims require verified execution association.
-This evidence does not change semantic review or Pangram obligations.
+Reject ordinary B submissions from emission allocation. Retain their
+offline utility only as research diagnostics. Test missing or invalid
+receipts, private-version copying, post-issue downgrade, external
+best-of-many selection and changes in the paid serving profile.
+Repeat the same frozen task across restarts and qualified instances to
+verify the bound result and execution budget. Test benchmark recognition
+and measure the registered version on authorized service requests from
+the paid interface. Required training tickets must use that version too.
+Attestation adds no quality bonus and does not change semantic review
+or Pangram obligations.
 
 Measure paid B demand and miner margins separately from emissions, with
 A hosting as a secondary offer. Include competitors purchasing outputs,

@@ -18,8 +18,10 @@ within that authorized evaluation group.
 
 This is the benchmark evidence flow. Under the [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)),
-customer requests are encrypted only for the assigned miner and do not enter
-these audits. Customers can separately send evidence to one chosen validator;
+B customer requests are encrypted to the verified key inside their qualified
+runtime and do not enter these audits. The miner receives no input key or
+plaintext output copy. Ordinary A hosting requires explicit operator-access
+terms. Customers can separately send evidence to one chosen validator;
 that requires a customer-directed packet with its own recipient and scope.
 
 1. Freeze qualified epoch rosters from completed actual request records, global
@@ -77,14 +79,18 @@ that requires a customer-directed packet with its own recipient and scope.
    exact text commitments and full probabilities. Compare the canonical outputs
    and projections with B's committed self-scores. Claimed scores, hashes or
    signatures do not verify the computation; validators still incur the full
-   A forward-pass workload. No private B generator replay is required.
+   A forward-pass workload. Every credited B entry separately requires its
+   verified qualified-runtime/model execution receipt; no private B weight
+   download or validator generation replay is required.
    Preservation `G`, public style `V` and Pangram evidence remain separate.
    The isolated runner receives
    no undeclared UID, hidden-label or source/candidate-role inputs. An A endpoint
    response cannot supply an authoritative probability. No artifact or threshold
    changes after issue: a validator-node outage uses another approved runner
-   with the same artifact. Actual reference failure leaves the common comparison
-   unresolved or void, never B nonresponse or an automatic pass. Missing actual
+   with the same artifact. Candidate-specific reference failure withholds only
+   that entry's credit; certified shared failure affects every entry requiring
+   that evidence. Keep assigned weights. Neither outcome implies B nonresponse
+   or an automatic pass. Missing actual
    strongest evidence prevents the corresponding strict claim. Commit all
    execution evidence by the fixed deadline.
 
@@ -205,7 +211,8 @@ scores out of plaintext logs and public plaintext artifacts. Every frozen
 certifier is authorized to inspect active evidence; no preparer can widen a
 customer's separate chosen-validator disclosure. Encryption does not hide all
 identities or
-timing, prove endpoint nondisclosure or establish private B generation.
+timing or by itself establish protected execution. B emissions and mandatory
+rewrites additionally require the qualified-runtime/version receipt.
 
 Miners pay for private queries beyond those tickets and required Pangram
 candidate reports. Source reports use the capped allowance in the
@@ -213,9 +220,10 @@ candidate reports. Source reports use the capped allowance in the
 no API key or new inference charge; validators fund hosting and review.
 The proposed subnet requires three distinct completed reports per mandated text;
 three reads of one report remain one observation. Miners may pay for additional
-attempts and select their reports before commitment. Scoring uses only the
-committed set; miners need not disclose all private attempts, and validators
-need not purchase fresh inference. Selection from undisclosed attempts can bias
+provider calls for the same final text and select reports before commitment.
+Generation and candidate selection must stay inside the qualified invocation.
+Scoring uses only the committed report set; miners need not disclose every
+provider call, and validators need not purchase fresh inference. Selection can bias
 that set toward favorable results; a pass applies to those committed
 observations and does not estimate fresh-query success probability. The
 [repeatability probe](pangram-repeatability.md) covers three texts through one

@@ -15,8 +15,8 @@ holds its model weights, but has no protocol key for the customer's
 plaintext. Both the weights and customer content must remain private
 under the accepted hardware and software assumptions. Ordinary hosting
 is available for A when the customer explicitly accepts operator access;
-it is ineligible for paid B customer jobs. Authorized B benchmarks and
-research may still use ordinary execution on separately permitted data.
+it is ineligible for paid B customer jobs or B emissions. Ordinary B
+execution remains available for research on separately permitted data.
 Attestation is an execution requirement, with no additional reward pool.
 
 A remains downloadable for local use. Customers may run a voluntarily
@@ -114,6 +114,17 @@ measured loader and execution policy described in
 Section~\ref{attested-b-models}; a GPU quote by itself supplies neither.
 A CPU-only enclave with unprotected GPU offload is insufficient.
 
+Hardware enforcement limits host memory access; customer secrecy cannot
+depend on the operator declining to inspect RAM. Qualify the exact CPU
+memory-isolation mechanism and GPU access controls. For example, H100
+confidential mode protects GPU memory with hardware firewalls and encrypts
+CPU/GPU transfers; its on-package HBM is not encrypted~\cite{h100isolation}.
+State which physical attacks the accepted platform excludes. An
+attestation report cannot establish the physical integrity of a hosting
+facility. AMD documents a physical memory-aliasing attack outside its
+SEV-SNP threat model~\cite{amdphysical}; a generic TEE label is insufficient
+for an unrestricted physical-adversary claim.
+
 \subsection{Application isolation and remaining trust}\label{attested-isolation}
 
 Protect input parsing, tokenization, author-profile construction,
@@ -154,7 +165,12 @@ Certify reference-policy changes under the strict validator quorum and
 activate them prospectively; the customer must accept the new policy
 before releasing another key. An operator-controlled web page must not
 receive plaintext before this verification. Pin the verifier locally or
-in a customer-controlled application.
+in a customer-controlled application. Treat generated text as untrusted
+content: escape active markup, disable remote images, link previews and
+automatic URL/tool fetches, and keep document rendering and profile
+storage inside the customer's accepted boundary. A malicious revision
+could otherwise cause the client to disclose source facts through a
+network request after successful confidential inference.
 
 Require fresh challenge evidence and current revocation collateral before
 key release, with fixed maximum evidence age and job duration in the
@@ -254,5 +270,5 @@ Inspection is advisory by default. A signed decision affects escrow only
 if the job's original terms gave that validator or selection policy
 authority and both parties accepted those terms. Choosing a reviewer
 does not itself change payment rights or extend deadlines. This route
-permits voluntary inspection while preserving the default assigned-miner
-input boundary.
+permits voluntary inspection while preserving the accepted runtime and
+customer-controlled input boundary.

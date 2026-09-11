@@ -1,23 +1,23 @@
 # Paid asynchronous inference
 
-Design update, September 11, 2026: Draft 0.15 requires attested execution for all
-paid B jobs, protecting both private weights and customer text through independent
-key release. Ordinary hosting below grants operator access and is ineligible for
-paid B. It remains an A option with customer acceptance. No monthly B weight
-release is required.
+Design update, September 11, 2026, whitepaper draft 0.16.
+Every paid B job requires qualified attested execution with independent
+model/customer key release. B emissions and mandatory rewrite service require
+the same qualified version and workload profile. Ordinary A hosting remains an
+option with explicit customer acceptance. B weights remain private.
 The [whitepaper](../whitepaper/slop_ninja.pdf), including its
 [model policy](../whitepaper/sections/03-models.tex) and
-[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
-is authoritative over conflicting earlier details below.
+[customer protocol](../whitepaper/sections/05-confidentiality.tex),
+defines the canonical design. The implementation remains unqualified.
 
-Proposal, updated 2026-09-10. The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
+Proposal, updated 2026-09-11. The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)) is the canonical design draft.
 Customers buy asynchronous jobs at miner-quoted prices in subnet alpha from
 providers hosting public A detectors or private B transformation models.
 A hosting is optional; publishing a qualified artifact does not require an A
 inference endpoint. Offers, assignments, commitments, escrow
-and settlement belong on chain; model execution runs on the assigned miner's
-hardware. This repository
+and settlement belong on chain; B execution runs on qualified confidential
+hardware, owned or rented by the miner. This repository
 has no deployed job contract or paid serving endpoint yet.
 
 Initial paid offers cover two task interfaces: A for author/origin detection,
@@ -39,38 +39,40 @@ denominated in alpha.
 
 ## Customer confidentiality
 
-Every customer inference input, including source text, reference writing,
-profiles and the complete brief, is encrypted by the customer for **only the
-assigned miner**, besides the customer's own access. In the default job flow,
-validators, auditors, customer-service operators and external model or detector
-providers receive no decryption key or automatic copy. Storage and transport
-services may carry ciphertext. They are not additional plaintext recipients.
+Every paid B job requires a qualified confidential runtime. The model owner
+releases encrypted model material only after verifying that runtime; the customer
+independently verifies its fresh attestation, loaded model commitment and job key.
+The customer encrypts the source, references, profiles and brief to that key.
+The operator cannot substitute an ordinary server key. It receives ciphertext
+and permitted metadata, with no customer input key or plaintext output copy.
 
-The miner encrypts the result for the customer's registered delivery key.
-The protocol does not automatically copy the source or result to validators,
-including during a payment dispute. No standing escrow, recovery or audit key
-grants a third party access. A customer may separately disclose selected evidence
-to one chosen validator under the process below.
-The miner necessarily sees the plaintext it processes and produces. Private
-weights and encryption in transit cannot prevent that miner from leaking it.
-Retention, deletion and local-execution promises remain service obligations;
-this design does not cryptographically attest compliance.
+The public runtime must cover the complete CPU/GPU path, constrain private
+weights to approved model data, deny content-bearing egress and telemetry, and
+isolate and clear job state. No operator shell or guest administrator may inspect
+the protected workload. Fixed workload buckets and response slots bound exposed
+size/timing metadata. The trusted client must also disable active markup and
+automatic remote fetches in model outputs. These are qualification requirements,
+not capabilities demonstrated by this repository.
 
-Confidential jobs require local model execution. They cannot outsource content
-to another miner, a hosted model API or Pangram. Detector measurements and
-public reports disclose content and are incompatible with this exclusive
-recipient policy. A customer may separately initiate a different flow with
-explicitly expanded recipients, but that is outside the default private job.
-Buying an inference job does not authorize training or benchmark reuse.
+A weights remain public. A customer can run them locally, select a qualified
+confidential service, or explicitly accept operator access through ordinary
+hosting. Every offer must identify which policy applies.
 
-Reassignment is never automatic. A customer must issue a new signed assignment
-and a new envelope for the new miner. The original miner cannot forward the
-input or re-encrypt it to a replacement on the customer's behalf. Changing an
-assignment also cannot revoke plaintext already received by the first miner.
+The accepted runtime encrypts the result to the customer's delivery key. No
+validator, support operator, storage provider or external model service receives
+a default input key or output copy. Customer jobs cannot call Pangram, train on
+the text, or enter benchmarks automatically. Authorized benchmarks have their
+own specified recipients and external-evaluation permissions.
 
-Benchmark-owned tasks have separate access rules: their authorized validators
-and, where required, Pangram can receive benchmark text. Those permissions do
-not extend to customer jobs.
+A customer can separately disclose selected evidence to one chosen validator.
+Reassignment requires a new customer-signed assignment, freshly verified
+instance and new envelope. A host cannot forward the job to an unapproved key.
+Revocation cannot undo any disclosure already authorized under an earlier flow.
+
+Hardware and measured software remain trusted. Attestation does not prove
+editorial quality, prevent denial of service, or eliminate hardware side
+channels. The full requirements and physical threat limits are in the
+[customer protocol](../whitepaper/sections/05-confidentiality.tex).
 
 ## What belongs on chain
 
@@ -80,7 +82,7 @@ not extend to customer jobs.
 | Deposits, acknowledgment, payment and timeout refunds | Contract | Deterministic accounting under the accepted policy |
 | Salted input/result commitments and envelope hashes | Contract | Binding to exact bytes when an authorized recipient checks an opening |
 | Source, references, profiles, brief and result | Encrypted transport/storage | Plaintext available only to the designated endpoints |
-| Hosted inference and B search | Assigned miner hardware | Public A artifacts or private B weights; customer content remains private |
+| Hosted inference and B search | Qualified confidential hardware for B; declared hosting mode for A | B receipt binds model/runtime and bounded workload; output quality requires independent evaluation |
 
 All content-bearing fields stay inside the envelope. Public offer and job
 metadata must not include excerpts, private profile values or the brief.
@@ -106,7 +108,8 @@ metadata, suitable for an epoch root rather than an append-only job database.
 ## Offer and job lifecycle
 
 A signed offer binds the miner hotkey, authorized settlement identity, encryption
-key, task schema, opaque model version, total alpha quote for a bounded job,
+key, task schema, model/version and qualified runtime evidence, total alpha
+quote for a bounded job,
 available capacity, input/output limits, quote expiry, acceptance and delivery
 deadlines, acknowledgment window and refund policy. Customers choose among
 compatible offers using benchmark quality, deadline and price. Miners may change
@@ -116,14 +119,15 @@ no owner-set base price, utilization target or global price-adjustment parameter
 An atomic reservation consumes offered capacity and locks the quoted alpha
 amount and terms. Expired or exhausted offers cannot be filled, and later
 repricing cannot change reserved jobs. The customer signs the assignment and
-binds its delivery key. Internal token and search counts are not independently
-observable, so payment uses the bounded quote. The service market determines
+binds its delivery key. The B profile binds the bounded internal search and
+padded workload; payment uses the reserved quote without exposing
+content-dependent token counts. The service market determines
 the alpha amount separately from the alpha/TAO exchange market.
 
 Quote discovery uses public service descriptions and size/deadline metadata
 the customer chooses to reveal. It sends no source, references, profiles or
-brief plaintext to prospective bidders. Only the selected miner receives the
-input envelope. If that miner cannot serve the request under the reserved
+brief plaintext to prospective bidders. The B envelope is addressed only to
+the verified instance key. If the provider cannot serve under the reserved
 terms, the job follows its rejection/refund policy; it cannot silently reprice
 after decryption.
 
@@ -151,13 +155,14 @@ sequenceDiagram
     participant C as Customer
     participant E as Job contract
     participant M as Assigned miner
+    participant R as Qualified B runtime
     C->>E: Reserve capacity and alpha quote, fund escrow, sign assignment
-    C->>M: Input envelope encrypted only for assigned miner
-    Note over M: Decrypt and check input, then accept
-    M->>E: Accept bounded job
-    Note over M: Execute locally
-    M->>E: Result commitment and customer-envelope hash
-    M->>C: Result encrypted for customer
+    C->>R: Verify attestation and job key, encrypt input
+    Note over R: Decrypt and validate inside protected runtime
+    R->>E: Accept bounded job through host relay
+    Note over R: Execute registered version and workload
+    R->>E: Result commitment, ciphertext hash and receipt through relay
+    R->>C: Result encrypted for customer
     alt Customer acknowledges before deadline
         C->>E: Signed acknowledgment bound to result
         E->>M: Release agreed payment
@@ -167,8 +172,9 @@ sequenceDiagram
     end
 ```
 
-Before acceptance, the assigned miner checks that the decrypted input opens
-the commitment and fits the offer. The exact brief remains inside that bound
+Before B acceptance, the protected runtime checks that the decrypted input opens
+the commitment and fits the offer. The host cannot perform this plaintext check.
+The exact brief remains inside that bound
 input. Bind signatures and envelopes to chain, contract, job ID, participant
 roles, assigned keys and nonce. Require final chain state and prevent duplicate
 acceptance, acknowledgment or settlement.
@@ -194,7 +200,9 @@ This is not fair exchange. A customer can read a useful result and withhold
 acknowledgment, receiving the timeout refund. The miner bears that nonpayment
 risk under this policy. Conversely, a miner can deliver unusable ciphertext or
 an inadequate revision; a delivery claim alone never triggers payment. Small
-job caps limit exposure but do not solve either incentive problem.
+job caps limit exposure but do not solve either incentive problem. Paid launch
+still needs a settlement decision. The [consistency review](design-consistency-review.md#remaining-payment-decision)
+describes a proposed execution-and-delivery policy; it is not yet the adopted rule.
 
 Default settlement uses public protocol evidence, such as signatures, deadlines
 and conflicting commitments. Validators or on-chain judges receive no plaintext
@@ -216,7 +224,7 @@ validator**. Authenticate that validator's encryption key before sending. The
 customer signs and encrypts the packet, binding the chain, contract, job ID,
 review context, recipient key, scope and nonce. Include the exact relevant
 evidence and any commitment salts/openings needed for the requested checks.
-The original input envelope and assigned-miner route remain unchanged.
+The original input envelope and accepted execution policy remain unchanged.
 
 The chosen validator sees only what the customer supplies. There is no standing
 access, validator broadcast, miner rewrapping or automatic escalation. Disclosure
@@ -266,11 +274,12 @@ review, including any required Pangram calls. Default private customer quotes
 include neither automatic detector submissions nor validator reading fees.
 
 Publish aggregate benchmark performance and public offers. Private customer
-outputs and profiles stay out of leaderboards. Opaque model versions do not
-prove execution, and black-box evaluation cannot enforce hidden search budgets
-or prevent a dishonest miner from outsourcing plaintext. Local execution is
-required by the confidential-job policy; proving it would need additional
-mechanisms.
+outputs and profiles stay out of leaderboards. Every credited B candidate and
+mandatory B rewrite requires a qualified-runtime execution receipt. A paid offer
+may cite a benchmark only for the same model/runtime and bounded search profile;
+a cheaper or changed version needs its own evidence. Qualification is a binary
+admission gate and earns no quality bonus. Attestation and benchmark evaluation
+remain separate checks, both requiring implementation.
 
 Serving can use signed `POST /jobs` with `202 Accepted`, followed by authenticated
 polling or encrypted retrieval. Application transport remains the subnet's
@@ -289,5 +298,5 @@ payments and duplicate prevention. No model training or Pangram call is needed.
 
 The existing [receipt envelope](receipt-envelope.md) is a cryptographic building
 block. Its validator-recipient benchmark schema is not a customer-job envelope
-or escrow implementation. A customer-specific schema must enforce the single
-assigned-miner input recipient and customer result recipient before deployment.
+or escrow implementation. A customer-specific schema must enforce the verified
+B instance input key and customer result key before deployment.
