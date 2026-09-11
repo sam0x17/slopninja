@@ -1,11 +1,13 @@
 # Slop Ninja subnet mechanisms
 
-Publication-policy update, September 11, 2026: [whitepaper draft 0.13](../whitepaper/slop_ninja.pdf)
-supersedes the private-only B policy in these earlier mechanism notes.
-B emissions require monthly public checkpoint nomination, qualification and
-validator generation replay. Newer private versions may serve customers, while
-the public reference supports offline local inference. The two reward pools
-and mandatory author-fit, evasion and semantic requirements remain.
+Design update, September 11, 2026: Draft 0.14 retains the two A/B pools and private B weights. Attestation is an
+execution mode with no quality bonus or third reward pool. Attested benchmark
+claims require version-bound receipts; ordinary private generation remains
+unverified. The monthly public B release policy from draft 0.13 is superseded.
+The [whitepaper](../whitepaper/slop_ninja.pdf), including its
+[model policy](../whitepaper/sections/03-models.tex) and
+[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
+is authoritative over conflicting earlier details below.
 
 Status: public A/private B design approved, 2026-09-10. We have enough evidence to define an
 offline competition. Paid validation still needs a suitable private benchmark,

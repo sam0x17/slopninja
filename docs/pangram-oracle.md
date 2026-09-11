@@ -1,11 +1,12 @@
 # Pangram benchmark, verification and API funding
 
-Publication-policy update, September 11, 2026: [whitepaper draft 0.13](../whitepaper/slop_ninja.pdf)
-supersedes private-only B generation for emissions. Validators reproduce the
-nominated public B package's exact candidate before applying the A/Pangram
-benchmark. Pangram can download monthly releases; only unreleased improvements
-retain weight secrecy. A local customer's input is never automatically sent
-to Pangram. See the [release policy](../whitepaper/sections/03-models.tex).
+Design update, September 11, 2026: Draft 0.14 retains private B weights and external benchmark reports. Attested
+version receipts do not establish Pangram scores or authorize forwarding customer
+text to Pangram. Mandatory monthly public B releases are no longer proposed.
+The [whitepaper](../whitepaper/slop_ninja.pdf), including its
+[model policy](../whitepaper/sections/03-models.tex) and
+[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
+is authoritative over conflicting earlier details below.
 
 Design decision, 2026-09-10. A's origin-detection quality anchor follows the
 strongest validated detector under the frozen comparison policy. Pangram is

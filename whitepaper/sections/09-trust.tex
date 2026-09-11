@@ -4,7 +4,8 @@ behavior}\label{trust-assumptions-and-adversarial-behavior}
 
 The chain can enforce authenticated accounting and commitment
 consistency. Recipient encryption limits who can decrypt protocol
-deliveries. Counter and roster commitments permit reproducible assignment
+deliveries. Attested jobs additionally restrict key release and plaintext
+processing to the accepted runtime under explicit hardware assumptions. Counter and roster commitments permit reproducible assignment
 of peers, comparison batches, and reviewers. Every scored submission
 receives the required review at launch. Each guarantee has a narrower scope than useful,
 confidential writing inference.
@@ -18,18 +19,27 @@ Risk & Proposed response and remaining assumption \\
 \endfoot
 Customer text reaches another miner or gateway & Encrypt locally to the
 pinned assignment; no alternate keys or automatic reassignment \\
-Assigned miner leaks or exploits an unpublished announcement & Use
-offline customer-controlled inference when disclosure is unacceptable.
-Hosted encryption does not prove endpoint nondisclosure; terms and
-penalties cannot undo a leak \\
-Published B package sends customer data outside the local environment &
-Qualify complete artifacts for isolated offline execution, with no
-network, telemetry, remote tools or undeclared dependencies. Customer
-machine and runtime integrity remain assumptions \\
-B miner scores with a private model but releases weaker weights &
-Bind emission scoring to independent execution of the nominated public B
-package. A different private hosted version needs separate performance
-evidence and supplies no public-model execution guarantee \\
+Ordinary hosted miner leaks decrypted text & This mode grants operator
+access; require the separately qualified attested mode for sensitive jobs \\
+Host reads sensitive B text, logs or GPU buffers & Attest the complete
+CPU/GPU path and approved application before customer key release;
+disable debug, logging, external tools and operator administration \\
+A real enclave runs malicious miner code & Public reviewed runtime and
+measured policy, constrained private model data and denied egress.
+Hardware identity alone does not approve an application \\
+A stale quote or substituted key redirects the request & Bind fresh
+customer nonce, instance keys, offer, model and policy; check revocation
+and refuse downgrade or alternate recipient envelopes \\
+Private model or shared cache leaks another customer's data & Isolate
+job state, prohibit online training, cache sharing and exported state;
+malicious-data and timing attacks still require evaluation \\
+Hardware or verifier is compromised & Pin accepted roots and versions,
+independent security review and revocation before new key releases;
+previous exposure cannot be undone and side channels remain a limit \\
+B miner retains private weights but fabricates quality claims & Score
+submitted revisions against the brief and independent review; ordinary internal
+generation remains unproved; attested entries additionally require a
+verified version-bound execution receipt \\
 B supplies false self-scores & Validators execute every assigned A
 artifact on the bound source and final text and compare canonical vectors
 and scalar projections; B's report does not authorize its own reward \\
@@ -53,9 +63,9 @@ Published A detector favors a transformation miner & Hidden qualification,
 targeted-trigger tests and a common frozen panel executed by validators;
 replay verifies computation but not the absence of colluding model behavior.
 Distinct UIDs do not prove independent models or owners \\
-A or B model is copied under additional identities & Pin complete artifacts
-and give identical inference content one model-credit entry within its
-pool, and at most one A panel seat; small changes or a new hash do not establish an independent
+A model is copied under additional identities & Pin complete artifacts
+and give identical inference content one model-credit entry and panel
+seat; small changes or a new hash do not establish an independent
 contribution or owner \\
 Pangram changes or serves conflicting records & Pin the reported
 interface/version, retain observations, and suspend affected comparisons
@@ -67,12 +77,16 @@ Miner manufactures paid demand & Keep customer revenue separate from
 emission scoring \\
 \end{longtable}
 
+Attestation adds trust in hardware vendors, firmware, the accepted workload
+and the customer's verifier. It supplies no proof of semantic fidelity or
+independent UID ownership. Customers retain control of their own accepted
+policy; protocol signers cannot release customer keys on their behalf.
+
 The quorum assumption applies after excluding the exact task participants;
 it must hold in that conditional validator set. It prevents conflicting
 certificates when honest validators sign once. It does not prove their
 semantic judgments correct or a published detector accurate. Authoritative
-A outputs and the scored B candidate come from validator execution of
-the frozen artifacts, with
+A outputs come from validator execution of the frozen artifact, with
 evidence checked under the declared runtime and output rules. The quorum
 still assumes enough honest validators perform those checks. Native Yuma
 also processes each validator's
@@ -109,7 +123,7 @@ Separate role counts prevent cheap successes from diluting failures.
 A persistent recovery deficit makes abandoned work delay later
 eligibility even after the current epoch's credit is lost. It cannot
 make an operator who plans to leave value future participation.
-Cache and validate the frozen A and B artifacts before task issue. A runner
+Cache and validate the frozen A artifacts before task issue. A runner
 outage can use reserved capacity for the same artifact; an unresolved
 reference execution requires the declared common-comparison closure and
 cannot select a different detector after seeing B's candidate.

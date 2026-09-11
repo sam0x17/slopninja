@@ -39,7 +39,7 @@ detector score or proximity to a learned profile alone cannot establish
 that result. A writer may also request greater accessibility or
 rhetorical force; those changes must respect the source and brief.
 
-The publication policy supports local use and paid hosting. A should make strong
+The model-publication split is intentional. A should make strong
 author/origin detection available for anyone to run and use in training,
 including external detector providers. Matching Pangram-level origin
 detection is an evaluation target, not an achieved result. Pangram
@@ -48,15 +48,17 @@ takes over after confirmed superiority, and Pangram becomes the target
 again if it later outperforms the incumbent. Continue comparing both
 against independent production records; author identification retains
 its own known-author labels. Public A
-models give B immediate local feedback. Monthly B releases provide
-independently evaluated transformation checkpoints that customers can run
-without disclosing their writing to a miner. B emissions depend on those
-released artifacts; miners may keep newer versions private for paid
-hosting between releases (Section~\ref{monthly-b-release}). Publication
-permits free access, local inference and training reuse, including by
-Pangram and competing miners. Hosting still costs compute and may be sold
-separately. Public releases improve access while newer hosted versions
-can compete on performance and convenience.
+models give B immediate local feedback while B miners retain their
+transformation models. A submissions must permit free artifact access,
+local inference and reuse for training private B models. Hosting still
+costs compute and may be sold separately. The subnet aims to make
+detector access a shared resource while miners compete to provide
+useful private transformation services. Sensitive customer jobs use
+attested private inference under Section~\ref{attested-customer-inference}.
+There is no mandatory monthly release of B weights. Customers verify the
+execution policy and instance before disclosing text, while B miners
+retain the model they sell access to. Hardware and audited software become
+explicit trust dependencies; attestation does not certify editorial quality.
 
 The initial subnet evaluates two tasks separately:
 

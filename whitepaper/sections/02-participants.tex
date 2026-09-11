@@ -1,14 +1,13 @@
 \section{Participants and the two kinds of
 work}\label{participants-and-the-two-kinds-of-work}
 
-A miners publish immutable, complete detector artifacts. B miners nominate
-public transformation checkpoints for monthly cycles and may retain newer
-private versions for hosted service. They register signed rewrite endpoints.
+A miners publish immutable, complete detector artifacts. B miners may
+retain private transformation models and register signed rewrite endpoints,
+including qualified attested instances for sensitive customer work.
 Both register capabilities and authenticated protocol identities. A miners
 may separately offer paid detector hosting. Customers buy detection and transformation
 jobs through separately quoted offers. Validators execute the frozen A
-and nominated B artifacts for authoritative benchmark computation,
-evaluate B outputs, and
+artifacts for authoritative benchmark scores, evaluate B outputs, and
 submit weights. Benchmark curators maintain
 permitted source material, production records, and hidden evaluation
 labels. A customer-facing gateway may relay ciphertext, but receives no
@@ -34,11 +33,11 @@ rules, a \emph{signer} is such a validator signing a particular final
 verdict. These duties may overlap; preparation alone grants no approval
 authority. Section~\ref{service-evidence} fixes the weighted quorum.
 
-A \emph{model-credit entry} records performance credit for one artifact's
-inference content after exact duplicates are coalesced within its task
-pool under Sections~\ref{a-artifact-execution} and~\ref{monthly-b-release}.
-It uses the canonical submitting UID and existing A or B payout policy;
-it creates no additional UID, token or payout pool.
+An A \emph{model-credit entry} records performance credit for one
+detector's inference content after exact duplicates are coalesced under
+Section~\ref{a-artifact-execution}. It uses the canonical submitting UID
+and existing A payout policy; it creates no additional UID, token or
+payout pool.
 
 \par\medskip\noindent
 \begin{tabularx}{\linewidth}{@{}LLL@{}}
@@ -49,10 +48,11 @@ Purpose & Serve a customer's request & Measure miners for emissions \\
 Launch services & A: detection; B: transformation & A: detection;
 B: transformation \\
 Source of text & Customer & Authorized benchmark collection \\
-Default input recipients & Customer and assigned miner & Curator,
+Default input recipients & Customer and attested instance; operator too
+in ordinary hosting & Curator,
 assigned service miners, validators, commissioned reviewers \\
-Evaluation & Customer acceptance & Validator execution of frozen A and B
-artifacts; independent B output review \\
+Evaluation & Customer acceptance & Validator execution of frozen A
+artifacts; independent B output review and required attested receipts \\
 Pangram submission & Excluded from the confidential job protocol &
 Required for every B benchmark \\
 Payment & Customer's quoted fee & Performance-dependent emissions \\
@@ -62,21 +62,16 @@ release terms \\
 \end{tabularx}
 \par\medskip
 
-Customers may instead run public A artifacts and the monthly B reference
-locally. That route sends no job input or result to a miner, gateway,
-validator or external detector and requires no chain interaction.
-Section~\ref{local-customer-inference} specifies the execution boundary.
-
-Publishing an artifact does not grant its publisher access to private
+Publishing an A artifact does not grant its publisher access to private
 benchmark text. Validators execute it on authorized evaluation inputs;
 miners receive only the inputs required for their assigned tasks.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figures/private-inference.pdf}
-\caption{Hosted inference, optional evidence disclosure and local execution.
-Hosted encryption limits recipients, while the assigned miner still
-sees plaintext. Local execution uses downloaded public artifacts.}
+\caption{Attested customer inference. The client verifies the instance
+before encrypting input; the model owner receives no customer key.
+Ordinary hosting has a different operator-access boundary.}
 \end{figure}
 
 Customer tasks do not become benchmark examples automatically.
@@ -92,8 +87,10 @@ times. Mandatory training tickets assign an A requester to a B rewrite
 provider on authorized text. A contributes published artifacts; B runs
 them locally for training and submits its benchmark self-scores for
 independent validator replay. A operates no required scoring endpoint.
-The network evaluates observable service performance and published
-computation. It cannot infer how many GPU hours a miner used in training,
-ownership of every component, or which private weights a hosted service used.
+The network evaluates observable service performance and published A
+computation. An attested B receipt additionally associates an output with
+its private model version under the accepted hardware and runtime policy.
+It cannot establish training effort, ownership of every component or
+independent ownership of UIDs. Ordinary private generation remains unverified.
 Emissions create an incentive to improve training; they do not reimburse
 unverifiable training claims.

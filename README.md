@@ -48,14 +48,14 @@ New corpora can use [recorded style profiles](baseline/detector/PROMPT_PROFILES.
 including anti-AI instructions and a pinned Fix Slop pass. These profiles were
 added after the first pilot and have not yet been evaluated in a fitted detector.
 The whitepaper surveys related work and defines public A detector artifacts,
-monthly public B transformation checkpoints with newer private hosted versions, training data,
+private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices
 denominated in subnet alpha.
-Hosted customer inputs are encrypted for the assigned
-miner; customers can separately share evidence with a specific validator.
-The assigned miner still sees plaintext. Customers with sensitive material
-can run the public A or monthly B reference offline on their own compute,
-without a subnet job, fee or external disclosure.
+Sensitive B jobs use an attested execution track: customers verify the
+approved application, CPU/GPU evidence and instance key before encrypting
+input. The miner retains its weights but receives no customer plaintext key.
+Ordinary hosting explicitly grants operator access and cannot be an automatic
+fallback. Customers can separately share evidence with a specific validator.
 Task A detects author and origin; Task B jointly matches the authorized writer's
 profile and evades Pangram and subnet AI detectors under the source and brief.
 Private customer jobs pursue the same goals without automatically sending text
@@ -63,15 +63,18 @@ to Pangram. External measurement requires a separate customer-authorized
 disclosure flow outside the confidential job protocol.
 B miners train and search against published A models locally, then submit
 self-scores bound to their final text and assigned panel. Validators rerun A to
-verify those scores and reproduce the candidate using B's nominated public
-package, fixed seed and compute budget. No A inference endpoint is required.
-B emission eligibility requires monthly publication and qualification, alongside
-the service gates. The reference changes only after independently confirmed
-improvement; a calendar boundary does not force a replacement. Public releases
-are downloadable by Pangram and competing miners too. See the
-[monthly release policy](whitepaper/sections/03-models.tex).
+verify those scores; no A inference endpoint or replay of B's generator is
+required. Attested entries also need a verified execution receipt binding
+benchmark output to the named private version. Attestation adds no quality
+bonus and never replaces semantic or Pangram checks.
+B transformation is the primary paid product; A is an open detector resource
+with optional hosting. There is no mandatory monthly B weight release.
+The [confidential inference design](whitepaper/sections/05-confidentiality.tex)
+specifies key release, runtime isolation and remaining hardware assumptions.
+The [investor brief](docs/confidential-transformation-brief.md) explains the
+commercial rationale and what must be demonstrated before sensitive paid launch.
 The aim is freely accessible detection competitive with Pangram, supporting
-better transformers for local use and paid hosting. Detection parity remains to be demonstrated;
+better private transformers. Detection parity remains to be demonstrated;
 running or hosting an A model still costs compute.
 Pangram is A's bootstrap quality anchor for AI-origin detection. A subnet detector
 takes over after demonstrating superiority; an improved Pangram becomes the
@@ -463,12 +466,12 @@ subnet AI detectors, in mechanism 1. Each receives
 style controls remain transformation gates and brief requirements.
 The [model plan](docs/miner-models-and-data.md) specifies starter
 classifiers and an editing adapter, with a [training-source plan](docs/miner-training-sources.md)
-covering Global Voices, PLOS and consented writing. The whitepaper now requires
-public A artifacts and monthly B checkpoints for emissions; newer B versions
-may remain private. These earlier mechanism/model notes predate that release
-policy. Miners can earn customer fees through
+covering Global Voices, PLOS and consented writing. A artifacts are public,
+B weights remain private, and miners can earn customer fees through
 [asynchronous inference](docs/paid-inference.md)
-with proposed on-chain job settlement and private execution.
+with proposed on-chain job settlement and private execution. Draft 0.14 adds
+attested serving and version receipts; older companion specifications below
+retain the ordinary transport design and point to the current whitepaper.
 Pangram is the required external benchmark. The [API funding and verification
 design](docs/pangram-oracle.md) separates the cost of independent measurement
 from the remaining trust in Pangram and human quality judgments.

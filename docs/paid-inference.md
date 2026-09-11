@@ -1,11 +1,13 @@
 # Paid asynchronous inference
 
-Publication-policy update, September 11, 2026: [whitepaper draft 0.13](../whitepaper/slop_ninja.pdf)
-adds public monthly B references alongside newer private hosted versions.
-Customers can run public A or B packages offline without a subnet job or fee.
-The hosted lifecycle below still discloses plaintext to the assigned miner;
-encryption does not prevent that miner from leaking or exploiting it. See the
-[local inference boundary](../whitepaper/sections/05-confidentiality.tex).
+Design update, September 11, 2026: Draft 0.14 makes B the primary paid product and adds attested execution for
+sensitive jobs. The customer verifies the application and CPU/GPU evidence before
+sending input to an instance key. Ordinary hosting below grants operator access
+and cannot be an automatic fallback. No monthly B weight release is required.
+The [whitepaper](../whitepaper/slop_ninja.pdf), including its
+[model policy](../whitepaper/sections/03-models.tex) and
+[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
+is authoritative over conflicting earlier details below.
 
 Proposal, updated 2026-09-10. The [whitepaper PDF](../whitepaper/slop_ninja.pdf)
 ([LaTeX source](../whitepaper/main.tex)) is the canonical design draft.

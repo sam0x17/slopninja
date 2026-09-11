@@ -1,11 +1,13 @@
 # Public A models and private B generation
 
-Publication-policy update, September 11, 2026: [whitepaper draft 0.13](../whitepaper/slop_ninja.pdf)
-extends public artifact execution to monthly B submissions. Its
-[release policy](../whitepaper/sections/03-models.tex) requires exact candidate
-replay under the nominated B package, task seed and compute budget for emissions.
-The private-only B policy and exclusions of B replay below are superseded.
-Newer private versions may still serve training tickets and paying customers.
+Design update, September 11, 2026: Draft 0.14 keeps validator execution of public A models and independent review
+of B outputs. An attested B entry additionally requires a verified private-version
+execution receipt; validators do not download or replay private B weights.
+Mandatory monthly B publication from draft 0.13 is superseded.
+The [whitepaper](../whitepaper/slop_ninja.pdf), including its
+[model policy](../whitepaper/sections/03-models.tex) and
+[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
+is authoritative over conflicting earlier details below.
 
 Status: **adopted design**, September 10, 2026. A detector artifacts are public;
 B generation remains private. The runner and revised benchmark protocol still

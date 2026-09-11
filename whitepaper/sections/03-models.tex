@@ -7,15 +7,15 @@ change their internal architectures, grammatical representations, search
 methods, and training data without changing those interfaces. Sharing a
 foundation model between tasks is permitted. A detectors must be published
 as complete immutable artifacts; an update enters a later qualification
-round. B emission eligibility requires a public checkpoint nominated for
-the monthly release cycle below. Miners may keep newer versions private
-for training and paid hosting between releases. Training recipes and
-data need not be public, subject to the rights required for each
-released artifact. Publication terms must permit free artifact access,
-local and commercial inference, redistribution, and reuse for training,
-including private models, while retaining applicable license obligations.
-A paid API alone does not qualify as publication. Hosting either task
-may charge for compute and delivery.
+round. B model weights remain private. Attested B serving uses an audited,
+measured runtime with private weights loaded as data, as specified below.
+There is no mandatory monthly B weight release. A training
+recipes and data need not be public, subject to the publication rights
+required for the resulting artifact.
+Those terms must permit free access, local inference and reuse for
+training private B models; an artifact available only behind a paid
+inference API does not qualify. Optional A hosting may still charge for
+compute and delivery.
 
 \subsection{Author and origin
 detection}\label{author-and-origin-detection}
@@ -118,12 +118,11 @@ other miners' candidates and preservation-review evidence remain restricted.
 B submits the complete self-scored probability vectors and declared scalar
 projections for every assigned A artifact, binding its hash, settings,
 exact source inputs and final candidate. Validators independently run
-those artifacts on the same inputs and compare the canonical outputs.
-For emissions, they also reproduce the candidate with B's nominated
-public artifact under the rules below. A miners need not serve inference
-calls or help calculate these benchmark scores. Mandatory training-ticket
-service and paid hosting may use newer private B versions; their outputs
-cannot substitute for the published artifact's benchmark candidate.
+those artifacts on the same inputs and compare the canonical outputs;
+they do not reproduce B's private generation process. An attested B
+service additionally supplies the execution receipt specified below,
+binding its candidate to the registered private model version. A miners
+need not serve inference calls or help calculate these benchmark scores.
 
 Train first on reviewed source/reference/brief/revision tuples. Then
 learn preferences among candidates that pass preservation review.
@@ -145,103 +144,79 @@ reader preference, and cost per accepted revision. All checkpoint
 licenses and revisions must be pinned before a training release. The
 named starters are proposals, not trained subnet products.
 
-\subsection{Monthly B publication and local reference}\label{monthly-b-release}
+\subsection{Private B versions and attested serving}\label{attested-b-models}
 
-The subnet maintains a downloadable B reference for customer-controlled
-inference. Each UTC calendar month defines a nomination cycle. Before
-the cycle begins, publish its nomination cutoff, qualification and
-comparison windows, and future activation epoch as finalized block-height
-boundaries. There is no obligation to replace a stronger incumbent merely
-because a month has passed. At launch, a qualified published starter must
-exist before advertising a local B service.
+B miners compete through private model weights and paid transformation
+service. Publish benchmark results and version commitments, without a
+scheduled release of the winning weights. Voluntary open B models may
+still exist, but neither local access to the best B model nor a monthly
+public checkpoint is promised. Model secrecy prevents direct downloading;
+it does not prevent detector providers from buying outputs, studying
+rewrites or learning similar transformations independently.
 
-\paragraph{What miners publish.}
-A B miner seeking emissions nominates one complete inference artifact
-by the cutoff. It binds weights, or an adapter and an exactly pinned
-downloadable base, tokenizer, prompts, preprocessing, author-profile
-construction, edit/search/selection code, dependencies, numerical precision,
-reference runtime and resource limits. Qualification requires the entire
-package to run offline, without a secret key, remote API, telemetry or
-undeclared state. Release rights cover every required component. A weight
-file that depends on an unpublished selection service is incomplete.
-Keep content-addressed copies and license notices in independent mirrors;
-validators verify and cache the complete artifact before task disclosure.
+An attested B offer commits to a complete inference manifest before its
+qualification tasks are disclosed. The manifest identifies private model
+content by a canonical cryptographic digest over weights, adapters,
+tokenizer, prompts and other inference data. It separately pins the
+public runner build, approved architecture and operators, profile
+construction, search/selection rules, decoding settings and resource
+limits. The approved loader computes the content digest inside the
+protected environment and authenticates every loaded page or tensor.
+It must not merely sign a hash supplied by the miner. The attestation
+chain binds this loader and its enforced configuration to the instance
+keys. Customers can thus compare version identity with benchmark records
+without downloading the model; they cannot independently inspect its
+private tensors.
 
-Exact inference-content copies receive one B model-credit entry, using
-the earliest finalized accepted commitment and canonical UID order for
-ties, as for A. Publisher metadata does not create distinct content.
-Repackaging or small weight changes do not prove an independent
-contribution; evaluate their utility under the same budget. Republishing
-the same qualifying checkpoint is allowed and supplies no novelty bonus.
+Only reviewed, reproducibly built execution code qualifies. Private
+weights and prompts are treated as data with checked formats and sizes.
+Miner-supplied executable plugins, arbitrary deserialization, tools,
+network calls, logging hooks and mutable host mounts cannot enter through
+a model package. New architectures or search implementations need a
+separately reviewed runner version. This restricts execution choices in
+the attested track; a hardware quote alone cannot make arbitrary private
+code safe. Independent security review must test malicious model data
+and inference-engine exploits as well as host attacks.
 
-\paragraph{Bind emissions to the released model.}
-The nominated artifact stays fixed for its monthly scoring cycle.
-The benchmark fixes a task seed independently of the submitter using
-the protocol domain, cycle and shared comparison index. The reference
-execution must produce exact final candidate text under the frozen
-runtime, seed and compute budget, including any search and selection.
-It may use the task's frozen public A panel locally within that budget;
-no live Pangram call or other external service is part of generation.
-B submits that candidate and its required detector evidence. Validators
-independently reproduce the text before applying the common A/Pangram,
-author-fit and semantic rules. A mismatch certified under the strict
-weighted validity rule invalidates that submission and earns zero utility,
-without substituting the replayed text. Runner disagreement or unavailable common evidence follows
-the existing whole-comparison closure policy. Miners cannot substitute
-text from stronger private weights, choose a different seed or make an
-unrecorded final edit. Pangram reports concern the resulting fixed text;
-their permitted repeat-selection policy remains explicit.
+\paragraph{Benchmark association.}
+Both ordinary and attested B entries face the same author-fit, semantic,
+Pangram and public-A scoring rules. Attestation earns no quality bonus and
+creates no third mechanism or reward pool. Ordinary entries establish
+performance of submitted outputs; their claimed private model identity
+remains unverified. To advertise benchmark results for an attested model
+version, every counted candidate must also have a valid execution receipt
+from that version's qualified runtime. Freeze the advertised version for
+the comparison; a changed model, prompt, search policy or runtime receives
+a new version and qualification.
 
-Publication and successful qualification are additional B eligibility
-conditions, alongside the existing service and recovery-deficit gates.
-Missing or incomplete publication earns no B skill for the affected
-cycle. Newly nominated weights enter a later cycle. Certification and
-native weight activation remain prospective under the actual reveal
-lag; this rule promises no retroactive clawback. Paid demand and training
-claims do not add emission credit.
+The receipt signs protocol, task and assignment context, instance and
+model identities, runtime/policy hashes, decoding/search budget, salted
+input/output commitments and the exact candidate binding. Its signing key
+is generated inside and bound to the attested instance. The runner signs
+only output it generated for that accepted input; an API that signs
+miner-supplied text does not qualify. Validators check the receipt and
+attestation chain, open the authorized benchmark commitments, rerun A,
+and conduct the existing independent review. Missing or invalid required
+receipts invalidate an attested submission; they cannot be downgraded
+after issue to ordinary submissions. Receipt-verification disagreement
+follows the common unresolved-evidence rule. A valid receipt associates
+execution with a version under the hardware and software assumptions;
+it proves neither meaning preservation nor a favorable Pangram result.
 
-\paragraph{Select the reference.}
-Compare qualifying released candidates and the incumbent on the same
-held-out source families, target-author briefs, frozen style evaluator,
-A panel and Pangram policy. Use the joint B utility in
-Equation~\ref{eq:transformation-utility}, with all preservation,
-readability and target-tone gates, under equal declared compute limits.
-Before task issue, freeze the qualification floors, aggregate ranking,
-paired source-family uncertainty test and selection correction for the
-number of challengers. Confirm a proposed replacement on independently
-held-out families. Publish aggregate evidence, supported task limits,
-resource requirements, artifact hashes and the future activation epoch
-under the existing strict weighted certificate rule. Reserve a separate
-fixed comparison budget, including generation replay and full semantic
-review, before nomination opens. The operator funds incumbent reports
-and the independent confirmation round, including when the incumbent's
-publisher has left; ordinary candidate submissions retain the miner-funded
-report policy. A retained artifact can participate as a reference without
-granting emissions to an absent or ineligible publisher. Missing comparison
-funding or evidence prevents promotion. Reference selection adds no reward pool.
+A private version can be provisioned to multiple qualified instances
+without releasing its weights to customers or validators. The model owner
+retains its original weights. Model decryption keys may be released only
+after the owner verifies the approved instance; customer input keys follow
+the separate customer-controlled release rule in
+Section~\ref{attested-customer-inference}. The model owner receives no
+customer input key, plaintext log, retained job state or output copy.
+Results from a newer private version cannot inherit an older version's
+benchmark association.
 
-Recommend the best independently confirmed released checkpoint under
-that comparison. Retain the incumbent on ties, inconclusive comparisons
-or no qualifying improvement. If the incumbent no longer qualifies,
-suspend its recommendation until a replacement qualifies; retain its
-archive and failure evidence. ``Best'' refers to evaluated public
-submissions under the stated budget, not every private service or every
-writer. Release scores cannot certify any particular customer's revision.
-
-\paragraph{Private lead and public access.}
-Miners may sell newer private versions between nomination cycles, with
-separate service-version identifiers and performance evidence. Public
-checkpoint scores do not attest which weights a hosted endpoint runs.
-At the next cutoff, a miner may nominate its improved version to compete
-for later emissions or retain it privately and continue competing with
-its older qualified artifact. The protocol rewards demonstrated public
-performance; it cannot compel disclosure of an unknown private model.
-
-Monthly releases let customers run B without disclosing their text to a
-miner. They also let Pangram, other detector providers and competing
-miners download, train against and improve those snapshots. Only
-unreleased improvements retain weight secrecy, and served outputs remain
-observable to their recipients. The economic premise is that emissions
-for released performance and revenue from newer hosted versions can
-support continuing improvement. Measure that premise; neither a durable
-private lead nor a hosted price premium is guaranteed.
+The attested version registry coalesces identical measured B content
+within the B task pool using the earliest accepted finalized commitment,
+with canonical UID order for ties. This requires the verified loader's
+digest and excludes signatures and publisher metadata. Near copies and
+ordinary private entries remain an incentive-analysis problem; differing
+hashes or receipts do not establish independent ownership. Attestation
+does not solve Sybil registration or the validator-quorum assumption.

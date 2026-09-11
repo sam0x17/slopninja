@@ -1,10 +1,13 @@
 # Mandatory A/B service evidence
 
-Publication-policy update, September 11, 2026: [whitepaper draft 0.13](../whitepaper/slop_ninja.pdf)
-requires public monthly B packages and generation replay for the separate
-emission benchmark. This transport pilot may still use a private B generator
-for training tickets; its delivery checks do not implement or replace that
-artifact benchmark. See the [release policy](../whitepaper/sections/03-models.tex).
+Design update, September 11, 2026: Draft 0.14 adds a separate attested customer path. The curator-authorized
+DATA/witness transport below must never export customer instance keys or supply
+validators with automatic customer access. It remains a training-ticket pilot,
+not an attestation implementation.
+The [whitepaper](../whitepaper/slop_ninja.pdf), including its
+[model policy](../whitepaper/sections/03-models.tex) and
+[attested customer protocol](../whitepaper/sections/05-confidentiality.tex),
+is authoritative over conflicting earlier details below.
 
 This specifies the proposed `service-evidence-v1` transport and accounting pilot
 for bounded authorized rewrite requests from A requesters to B providers.

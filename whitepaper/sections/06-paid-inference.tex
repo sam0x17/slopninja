@@ -1,38 +1,59 @@
 \section{Paid asynchronous jobs and on-chain
 coordination}\label{paid-asynchronous-jobs-and-on-chain-coordination}
 
-The launch market offers hosted A detection and B transformation jobs.
-Customers can instead run a public A artifact or the monthly B reference
-locally at their own compute cost. Hosted services sell execution,
-capacity and delivery; B miners can also offer newer private models
-between releases. The public alternative can constrain hosted prices;
-the protocol prescribes neither a discount nor a price ratio between
-A and B. Both hosted services use the alpha-denominated market and the
-same assigned-miner privacy boundary. Local inference creates no
-subnet job, per-request fee or on-chain payment.
+B transformation is the primary commercial product: author-directed
+cleanup that preserves meaning and target tone while pursuing the
+required detector objectives. Customers pay for access to competing
+private models, accepted-revision performance, convenience and qualified
+attested execution. Private weights are not released on a calendar;
+miners can retain improvements while offering newly benchmarked versions.
+A remains an open detector resource and a secondary hosted service for
+customers who prefer an API to running it themselves. The market determines
+whether A hosting is cheaper; the protocol mandates no price ratio.
 
-An offer identifies whether it serves a named public checkpoint or a
-separately benchmarked private service version. It must not imply that
-the monthly reference is the same model as a private endpoint, or that
-hosted execution hides plaintext from its operator. A customer requiring
-that boundary uses local execution in Section~\ref{local-customer-inference}.
-B jobs pursue author matching and detector evasion through local
-generation and evaluation. A private job has no verified Pangram result
+Miners earn network emissions for independently evaluated benchmark
+utility and may separately earn customer fees. These are different
+revenue sources. Customers can pay for B without receiving its weights;
+benchmark version commitments and attested receipts support that service
+claim. Hardware attestation supplies no exclusivity, guaranteed premium
+or permanent advantage against detector providers studying served outputs.
+Reader outcomes, repeat purchases and margins after confidential-compute
+costs must test the business thesis.
+
+The proposed subnet settlement transfers the quoted fee to the serving
+miner, subject to its disclosed fees and payment rules. It does not
+automatically pay a royalty to Slop Ninja Research or make customer
+revenue an emission multiplier. Any future application subscription or
+gateway fee needs explicit customer terms; none is assumed in the
+protocol's economics. Alpha-denominated demand alone establishes no
+token-price or investor-return guarantee.
+
+Offers identify ordinary or attested execution, model/version evidence
+and the accepted runtime policy. Sensitive B jobs require attestation
+under Section~\ref{attested-customer-inference}; a customer must explicitly
+choose ordinary hosting to grant the operator plaintext access. Public A
+and voluntarily published B models can run locally, without a subnet
+job or fee. No public copy of the best private B model is promised.
+
+B jobs pursue author matching and detector evasion within the selected
+execution boundary. A confidential job has no verified Pangram result
 unless the customer separately authorizes external disclosure; its
 objectives do not expand recipient access. Authorized benchmark rounds
 provide the routine external measurements under
 Section~\ref{pangram-cadence-and-parity}.
 The proposed job contract uses Subtensor's EVM to coordinate offers,
 escrow, commitments, and settlement. Inference prices are denominated in
-Slop Ninja's subnet alpha; actual model execution stays on miner hardware.
+Slop Ninja's subnet alpha; execution stays off-chain.
 Subtensor EVM guide~\cite{evm}.
 
 \subsection{Market pricing in alpha}\label{market-pricing-in-alpha}
 
 Miners publish signed offers for bounded jobs. Each offer specifies a
-total alpha price, task and service version, input/output limits,
+total alpha price, task, service version and execution mode, input/output limits,
 delivery deadline, available capacity, quote expiry, and settlement
-terms. Customers select among compatible offers using price, benchmark
+terms. Attested sensitive-job offers also bind the padded workload bucket
+and fixed response-release slot; charge the reserved job price without
+publishing content-dependent token usage. Customers select among compatible offers using price, benchmark
 performance, and delivery time. A higher-quality model or faster service
 may command a different price. There need not be one clearing price for
 every kind of inference.
@@ -54,7 +75,8 @@ other offers change.
 
 Quote discovery uses public service descriptions and the size/deadline
 information the customer chooses to reveal. Source text, reference
-writing, and the full brief remain encrypted for the selected miner.
+writing, and the full brief remain encrypted to the selected instance
+or, for explicitly ordinary hosting, its operator-controlled key.
 Obtaining competing offers does not distribute the plaintext to
 prospective bidders. If the selected miner cannot serve the bounded
 request, the job follows its rejection/refund terms; it cannot silently
@@ -86,20 +108,26 @@ The proposed lifecycle is:
 \tightlist
 \item
   \textbf{Offer and reserve.} The customer selects a miner's signed
-  offer, pins its key and job terms, and escrows the quoted alpha amount
-  for a bounded input/output.
+  offer, pins its execution mode, version and job terms, and escrows the
+  quoted alpha amount for a bounded input/output. Attested jobs verify
+  fresh instance evidence and its job key before any input disclosure;
+  failed verification permits cancellation/refund under the offer.
 \item
   \textbf{Encrypt and submit.} The customer posts the salted input
   commitment and encrypted-delivery hash, then delivers the envelope to
-  that miner.
+  the selected recipient key, including the attested instance binding
+  where required.
 \item
-  \textbf{Accept.} The miner decrypts, checks the opening and limits,
-  and accepts before the acceptance deadline. Failure to accept permits
+  \textbf{Accept.} The selected runtime decrypts, checks the opening and limits,
+  and accepts before the acceptance deadline. In attested mode this
+  occurs inside the protected application, without operator access. Failure to accept permits
   a refund.
 \item
-  \textbf{Execute and deliver.} The miner runs the private service,
+  \textbf{Execute and deliver.} The selected runtime runs the private service,
   commits the result, and makes its customer-encrypted envelope
-  available before the delivery deadline.
+  available before the delivery deadline. Attested execution also returns
+  the bound receipt from its protected signing key; the host only relays
+  the ciphertext and permitted settlement metadata.
 \item
   \textbf{Acknowledge or expire.} A customer acknowledgment releases
   payment. If there is no timely acceptance or delivery claim, the
