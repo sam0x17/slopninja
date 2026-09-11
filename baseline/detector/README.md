@@ -30,8 +30,10 @@ plot summaries and reserves Phi-4 for an unseen-generator Test. Its generation,
 selection and comparison rules are frozen before fitting; v4 remains the latest
 measured and published detector.
 An early [Train-only overlap audit](NARRATIVE_GENERATION_QA.md) found substantial
-rewriting in Qwen's requested copyedits. It records a training-data limitation;
-no v5 detector has been evaluated yet.
+rewriting in Qwen's requested copyedits. The [clarified main target](ENCODER_NARRATIVE_V5_TARGET.md)
+is fully model-written prose deliberately steered away from the model's usual
+voice. Selection now prioritizes human-versus-model-draft detection, with explicit
+writing-profile slices. No v5 detector has been evaluated yet.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,

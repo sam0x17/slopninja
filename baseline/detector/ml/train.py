@@ -54,6 +54,28 @@ def source_origin_weights(rows):
     return {r["id"]: scale / counts[r["source_group"], r["label"]] for r in rows}
 
 
+def human_model_metrics(logits, labels):
+    """Evaluate complete model drafts against humans; mixed examples are auxiliary."""
+    labels = torch.tensor(labels, dtype=torch.long)
+    keep = labels != 2
+    selected = logits.double()[keep]
+    truth = labels[keep]
+    counts = [int((truth == i).sum()) for i in range(2)]
+    if not all(counts):
+        raise ValueError("human/model selection requires both human and model-only examples")
+    # Log-sum-exp preserves the existing P(AI) = P(model_only) + P(mixed) score.
+    binary_logits = torch.stack((selected[:, 0], torch.logsumexp(selected[:, 1:], dim=1)), dim=1)
+    probabilities = torch.softmax(binary_logits, dim=1)
+    predicted = (probabilities[:, 1] > 0.5).long()
+    confusion = [[int(((truth == i) & (predicted == j)).sum()) for j in range(2)] for i in range(2)]
+    return {"count": len(truth), "class_counts": counts, "excluded_mixed_rows": int((~keep).sum()),
+            "log_loss": float(torch.nn.functional.cross_entropy(binary_logits, truth)),
+            "binary_brier": float(((probabilities[:, 1] - truth) ** 2).mean()),
+            "accuracy_at_half": float((truth == predicted).double().mean()),
+            "confusion_true_rows_predicted_columns": confusion,
+            "recall_at_half": [confusion[i][i] / counts[i] for i in range(2)]}
+
+
 def validate_data_rights(path, shard_paths, partitions):
     """Check the Rust admission handoff before fitting; never infer data rights here."""
     required = {(row["id"], row["hash"]) for rows in partitions.values()
@@ -92,7 +114,9 @@ def main():
     p.add_argument("--class-weights", choices=["none", "inverse_frequency"], default="none")
     p.add_argument("--sample-weighting", choices=["none", "source_origin"], default="none")
     p.add_argument("--require-class-coverage", action="store_true",
-                   help="Select only epochs with nonzero Development recall for each origin")
+                   help="Require nonzero Development recall for each class in the selected objective")
+    p.add_argument("--selection-objective", choices=["three_class", "human_model"], default="three_class",
+                   help="Choose uncalibrated Development three-class NLL or human-versus-model-draft binary NLL")
     p.add_argument("--seed", type=int, default=17)
     p.add_argument("--freeze-encoder", action="store_true", help="Train the classification layers only as a control")
     p.add_argument("--training-whitespace-view", type=Path,
@@ -176,21 +200,31 @@ def main():
             development = metrics(development_logits, [r["label"] for r in partitions["development"]])
             summary = {"epoch": epoch, "training_loss": loss_total / len(order), "development": development,
                        "elapsed_seconds": time.monotonic() - epoch_start}
-            eligible = not args.require_class_coverage or all(development["per_class"][label]["recall"] > 0 for label in LABELS)
+            if args.selection_objective == "human_model":
+                selection_metrics = human_model_metrics(development_logits, [r["label"] for r in partitions["development"]])
+                summary["development_human_model"] = selection_metrics
+                eligible = not args.require_class_coverage or all(recall > 0 for recall in selection_metrics["recall_at_half"])
+                selection_loss = selection_metrics["log_loss"]
+            else:
+                eligible = not args.require_class_coverage or all(development["per_class"][label]["recall"] > 0 for label in LABELS)
+                selection_loss = development["log_loss"]
+            summary["selection_objective"] = args.selection_objective
+            summary["selection_loss"] = selection_loss
             summary["selection_eligible"] = eligible
             if alternate:
                 summary["whitespace_view_rows"] = sum(use_alternate(r["source_group"], epoch) for r in order)
             epochs.append(summary)
             print(json.dumps(summary), flush=True)
-            if eligible and development["log_loss"] < best_loss:
-                best_loss = development["log_loss"]
+            if eligible and selection_loss < best_loss:
+                best_loss = selection_loss
                 best_epoch = epoch
                 save_model(model, selected)
         # Model choice is complete before calibration. Final-test input has no CLI argument here.
         if best_epoch is None:
             failure_path = args.output.parent / (args.output.name + "-no-eligible-epoch.json")
             failure_path.write_text(json.dumps({"status":"no_eligible_epoch","epoch_history":epochs,
-                "criterion":"nonzero Development recall for every origin; then minimum NLL",
+                "criterion":"nonzero Development recall for every class in the selected objective; then minimum NLL",
+                "selection_objective":args.selection_objective,
                 "final_test_opened":False}, indent=2) + "\n")
             raise ValueError(f"no epoch met class coverage; diagnostic retained at {failure_path}")
         load_model(model, selected, strict=True, device=args.device)
@@ -218,9 +252,11 @@ def main():
                                        for evidence in sorted({r["evidence"] for r in rows})}
                                 for name, rows in partitions.items()},
             "partition_sha256": {name: sha256(getattr(args, f"{name}_jsonl")) for name in partitions},
-            "selection_metric": "development_unweighted_log_loss", "selected_epoch": best_epoch,
-            "unrestricted_best_development_epoch": min(epochs, key=lambda e: e["development"]["log_loss"])["epoch"],
-            "requires_nonzero_development_class_recall":args.require_class_coverage,
+            "selection_metric": "development_unweighted_log_loss" if args.selection_objective == "three_class" else "development_human_model_binary_log_loss",
+            "selection_objective":args.selection_objective,"selected_epoch": best_epoch,
+            "unrestricted_best_development_epoch": min(epochs, key=lambda e: e["selection_loss"])["epoch"],
+            "requires_nonzero_development_class_recall":args.require_class_coverage and args.selection_objective == "three_class",
+            "requires_nonzero_development_binary_recall":args.require_class_coverage and args.selection_objective == "human_model",
             "epoch_history": epochs, "elapsed_seconds": time.monotonic() - started,
             "final_test_opened": False,
         }

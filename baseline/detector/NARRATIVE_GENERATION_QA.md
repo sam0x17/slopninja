@@ -1,5 +1,10 @@
 # Narrative generation: editing-strength snapshot
 
+The user subsequently clarified that fully model-written, strongly style-steered
+prose is the main target. The [v5 amendment](ENCODER_NARRATIVE_V5_TARGET.md) applies
+that priority to selection and evaluation. The measurements below describe the
+auxiliary edit examples; lack of light assistance is not a main-target gap.
+
 Measured during the running v5 Qwen campaign, before any v5 fitting or detector
 scores. This is a snapshot of completed Train outputs, including successful
 siblings of families that may later fail complete-pair admission. It is not the

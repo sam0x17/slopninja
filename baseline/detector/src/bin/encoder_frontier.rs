@@ -28,6 +28,8 @@ struct Args {
     learning_rates: Vec<f64>,
     #[arg(long, default_value_t = 5, value_parser = clap::value_parser!(u32).range(1..=20))]
     epochs: u32,
+    #[arg(long, default_value = "three_class", value_parser = ["three_class", "human_model"])]
+    selection_objective: String,
 }
 
 fn main() -> Result<()> {
@@ -75,7 +77,8 @@ fn main() -> Result<()> {
         "schema":"slop_ninja_encoder_frontier_v1",
         "learning_rates":args.learning_rates,"epochs":args.epochs,"batch_size":4,"seed":17,
         "sample_weighting":"source_origin","class_weights":"none",
-        "selection":"positive Development recall for every origin, then minimum uncalibrated Development log loss; earlier epoch and lower learning rate break exact ties",
+        "selection_objective":args.selection_objective,
+        "selection":"positive Development recall for each class in the selected objective, then minimum uncalibrated Development objective log loss; earlier epoch and lower learning rate break exact ties",
         "partition_sha256":hashes,"checkpoint_pin_sha256":checkpoint_hash,
         "whitespace_train_sha256":sha256(fs::read(&args.whitespace_train)?),
         "data_rights_sha256":sha256(fs::read(args.shards.join("data_rights.json"))?),
@@ -132,6 +135,12 @@ fn main() -> Result<()> {
             .env("HF_HUB_OFFLINE", "1")
             .env("TRANSFORMERS_OFFLINE", "1")
             .env("PYTHONUNBUFFERED", "1");
+        // The original frozen v4 runner predates this optional argument.
+        if args.selection_objective != "three_class" {
+            command
+                .arg("--selection-objective")
+                .arg(&args.selection_objective);
+        }
         for split in ["train", "development", "calibration"] {
             command
                 .arg(format!("--{split}-jsonl"))
@@ -166,9 +175,18 @@ fn main() -> Result<()> {
         }
         let training: Value = serde_json::from_slice(&fs::read(output.join("training.json"))?)?;
         let manifest: Value = serde_json::from_slice(&fs::read(output.join("manifest.json"))?)?;
+        let coverage_key = if args.selection_objective == "human_model" {
+            "requires_nonzero_development_binary_recall"
+        } else {
+            "requires_nonzero_development_class_recall"
+        };
         ensure!(
             training["final_test_opened"] == false
-                && training["requires_nonzero_development_class_recall"] == true,
+                && training[coverage_key] == true
+                && training["selection_objective"]
+                    .as_str()
+                    .unwrap_or("three_class")
+                    == args.selection_objective,
             "Unexpected training selection contract"
         );
         for split in ["train", "development", "calibration"] {
@@ -196,7 +214,12 @@ fn main() -> Result<()> {
             epoch["selection_eligible"] == true,
             "Selected epoch was ineligible"
         );
-        let loss = epoch["development"]["log_loss"]
+        let development_key = if args.selection_objective == "human_model" {
+            "development_human_model"
+        } else {
+            "development"
+        };
+        let loss = epoch[development_key]["log_loss"]
             .as_f64()
             .context("Missing Development loss")?;
         ensure!(loss.is_finite(), "Non-finite Development loss");
@@ -206,15 +229,20 @@ fn main() -> Result<()> {
             .to_owned();
         candidates.push(json!({"name":name,"learning_rate":rate,"eligible":true,
             "artifact_id":artifact_id,"selected_epoch":training["selected_epoch"],
+            "selection_objective":args.selection_objective,
             "development_uncalibrated":epoch["development"],
+            "development_selection_metrics":epoch[development_key],
             "training_sha256":sha256(fs::read(output.join("training.json"))?)}));
         if selected.as_ref().is_none_or(|(best, _, _, _)| loss < *best) {
             selected = Some((loss, rate, output, artifact_id));
         }
     }
-    let winner = selected.map(|(loss, rate, path, id)| json!({
-        "path":path,"artifact_id":id,"development_uncalibrated_log_loss":loss,"learning_rate":rate
-    }));
+    let winner = selected.map(|(loss, rate, path, id)| {
+        json!({
+            "path":path,"artifact_id":id,"selection_objective":args.selection_objective,
+            "development_uncalibrated_log_loss":loss,"learning_rate":rate
+        })
+    });
     let report = json!({"schema":"slop_ninja_encoder_frontier_selection_v1",
         "protocol_sha256":sha256(fs::read(args.output_dir.join("protocol.json"))?),
         "candidates":candidates,"selected":winner,"final_test_opened":false,

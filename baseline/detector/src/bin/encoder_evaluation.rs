@@ -332,19 +332,31 @@ fn main() -> Result<()> {
                 "Evaluation overlaps the model's calibration IDs, families or exact texts"
             );
             let mut providers = BTreeMap::<String, BTreeSet<String>>::new();
+            let mut profiles = BTreeMap::<String, BTreeSet<String>>::new();
             for record in &selected {
                 if let Some(generation) = &record.generation {
                     providers
                         .entry(record.source_group.clone())
                         .or_default()
                         .insert(generation.model_revision.clone());
+                    profiles
+                        .entry(record.source_group.clone())
+                        .or_default()
+                        .insert(
+                            generation
+                                .prompt_profile
+                                .as_ref()
+                                .map(|p| p.profile.id.clone())
+                                .unwrap_or_else(|| "legacy-unprofiled".into()),
+                        );
                 }
             }
             ensure!(
-                selected
-                    .iter()
-                    .all(|r| providers.get(&r.source_group).is_some_and(|p| p.len() == 1)),
-                "Evaluation requires one declared generator pair per source family"
+                selected.iter().all(|r| providers
+                    .get(&r.source_group)
+                    .is_some_and(|p| p.len() == 1)
+                    && profiles.get(&r.source_group).is_some_and(|p| p.len() == 1)),
+                "Evaluation requires one declared generator/profile pair per source family"
             );
             fs::create_dir_all(&args.output_dir)?;
             save(
@@ -360,22 +372,26 @@ fn main() -> Result<()> {
             for row in &rows {
                 let record = by_id[row.id.as_str()];
                 let provider = providers[&record.source_group].iter().next().unwrap();
+                let profile = profiles[&record.source_group].iter().next().unwrap();
                 for key in [
                     format!("provider:{provider}"),
                     format!("collection:{}", record.source.collection),
+                    format!("profile:{profile}"),
+                    format!("provider-profile:{provider}|{profile}"),
                 ] {
                     slices.entry(key).or_default().push(row.clone());
                 }
             }
-            let slice_reports = slices
-                .into_iter()
-                .map(|(key, rows)| {
-                    Ok((
-                        key,
-                        metrics::evaluate_probability_rows(artifact_id, &rows, prior, &points)?,
-                    ))
-                })
-                .collect::<Result<BTreeMap<_, _>>>()?;
+            let mut slice_reports = BTreeMap::new();
+            let mut binary_slice_reports = BTreeMap::new();
+            for (key, slice_rows) in slices {
+                binary_slice_reports
+                    .insert(key.clone(), metrics::summarize_human_model(&slice_rows)?);
+                slice_reports.insert(
+                    key,
+                    metrics::evaluate_probability_rows(artifact_id, &slice_rows, prior, &points)?,
+                );
+            }
             let report = metrics::evaluate_probability_rows(artifact_id, &rows, prior, &points)?;
             let tolerance = manifest["reference_runtime"]["probability_absolute_tolerance"]
                 .as_f64()
@@ -399,9 +415,11 @@ fn main() -> Result<()> {
                 "records_sha256":records_hash,"split":selected_split,
                 "thresholds_sha256":sha256(fs::read(thresholds)?),"effective_training_class_prior":prior,
                 "final_test_opened":matches!(split, Partition::Test),"report":report,"slices":slice_reports,
+                "human_model":metrics::summarize_human_model(&rows)?,"human_model_slices":binary_slice_reports,
                 "near_cutoffs":near_cutoffs,
                 "notes":["Each detector retains its own original Calibration shard and frozen temperature; threshold files must exist before evaluation.",
                     "Provider slices include the corresponding human roots selected with that provider's draft/edit pair.",
+                    "Human/model metrics exclude mixed-origin rows and use P(model_only)+P(mixed); accuracy_at_half is diagnostic, separate from frozen operating thresholds. Profile slices include the corresponding human roots; legacy rows retain an explicit unprofiled category.",
                     "Effective training-prior control accounts for source-origin or inverse-frequency loss weights.",
                     "Different frozen operating points do not prove superiority at matched population FPR.",
                     "Cutoff proximity uses twice the per-class reference-vector tolerance as a diagnostic margin, not a proven bound on cross-platform drift for every text."]}),

@@ -19,6 +19,14 @@ struct Args {
 }
 
 fn paired(before: &[ProbabilityRow], after: &[ProbabilityRow]) -> Result<Value> {
+    paired_objective(before, after, false)
+}
+
+fn paired_objective(
+    before: &[ProbabilityRow],
+    after: &[ProbabilityRow],
+    binary: bool,
+) -> Result<Value> {
     metrics::summarize(before)?;
     metrics::summarize(after)?;
     ensure!(before.len() == after.len(), "Prediction counts differ");
@@ -31,13 +39,21 @@ fn paired(before: &[ProbabilityRow], after: &[ProbabilityRow]) -> Result<Value> 
             a.group == b.group && a.label == b.label,
             "Paired family or origin label differs"
         );
-        let ma = metrics::summarize(std::slice::from_ref(*a))?;
-        let mb = metrics::summarize(std::slice::from_ref(*b))?;
-        let delta = [
-            mb.log_loss - ma.log_loss,
-            mb.multiclass_brier - ma.multiclass_brier,
-            mb.accuracy - ma.accuracy,
-        ];
+        if binary && a.label == 2 {
+            continue;
+        }
+        let score = |row: &ProbabilityRow| -> Result<[f64; 3]> {
+            if binary {
+                let m = metrics::summarize_human_model(std::slice::from_ref(row))?
+                    .context("Missing human/model row")?;
+                Ok([m.log_loss, m.binary_brier, m.accuracy_at_half])
+            } else {
+                let m = metrics::summarize(std::slice::from_ref(row))?;
+                Ok([m.log_loss, m.multiclass_brier, m.accuracy])
+            }
+        };
+        let (ma, mb) = (score(a)?, score(b)?);
+        let delta = std::array::from_fn::<_, 3, _>(|i| mb[i] - ma[i]);
         let (sum, n) = groups.entry(&a.group).or_default();
         for i in 0..3 {
             sum[i] += delta[i];
@@ -45,6 +61,10 @@ fn paired(before: &[ProbabilityRow], after: &[ProbabilityRow]) -> Result<Value> 
         *n += 1;
     }
     let values: Vec<_> = groups.into_values().collect();
+    ensure!(
+        !values.is_empty(),
+        "No rows for the selected comparison objective"
+    );
     let mean = |sample: &[([f64; 3], usize)]| -> [f64; 3] {
         let n = sample.iter().map(|v| v.1).sum::<usize>() as f64;
         std::array::from_fn(|i| sample.iter().map(|v| v.0[i]).sum::<f64>() / n)
@@ -71,10 +91,12 @@ fn paired(before: &[ProbabilityRow], after: &[ProbabilityRow]) -> Result<Value> 
         }
     }
     let mut deltas = serde_json::Map::new();
-    for (i, name) in ["log_loss", "multiclass_brier", "accuracy"]
-        .iter()
-        .enumerate()
-    {
+    let names = if binary {
+        ["log_loss", "binary_brier", "accuracy_at_half"]
+    } else {
+        ["log_loss", "multiclass_brier", "accuracy"]
+    };
+    for (i, name) in names.iter().enumerate() {
         draws[i].sort_by(f64::total_cmp);
         let (interval, status) = if draws[i].is_empty() {
             (None, "insufficient_source_groups")
@@ -94,7 +116,8 @@ fn paired(before: &[ProbabilityRow], after: &[ProbabilityRow]) -> Result<Value> 
         );
     }
     Ok(
-        json!({"rows":before.len(),"source_groups":values.len(),"bootstrap_replicates":draws[0].len(),
+        json!({"rows":values.iter().map(|v| v.1).sum::<usize>(),"source_groups":values.len(),"bootstrap_replicates":draws[0].len(),
+        "objective":if binary { "human_model" } else { "three_class" },
         "bootstrap_seed":"243f6a8885a308d3","deltas":deltas,
         "method":"Sample complete source families with replacement, using the same draw for both detectors; average all sampled rows. Sorted IDs/groups and a fixed SplitMix64 stream make the calculation reproducible.",
         "limits":"Intervals assume independent source families and do not cover arbitrary new registers, generators or pretraining contamination. Degenerate intervals are omitted. Different frozen thresholds do not establish matched-FPR superiority."}),
@@ -134,10 +157,12 @@ fn main() -> Result<()> {
     let before: Vec<ProbabilityRow> = serde_json::from_value(a["report"]["predictions"].clone())?;
     let after: Vec<ProbabilityRow> = serde_json::from_value(b["report"]["predictions"].clone())?;
     let comparison = paired(&before, &after)?;
+    let human_model = paired_objective(&before, &after, true)?;
     let report = json!({"schema":"slop_ninja_paired_encoder_comparison_v1",
         "baseline_report_sha256":sha256(baseline_bytes),"candidate_report_sha256":sha256(candidate_bytes),
         "baseline_artifact_id":a["artifact_id"],"candidate_artifact_id":b["artifact_id"],
         "records_sha256":a["records_sha256"],"split":a["split"],"comparison":comparison,
+        "human_model_comparison":human_model,
         "baseline_metrics":a["report"]["model"],"candidate_metrics":b["report"]["model"],
         "baseline_operating_points":a["report"]["operating_points"],"candidate_operating_points":b["report"]["operating_points"],
         "baseline_near_cutoffs":a["near_cutoffs"],"candidate_near_cutoffs":b["near_cutoffs"]});
@@ -170,6 +195,16 @@ mod tests {
             })
             .collect();
         let result = paired(&before, &after).unwrap();
+        let binary = paired_objective(&before, &after, true).unwrap();
+        assert_eq!(binary["rows"], 4);
+        assert!(
+            (binary["deltas"]["log_loss"]["candidate_minus_baseline"]
+                .as_f64()
+                .unwrap()
+                - ((0.6_f64 / 0.8).ln() + (0.8_f64 / 0.9).ln()) / 2.0)
+                .abs()
+                < 1e-12
+        );
         assert!(
             (result["deltas"]["log_loss"]["candidate_minus_baseline"]
                 .as_f64()

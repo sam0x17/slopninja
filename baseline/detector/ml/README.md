@@ -77,6 +77,15 @@ mixture without resampling or training class weights. Its class counts, priors
 and any boundary optimum are recorded. This does not establish calibrated
 probabilities for a different deployment population.
 
+`--selection-objective human_model` changes checkpoint selection to binary
+Development log loss on human and fully model-written rows, using the combined
+model/mixed probability. Mixed-origin rows still contribute to training and
+calibration but do not enter this selection metric. With `--require-class-coverage`,
+both binary classes need positive recall at the fixed 0.5 diagnostic boundary.
+The default `three_class` objective retains the original selection rule. The
+[v5 target amendment](../ENCODER_NARRATIVE_V5_TARGET.md) declares the new objective
+before fitting and keeps the final operating thresholds separate from this gate.
+
 `--class-weights inverse_frequency` computes weights from training counts only.
 The default is unweighted training. `--freeze-encoder` is a classification-head
 control. `--synthetic-smoke-only` explicitly marks artifacts trained using

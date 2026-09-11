@@ -48,6 +48,56 @@ pub struct MetricSummary {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct HumanModelSummary {
+    pub rows: usize,
+    pub source_groups: usize,
+    pub human_rows: usize,
+    pub model_rows: usize,
+    pub excluded_mixed_rows: usize,
+    pub log_loss: f64,
+    /// Mean squared error of P(model_only) + P(mixed), with range [0, 1].
+    pub binary_brier: f64,
+    pub accuracy_at_half: f64,
+}
+
+/// Human versus fully model-written examples, using the existing AI score.
+/// Mixed-origin labels remain in the separate three-class report.
+pub fn summarize_human_model(rows: &[ProbabilityRow]) -> Result<Option<HumanModelSummary>> {
+    validate_rows(rows)?;
+    let selected: Vec<_> = rows.iter().filter(|r| r.label != 2).collect();
+    if selected.is_empty() {
+        return Ok(None);
+    }
+    let mut loss = 0.0;
+    let mut brier = 0.0;
+    let mut correct = 0;
+    for row in &selected {
+        let ai = (row.probabilities[1] + row.probabilities[2]).clamp(0.0, 1.0);
+        let truth = row.label == 1;
+        loss -= if truth { ai } else { row.probabilities[0] }
+            .max(1e-15)
+            .ln();
+        brier += (ai - f64::from(truth)).powi(2);
+        correct += usize::from((ai > 0.5) == truth);
+    }
+    let n = selected.len();
+    Ok(Some(HumanModelSummary {
+        rows: n,
+        source_groups: selected
+            .iter()
+            .map(|r| &r.group)
+            .collect::<BTreeSet<_>>()
+            .len(),
+        human_rows: selected.iter().filter(|r| r.label == 0).count(),
+        model_rows: selected.iter().filter(|r| r.label == 1).count(),
+        excluded_mixed_rows: rows.len() - n,
+        log_loss: loss / n as f64,
+        binary_brier: brier / n as f64,
+        accuracy_at_half: correct as f64 / n as f64,
+    }))
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct OperatingPoint {
     pub target_human_false_positive_rate: f64,
     pub threshold: f64,
@@ -415,6 +465,41 @@ fn rate_estimate(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn human_model_objective_ignores_mixed_rows_and_combines_ai_probabilities() {
+        let rows: Vec<_> = [[0.8, 0.1, 0.1], [0.1, 0.2, 0.7], [0.999, 0.0005, 0.0005]]
+            .into_iter()
+            .enumerate()
+            .map(|(label, probabilities)| ProbabilityRow {
+                id: format!("synthetic-{label}"),
+                group: "synthetic-family".into(),
+                label,
+                probabilities,
+            })
+            .collect();
+        let metric = summarize_human_model(&rows).unwrap().unwrap();
+        assert_eq!(
+            (
+                metric.rows,
+                metric.human_rows,
+                metric.model_rows,
+                metric.excluded_mixed_rows
+            ),
+            (2, 1, 1, 1)
+        );
+        assert!((metric.log_loss + (0.8_f64.ln() + 0.9_f64.ln()) / 2.0).abs() < 1e-12);
+        assert!((metric.binary_brier - 0.025).abs() < 1e-12);
+        assert_eq!(metric.accuracy_at_half, 1.0);
+        let mut changed = rows.clone();
+        changed[1].probabilities = [0.1, 0.8, 0.1];
+        changed[2].probabilities = [0.1, 0.1, 0.8];
+        assert!(
+            (summarize_human_model(&changed).unwrap().unwrap().log_loss - metric.log_loss).abs()
+                < 1e-12
+        );
+        assert!(summarize_human_model(&rows[2..]).unwrap().is_none());
+    }
 
     #[test]
     fn threshold_ties_and_small_calibration_sets_do_not_invent_fpr_guarantees() {

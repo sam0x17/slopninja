@@ -1,5 +1,10 @@
 # Narrative detector experiment v5
 
+The [target clarification](ENCODER_NARRATIVE_V5_TARGET.md) supersedes this initial
+selection objective and primary comparison. It was recorded before fitting or
+detector predictions. The running generation campaign retains this original
+protocol's frozen snapshot and prompts.
+
 Declared before narrative generation, fitting or new detector predictions.
 The experiment adds historical narrative summaries and tests transfer to a
 generator absent from fitting. It also reduces the learning rates and maximum
