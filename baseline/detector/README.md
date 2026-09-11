@@ -29,6 +29,9 @@ The [v5 narrative experiment](ENCODER_NARRATIVE_V5.md) adds 289 admitted histori
 plot summaries and reserves Phi-4 for an unseen-generator Test. Its generation,
 selection and comparison rules are frozen before fitting; v4 remains the latest
 measured and published detector.
+An early [Train-only overlap audit](NARRATIVE_GENERATION_QA.md) found substantial
+rewriting in Qwen's requested copyedits. It records a training-data limitation;
+no v5 detector has been evaluated yet.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
