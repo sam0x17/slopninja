@@ -45,6 +45,9 @@ DeepSeek style steering, a Fix Slop pass and a DeepSeek-to-Qwen rewrite. V4
 detected all four synthetic passages, but the rewrites introduced meaning or
 tone problems. Both same-model and cross-model revisions retain model-only
 lineage; these examples remain outside the frozen v5 experiment.
+The [revision-chain generator](MODEL_REVISIONS.md) now records this workflow
+directly, retaining every ancestor and a model-only label through successive
+rewrites by the same or different models.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,

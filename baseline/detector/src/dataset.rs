@@ -45,6 +45,7 @@ pub enum Evidence {
     HistoricalProxy,
     DocumentedHuman,
     RecordedModelGeneration,
+    RecordedModelRevision,
     ModelEditOfHistoricalProxy,
     RecordedMixedWorkflow,
     SyntheticFixture,
@@ -194,6 +195,14 @@ impl OriginRecord {
                         .generation
                         .as_ref()
                         .is_some_and(|g| g.operation == "draft")
+            }
+            Evidence::RecordedModelRevision => {
+                self.origin == Origin::ModelOnly
+                    && self.parent_id.is_some()
+                    && self
+                        .generation
+                        .as_ref()
+                        .is_some_and(|g| g.operation == "revise")
             }
             Evidence::ModelEditOfHistoricalProxy => {
                 self.origin == Origin::Mixed
@@ -382,6 +391,17 @@ pub fn validate_records(records: &[OriginRecord]) -> Result<()> {
                 ensure!(
                     parent.evidence == Evidence::HistoricalProxy,
                     "{}: incorrect historical parent",
+                    record.id
+                );
+            }
+            if record.evidence == Evidence::RecordedModelRevision {
+                ensure!(
+                    parent.origin == Origin::ModelOnly
+                        && matches!(
+                            parent.evidence,
+                            Evidence::RecordedModelGeneration | Evidence::RecordedModelRevision
+                        ),
+                    "{}: model-only revision requires a recorded model-only parent",
                     record.id
                 );
             }

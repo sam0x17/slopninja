@@ -253,7 +253,9 @@ fn validate_header(header: &FeatureHeader) -> Result<()> {
     );
     let compatible = match header.evidence {
         Evidence::HistoricalProxy | Evidence::DocumentedHuman => header.origin == Origin::HumanOnly,
-        Evidence::RecordedModelGeneration => header.origin == Origin::ModelOnly,
+        Evidence::RecordedModelGeneration | Evidence::RecordedModelRevision => {
+            header.origin == Origin::ModelOnly
+        }
         Evidence::ModelEditOfHistoricalProxy => header.origin == Origin::Mixed,
         Evidence::RecordedMixedWorkflow | Evidence::SyntheticFixture | Evidence::Unknown => false,
     };
