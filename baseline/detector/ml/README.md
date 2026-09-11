@@ -152,6 +152,15 @@ generator/register slices and paired Pangram comparisons remain part of the
 larger Rust evaluation stage. Reusing a test to guide another model choice
 requires retiring that test and reserving fresh confirmation data.
 
+## Data release terms
+
+When training on the Wikipedia ShareAlike lane, pass `--data-rights` with the
+`data_rights.json` file from Rust's shard export. The trainer verifies its shard
+hashes and source-notice coverage, then bundles the attribution and declared
+fine-tuned weight license. Omitting or mismatching this file stops fitting.
+The base checkpoint's license remains in `UPSTREAM_LICENSE` for that lane.
+See the [distribution policy](../SHARE_ALIKE_POLICY.md).
+
 ## Runtime spike
 
 ```sh

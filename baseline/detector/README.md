@@ -13,9 +13,11 @@ as a separate experimental release, with all comparisons and exclusions reported
 The [word/grammar development probe](LINEAR_STYLE_RESULTS.md) recovered mixed
 predictions with smaller optimization steps and independent coordinate budgets.
 The [standard-corpus plan](STANDARD_CORPUS.md) describes admitted HC3 sources and
-reusable Pangram annotation workflow. The first [Pangram comparison](PANGRAM_CORPUS_RESULTS.md)
+the reusable Pangram annotation workflow. The first [Pangram comparison](PANGRAM_CORPUS_RESULTS.md)
 flagged all 38 model/mixed Development texts, compared with 20 for the encoder.
 Three passes had identical document fractions; auxiliary window scores varied.
+The [next corpus expansion](CORPUS_EXPANSION_V4.md) adds historical encyclopedia
+sources, prepares narrative summaries and introduces OLMo as a third generator.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,

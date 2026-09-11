@@ -11,6 +11,9 @@ SHA256 `178b2c9ab55a74107fb6792b72a5d69e369a9bd103b17fa3343caeaac989c23d`.
 Keep the frozen source-family splits. Select one representative from each of the
 243 families by ascending SHA256 of record ID, independent of text scores. Keep
 all other admitted excerpts in the source archive and record this selection.
+The selected corpus hash is
+`4481783ee88a43df8369988f811a854b67b690a73212297588a2c8502fb9afb2`:
+184 Train, 21 Development, 21 Calibration and 17 Test families.
 
 Produce one independently composed, source-conditioned draft and one light to
 moderate copyedit per representative. Keep the encyclopedia register for these
@@ -36,6 +39,12 @@ including the 4.11 GB weight file's SHA256. The local server uses the existing
 MLX environment, disables prompt caching and serves one request at a time.
 Generation uses temperature 0.7 and a 1,200-token completion cap, with complete
 requests, model settings and raw responses retained locally.
+
+The first run requests 486 outputs, two per selected family. Its immutable local
+plan and response archive are under
+`data/baseline-detector/corpus-expansion-v4/olmo-hc3/`. A finished summary is
+required before training. The current 80-word output floor can exclude otherwise
+usable edits of short sources; retain these failures when assessing corpus yield.
 
 The compatibility probe completed one synthetic 100-word passage, 118 generated
 tokens, in 1.38 seconds including prompt processing. This verifies that the
