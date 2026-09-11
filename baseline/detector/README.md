@@ -13,7 +13,9 @@ as a separate experimental release, with all comparisons and exclusions reported
 The [word/grammar development probe](LINEAR_STYLE_RESULTS.md) recovered mixed
 predictions with smaller optimization steps and independent coordinate budgets.
 The [standard-corpus plan](STANDARD_CORPUS.md) describes the staged HC3 subset and
-reusable Pangram annotation workflow. Preparation has made no paid provider calls.
+reusable Pangram annotation workflow. The first [Pangram comparison](PANGRAM_CORPUS_RESULTS.md)
+flagged all 38 model/mixed Development texts, compared with 20 for the encoder.
+Three passes had identical document fractions; auxiliary window scores varied.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,

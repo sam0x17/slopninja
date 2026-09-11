@@ -86,8 +86,11 @@ external-evaluation permission, deduplicates exact inputs while retaining every
 source label, and writes Pangram 4 bulk payloads plus a costed manifest. Each
 planned repeat has a distinct request ID. It makes no network calls and reads no
 API key. Its archived corpus and request files contain text and belong in ignored
-`data/`. Submission, receipt reconciliation and annotation import remain to be
-implemented for bulk jobs; the root CLI has an existing realtime corpus scorer.
+`data/`. The Rust `pangram_bulk` command now submits against a cumulative local
+budget, archives receipts, resumes collection and reconciles every result.
+It refuses to repeat an existing or uncertain submission. `compare_pangram`
+compares the annotated Development corpus with the frozen local models;
+`bulk_repeatability` compares the three complete observations for every input.
 
 ```sh
 cargo run --release --manifest-path baseline/detector/Cargo.toml --bin annotation_plan -- \
@@ -103,8 +106,10 @@ A read-only catalog request confirmed `pangram-4` access for the available key.
 
 This prepares the exact development corpus as an API rehearsal. It is
 already used for model selection and cannot provide fresh confirmation. The
-separate word/grammar probe remains free of provider calls. No API spending or
-annotation publication has occurred in this preparation step.
+separate word/grammar probe remains free of provider calls. With subsequent user
+authorization, all 57 documents received three provider observations for an
+estimated $21.12. See [results and limits](PANGRAM_CORPUS_RESULTS.md). Raw provider
+annotations remain local.
 
 ## Local standard-dataset staging
 
@@ -129,3 +134,26 @@ cargo run --release --manifest-path baseline/detector/Cargo.toml --bin stage_hc3
 
 The staging command requires a new directory, bounds downloads, archives exact
 bytes and records hashes. It does not execute the upstream dataset loader.
+
+## Historical-lineage review
+
+`resolve_hc3` used article titles embedded in the questions to review a fixed
+100-row sample, ordered by SHA256 of the question. It retrieved each article's
+last revision at or before 2022-11-01 and required the whole normalized answer
+to occur both in the rendered lead and in historical wikitext after conservative
+markup removal. Templates are not expanded for the literal match, preventing a
+current template from supplying the only evidence of historical wording.
+
+Of 100 rows, 99 resolved to usable historical source captures. Forty-nine
+answers matched both checks, fifty did not, and one lacked revision text.
+Forty matched answers had none of the initial rights-notice search terms; 35 of
+those contained at least 50 words. The keyword screen is provisional and can
+produce false positives or miss a notice. It is not license certification.
+
+The [review summary](results/hc3-lineage-v1.json) binds the exact input and local
+result hashes. Captures and individual decisions remain in
+`data/baseline-detector/standard-corpora/hc3-lineage-v1/`. This supplies 49
+historical source joins for further admission work; it exports no training
+records. Wikimedia accepts article links as one route to contributor attribution
+and requires preservation of additional imported-text notices where present.
+[Wikimedia reuse terms](https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use#7._Licensing_of_Content).

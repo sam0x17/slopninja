@@ -1,5 +1,11 @@
 # Pangram repeatability probe
 
+The [2026-09-11 corpus extension](../baseline/detector/PANGRAM_CORPUS_RESULTS.md)
+adds three observations for each of 57 texts. All document fractions and native
+labels were identical across those 171 observations. Complete results differed
+for 30 texts, confined to window assistance and humanizer scores. These remain
+same-account, same-day observations; cross-account verification is untested.
+
 On 2026-09-09, three fresh Pangram requests for one identical synthetic text
 returned equal document class fractions and different auxiliary scores. Two
 later GETs of the first task returned its original result unchanged. Full
