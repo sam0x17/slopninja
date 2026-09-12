@@ -1,5 +1,6 @@
 pub mod acquire;
 pub mod attribution;
+pub mod cli_capture;
 pub mod dataset;
 pub mod evaluation_view;
 pub mod features;

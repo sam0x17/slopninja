@@ -1,7 +1,8 @@
 //! Capture provider CLI prose and provenance without inventing API settings.
 use anyhow::{Context, Result, ensure};
-use clap::{Parser, ValueEnum};
-use serde_json::{Value, json};
+use clap::Parser;
+use serde_json::json;
+use slop_ninja_detector::cli_capture::{Backend, parse_capture};
 use slop_ninja_detector::dataset::{self, Split, sha256};
 use std::{
     fs,
@@ -9,12 +10,6 @@ use std::{
     path::PathBuf,
     process::{Command, Stdio},
 };
-
-#[derive(Clone, Copy, ValueEnum)]
-enum Backend {
-    Codex,
-    Claude,
-}
 
 #[derive(Parser)]
 struct Args {
@@ -43,110 +38,36 @@ fn save(path: impl AsRef<std::path::Path>, bytes: &[u8]) -> Result<()> {
     Ok(())
 }
 
-fn parse_capture(backend: Backend, stdout: &[u8]) -> Result<(String, Value)> {
-    match backend {
-        Backend::Codex => {
-            let events: Vec<Value> = std::str::from_utf8(stdout)?
-                .lines()
-                .map(serde_json::from_str)
-                .collect::<std::result::Result<_, _>>()?;
-            ensure!(
-                !events
-                    .iter()
-                    .any(|e| e["type"] == "error" || e["type"] == "turn.failed"),
-                "Codex reported failure"
-            );
-            let turns: Vec<_> = events
-                .iter()
-                .filter(|e| e["type"] == "turn.completed")
-                .collect();
-            ensure!(turns.len() == 1, "Expected one completed Codex turn");
-            let mut messages = Vec::new();
-            for event in &events {
-                if event["type"] == "item.started" || event["type"] == "item.completed" {
-                    let item = &event["item"];
-                    ensure!(
-                        item["type"] == "agent_message" || item["type"] == "reasoning",
-                        "Tool or other non-prose activity in capture"
-                    );
-                    if event["type"] == "item.completed" && item["type"] == "agent_message" {
-                        messages.push(item["text"].as_str().context("Missing Codex prose")?);
-                    }
-                }
-            }
-            ensure!(
-                messages.len() == 1 && !messages[0].trim().is_empty(),
-                "Require one prose response"
-            );
-            Ok((
-                messages[0].to_owned(),
-                json!({"reported_models":[],"usage":turns[0]["usage"],"completion_evidence":"one turn.completed; exit zero; one prose message; no tools","immutable_snapshot_exposed":false}),
-            ))
+fn discover_version(executable: &std::path::Path, directory: &std::path::Path) -> Result<String> {
+    let version = match Command::new(executable).arg("--version").output() {
+        Ok(version) => version,
+        Err(error) => {
+            save(
+                directory.join("version-status.json"),
+                &serde_json::to_vec_pretty(&json!({
+                    "spawn_error":error.to_string(),"generation_request":false
+                }))?,
+            )?;
+            return Err(error.into());
         }
-        Backend::Claude => {
-            let events: Vec<Value> = std::str::from_utf8(stdout)?
-                .lines()
-                .map(serde_json::from_str)
-                .collect::<std::result::Result<_, _>>()?;
-            let results: Vec<_> = events.iter().filter(|e| e["type"] == "result").collect();
-            ensure!(results.len() == 1, "Require one final Claude result");
-            let result = results[0];
-            ensure!(
-                result["type"] == "result"
-                    && result["subtype"] == "success"
-                    && result["is_error"] == false
-                    && result["num_turns"] == 1,
-                "Incomplete Claude capture"
-            );
-            let text = result["result"]
-                .as_str()
-                .filter(|s| !s.trim().is_empty())
-                .context("Missing Claude prose")?;
-            let usage_models: Vec<_> = result["modelUsage"]
-                .as_object()
-                .context("Missing reported Claude model usage")?
-                .keys()
-                .cloned()
-                .collect();
-            let mut models = std::collections::BTreeSet::new();
-            let mut prose = String::new();
-            for event in events.iter().filter(|e| e["type"] == "assistant") {
-                let message = &event["message"];
-                for content in message["content"]
-                    .as_array()
-                    .context("Missing assistant content")?
-                {
-                    ensure!(
-                        content["type"] == "text"
-                            || content["type"] == "thinking"
-                            || content["type"] == "redacted_thinking",
-                        "Non-prose Claude tool content"
-                    );
-                    if content["type"] == "text" {
-                        prose.push_str(content["text"].as_str().context("Missing assistant text")?);
-                        models.insert(
-                            message["model"]
-                                .as_str()
-                                .context("Missing prose-generating model")?
-                                .to_owned(),
-                        );
-                    }
-                }
-            }
-            ensure!(
-                models.len() == 1 && prose == text,
-                "Assistant prose/model differs from final result"
-            );
-            let usage_only_models: Vec<_> = usage_models
-                .into_iter()
-                .filter(|m| !models.contains(m))
-                .collect();
-            Ok((
-                text.to_owned(),
-                json!({"reported_models":models,"usage_only_models":usage_only_models,"usage":result["usage"],"model_usage":result["modelUsage"],"reported_cost_usd":result["total_cost_usd"],"completion_evidence":"successful single-turn result matches assistant prose; prose model from assistant message; tools disabled","immutable_snapshot_exposed":false}),
-            ))
-        }
-    }
+    };
+    save(directory.join("version.stdout"), &version.stdout)?;
+    save(directory.join("version.stderr"), &version.stderr)?;
+    save(
+        directory.join("version-status.json"),
+        &serde_json::to_vec_pretty(&json!({
+            "code":version.status.code(),"success":version.status.success(),
+            "status":version.status.to_string(),"generation_request":false
+        }))?,
+    )?;
+    ensure!(
+        version.status.success(),
+        "CLI version discovery failed; diagnostics retained in {}",
+        directory.display()
+    );
+    let version = std::str::from_utf8(&version.stdout)?.trim().to_owned();
+    ensure!(!version.is_empty(), "CLI returned an empty version");
+    Ok(version)
 }
 
 fn main() -> Result<()> {
@@ -184,17 +105,23 @@ fn main() -> Result<()> {
                 .all(|w| w[0].source_group != w[1].source_group),
         "Require one original draft per source family"
     );
-    let version = Command::new(&args.executable).arg("--version").output()?;
-    ensure!(version.status.success(), "CLI version discovery failed");
-    let version = std::str::from_utf8(&version.stdout)?.trim().to_owned();
     fs::create_dir(&args.output_dir)?;
     save(args.output_dir.join("input.jsonl"), &input)?;
     let backend = match args.backend {
         Backend::Codex => "codex",
         Backend::Claude => "claude",
     };
+    save(
+        args.output_dir.join("setup.json"),
+        &serde_json::to_vec_pretty(&json!({
+            "schema":"slop_ninja_cli_capture_setup_v1","backend":backend,"requested_model":args.model,
+            "executable":args.executable,"input_sha256":sha256(&input),"generation_request":false,
+            "started_at":chrono::Utc::now().to_rfc3339()
+        }))?,
+    )?;
+    let version = discover_version(&args.executable, &args.output_dir)?;
     let cli_hash = sha256(fs::read(&args.executable)?);
-    let manifest = json!({"schema":"slop_ninja_cli_capture_run_v1","backend":backend,"requested_model":args.model,"cli_version":version,"cli_entrypoint_sha256":cli_hash,"input_sha256":sha256(&input),"runner_sha256":sha256(fs::read(std::env::current_exe()?)?),"source_sha256":sha256(include_bytes!("collect_cli_samples.rs")),"max_calls":args.max_calls,"available_families":drafts.len(),"temperature":null,"seed":null,"max_output_tokens":null,"status":"raw_capture_only","policy":"Source-conditioned prose. Preserve all attempts; no wrapper retries or automatic model fallback. Internal CLI transport retries are not fully exposed. Hosted-weight identity and unexposed sampling settings remain unknown. Not yet admitted to the commercial training corpus."});
+    let manifest = json!({"schema":"slop_ninja_cli_capture_run_v1","backend":backend,"requested_model":args.model,"cli_version":version,"cli_entrypoint_sha256":cli_hash,"input_sha256":sha256(&input),"runner_sha256":sha256(fs::read(std::env::current_exe()?)?),"source_sha256":sha256(include_bytes!("collect_cli_samples.rs")),"parser_source_sha256":sha256(include_bytes!("../cli_capture.rs")),"max_calls":args.max_calls,"available_families":drafts.len(),"temperature":null,"seed":null,"max_output_tokens":null,"status":"raw_capture_only","policy":"Source-conditioned prose. Preserve all attempts; no wrapper retries or automatic model fallback. Internal CLI transport retries are not fully exposed. Hosted-weight identity and unexposed sampling settings remain unknown. Not yet admitted to the commercial training corpus."});
     save(
         args.output_dir.join("run.json"),
         &serde_json::to_vec_pretty(&manifest)?,
@@ -360,32 +287,30 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-#[cfg(test)]
+#[cfg(all(test, unix))]
 mod tests {
     use super::*;
+    use std::os::unix::fs::PermissionsExt;
     #[test]
-    fn codex_capture_rejects_tool_use_and_missing_completion() {
-        let good = b"{\"type\":\"item.completed\",\"item\":{\"type\":\"agent_message\",\"text\":\"Synthetic prose.\"}}\n{\"type\":\"turn.completed\",\"usage\":{}}";
+    fn failed_version_check_retains_diagnostics_without_generating() {
+        let tmp = tempfile::tempdir().unwrap();
+        let executable = tmp.path().join("version-fixture");
+        fs::write(
+            &executable,
+            b"#!/bin/sh\nprintf 'synthetic version failure' >&2\nexit 23\n",
+        )
+        .unwrap();
+        fs::set_permissions(&executable, fs::Permissions::from_mode(0o700)).unwrap();
+        assert!(discover_version(&executable, tmp.path()).is_err());
         assert_eq!(
-            parse_capture(Backend::Codex, good).unwrap().0,
-            "Synthetic prose."
+            fs::read_to_string(tmp.path().join("version.stderr")).unwrap(),
+            "synthetic version failure"
         );
-        assert!(parse_capture(Backend::Codex, b"{\"type\":\"turn.started\"}").is_err());
-        let mut with_tool = good.to_vec();
-        with_tool.extend_from_slice(
-            b"\n{\"type\":\"item.completed\",\"item\":{\"type\":\"command_execution\"}}",
-        );
-        assert!(parse_capture(Backend::Codex, &with_tool).is_err());
-    }
-
-    #[test]
-    fn claude_prose_identity_is_separate_from_usage_only_models() {
-        let assistant = json!({"type":"assistant","message":{"model":"main-model","content":[{"type":"text","text":"Synthetic prose."}]}});
-        let result = json!({"type":"result","subtype":"success","is_error":false,"num_turns":1,"result":"Synthetic prose.","modelUsage":{"main-model":{},"helper-model":{}}});
-        let bytes = format!("{assistant}\n{result}");
-        let (_, metadata) = parse_capture(Backend::Claude, bytes.as_bytes()).unwrap();
-        assert_eq!(metadata["reported_models"], json!(["main-model"]));
-        assert_eq!(metadata["usage_only_models"], json!(["helper-model"]));
-        assert!(parse_capture(Backend::Claude, result.to_string().as_bytes()).is_err());
+        let status: serde_json::Value =
+            serde_json::from_slice(&fs::read(tmp.path().join("version-status.json")).unwrap())
+                .unwrap();
+        assert_eq!(status["code"], 23);
+        assert_eq!(status["generation_request"], false);
+        assert!(!tmp.path().join("run.json").exists());
     }
 }

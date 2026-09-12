@@ -3,7 +3,9 @@ use anyhow::{Context, Result, ensure};
 use clap::Parser;
 use serde_json::{Value, json};
 use slop_ninja_detector::dataset::{self, Evidence, Generation, Origin, OriginRecord, Split};
-use slop_ninja_detector::generation::{self, ModelSpec, RevisionStyle, revision_parents};
+use slop_ninja_detector::generation::{
+    self, ModelSpec, RevisionStyle, reject_source_copy, revision_parents,
+};
 use slop_ninja_detector::prompt_profiles::{self, Provenance, Selection};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs::{self, OpenOptions};
@@ -193,31 +195,6 @@ impl PauseControl {
         let index = cursor.fetch_add(1, Ordering::SeqCst);
         (index < count).then_some(index)
     }
-}
-
-fn reject_source_copy(source: &str, draft: &str) -> Result<()> {
-    let source_words = grammar_core::features::words(source);
-    let draft_words = grammar_core::features::words(draft);
-    let source_spans: BTreeSet<_> = source_words.windows(20).map(|w| w.join(" ")).collect();
-    ensure!(
-        !draft_words
-            .windows(20)
-            .any(|w| source_spans.contains(&w.join(" "))),
-        "draft_source_copy: reused contiguous 20-word source span"
-    );
-    let sentences = |text: &str| {
-        text.split(['.', '!', '?', '\n'])
-            .map(grammar_core::features::words)
-            .filter(|w| w.len() >= 12)
-            .map(|w| w.join(" "))
-            .collect::<BTreeSet<_>>()
-    };
-    let source_sentences = sentences(source);
-    ensure!(
-        sentences(draft).is_disjoint(&source_sentences),
-        "draft_source_copy: reused normalized source sentence of at least 12 words"
-    );
-    Ok(())
 }
 
 fn execute(

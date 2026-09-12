@@ -43,6 +43,11 @@ uses small, varied cohorts and targets coverage across 60-100% detected content.
 The [generator-attribution plan](GENERATOR_ATTRIBUTION.md) adds GPT/Claude CLI
 captures and preserves original generators, revisers, and prompt profiles as
 separate labels. Raw captures remain separate from admitted training records.
+The completed 96-text matched collection exposed a v5 weakness on Claude Opus:
+11/24 outputs detected at the stricter threshold, versus 23/24 for GPT-6.
+Overall detection was 72/96. All source families occur in Train, so this
+[diagnostic](GENERATOR_ATTRIBUTION.md#v5-diagnostic-on-these-captures) is not a
+fresh benchmark or a Pangram comparison.
 An early [Train-only overlap audit](NARRATIVE_GENERATION_QA.md) found substantial
 rewriting in Qwen's requested copyedits. The [clarified main target](ENCODER_NARRATIVE_V5_TARGET.md)
 is fully model-written prose deliberately steered away from the model's usual

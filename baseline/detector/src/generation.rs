@@ -105,3 +105,29 @@ pub fn revision(
     ))?);
     Ok((key, request))
 }
+
+/// Check the existing draft source-copy bounds without altering either text.
+pub fn reject_source_copy(source: &str, draft: &str) -> Result<()> {
+    let source_words = grammar_core::features::words(source);
+    let draft_words = grammar_core::features::words(draft);
+    let source_spans: BTreeSet<_> = source_words.windows(20).map(|w| w.join(" ")).collect();
+    ensure!(
+        !draft_words
+            .windows(20)
+            .any(|w| source_spans.contains(&w.join(" "))),
+        "draft_source_copy: reused contiguous 20-word source span"
+    );
+    let sentences = |text: &str| {
+        text.split(['.', '!', '?', '\n'])
+            .map(grammar_core::features::words)
+            .filter(|w| w.len() >= 12)
+            .map(|w| w.join(" "))
+            .collect::<BTreeSet<_>>()
+    };
+    let source_sentences = sentences(source);
+    ensure!(
+        sentences(draft).is_disjoint(&source_sentences),
+        "draft_source_copy: reused normalized source sentence of at least 12 words"
+    );
+    Ok(())
+}
