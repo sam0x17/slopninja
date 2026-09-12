@@ -15,9 +15,10 @@ it. Current exceptions are the spaCy annotation bridges and PyTorch author
 scoring experiments in `grammar/crates/grammar-eval/python/`. Keep
 corpus handling, feature extraction and vector geometry in Rust.
 
-Run heavy compute, including model generation, training and evaluation, on
-`sam@matthews-mac-studio.local`. Keep local work to editing, inspection and
-lightweight coordination. Use dedicated project processes on the Studio. Do not
+Run all intensive CPU or GPU work on `sam@matthews-mac-studio.local`, including
+model generation, training, evaluation, large builds, test suites, benchmarks
+and bulk hash sweeps. Keep local work to editing, inspection and lightweight
+coordination. Use dedicated project processes on the Studio. Do not
 reboot it, restart LM Studio or interrupt unrelated workloads. Preserve caches
 and record changes of execution host when resuming an experiment.
 
