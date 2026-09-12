@@ -29,7 +29,11 @@ readability, human authorship, or performance on unseen sources.
 
 Keep generated corpora, credentials, local databases, and live invocation logs in
 ignored `data/`. Check in pinned source manifests, reproducible Rust code, and
-reports. `legacy/` and `experiments/pangram-preface/` preserve earlier work; do not
+reports. The user authorized publishing the redistributable detector corpus on
+2026-09-12: curated snapshots belong in `datasets/`, with exact text, provenance,
+source licenses, fixed splits and checksums. Keep private material and live
+provider logs in ignored storage. `legacy/` and `experiments/pangram-preface/`
+preserve earlier work; do not
 extend their Python orchestration for new experiments.
 
 Private correspondence and coursework, extracted passages, identifying source

@@ -6,6 +6,11 @@ publish the portions for which both text and annotation reuse rights are clear.
 A Pangram prediction must never overwrite an origin label or establish that an
 unlabeled web page was written by a human.
 
+The [first public text snapshot](../../datasets/detector-origin-v1/README.md)
+now contains 432 admitted records with their source attribution, exact prompts,
+generator provenance and frozen Train/Development assignments. Individual
+provider annotations remain local while their redistribution terms are unresolved.
+
 ## Dataset priorities
 
 | Source | Contribution | Admission work |

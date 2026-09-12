@@ -65,7 +65,8 @@ their training bundle records the attribution manifest hash in the runtime
 contract. Generated descendants retain source credit and get an explicit model
 change notice. A model release must include these files and terms.
 
-Raw corpus text and source captures remain under ignored `data/`. A future text
-release must include record-level attribution and licenses. Pangram annotations
+Source captures and working corpora remain under ignored `data/`. The authorized
+[public snapshot](../../datasets/detector-origin-v1/README.md) includes selected
+text with record-level attribution, licenses and original input hashes. Pangram annotations
 have separate provider terms and remain local; this policy does not grant rights
 to publish them or treat their predictions as origin labels.
