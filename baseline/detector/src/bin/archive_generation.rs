@@ -49,6 +49,10 @@ fn main() -> Result<()> {
     }
     let mut cohorts = Vec::new();
     for directory in &args.generation_dir {
+        ensure!(
+            !directory.join("run.lock").try_exists()?,
+            "Generation cohort has run.lock; wait for generation/export to close"
+        );
         let run_bytes = fs::read(directory.join("run.json"))?;
         let run: Value = serde_json::from_slice(&run_bytes)?;
         ensure!(

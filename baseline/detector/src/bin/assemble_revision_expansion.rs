@@ -372,6 +372,14 @@ fn read_pass(
     bindings: &mut Bindings,
 ) -> Result<Pass> {
     let run_path = base.join(&paths.run);
+    ensure!(
+        !run_path
+            .parent()
+            .context("Run lacks parent directory")?
+            .join("run.lock")
+            .try_exists()?,
+        "Revision cohort has run.lock; wait for generation/export to close"
+    );
     let run = object(&run_path, &format!("{label}.run"), bindings)?;
     let summary = object(
         &run_path
@@ -1167,6 +1175,22 @@ mod tests {
         )
         .unwrap();
         assert!(pass.binding.get("failed_count").is_none());
+        let lock = temp.path().join("run.lock");
+        fs::write(&lock, b"pid=synthetic-active-generator\n").unwrap();
+        let mut bindings = Bindings::new();
+        let error = read_pass(
+            temp.path(),
+            &paths,
+            "fixture",
+            QWEN,
+            RevisionStyle::AntiAi,
+            &mut bindings,
+        )
+        .err()
+        .expect("A complete summary must not override an active run.lock");
+        assert!(error.to_string().contains("run.lock"));
+        assert!(bindings.is_empty());
+        fs::remove_file(lock).unwrap();
         summary["unattempted"] = json!(["not-yet-attempted"]);
         fs::write(&summary_path, serde_json::to_vec(&summary).unwrap()).unwrap();
         assert!(
