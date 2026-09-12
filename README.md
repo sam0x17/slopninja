@@ -41,6 +41,7 @@ primary-Test binary log loss from 0.6970 to 0.1430, with human false positives
 falling from 5/25 to 1/25 while detecting all 25 model-written drafts. On the
 unseen Phi-4 generator, it reduced false positives but missed two of 21 drafts
 at the stricter threshold. Those misses used Anti-AI and Fix Slop instructions.
+Download the [experimental v5 model bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-narrative-v0.5.0).
 Its [commands and earlier releases](baseline/detector/README.md),
 [implementation plan](baseline/detector/PLAN.md) and
 [commercial-use source register](baseline/detector/SOURCES.md) cover acquisition,

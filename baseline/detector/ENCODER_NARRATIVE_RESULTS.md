@@ -12,9 +12,16 @@ but exposed a sensitivity tradeoff. At the stricter operating point, v5 detected
 an experimental detector with an unresolved weakness on the main style-steering
 target. No new Pangram calls or Pangram-derived training labels were used.
 
-The [aggregate results](results/encoder-narrative-v5.json) include both selected
-fits, all six evaluations, provider/profile slices, three paired comparisons,
-thresholds and recovery provenance. The original logs retain every epoch.
+Download the [v5 weights and CPU inference bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-narrative-v0.5.0).
+The 558,321,008-byte archive has SHA256
+`78a24a7d7908257eb1e9182c0d18f6aa350f630fe30f654c020b2a9fad4ec482`;
+GitHub's asset digest matches the verified local archive. Fine-tuned weights use
+the project's CC BY-SA 4.0 release policy, with upstream notices and full source
+credits included.
+
+The [aggregate results](results/encoder-narrative-v5.json) include both training
+histories, all six evaluations, provider/profile slices, three paired comparisons,
+thresholds and recovery provenance.
 
 ## Data and selection
 
@@ -165,9 +172,9 @@ The selected artifact is
 The two-rate selection record has SHA256
 `70fe91d23f89d0673a6e0bdea84e44fc641394cc79ba3f7d54a26429448cec74`.
 Selection, thresholds, corpus inputs and evaluator hashes were frozen before
-Test opening at 2026-09-12 04:31:57 UTC. All model artifacts, individual
-predictions, generation responses and recovery logs remain in ignored storage;
-the public report contains aggregates and integrity bindings.
+Test opening at 2026-09-12 04:31:57 UTC. The release includes the selected artifact,
+aggregate report and provenance. Corpus passages, individual predictions,
+generation responses and original recovery logs remain in ignored storage.
 
 V5 is the next research candidate for binary origin detection. It has neither
 Pangram parity nor subnet qualification. The opened Test families are retired

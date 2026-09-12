@@ -33,6 +33,7 @@ detecting all 25 model-written drafts. Phi-4 log loss also improved, but detecti
 fell from 21/21 to 19/21 at the stricter threshold. The missed drafts used Anti-AI
 and Fix Slop instructions. V5 is the next experimental binary detector; v4 remains
 available for the reported sensitivity comparison.
+Download the [v5 weights and CPU inference bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-narrative-v0.5.0).
 An early [Train-only overlap audit](NARRATIVE_GENERATION_QA.md) found substantial
 rewriting in Qwen's requested copyedits. The [clarified main target](ENCODER_NARRATIVE_V5_TARGET.md)
 is fully model-written prose deliberately steered away from the model's usual
