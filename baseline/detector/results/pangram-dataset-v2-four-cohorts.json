@@ -260,7 +260,7 @@
     "executable_sha256": "d1251c59a85954dae50698f802e09416129d0de40893b3683a4ca5b5b66bc0f2"
   },
   "validation": {
-    "collector": "focused Rust tests, focused Clippy with warnings denied, format check and full Rust tests passed; all-targets Clippy continues",
+    "collector": "format check, full Rust tests and all-targets Clippy with warnings denied passed on the Studio; focused collector and CLI parser checks also passed",
     "raw_source_unchanged": true,
     "normalization": "Explicit opt-in permits whitespace normalization and removal only of existing source U+00AD. Original and returned hashes retained.",
     "frozen_v6_fit_unchanged": true
