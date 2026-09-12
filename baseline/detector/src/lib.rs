@@ -2,6 +2,7 @@ pub mod acquire;
 pub mod dataset;
 pub mod evaluation_view;
 pub mod features;
+pub mod generation;
 pub mod metrics;
 pub mod model;
 pub mod prompt_profiles;
