@@ -36,9 +36,10 @@ Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
 
 The experimental origin detector is trained under `baseline/detector/`.
-The [public corpus snapshot](datasets/detector-origin-v1/README.md) contains
-432 texts with source attribution, generation prompts and model provenance
-(375 Train, 57 Development; 4.05 MB). Individual Pangram reports remain local.
+The [published datasets](datasets/README.md) include the full v5 primary corpus:
+3,384 texts with source attribution, generation prompts and model provenance
+(2,925 Train; 32.88 MB of JSONL). A separate, overlapping 432-text snapshot
+contains the initial Pangram inputs. Individual Pangram reports remain local.
 The [v5 comparison](baseline/detector/ENCODER_NARRATIVE_RESULTS.md) reduced
 primary-Test binary log loss from 0.6970 to 0.1430, with human false positives
 falling from 5/25 to 1/25 while detecting all 25 model-written drafts. On the

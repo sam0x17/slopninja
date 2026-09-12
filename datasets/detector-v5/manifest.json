@@ -1,0 +1,23 @@
+{
+  "data_rights_sha256": "26139a06ee4e7421558e940e353e17920563dc954031cd7eb29c73a78f99dece",
+  "partitions": {
+    "calibration": {
+      "rows": 201,
+      "sha256": "ed713db6a5d4ede93ff59cead8321b7926493628bf3fbe6be05729cb11b30c7d"
+    },
+    "development": {
+      "rows": 183,
+      "sha256": "b31c241f8dc06c57855ad8c6e478096de9f99b0fc6b5b9cbcc50af76742dc305"
+    },
+    "test": {
+      "rows": 75,
+      "sha256": "39c50dfbd23ff37ecaf6e77186a359876a2997f1679e6a9db6bd0037248b5b33"
+    },
+    "train": {
+      "rows": 2925,
+      "sha256": "ac0624daad4f1d0f132cc7af85b3e34eaf8c193a741734123ec056dc7e8084aa"
+    }
+  },
+  "schema": "slop_ninja_origin_shards_v1",
+  "source_manifest_sha256": "1b589c754dfb6d9585b9b724105057903aef3fa66a950808730d4aa6595a5cbd"
+}
