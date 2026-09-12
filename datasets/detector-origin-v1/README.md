@@ -53,10 +53,11 @@ or Test records and must not substitute for the frozen v6 fitting corpus.
 Individual Pangram annotations and raw reports remain in the local archive.
 Their redistribution terms remain unresolved in the
 [provider-terms review](../../baseline/detector/STANDARD_CORPUS.md).
-The [published aggregate](../../baseline/detector/results/pangram-dataset-v2-first-cohorts.json)
-covers the first 258 Train texts. The fourth batch's 117 source records pass
-the corpus audit; validation of the provider's text normalization is pending
-at this snapshot. Origin labels are independent of detector observations.
+The [published aggregate](../../baseline/detector/results/pangram-dataset-v2-four-cohorts.json)
+covers all 375 Train texts. The fourth batch's provider echoes now validate
+with explicitly recorded whitespace and source soft-hyphen normalization;
+the submitted corpus bytes remain unchanged. Origin labels are independent
+of detector observations.
 
 Preserve each row's `rights.attribution`, license, source links, change notices
 and any `rights.share_alike` obligations when redistributing it. Text licenses

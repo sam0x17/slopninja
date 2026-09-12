@@ -68,3 +68,12 @@ it is not evidence of an improved fitted model.
 
 CLI interfaces were checked against [Codex non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode)
 and [Claude's CLI reference](https://code.claude.com/docs/en/cli-reference).
+
+The matched capture run started on the Studio on 2026-09-12. It requests 24
+drafts each from `gpt-6-astra`, `gpt-5.6-sol`, Claude `opus` and Claude `sonnet`
+over the same frozen sources and profiles. The runner passed its parser tests,
+format check and focused Clippy check before starting. The repository's full
+Rust tests also passed; its all-targets lint check is still running. Capture
+counts, successful completion and corpus admission remain separate milestones.
+This job makes no Pangram calls. The earlier interface probes are retained
+separately and do not replace any member of the matched cohort.

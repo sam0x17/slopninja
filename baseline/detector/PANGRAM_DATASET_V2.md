@@ -206,3 +206,35 @@ Train allocation toward GPT and Claude as well as the existing local models.
 The next 24-source set is frozen independently of its future detector results.
 Do not spend that allocation on another expansion limited to the original three
 composers. The $30 allocation for a fresh comparison remains available.
+
+The fourth collection now passes the Rust collector with that explicit
+normalization policy. It has 13 exact echoes, 103 whitespace-only echoes and
+one echo with source soft hyphens removed. No additional request was submitted.
+Its annotation SHA256 is
+`f907378843135e871e9a596b8936f4f803957a9a1f6a5efb25ab4c4b51a62fcd`.
+All 375 Train texts now have validated Pangram 4.0 observations, across 109
+source families. The 109 historical human controls all score zero.
+
+| Detected content | Model-only | Mixed | Combined nonhuman |
+| --- | ---: | ---: | ---: |
+| Below 60% | 2 | 8 | 10 |
+| 60-70% | 2 | 2 | 4 |
+| 70-80% | 4 | 5 | 9 |
+| 80-90% | 5 | 6 | 11 |
+| 90% to below 100% | 4 | 5 | 9 |
+| 100% | 140 | 83 | 223 |
+
+The [four-cohort report](results/pangram-dataset-v2-four-cohorts.json) retains
+the counts, bindings and cost estimates. There are now 33 nonhuman texts in
+the requested interior range. The original inputs and their provenance are
+available in the [public snapshot](../../datasets/detector-origin-v1/README.md).
+Individual provider reports and per-record weighting files remain local.
+
+The prepared weighting view retains all 375 records and full generator ancestry.
+It gives each origin equal total weight, then equalizes occupied score bins
+within each origin. Its maximum weight is 10.4167 and its weight effective
+sample size is 99.9650, computed as squared total weight divided by the sum
+of squared weights. That number does not account for within-family correlation.
+The sparse bins still need additional examples; weighting them more heavily
+does not supply new evidence. No detector has been fitted on these weights,
+and the frozen v6 experiment remains unchanged.
