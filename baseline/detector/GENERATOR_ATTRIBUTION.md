@@ -181,3 +181,6 @@ observations do not isolate a causal effect of the style instructions. Retain
 the full collection rather than selecting only explicit evasion prompts for
 later work. There are no Pangram observations for these 96 captures yet, and
 this diagnostic changed neither v6 fitting nor its selection or Test protocol.
+
+The capture-audit revision in `c881faf` passed the complete Rust test suite,
+format checks and all-targets Clippy on the Studio at 2026-09-12T22:51:59Z.
