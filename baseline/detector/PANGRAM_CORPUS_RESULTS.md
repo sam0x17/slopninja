@@ -1,5 +1,8 @@
 # Pangram corpus results
 
+The [v5 follow-up](PANGRAM_V5_RESULTS.md) compares the current released detector
+on these same cached annotations. The original v2 comparison follows below.
+
 Pangram flagged all 38 model-only or model-edited texts in the 57-row v2
 Development cohort, with no flags on its 19 historical human proxies. The encoder
 flagged 20/38 and the word/grammar candidate 12/38 at their frozen calibration
