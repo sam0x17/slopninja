@@ -58,11 +58,12 @@ our estimate. These rates and limits were rechecked on 2026-09-12 against the
 [pricing page](https://www.pangram.com/pricing) and
 [bulk API documentation](https://docs.pangram.com/api-reference/bulk-api).
 
-The existing cumulative authorization is $37.50. Two completed jobs retain
-$30 of reservations; their posted-price estimate is $21.12 and actual account
-billing has not been reconciled. Do not release those reservations based on an
-estimate. A cumulative $360 cap has been requested for this prepared expansion;
-it is pending approval. Keep the same ledger across collections.
+The user subsequently authorized a $150 ceiling and requested varied scores,
+preferably spanning 60-100%. The [revised collection plan](PANGRAM_DATASET_V2.md)
+replaces submission of this full prepared corpus with small, adaptive cohorts.
+Apply the $150 limit cumulatively. Two completed jobs retain $30 of reservations;
+their posted-price estimate is $21.12 and actual account billing has not been
+reconciled. Keep those reservations and the same ledger across collections.
 
 ## Training and benchmark use
 

@@ -30,6 +30,7 @@ fn plan(
         "Use between one and ten repeats"
     );
     let mut unique = BTreeMap::<&str, (&str, Vec<Value>)>::new();
+    let index = records.iter().map(|r| (r.id.as_str(), r)).collect();
     for record in records {
         record.validate()?;
         ensure!(
@@ -58,7 +59,8 @@ fn plan(
         ensure!(entry.0 == record.text, "Text hash collision");
         entry.1.push(json!({
             "record_id":record.id,"source_group":record.source_group,"split":record.split,
-            "origin":record.origin,"evidence":record.evidence,"parent_id":record.parent_id
+            "origin":record.origin,"evidence":record.evidence,"parent_id":record.parent_id,
+            "generator_attribution":slop_ninja_detector::attribution::describe(record, &index)?
         }));
     }
     ensure!(!unique.is_empty(), "Empty corpus");

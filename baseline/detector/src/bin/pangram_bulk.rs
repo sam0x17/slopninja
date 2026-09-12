@@ -46,6 +46,9 @@ enum Command {
         /// Record whitespace-only echo changes separately; all other changes fail.
         #[arg(long)]
         allow_whitespace_echo: bool,
+        /// Separately record removal of source soft hyphens (U+00AD) in the echo.
+        #[arg(long)]
+        allow_soft_hyphen_echo: bool,
     },
 }
 
@@ -196,9 +199,16 @@ fn validate_payload(plan_dir: &Path, batch: usize) -> Result<(Value, Vec<u8>, u6
                 reference["origin"] == serde_json::to_value(record.origin)?
                     && reference["split"] == serde_json::to_value(record.split)?
                     && reference["evidence"] == serde_json::to_value(record.evidence)?
+                    && reference["parent_id"] == serde_json::to_value(&record.parent_id)?
                     && reference["source_group"] == record.source_group,
                 "Origin metadata mismatch"
             );
+            if let Some(attribution) = reference.get("generator_attribution") {
+                ensure!(
+                    *attribution == slop_ninja_detector::attribution::describe(record, &records)?,
+                    "Generator attribution mismatch"
+                );
+            }
         }
         let words = text.split_whitespace().count();
         ensure!(words >= 50, "Input too short");
@@ -288,6 +298,7 @@ fn validate_result(
     expected: &Value,
     task_id: &str,
     allow_whitespace: bool,
+    allow_soft_hyphen: bool,
 ) -> Result<&'static str> {
     ensure!(
         item["id"] == expected["id"] && item["task_id"] == task_id,
@@ -302,12 +313,21 @@ fn validate_result(
     let submitted = field(expected, "text")?;
     let echo_match = if returned == submitted {
         "exact"
+    } else if allow_whitespace && returned.split_whitespace().eq(submitted.split_whitespace()) {
+        "whitespace_only"
     } else {
+        let without_soft_hyphens = submitted.replace('\u{00ad}', "");
         ensure!(
-            allow_whitespace && returned.split_whitespace().eq(submitted.split_whitespace()),
+            allow_soft_hyphen
+                && submitted.contains('\u{00ad}')
+                && (returned == without_soft_hyphens
+                    || (allow_whitespace
+                        && returned
+                            .split_whitespace()
+                            .eq(without_soft_hyphens.split_whitespace()))),
             "Provider returned different input text"
         );
-        "whitespace_only"
+        "source_soft_hyphens_removed"
     };
     ensure!(
         !field(result, "version")?.is_empty(),
@@ -329,7 +349,7 @@ fn validate_result(
     Ok(echo_match)
 }
 
-fn collect(job: &Path, allow_whitespace: bool) -> Result<Value> {
+fn collect(job: &Path, allow_whitespace: bool, allow_soft_hyphen: bool) -> Result<Value> {
     let receipt = read(&job.join("receipt.json"))?;
     let bulk_id = field(&receipt, "bulk_id")?;
     ensure!(
@@ -433,6 +453,7 @@ fn collect(job: &Path, allow_whitespace: bool) -> Result<Value> {
                         &items[index],
                         accepted.get(&index).context("Unaccepted success")?,
                         allow_whitespace,
+                        allow_soft_hyphen,
                     )?;
                 } else {
                     ensure!(item["stage"] == "STAGE_FAILED", "Unresolved failed item");
@@ -473,7 +494,13 @@ fn collect(job: &Path, allow_whitespace: bool) -> Result<Value> {
         if item["stage"] == "STAGE_SUCCESS" {
             succeeded += 1;
             versions.insert(field(&item["result"], "version")?);
-            echo_match = validate_result(item, &items[*index], accepted[index], allow_whitespace)?;
+            echo_match = validate_result(
+                item,
+                &items[*index],
+                accepted[index],
+                allow_whitespace,
+                allow_soft_hyphen,
+            )?;
         }
         *echo_counts.entry(echo_match).or_default() += 1;
         let annotation = json!({"schema":"slop_ninja_pangram_corpus_annotation_v1","bulk_id":bulk_id,
@@ -493,6 +520,7 @@ fn collect(job: &Path, allow_whitespace: bool) -> Result<Value> {
         "bulk_id":bulk_id,"items":items.len(),"succeeded":succeeded,"failed":items.len()-succeeded,
         "returned_versions":versions,"annotations_sha256":sha256(&annotations),"collection_dir":attempt,
         "echo_counts":echo_counts,"whitespace_echo_allowed":allow_whitespace,
+        "source_soft_hyphen_removal_allowed":allow_soft_hyphen,
         "billing":"unverified; retain the full reservation until account usage is reconciled"});
     save(&attempt.join("summary.json"), &summary)?;
     Ok(summary)
@@ -525,7 +553,8 @@ fn main() -> Result<()> {
         Command::Collect {
             job_dir,
             allow_whitespace_echo,
-        } => collect(&job_dir, allow_whitespace_echo)?,
+            allow_soft_hyphen_echo,
+        } => collect(&job_dir, allow_whitespace_echo, allow_soft_hyphen_echo)?,
     };
     println!("{}", serde_json::to_string_pretty(&result)?);
     Ok(())
@@ -539,21 +568,40 @@ mod tests {
         let expected = json!({"id":"row","text":"An invented fixture."});
         let good = json!({"id":"row","task_id":"task","stage":"STAGE_SUCCESS","result":{
             "text":"An invented fixture.","version":"test","fraction_human":0.2,"fraction_ai":0.5,"fraction_ai_assisted":0.3}});
-        validate_result(&good, &expected, "task", false).unwrap();
+        validate_result(&good, &expected, "task", false, false).unwrap();
         let mut whitespace = good.clone();
         whitespace["result"]["text"] = json!("An\n invented fixture.");
-        assert!(validate_result(&whitespace, &expected, "task", false).is_err());
+        assert!(validate_result(&whitespace, &expected, "task", false, false).is_err());
         assert_eq!(
-            validate_result(&whitespace, &expected, "task", true).unwrap(),
+            validate_result(&whitespace, &expected, "task", true, false).unwrap(),
             "whitespace_only"
         );
         let mut changed = good.clone();
         changed["result"]["text"] = json!("Different text");
-        assert!(validate_result(&changed, &expected, "task", true).is_err());
-        assert!(validate_result(&good, &expected, "other-task", false).is_err());
+        assert!(validate_result(&changed, &expected, "task", true, false).is_err());
+        assert!(validate_result(&good, &expected, "other-task", false, false).is_err());
         let mut changed = good;
         changed["result"]["fraction_ai"] = json!(0.7);
-        assert!(validate_result(&changed, &expected, "task", false).is_err());
+        assert!(validate_result(&changed, &expected, "task", false, false).is_err());
+    }
+
+    #[test]
+    fn soft_hyphen_opt_in_does_not_allow_other_text_changes() {
+        let expected = json!({"id":"row","text":"An in\u{00ad}vented fixture."});
+        let mut item = json!({"id":"row","task_id":"task","stage":"STAGE_SUCCESS","result":{
+            "text":"An invented fixture.","version":"test","fraction_human":0.2,"fraction_ai":0.5,"fraction_ai_assisted":0.3}});
+        assert!(validate_result(&item, &expected, "task", true, false).is_err());
+        assert_eq!(
+            validate_result(&item, &expected, "task", false, true).unwrap(),
+            "source_soft_hyphens_removed"
+        );
+        item["result"]["text"] = json!("An\n invented fixture.");
+        assert!(validate_result(&item, &expected, "task", false, true).is_err());
+        validate_result(&item, &expected, "task", true, true).unwrap();
+        item["result"]["text"] = json!("An invented example.");
+        assert!(validate_result(&item, &expected, "task", true, true).is_err());
+        item["result"]["text"] = json!("An in\u{200b}vented fixture.");
+        assert!(validate_result(&item, &expected, "task", true, true).is_err());
     }
     #[test]
     fn uncertain_jobs_still_consume_budget() {

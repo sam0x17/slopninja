@@ -1,4 +1,5 @@
 pub mod acquire;
+pub mod attribution;
 pub mod dataset;
 pub mod evaluation_view;
 pub mod features;

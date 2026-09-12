@@ -38,7 +38,11 @@ The [v5 Pangram follow-up](PANGRAM_V5_RESULTS.md) uses the same 57 previously
 annotated Development texts: v5 detects 32/38 model-involved texts at its stricter
 threshold and 34/38 at its looser threshold, with 1/19 human false positives.
 Pangram detects 38/38 with 0/19 human flags. The [annotation expansion](PANGRAM_CORPUS_EXPANSION.md)
-prepares 2,925 Train texts for a larger reusable collection.
+prepared 2,925 Train texts. The [revised $150 collection](PANGRAM_DATASET_V2.md)
+uses small, varied cohorts and targets coverage across 60-100% detected content.
+The [generator-attribution plan](GENERATOR_ATTRIBUTION.md) adds GPT/Claude CLI
+captures and preserves original generators, revisers, and prompt profiles as
+separate labels. Raw captures remain separate from admitted training records.
 An early [Train-only overlap audit](NARRATIVE_GENERATION_QA.md) found substantial
 rewriting in Qwen's requested copyedits. The [clarified main target](ENCODER_NARRATIVE_V5_TARGET.md)
 is fully model-written prose deliberately steered away from the model's usual
