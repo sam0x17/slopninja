@@ -114,14 +114,14 @@ compromise; authorized archives retain complete replay evidence.
 \paragraph{Transitions and attribution.}
 Issue permanently consumes the requester index and activates its
 obligation. One immutable manifest fixes each stage; identical retries
-are idempotent and conflicting signed manifests remain evidence. A
+are idempotent and conflicting signed manifests remain evidence. The
 requester's decline, absent complete publication, or certified invalid
 input is its failure. An authenticated decline included by the stage's
 publication cutoff is terminal for that stage. Retain later bytes as
 evidence, but reject an acceptance certificate that ignores the decline;
 late declines cannot reopen closed accounting. Only a timely global input-acceptance certificate
 activates the first provider at its fixed start. No input acceptance
-means no provider obligation. A provider's decline, absent publication,
+means no provider obligation. The provider's decline, absent publication,
 or globally certified invalid response permits the next fixed fallback;
 successful fallback never erases preceding failures. Unresolved validity
 stops dependent work without another draw. Late answers remain late.

@@ -1,6 +1,6 @@
 # Public A models and private B generation
 
-Design update, September 11, 2026, whitepaper draft 0.17.
+Design update, September 11, 2026, whitepaper draft 0.21.
 A artifacts are public and validators execute them independently. B weights
 remain private; every credited B candidate, mandatory rewrite and paid B job
 requires qualified attested execution. Validators verify its version-bound
@@ -200,6 +200,21 @@ Hash the inference-affecting content, excluding owner signatures and wrapper
 metadata. One identical content hash receives at most one A model-credit entry
 and one panel seat per round. Assign that entry to the earliest finalized,
 accepted artifact commitment; break same-position ties by canonical UID.
+Registration uses a domain-separated hash commitment to the miner's
+registration identity, round, canonical content digest and a fresh random
+256-bit nonce. Registration fields and nonce are excluded from the
+inference-content identity; keep the nonce secret until opening.
+For previously unreleased content, finalize the
+commitment before disclosing its digest, manifest or retrievable artifact.
+The round fixes a publication deadline before qualification and panel selection.
+By that deadline, open the commitment and provide the complete artifact.
+Validators verify the opening and content digest and complete qualification;
+only accepted entries retain their original commitment's finalization priority.
+Missing or invalid publication reserves no credit, panel seat or priority in
+later rounds. Already-public artifacts and foundation-model components remain
+admissible. This assigns duplicate credit without establishing model authorship
+or training priority.
+
 New hotkeys do not create another credit entry for that artifact. Small weight
 changes and equivalent implementations remain a copying and attribution
 problem that hash deduplication does not solve. Separate payment for measured

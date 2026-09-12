@@ -54,7 +54,7 @@ and voluntarily published B models can run locally, without a subnet
 job or fee. No public copy of the best private B model is promised.
 
 B jobs pursue author matching and detector evasion within the selected
-execution boundary. A confidential job has no verified Pangram result
+execution boundary. Such a job has no verified Pangram result
 unless the customer separately authorizes external disclosure; its
 objectives do not expand recipient access. Authorized benchmark rounds
 provide the routine external measurements under
@@ -190,7 +190,7 @@ customer output key, padded ciphertext length and hash, and deadlines.
 Only a successful run of the agreed procedure may produce a completion
 receipt. The runtime must generate and encrypt the result itself; it
 cannot attest arbitrary miner-supplied text, truncated execution or a
-model-selected error as completed work. A model's poor revision can
+model-selected error as completed work. The model's poor revision can
 still be the valid output of that procedure.
 
 Customer authorization fixes both instance keys before disclosure.
@@ -231,8 +231,8 @@ agreeing weight \(w\) satisfying \(3w>2W\). It binds the job, offer,
 snapshot, accepted policy, receipt digest, completion transaction and
 ciphertext hash/length. The contract verifies the frozen signer weights
 and signatures, the pinned runtime receipt signature and job bindings,
-matching recorded ciphertext publication and all deadlines. A validator
-certificate cannot waive those contract checks. No new receipt,
+matching recorded ciphertext publication and all deadlines. Validator
+certificates cannot waive those contract checks. No new receipt,
 output or validator set may replace an accepted completion after issue.
 Retries of identical evidence are idempotent.
 
@@ -255,7 +255,7 @@ permits refund after \(H_c\). Refund decisions wait for finality of the
 relevant cutoff. A late certificate cannot recover refunded principal.
 The contract records exactly one payment or refund; retries cannot pay
 twice, and neither replacement evidence nor a dispute extends deadlines.
-A miner, customer or keeper submits settlement transactions. Relaying
+Miners, customers or keepers submit settlement transactions. Relaying
 evidence does not change the beneficiary.
 
 With honest, available quorum and timely chain inclusion, a customer
@@ -269,9 +269,9 @@ terminal settlement; they cannot justify drawing new judges or shrinking
 \(W\). These dependencies prevent an unconditional fair-exchange claim.
 
 \paragraph{Editorial disputes and A hosting.}
-A completion certificate establishes no semantic fidelity, author-fit
+Completion certificates establish no semantic fidelity, author-fit
 success or Pangram pass. Benchmark evaluation remains independent.
-A customer may separately send evidence to one chosen validator under
+Any customer may separately send evidence to one chosen validator under
 Section~\ref{customer-directed-evidence-disclosure}. Inspection is advisory
 unless both parties accepted specific refund or revision terms beforehand.
 The initial B escrow uses the receipt/certificate rule; additional

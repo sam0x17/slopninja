@@ -21,7 +21,7 @@ For every B benchmark, a miner commits its final candidate and
 required report IDs before the evidence deadline. Every validator in the
 round's frozen certifying set receives the source, candidate, report URLs,
 score projections, and commitment openings in a separate encrypted evidence
-envelope. A signer must retrieve the provider's record and inspect the exact
+envelope. Each signer must retrieve the provider's record and inspect the exact
 text, fractions, version, time window, and required preservation evidence;
 preparer signatures cannot substitute for that inspection. Report IDs and
 URLs remain encrypted in chain payloads and absent from public plaintext

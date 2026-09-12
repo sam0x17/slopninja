@@ -11,7 +11,7 @@ artifacts for authoritative benchmark scores, evaluate B outputs, and
 submit weights. For paid B, they verify TEE receipts and complete encrypted
 delivery without reading customer text. Benchmark curators maintain
 permitted source material, production records, and hidden evaluation
-labels. A customer-facing gateway may relay ciphertext, but receives no
+labels. Customer-facing gateways may relay ciphertext, but receive no
 decryption key.
 
 Benchmark operator and coordinator denote administrative duties assigned
@@ -28,7 +28,7 @@ transfers, described in
 Section~\ref{paid-asynchronous-jobs-and-on-chain-coordination}.
 
 An \emph{evidence preparer} is a hash-assigned validator who assembles
-the review dossier. A \emph{certifying validator} belongs to the round's
+the review dossier. Each \emph{certifying validator} belongs to the round's
 frozen eligible set and independently checks the evidence. In certificate
 rules, a \emph{signer} is such a validator signing a particular final
 verdict. These duties may overlap; preparation alone grants no approval
@@ -80,7 +80,7 @@ A separate customer disclosure can authorize editorial inspection.}
 
 Customer tasks do not become benchmark examples automatically.
 Validators must not obtain customer inputs through an audit exception, a
-shared support key, or an arbitration process. A customer may initiate a
+shared support key, or an arbitration process. Any customer may initiate a
 separate, explicitly addressed evidence disclosure as described in
 Section~\ref{customer-directed-evidence-disclosure}. This applies to both
 detection and transformation requests. An author's uploaded reference collection can be more identifying

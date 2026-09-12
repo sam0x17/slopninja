@@ -34,16 +34,41 @@ writer cannot reliably distinguish from that writer's own comparable
 work, while the required substance remains intact and the unwanted
 patterns have been removed. This is an empirical target. Evaluate it
 through blinded comparisons in the same register, independent tests on
-held-out author samples, and full preservation review. A favorable
-detector score or proximity to a learned profile alone cannot establish
-that result. A writer may also request greater accessibility or
+held-out author samples, and full preservation review. Neither a favorable
+detector score nor proximity to a learned profile alone can establish
+that result. Writers may also request greater accessibility or
 rhetorical force; those changes must respect the source and brief.
+
+\paragraph{Illustrative revision.}
+The following brief and passages are synthetic. The brief summarizes a
+fictional target writer's profile; actual benchmark tasks require
+independent authorized reference writing.
+
+\emph{Brief:} Write a team update in the project lead's voice: short
+sentences, contractions and a calm tone. State uncertainty directly and
+retain the reason for the decision, every quantity and the unresolved question.
+
+\emph{Source:} ``Following a review of the pilot, the team has made the
+decision to extend testing by two weeks. Three of the twelve participants
+reported missing notifications. This extension may help us establish
+whether the problem also affects new accounts; we do not yet know.''
+
+\emph{Revision:} ``We've reviewed the pilot and decided to extend testing
+by two weeks. Three of twelve participants reported missing notifications.
+We don't yet know whether new accounts are affected. The extra testing
+may help us find out.''
+
+The revision removes the long decision phrase and follows the requested
+voice while retaining the reports, quantities and uncertainty. Replacing
+``may help'' with ``will establish'' would fail preservation. This example
+illustrates the editorial judgment; it has no measured author-fit or
+detector result and establishes no benchmark pass.
 
 The model-publication split is intentional. A should make strong
 author/origin detection available for anyone to run and use in training,
 including external detector providers. Matching Pangram-level origin
 detection is an evaluation target, not an achieved result. Pangram
-initially sets A's origin-detection quality target. A subnet detector
+initially sets A's origin-detection quality target. An eligible subnet detector
 takes over after confirmed superiority, and Pangram becomes the target
 again if it later outperforms the incumbent. Continue comparing both
 against independent production records; author identification retains
@@ -86,7 +111,7 @@ The panel contains its lead and two hash-selected qualified detectors,
 frozen for all B candidates in a matched batch
 (Section~\ref{common-transformation-evidence}). Reaching zero is a
 desirable measured outcome, not a promise
-of this design. A model-origin text retains that recorded origin after a
+of this design. Model-origin text retains its recorded origin after a
 successful rewrite. Detector evasion does not change its production
 history.
 

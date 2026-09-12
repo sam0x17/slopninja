@@ -74,7 +74,7 @@ emissions. Every credited B provider uses its qualified attested service
 version for these assigned rewrites, with a bound execution receipt. Expected emissions need not cover every miner's costs. The
 obligation concerns delivered service, not unverifiable training effort.
 Independent preservation, readability, and requested-tone review are
-required for B. A miner cannot approve its own revision for rewards.
+required for B. No miner can approve its own revision for rewards.
 
 Public A artifacts let B miners train and search locally.
 Those queries consume B's compute and
@@ -146,7 +146,7 @@ The ticket pins \(R_e\) for eligibility without mixing it into each
 peer's rank: changing one roster member does not reshuffle the relative
 order of all remaining peers.
 
-A ticket binds the epoch, UID/index, roster root, prescribed peers and roles,
+Each ticket binds the epoch, UID/index, roster root, prescribed peers and roles,
 permitted task, salted input commitment, size limits, deadline, and
 nonce. Anyone can check the scheduling metadata and sequential
 consumption against the finalized ledger. The text and commitment
@@ -157,7 +157,7 @@ without another charge against the quota. Counter issuance and quota
 consumption require one authoritative, replay-protected ledger shared
 by validators, not independent per-validator counters.
 
-This schedule is predictable. A miner can inspect future assignments,
+This schedule is predictable. Any miner can inspect future assignments,
 and another UID may have the same owner. Registration costs, bounded
 work schedules, and penalties for assigned failures constrain abuse;
 the hash does not prove operator independence or eliminate strategic
@@ -207,7 +207,7 @@ separately to mandatory protocol service for each committed interface
 and assigned role,
 and require every applicable gate to pass. Purchased traffic cannot
 dilute failures on mandatory work. Successful outgoing requests cannot
-dilute missed provider replies. A miner needs a positive assigned
+dilute missed provider replies. Each miner needs a positive assigned
 workload on each interface for which it seeks eligibility; apply a
 role-specific gate when the schedule assigns that role work.
 An answer after its deadline remains a recorded late answer. A successful
@@ -326,7 +326,7 @@ measurement before live rewards.
 Apply the frozen-artifact and runner-recovery rules in
 Section~\ref{a-artifact-execution}. Unresolved execution follows the
 candidate-specific or shared-evidence closure in Section~\ref{reward-adjudication}.
-A B miner that fails to submit receives zero on its
+Any B miner that fails to submit receives zero on its
 assigned work. A missing strongest-detector result prevents a claim of
 success against that detector. Deliberately triggered execution errors
 are a required pilot attack case.
@@ -414,7 +414,7 @@ comparisons and emission credit under this utility. Source origin grants
 no exemption from either objective or any acceptance gate.
 
 Let \(V\in[0,1]\) be the exact normalized positive improvement in
-target-style fit defined in Section~\ref{reward-adjudication}. A frozen
+target-style fit defined in Section~\ref{reward-adjudication}. The frozen
 public evaluator returns integer style-fit scores \(q_x\) for source \(x\)
 and \(q_z\) for candidate \(z\), using the same target-author references;
 private miner predictions cannot change them. Validators validate the
@@ -496,7 +496,7 @@ allow the other component to earn a reward. Both author fit and detector
 evasion are mandatory parts of every comparison. The semantic gate
 requires preservation of full meaning, readability and target tonal intent;
 neither component can compensate for a failed field. Unresolved evidence
-follows the common closure rule. A declared unscorable candidate earns
+follows the common closure rule. Any declared unscorable candidate earns
 zero B utility under Section~\ref{reward-adjudication}.
 
 Incremental utility can reward improvement in one component while the

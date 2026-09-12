@@ -47,7 +47,7 @@ customer secrets arrive and close provisioning interfaces for the job.
 
 The same protected runtime holds both plaintext inputs during computation.
 The miner may own the hardware or rent confidential compute from another
-operator. A separate host obtains neither secret; a miner that owns the
+operator. The separate host obtains neither secret; a miner that owns the
 model still knows its original weights but obtains no customer plaintext.
 Customers receive encrypted revisions, with no weight download, tensor
 inspection or debug interface. Keep the execution code public and
@@ -112,7 +112,7 @@ from a GPU product name~\cite{nvidiacc}. GPU attestation checks device
 security state and firmware. Application and model binding require the
 measured loader and execution policy described in
 Section~\ref{attested-b-models}; a GPU quote by itself supplies neither.
-A CPU-only enclave with unprotected GPU offload is insufficient.
+CPU-only enclaves with unprotected GPU offload are insufficient.
 
 Hardware enforcement limits host memory access; customer secrecy cannot
 depend on the operator declining to inspect RAM. Qualify the exact CPU
@@ -168,7 +168,7 @@ receive plaintext before this verification. Pin the verifier locally or
 in a customer-controlled application. Treat generated text as untrusted
 content: escape active markup, disable remote images, link previews and
 automatic URL/tool fetches, and keep document rendering and profile
-storage inside the customer's accepted boundary. A malicious revision
+storage inside the customer's accepted boundary. Malicious revisions
 could otherwise cause the client to disclose source facts through a
 network request after successful confidential inference.
 
@@ -186,7 +186,7 @@ customer's own device remain trust dependencies. Timing, size buckets,
 chosen service, prices and availability remain observable; padding and
 bounded scheduling reduce some leakage without proving its absence.
 The design does not claim protection against every side channel,
-physical attack or future hardware exploit. A miner can refuse service
+physical attack or future hardware exploit. Any miner can refuse service
 or withhold ciphertext. Attestation does not prove writing quality,
 guarantee availability or settle payment alone. B settlement additionally
 requires complete ciphertext publication and a strict weighted delivery
@@ -230,7 +230,7 @@ evidence to a chosen validator under the next subsection, but no audit
 exception supplies automatic customer access.
 
 Public A artifacts may be evaluated inside the protected instance.
-A confidential customer job cannot send text to Pangram without a
+Confidential customer jobs cannot send text to Pangram without a
 separate customer-authorized disclosure outside this protocol. The
 attested receipt proves no Pangram pass. Authorized subnet benchmarks
 have their own recipients and external reports; their success is not a
@@ -239,7 +239,7 @@ per-document guarantee for an unseen customer revision.
 \subsection{Customer-directed evidence
 disclosure}\label{customer-directed-evidence-disclosure}
 
-A customer can ask a specific validator to inspect a job by creating a
+Any customer can ask a specific validator to inspect a job by creating a
 new evidence packet encrypted to that validator's authenticated key. The
 customer signs a disclosure context binding the job, selected validator
 and key version, purpose, scope, and validity window. The packet can

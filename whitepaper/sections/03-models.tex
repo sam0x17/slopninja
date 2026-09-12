@@ -30,8 +30,8 @@ withheld-author evaluation.
 
 An origin task returns probabilities over documented production
 histories: human-only, model-only, and mixed human/model work. The
-production record includes revision order and assistance type. A model
-rewrite of a human-only source is mixed human/model work; a model-to-model
+production record includes revision order and assistance type. Rewriting
+a human-only source with a model produces mixed human/model work; a model-to-model
 rewrite remains model-only under this initial label
 scheme. Pangram supplies a comparison, not the training label. The
 proposed encoder uses a separate origin head; author similarity must not
@@ -59,7 +59,25 @@ excluding owner and signature metadata from the content identity. Identical
 content receives one model-credit entry and one possible panel seat; the
 earliest finalized accepted commitment wins, with canonical UID order for
 ties. Small changes and equivalent implementations remain a qualification
-problem. The benchmark scheduler selects reserve artifacts before task issue.
+problem.
+
+For registration, A miners submit a domain-separated hash commitment
+binding their registration identity, round, canonical content digest and a
+fresh random 256-bit nonce. The nonce and registration fields belong to
+the commitment, not the inference-content identity; the nonce remains
+secret until opening. For previously
+unreleased content, miners wait for commitment finality before disclosing
+the digest, manifest or retrievable artifact. The round fixes a publication
+deadline before qualification and panel selection. By that deadline, the
+miner must open the commitment and provide the complete artifact;
+validators check the opening, content digest and qualification. Only
+accepted entries retain their original commitment's finalization priority.
+Missing or invalid publication reserves no credit, panel seat or priority
+in later rounds. Already-public artifacts and foundation-model components
+remain admissible. This ordering allocates duplicate credit; it does not
+establish who authored or first trained a model.
+
+The benchmark scheduler selects reserve artifacts before task issue.
 After issue, a runner outage permits execution of the same artifact on a
 reserved runner, not substitution of another detector or threshold. An unresolved reference
 execution withholds credit under the candidate-specific or shared-evidence
@@ -80,7 +98,7 @@ Inputs are the source, independent target-author samples, requested
 style changes, and a preservation brief. The brief identifies unwanted
 writing patterns to remove and intentional voice features to retain.
 Before generation, it fixes the target tonal intent using any requested
-style and supplied reference samples. A dramatic authorial-style shift can change
+style and supplied reference samples. Dramatic authorial-style shifts can change
 tone while preserving the source's full meaning.
 Author matching covers lexical, grammatical and rhetorical habits in
 the requested register; generic polish alone does not satisfy it.
@@ -91,7 +109,7 @@ requires target-author references, style calibration and the complete
 detector evidence. Opponent selection and scoring are fixed by the benchmark,
 independently of the submitting miner. Author-directed revision of
 one's own or licensed writing and authorized detector-robustness research
-motivate this task. A detector pass does not replace the documented
+motivate this task. Passing a detector does not replace the documented
 production history or any disclosure required for the intended use.
 
 The proposed starter is an 8B decoder, initially
@@ -129,12 +147,12 @@ learn preferences among candidates that pass preservation review.
 Include originals, failed rewrites, copied reference passages, and
 fluent meaning-breaking edits as controls. Also include polished
 revisions that erase the writer's voice and detector-passing revisions
-that retain unwanted filler or formulaic phrasing. A miner's own style score may
+that retain unwanted filler or formulaic phrasing. The miner's own style score may
 guide its search, but cannot approve its output for benchmark rewards.
 
 Transformation briefs may specify audience, clarity, accessibility,
-organization, rhetorical force, and tone. A lower reading level or
-shorter text is useful only when the brief calls for it. Suitable text
+organization, rhetorical force, and tone. Reducing reading level or
+length is useful only when the brief calls for it. Suitable text
 can remain unchanged. Validators use independent judges and reader
 audits to assess preservation, readability, and requested voice;
 reviewer ties and disagreements remain in the data.
@@ -147,7 +165,7 @@ named starters are proposals, not trained subnet products.
 \subsection{Private B versions and attested serving}\label{attested-b-models}
 
 B miners compete through private model weights and paid transformation
-service. Publish benchmark results and version commitments. A miner may
+service. Publish benchmark results and version commitments. Any miner may
 voluntarily publish its B model; customers access private versions through
 qualified attested serving. Model secrecy prevents direct downloading;
 it does not prevent detector providers from buying outputs, studying
@@ -200,14 +218,14 @@ are obtained for that one final text outside the generation runtime.
 Repeated provider observations retain the declared report-selection policy.
 
 Advertising a benchmark result requires the same model, runtime, search
-procedure and workload profile in the paid offer. A cheaper configuration,
-different token budget or newer private model cannot inherit that score.
+procedure and workload profile in the paid offer. Cheaper configurations,
+different token budgets or newer private models cannot inherit that score.
 Publicly identify the tested task population, limits, date, failure rate
 and strict-success rate separately from incremental utility. This binds
 a service to measured performance; it does not guarantee the quality of
 an unseen customer revision.
 
-A miner seeking B emissions must reserve capacity and fulfill assigned
+Miners seeking B emissions must reserve capacity and fulfill assigned
 training rewrites with that qualified version and serving profile. These
 real requests test continued service without requiring paid sales or a
 particular market price. Bind generation receipts on those tickets too.
@@ -226,11 +244,11 @@ miner-supplied text does not qualify. Validators check the receipt and
 attestation chain, open the authorized benchmark commitments, rerun A,
 and conduct the existing independent review. Missing or invalid required
 receipts invalidate a B submission; ordinary execution cannot earn credit. Receipt-verification disagreement
-follows the common unresolved-evidence rule. A valid receipt associates
+follows the common unresolved-evidence rule. Each valid receipt associates
 execution with a version under the hardware and software assumptions;
 it proves neither meaning preservation nor a favorable Pangram result.
 
-A private version can be provisioned to multiple qualified instances
+The same private version can be provisioned to multiple qualified instances
 without releasing its weights to customers or validators. The model owner
 retains its original weights. Model decryption keys may be released only
 after the owner verifies the approved instance; customer input keys follow
