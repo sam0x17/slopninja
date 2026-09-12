@@ -92,6 +92,37 @@ control. `--synthetic-smoke-only` explicitly marks artifacts trained using
 synthetic fixtures; the script rejects these fixtures without that flag.
 Hyperparameter sweeps and selection across seeds remain Rust orchestration work.
 
+For revision chains, retain the complete ancestry in each exported shard.
+Use Rust's `build_evaluation_view` CLI to declare one human/model/mixed trio
+per source family, binding the full shard and exact selected texts. Supply
+an explicit selection array with `source_group`, `human_id`, `model_id` and
+`mixed_id`; choose these IDs before detector scoring. The builder checks
+the original draft/edit pairing and reconstructs the selected model's
+revision history. An explicitly selected intermediate stage supports
+diagnostic comparisons on the same archive.
+
+```sh
+cargo run --manifest-path baseline/detector/Cargo.toml --bin build_evaluation_view -- \
+  --records data/baseline-detector/export/development.jsonl \
+  --split development \
+  --selection data/baseline-detector/export/development-selection.json \
+  --output data/baseline-detector/export/development-view.json
+```
+
+Build the Calibration view the same way, then add both `--development-view`
+and `--calibration-view` to `train.py`. Full-shard token, rights and separation
+checks still cover every ancestor. Epoch selection and temperature fitting
+use only the declared trios. Train remains unchanged; `--sample-weighting
+source_origin` gives each family and origin equal total loss weight while
+exposing every admitted training stage. Training metadata records the view
+hashes, effective counts and complete-archive counts.
+
+For these artifacts, `encoder_evaluation freeze-thresholds` also requires
+the original `--calibration-view`. Use `evaluate --evaluation-view` for
+Development or Test. The paired-report comparison requires the same archive
+and view for both detectors. Omitting both training view flags retains the
+existing behavior for corpora with one draft/edit pair per family.
+
 The token cap includes special tokens. A shard containing a longer record fails
 with its token count; no text is truncated, dropped or split into undocumented
 windows. This first runtime supports rejection only. A separate trained and

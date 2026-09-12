@@ -98,12 +98,48 @@ def validate_data_rights(path, shard_paths, partitions):
     return manifest
 
 
+def evaluation_view(path, shard, split, rows):
+    """Select a Rust-validated trio per family after checking the full ML shard."""
+    view_bytes = path.read_bytes()
+    view = json.loads(view_bytes)
+    if (split not in {"development", "calibration"}
+            or view.get("schema") != "slop_ninja_origin_evaluation_view_v1"
+            or view.get("split") != split or view.get("records_sha256") != sha256(shard)):
+        raise ValueError("evaluation view does not bind this full Development/Calibration shard")
+    by_id = {row["id"]: row for row in rows}
+    if len(by_id) != len(rows):
+        raise ValueError("duplicate record ID in the full evaluation archive")
+    families = view["families"]
+    groups = [family["source_group"] for family in families]
+    if groups != sorted({row["source_group"] for row in rows}):
+        raise ValueError("evaluation view must select every source family exactly once in canonical order")
+    selected = []
+    seen = set()
+    for family in families:
+        for label, role in enumerate(("human", "model", "mixed")):
+            binding = family[role]
+            row = by_id.get(binding["id"])
+            if (row is None or row["id"] in seen or row["label"] != label
+                    or row["source_group"] != family["source_group"]
+                    or row["hash"] != binding["text_sha256"]):
+                raise ValueError("evaluation view ID, origin, family or text differs from the full shard")
+            seen.add(row["id"])
+            selected.append(row)
+    if not selected:
+        raise ValueError("empty evaluation view")
+    return selected, {"sha256": hashlib.sha256(view_bytes).hexdigest(), "records_sha256": view["records_sha256"],
+                      "split": split, "selected_rows": len(selected), "source_groups": len(groups)}
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--checkpoint", required=True, type=Path)
     p.add_argument("--data-rights", type=Path, help="Rust-exported attribution and release obligations")
     for name in ["train", "development", "calibration"]:
         p.add_argument(f"--{name}-jsonl", required=True, type=Path)
+    for name in ["development", "calibration"]:
+        p.add_argument(f"--{name}-view", type=Path,
+                       help="Frozen Rust trio selection over the complete ancestry shard; use both views together")
     p.add_argument("--output", required=True, type=Path)
     p.add_argument("--device", choices=["cpu", "mps"], default="cpu")
     p.add_argument("--max-tokens", type=int, default=1024)
@@ -131,6 +167,8 @@ def main():
         p.error("invalid optimizer parameters")
     if args.sample_weighting != "none" and args.class_weights != "none":
         p.error("choose source-origin sample weights or class weights, not both")
+    if bool(args.development_view) != bool(args.calibration_view):
+        p.error("provide both --development-view and --calibration-view, or neither")
     if args.device == "mps" and not torch.backends.mps.is_available():
         p.error("MPS is unavailable")
     check_package_sources(args.checkpoint)
@@ -151,6 +189,14 @@ def main():
         check_partition_separation({**partitions, "train": partitions["train"] + alternate_rows})
     if any(row["evidence"] == "synthetic_fixture" for rows in partitions.values() for row in rows) and not args.synthetic_smoke_only:
         raise ValueError("synthetic fixtures require --synthetic-smoke-only")
+    archive_counts = {name: class_counts(rows) for name, rows in partitions.items()}
+    views = {}
+    if args.development_view:
+        # Admission, rights, split separation and token limits cover every ancestor.
+        # Only the declared observations enter epoch selection and temperature fit.
+        for name in ["development", "calibration"]:
+            partitions[name], views[name] = evaluation_view(
+                getattr(args, f"{name}_view"), getattr(args, f"{name}_jsonl"), name, partitions[name])
     counts = {name: class_counts(rows) for name, rows in partitions.items()}
     sample_weights = source_origin_weights(partitions["train"]) if args.sample_weighting == "source_origin" else None
     if any(n == 0 for values in counts.values() for n in values):
@@ -271,6 +317,13 @@ def main():
             }
         if args.data_rights:
             training["data_rights_sha256"] = sha256(args.data_rights)
+        if views:
+            training["evaluation_views"] = views
+            training["archive_class_counts"] = archive_counts
+            training["evaluation_view_policy"] = (
+                "Train exposes all admitted stages with the declared weighting; Development and Calibration "
+                "use one frozen human/model/mixed trio per family. Full ancestry shards retain admission, "
+                "rights, split-separation and token-limit checks. No Test input enters fitting.")
         manifest = package_artifact(args.output, tokenizer, model, calibration, training, args.max_tokens, args.checkpoint, data_rights)
         print(json.dumps({"artifact": str(args.output), "artifact_id": manifest["artifact_id"], "status": training["status"]}))
 

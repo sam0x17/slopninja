@@ -1,5 +1,6 @@
 pub mod acquire;
 pub mod dataset;
+pub mod evaluation_view;
 pub mod features;
 pub mod metrics;
 pub mod model;
