@@ -91,10 +91,10 @@ successful rewrite. Detector evasion does not change its production
 history.
 
 The adversarial loop connects these two tasks: detection miners
-learn to recognize transformed model-origin text, while transformation
+learn to recognize model-generated revisions, while transformation
 miners try to defeat qualified detectors from completed rounds.
 The benchmark fixes the opponent-assignment and scoring rules and retains
-the source's production records as the models improve.
+source provenance and each candidate's production record as the models improve.
 
 The initial scope is English prose, document-level author/origin
 predictions, and bounded asynchronous editing jobs. Span-level origin

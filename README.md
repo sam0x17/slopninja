@@ -130,7 +130,10 @@ claims remain unresolved. The selected [public-model design](docs/public-model-e
 removes private A reports from scoring authority. Artifact replay, detector
 qualification and copying incentives still need implementation and evaluation.
 
-Every launch B benchmark measures author fit and detector evasion. Strict
+Every launch B benchmark measures author fit and detector evasion. Human-only,
+model-only and mixed sources all qualify for scored comparisons under the same
+preservation, target-tone and nonregression gates. Freeze the source mixture
+and assigned weights before issue and report results by source origin. Strict
 detector success requires less than 10% AI-generated **plus AI-assisted** content
 on the committed Pangram reports, a majority pass against the subnet panel, and
 a pass against its strongest qualified prior-round origin detector at their
@@ -476,7 +479,7 @@ classifiers and an editing adapter, with a [training-source plan](docs/miner-tra
 covering Global Voices, PLOS and consented writing. A artifacts are public,
 B weights remain private, and miners can earn customer fees through
 [asynchronous inference](docs/paid-inference.md)
-with proposed on-chain job settlement and private execution. Draft 0.19 requires
+with proposed on-chain job settlement and private execution. Draft 0.20 requires
 qualified attestation for B emissions and paid service, with independent key
 release and version-bound receipts. The [consistency review](docs/design-consistency-review.md)
 records the incentive corrections and remaining launch requirements.

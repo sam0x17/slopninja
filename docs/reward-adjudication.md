@@ -45,6 +45,15 @@ and the frozen subnet detector panel. Authorized target references and style
 calibration are mandatory inputs before issue. Isolated style or detector
 ablations are diagnostics with no B emissions.
 
+Human-only, model-only and mixed sources all enter scored B comparisons.
+Freeze their mixture and assigned aggregation weights before task issue,
+and report results by source origin alongside the aggregate. Apply the same
+utility and acceptance gates to every origin. If any required source Pangram
+report scores zero, every required candidate report must also score zero;
+style improvement can earn credit only when subnet nonregression and all
+other gates pass. Retain source provenance separately from each candidate's
+production history. A model rewrite of a human-only source is mixed work.
+
 Before issue, the instance manifest must identify a permitted public
 word/grammar author-distance artifact. Pin its artifact and parameter hashes,
 parser and feature schemas, reference-pooling rule, executable/runtime,

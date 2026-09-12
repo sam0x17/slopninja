@@ -30,8 +30,9 @@ withheld-author evaluation.
 
 An origin task returns probabilities over documented production
 histories: human-only, model-only, and mixed human/model work. The
-production record includes revision order and assistance type. A
-model-to-model rewrite remains model-only under this initial label
+production record includes revision order and assistance type. A model
+rewrite of a human-only source is mixed human/model work; a model-to-model
+rewrite remains model-only under this initial label
 scheme. Pangram supplies a comparison, not the training label. The
 proposed encoder uses a separate origin head; author similarity must not
 be substituted for provenance.
