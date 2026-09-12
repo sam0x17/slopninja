@@ -71,7 +71,7 @@ required. Every credited B entry needs a verified execution receipt binding
 its output to the named private version and bounded serving profile. Attestation adds no quality
 bonus and never replaces semantic or Pangram checks.
 B transformation is the primary paid product; A is an open detector resource
-with optional hosting. There is no mandatory monthly B weight release.
+with optional hosting.
 The [confidential inference design](whitepaper/sections/05-confidentiality.tex)
 specifies key release, runtime isolation and remaining hardware assumptions.
 The [investor brief](docs/confidential-transformation-brief.md) describes proposed
@@ -476,7 +476,7 @@ classifiers and an editing adapter, with a [training-source plan](docs/miner-tra
 covering Global Voices, PLOS and consented writing. A artifacts are public,
 B weights remain private, and miners can earn customer fees through
 [asynchronous inference](docs/paid-inference.md)
-with proposed on-chain job settlement and private execution. Draft 0.17 requires
+with proposed on-chain job settlement and private execution. Draft 0.18 requires
 qualified attestation for B emissions and paid service, with independent key
 release and version-bound receipts. The [consistency review](docs/design-consistency-review.md)
 records the incentive corrections and remaining launch requirements.

@@ -101,9 +101,9 @@ still assumes enough honest validators perform those checks. Native Yuma
 also processes each validator's
 submitted weights independently. A valid benchmark certificate cannot
 force a dishonest validator to submit its prescribed weight row. Public
-replay does not change the native payout transformations studied in
-Section~\ref{existing-evidence-and-implementation-status}; model behavior
-and validator weights still need separate incentive analysis.
+replay establishes the executed computation. Native payout analysis must also account
+for validator weight choices, bond state and any miner and validator
+receipts controlled by a common owner.
 
 The benchmark also needs private source rotation, duplicate detection,
 and delayed release of retired examples. A published model may recognize

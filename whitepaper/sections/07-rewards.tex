@@ -505,7 +505,7 @@ distinct statuses. Extra cheap submissions do not increase a miner's share. Appl
 zero-deficit gates to each miner's earned A and B skill for the measured
 epoch. B entries additionally require valid qualified-version receipts
 and fulfillment of their reserved attested service obligations. Ordinary
-B entries earn no emissions. There is no monthly publication gate for B. Then normalize eligible positive skill
+B entries earn no emissions. Then normalize eligible positive skill
 within each task pool and combine using the published shares. The chain mechanism split carries the corresponding
 aggregate task allocation.
 
@@ -532,10 +532,11 @@ determines the resulting payouts.
 \paragraph{Execution and incentive limits.}
 The two native task pools above reward
 independently evaluated A artifact performance and B output utility.
-Section~\ref{existing-evidence-and-implementation-status} records earlier
-private-panel and shared-settlement experiments and why they do not
-establish conserved native payouts for this design.
 Public A models can still favor colluding B outputs, and public weights
 make copying possible. Qualification, duplicate handling, execution
 budgets and actual native settlement must be tested before live rewards.
+The incentive study must include miner incentives and validator dividends
+received by a common owner, including native filtering, normalization,
+bond state and weight-reveal delays. Application-level credits alone
+do not establish that owner's native payout.
 The design does not claim to eliminate all profitable self-dealing.

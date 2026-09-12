@@ -29,8 +29,8 @@ confounds \\
 Compact document projection & 32.82\% Blog; 25.00\% Global Voices &
 Development-selected linear encoder; previously evaluated test
 corpora \\
-Remove unselected contributions from old scorer & 40.83\% Blog; 29.17\%
-Global Voices & Conditional diagnostic retaining old pooling and
+Selected-feature ablation & 40.83\% Blog; 29.17\%
+Global Voices & Conditional diagnostic retaining the frozen scorer's pooling and
 calibration \\
 \bottomrule
 \end{tabularx}
@@ -63,146 +63,6 @@ encrypts receipts for assigned validators. The receipt prototype relies on calle
 trusted assignments; it is not a customer-request protocol or deployed
 key registry.
 Receipt implementation~\cite{receipts}.
-
-\paragraph{Design history of the stress tests.}\label{historical-stress-tests}
-The following experiments include earlier designs with private A
-inference endpoints, reciprocal A/B service obligations and
-three-reviewer majority judgments. Some fixtures therefore use two
-tickets and four service roles. The current design publishes A artifacts,
-requires training service from A requesters to B providers, and certifies
-judgments through the global weighted quorum
-(Sections~\ref{model-interfaces-and-starter-architectures},
-\ref{adversarial-feedback-loop} and \ref{service-evidence}). The
-complementary-credit and shared-pool policies tested below remain
-experimental settlement proposals. Their arithmetic and counterexamples
-constrain the design without becoming adopted payout rules.
-
-\subsection{Assignment and accounting stress tests}
-
-A reproducible Rust experiment uses SHA-256 rankings for 100 synthetic
-miner UIDs and a separate, already-eligible 100-UID reviewer roster.
-It evaluates 10,000 scheduled slots for each of three fixed seeds, with
-fixed cartel shares from 0\% to 50\%. The table gives pooled counts for
-the 20\% case. Peer rates concern cartel requesters; panel and reviewer
-rates concern all modeled comparisons~\cite{assignmentgameability}.
-
-\par\medskip\noindent
-\begin{tabularx}{\linewidth}{@{}Lrr@{}}
-\toprule
-Event & Count / opportunities & Rate \\
-\midrule
-Cartel peer, mandatory first assignment & 1,128 / 6,000 & 18.80\% \\
-Cartel peer, requester chooses among three & 2,875 / 6,000 & 47.92\% \\
-Cartel A majority, strongest A honest & 1,179 / 30,000 & 3.93\% \\
-Cartel A majority, strongest A colluding & 10,250 / 30,000 & 34.17\% \\
-Cartel majority among three reviewers & 3,060 / 30,000 & 10.20\% \\
-\bottomrule
-\end{tabularx}
-\par\medskip
-
-Counting selective requester skips against each interface's 10\% limit
-raised favorable partners among delivered requests to 20.89\%, while
-leaving their absolute count unchanged. Aggregate-only accounting let
-34 of 60 cartel UID-epochs pass despite exceeding an interface's limit.
-These results support mandatory first assignment, persistent consumed
-indices, and separate service gates. The recovery calculation in
-Equation~\ref{eq:recovery-deficit} also passes the experiment's boundary
-checks; its incentive effect remains conditional on valuing future
-participation.
-
-Colluders can answer every request on time and reserve dishonest answers
-for known favorable committees. Under the modeled majority rule,
-complete review coverage then fails to establish correctness. Exact
-without-replacement calculations lower the reviewer-majority frequency
-from 10.11\% for three reviewers to 1.47\% for nine at the same fixed
-20\% share, with three times the review calls. Larger committees reduce
-this modeled frequency without proving an honest majority.
-
-These are assignment and accounting tests, not measured model accuracy,
-profitable attacks, or an equilibrium analysis. The simulation assumes
-fixed membership and reserved capacity; it does not model adaptive UID
-acquisition, shared-detector fallback, delivery disputes, private-model
-execution, or native payouts. It also does not test the public A artifact
-runner required by the current design.
-
-\subsection{Settlement counterexamples and certificate boundaries}
-
-A second isolated Rust experiment checks 1,921,920 binary-probability
-cases and 693 three-class cases for a proposed complementary integer
-allocation. For fixed admission and a pot \(c\), assigning B
-\(\lfloor cb\rfloor\) and A its remainder conserves \(c\) in every
-admitted case. Rejected joint admissions award neither endpoint. This
-verifies accounting in the synthetic model; it does not verify the
-quality oracle or imply alpha-payout conservation~\cite{settlementgameability}.
-
-With separate normalization, moving an allied pair's raw credits from
-\((12{,}000,0)\) to \((9{,}000,3{,}000)\) increases its combined allocation
-from 10.00000\% to 10.83591\%. Even fixed complete weight rows leave a
-counterexample: with 70\% honest and 30\% malicious validator stake, a
-simplified native clipping and rank-normalization model increases the
-pair's miner-incentive share from 13.15789\% to 13.56362\%. Its combined
-policy credits remain 12,000. The simulation omits native fixed-point
-details, registration filtering, dividends, pruning, and future emission
-changes. It disproves an inference from conserved credits to conserved
-payouts; it is not a measured deployed exploit.
-
-The abstract certificate model also checks 1,332 admissible pairs of weighted vote sets
-without a conflicting strict quorum at or below one-third dishonest
-weight when honest validators never double-sign. Exactly one-third can
-block liveness by withholding. Above one-third, an explicit roster admits
-conflicting certificates through double-signing. This vote-set model does
-not implement the mailbox's first-commitment ledger. Removing missing voters from the denominator
-breaks the safety argument even below that boundary. Service fixtures
-cover unresolved obligations, requester fault before provider activation,
-replay accounting, the 10\% boundary, and persistent recovery deficits.
-Seven focused tests, formatting, and Clippy pass for this isolated
-experiment. These checks supply neither a production ledger nor an
-economic equilibrium proof.
-
-\subsection{Shared-pool and dividend follow-up}
-
-A third isolated Rust experiment considers settling complementary A/B
-credits in one native pool. With identical complete post-filter honest
-rows, fixed honest stake \(s\), fixed outside credits and coalition credit
-sum \(c\), the maximum coalition miner incentive is
-\(c/[s+(1-s)c]\). It depends on the sum rather than the internal A/B
-split. The experiment checks 3,245,130 malicious-row cases and explicit
-maximizers. This invariant concerns the optimized miner-incentive
-envelope; it does not establish total economic receipts~\cite{sharedpoolgameability}.
-
-Historical validator dividends give a counterexample with 20\% coalition
-stake and distinct miner and validator UIDs. Moving honest A/B credits
-from \((.05,.15)\) to \((.15,.05)\), while outside credit stays \(.8\),
-preserves combined miner incentive but increases the dividend of a
-coalition validator with an asymmetric bond history. The replay uses
-unchanged production math function bodies from pinned Subtensor
-revision \texttt{67dcf7f}, explicit sparse-branch orchestration, stored
-bond quantization and integer epoch allocation. In a synthetic budget
-of one billion units, coalition miner-plus-validator allocation rises
-from 126,786,990 to 137,501,008 under legacy bonds. A separate Yuma3
-fixture with Liquid Alpha disabled rises from 125,824,352 to
-131,439,278. These are function-level replays with supplied histories,
-not SDK runtime executions or observed operator profits. The coalition
-is assumed to economically own the modeled validator receipts.
-
-Using current, fully clipped legacy bonds removes the displayed history
-attack. The ideal maximum combined share is \((c+1-s)/2\) when
-\(c\le s\), and \(c(2-s)/[2(s+(1-s)c)]\) otherwise. A finite grid and
-explicit maximizers support this calculation. The native swap fixtures
-give identical units under that configuration, but a 19-split sweep
-retains rounding sensitivity: the matching-row strategy spans 4,884
-units out of one billion. This is not a bound over all native rows.
-The proposed settings remain a candidate, with native filtering,
-registration changes, integer encoding and future incentives still to
-establish.
-
-Separate bounded-cost pot fixtures test irreversible funding and
-per-ticket default bonds. They deter the enumerated independently
-attributable defaults under the declared cost bound; an unobservable
-private execution shortcut remains outside that result. Nine focused
-tests, formatting and Clippy pass. These findings constrain settlement
-claims and motivate the selected public A policy. They do not test its
-artifact runner, copying incentives or detector qualification.
 
 The project does not yet demonstrate a reliable sub-10\% rewriting
 model, calibrated production-origin service, reviewed commercial
