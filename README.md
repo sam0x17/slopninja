@@ -476,7 +476,7 @@ classifiers and an editing adapter, with a [training-source plan](docs/miner-tra
 covering Global Voices, PLOS and consented writing. A artifacts are public,
 B weights remain private, and miners can earn customer fees through
 [asynchronous inference](docs/paid-inference.md)
-with proposed on-chain job settlement and private execution. Draft 0.18 requires
+with proposed on-chain job settlement and private execution. Draft 0.19 requires
 qualified attestation for B emissions and paid service, with independent key
 release and version-bound receipts. The [consistency review](docs/design-consistency-review.md)
 records the incentive corrections and remaining launch requirements.

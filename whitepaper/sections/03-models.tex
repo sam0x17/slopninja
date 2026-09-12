@@ -45,11 +45,11 @@ subnet does not require that checkpoint or assume it will win.
 Each A artifact binds weights, features, tokenizer, preprocessing and
 postprocessing, calibration, reference pooling, executable dependencies,
 runtime, numerical precision, hardware requirements and output rules.
-Pin prompts and random generators where used. Qualification must establish
-a reproducible reference execution, including fixed tolerances and a
-resolution rule for numerical boundary cases. Validate and cache the
-qualified panel, its artifact hashes and thresholds before revealing the
-B task or allowing candidate generation. Validators execute
+A miners pin prompts and random generators where used. During qualification,
+validators establish a reproducible reference execution, including fixed
+tolerances and a resolution rule for numerical boundary cases. They validate and cache the
+qualified panel, its artifact hashes and thresholds before the curator
+reveals the B task or permits candidate generation. Validators execute
 that panel themselves for authoritative benchmark probabilities; a miner's
 reported score is not the scoring oracle.
 
@@ -58,16 +58,16 @@ excluding owner and signature metadata from the content identity. Identical
 content receives one model-credit entry and one possible panel seat; the
 earliest finalized accepted commitment wins, with canonical UID order for
 ties. Small changes and equivalent implementations remain a qualification
-problem. Select any reserve artifact before task issue. After issue, a
-runner outage permits execution of the same artifact on a reserved runner,
-not substitution of another detector or threshold. An unresolved reference
+problem. The benchmark scheduler selects reserve artifacts before task issue.
+After issue, a runner outage permits execution of the same artifact on a
+reserved runner, not substitution of another detector or threshold. An unresolved reference
 execution withholds credit under the candidate-specific or shared-evidence
 closure rules; it is neither B nonresponse nor an automatic pass.
 
-Independent hidden author and production labels qualify each artifact.
-Include targeted-trigger controls: a published model can faithfully execute
-a rule designed to favor a colluding B. Publication verifies computation,
-not reliable detection or independent ownership. The isolated runner
+Validators qualify each artifact against independent hidden author and
+production labels. They include targeted-trigger controls: a published model
+can faithfully execute a rule designed to favor a colluding B. Publication
+verifies computation, not reliable detection or independent ownership. The isolated runner
 provides no network or undeclared state and excludes miner identities
 and assignment metadata from model inputs; text itself
 can still reveal task roles, so this does not prove blindness.

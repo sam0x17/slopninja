@@ -79,9 +79,12 @@ preservation and quality checks, a score strictly below 10\% on
 Pangram's reported AI-generated \textbf{plus AI-assisted} fraction,
 a majority pass against a common panel of three qualified subnet origin
 detectors, and a pass against the strongest qualified prior-round detector at its
-calibrated threshold. The panel contains that strongest detector and two
-hash-selected qualified detectors, frozen for all B candidates in a
-matched batch (Section~\ref{common-transformation-evidence}). Reaching zero is a
+calibrated threshold. The panel's lead detector is selected by held-out
+origin Brier performance; A's quality anchor is selected by sensitivity at
+fixed human false-positive operating points and may be a different detector.
+The panel contains its lead and two hash-selected qualified detectors,
+frozen for all B candidates in a matched batch
+(Section~\ref{common-transformation-evidence}). Reaching zero is a
 desirable measured outcome, not a promise
 of this design. A model-origin text retains that recorded origin after a
 successful rewrite. Detector evasion does not change its production

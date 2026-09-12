@@ -47,10 +47,13 @@ human false-positive rates separately. Fix operating thresholds on
 development data. Unknown or weak production records cannot become hard
 labels merely because Pangram agrees with a miner.
 
-The quality anchor for A's origin task follows the strongest validated
-detector under Section~\ref{pangram-cadence-and-parity}. Start with
-Pangram; a superior subnet detector takes over, and an improved Pangram
-can regain that role. Compare A artifacts and Pangram on the same
+The quality anchor for A's origin task is selected by detection sensitivity
+at fixed human false-positive operating points under
+Section~\ref{pangram-cadence-and-parity}. The B panel's lead detector is
+selected separately by held-out origin Brier performance; the two roles
+can belong to different detectors. Pangram is the initial quality anchor;
+a superior subnet detector takes over, and an improved Pangram can regain
+that role. Validators compare A artifacts and Pangram on the same
 independently labeled hidden origin set and publish performance gaps
 and uncertainty regardless of who anchors the comparison. Documented
 production histories determine reward labels;
@@ -277,12 +280,13 @@ execution capacity for a common comparison batch using published A
 artifacts, plus verification of the required attested B receipts. This matrix consumes no miner service-ticket quota or lifetime
 interaction index.
 
-For each shared comparison index, deterministically select three
-qualified A artifacts on distinct UIDs and a B batch from the frozen registry.
+For each shared comparison index, the benchmark scheduler deterministically
+selects three qualified A artifacts on distinct UIDs and a B batch from the
+frozen registry.
 Admit only qualified attested B entries and freeze each serving profile.
 Coalesce identical verified B content under Section~\ref{attested-b-models}
 before ranking its canonical UID. Include the
-strongest qualified origin detector from the previous completed A round
+highest-ranked qualified origin detector from the previous completed A round
 in the A panel; hash-rank eligible remaining A UIDs under a separate
 comparison domain to select the other two and the reserve order. Then
 hash-rank eligible B UIDs outside that panel to fill the published batch
@@ -297,21 +301,23 @@ counter are frozen and reproducible. Miners cannot nominate a panel,
 join a preferred batch, or obtain another draw by declining work. Only
 exact UID exclusion is asserted; different UIDs may share ownership.
 
-Rank the strongest A service by held-out origin Brier performance,
-subject to the declared calibration and human false-positive limits.
+The panel's lead detector is the strongest qualified A service by held-out
+origin Brier performance, subject to the declared calibration and human
+false-positive limits. Validators freeze that ranking from the previous
+completed A round.
 Author-retrieval rank does not qualify an origin service. Every B entry
 faces the same three detectors, source texts, briefs, authorized target-author
 references, style artifact and calibration, Pangram policy,
 source-baseline evidence, and frozen settings. Every B benchmark requires
-these inputs. Validate and cache the
+these inputs. Validators validate and cache the
 entire selected A panel before revealing the B task or starting its
 generation window. Every B entry must have qualified its runtime,
 model manifest and complete bounded generation/selection profile before
 that issue point. Bind its one final candidate to that invocation;
 external generation retries cannot select a better benchmark answer.
 Artifact reserves may be used only before that issue
-point. Execute a complete source and candidate matrix after B candidate
-commitments, using the same frozen artifacts and reference runtime. This is
+point. Validators execute a complete source and candidate matrix after B
+candidate commitments, using the same frozen artifacts and reference runtime. This is
 what matched assignments mean. The three-member pilot is provisional;
 its cost, coverage, and susceptibility to colluding UIDs require
 measurement before live rewards.
@@ -334,7 +340,7 @@ from independent labeled evaluation, not from how harshly it scores B.
 The strongest detector's result is also reported separately. Legitimate
 detector disagreement alone is neither fraud nor a replacement trigger.
 
-Execute A under an isolated reference interface that excludes B UIDs,
+Validators execute A under an isolated reference interface that excludes B UIDs,
 source/candidate role labels, scheduling metadata and undeclared state.
 Mix human and model controls. Text itself can still reveal its origin
 or purpose; interface restrictions do not prove blindness. Retain
@@ -351,9 +357,13 @@ submission. They earn no separate credit and do not reduce required
 validator execution. Validators
 recompute the canonical outputs and compare the claims; verified results
 determine rewards, with mismatches retained. A claimed high score cannot
-skip another candidate's verification. Commit the complete evidence by the fixed block deadline;
-hash-assigned validators review every scored submission and all required
-checks at launch. Bootstrap rounds
+skip another candidate's verification. B miners commit submission evidence,
+and validators commit their verification records, by the fixed evidence
+deadline. Hash-assigned preparers organize each submission's dossier.
+Every certifying validator independently performs
+all required checks before signing; final certificates require the strict
+quorum of the full frozen eligible set. At launch, this process covers
+every scored submission. Bootstrap rounds
 use published, explicitly funded bootstrap A artifacts until enough
 competitive models qualify, and are reported separately.
 
@@ -400,9 +410,10 @@ disagreement remain review risks.
 
 Let \(V\in[0,1]\) be the exact normalized positive improvement in
 target-style fit defined in Section~\ref{reward-adjudication}. A frozen
-public evaluator returns integer source and candidate scores; private
-miner predictions cannot change them. Validate the evaluator against
-independent reader comparisons before live use. Topic copying, reference
+public evaluator returns integer style-fit scores \(q_x\) for source \(x\)
+and \(q_z\) for candidate \(z\), using the same target-author references;
+private miner predictions cannot change them. Validators validate the
+evaluator against independent reader comparisons before live use. Topic copying, reference
 copying, and meaning-breaking edits must fail that validation. No
 miner-defined embedding can be its own reward oracle.
 
@@ -489,6 +500,12 @@ threshold or the strict detector target. Report author fit and detector
 passes separately from incremental utility; a strict pass must also meet
 the raw nonregression conditions above. An already suitable source can
 stay unchanged without receiving an invented improvement bonus.
+
+If any required source report gives \(F_r(x)=0\), Pangram nonregression
+requires every candidate report to give \(F_r(z)=0\). The same floor can
+occur for model-only or mixed sources; the documented production label
+does not relax the gate. Style improvement may still earn incremental
+utility when all gates pass.
 
 Validate this proposed utility against blinded reader comparisons
 before live reward use. It must order useful revisions above omissions,

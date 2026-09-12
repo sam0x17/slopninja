@@ -1,70 +1,56 @@
 \section*{Abstract}\label{abstract}
 
-Slop Ninja proposes a Bittensor subnet launching with two tasks:
-author and AI-origin detection (A), and author-directed text
-transformation (B). B jointly targets a particular authorized writer's
-style and evasion of Pangram and qualified subnet AI-origin detectors.
-Both objectives guide removal of unwanted generic and formulaic writing
-while retaining the source's arguments, details and qualifications and
-matching the requested tonal intent. Indistinguishability from that
-writer's own work is a target for blinded evaluation, not an achieved
-result. Every B benchmark evaluates both author fit and detector evasion.
-Miners publish complete, immutable A inference artifacts and keep B
-generation models private. They compete on the usefulness of their
-outputs. They receive network emissions for benchmark performance and
-can separately sell asynchronous inference at market prices denominated
-in the subnet's alpha token. Validators execute frozen A artifacts
-directly; B miners can use them locally for training and search.
-Pangram initially sets A's origin-detection quality target. A superior
-subnet detector becomes the anchor after independent confirmation;
-continuing Pangram comparisons can return it to that role if it improves
-past the incumbent.
-Training recipes and source data need not be published merely to
-reproduce A inference.
+Slop Ninja proposes a Bittensor subnet with two tasks: author and
+AI-origin detection (A), and author-directed text transformation (B).
+B jointly targets an authorized writer's style and evasion of Pangram
+and qualified subnet AI-origin detectors. Rewrites must retain the
+source's arguments, details and qualifications while removing unwanted
+formulaic writing. Every B benchmark measures both objectives; rewards
+require independent preservation, readability and requested-tone approval.
+Indistinguishability from the writer's own work remains a target for
+blinded evaluation.
 
-For every paid B customer job, inputs are encrypted directly to a verified
-TEE instance serving the assigned miner's private model. The customer
-releases no input key until it has checked fresh hardware evidence and
-the accepted application policy. CPU, GPU and their transfer path must
-all satisfy that policy. The model owner separately provisions encrypted
-weights to the approved runtime; it receives no customer input key.
-Ordinary A hosting grants the operator plaintext access when the customer
-accepts that mode. It is not eligible for paid B jobs.
-The customer's source text, reference writing, style profile, and
-editorial brief are not automatically disclosed to validators, routing
-services, or other miners. Customers receive encrypted results and may
-separately provide evidence to a specific validator of their choice.
-B transformation is
-the primary paid product; A remains an open detector resource with
-optional paid hosting. Subnet-owned benchmarks provide the authorized material that validators
-need to assess accuracy and target style, with preservation, readability,
-and tone as constraints on B.
-Transformation miners compete against Pangram and qualified subnet
-AI-origin detectors. Emission eligibility
-requires public A artifacts and qualified attested B generation, including
-bounded rewrite service on authorized A training requests. B miners
-self-score locally; validators verify those scores without involving A
-inference endpoints. Every credited B candidate binds to its private model
-version and serving profile through an execution receipt. Ordinary B
-generation remains research-only. Retired benchmark rewrites feed later
-detection rounds. Detector reports establish observations rather than
-human authorship or preserved meaning.
+A miners publish complete, immutable inference artifacts; B miners keep
+generation models private. B can run A locally for training and search,
+and validators independently reproduce A scores. Pangram initially
+anchors A's origin-detection quality target. An independently confirmed
+superior subnet detector replaces it; continuing comparisons let Pangram
+regain that role if it surpasses the incumbent. Detector results establish
+neither human authorship nor preserved meaning.
 
-On-chain contracts coordinate offers, commitments, deadlines, and
-payments; miners execute inference privately off-chain. Paid B settlement
-requires a TEE-signed execution receipt, complete customer-encrypted
-result publication and a strict validator-weight delivery certificate.
-Validators receive no customer decryption capability; acknowledgment is
-unnecessary. Published hash
-rules determine counterpart and evidence-preparer assignments. Every scored
-benchmark submission receives the required review at launch. Final
+Miners qualify for the interfaces they commit to serve.
+A requires qualified public artifacts and fulfillment of assigned
+obligations as training requesters. B requires qualified attested generation
+and bounded rewrite service for authorized A training requests.
+Miners must meet availability requirements across all their committed roles.
+Emissions reward benchmark performance; miners separately sell
+asynchronous inference at market prices denominated in the subnet's
+alpha token. B transformation is the primary paid product, with optional
+paid A hosting.
+
+For paid B jobs, customers encrypt inputs to a verified trusted execution
+environment (TEE), a hardware-protected runtime. Customers verify fresh
+evidence covering the execution code, CPU, GPU and transfer path before
+releasing input keys. Model owners independently
+verify the instance before releasing model keys; they receive no customer
+input keys and cannot authorize their release. Customer text is not
+automatically disclosed to validators, routing services or other miners.
+Customers may separately disclose evidence to a chosen validator.
+Every credited B candidate and paid B job needs an execution receipt:
+a record signed by the protected runtime that binds generated text to
+the registered private model version and serving profile.
+
+On-chain contracts coordinate jobs and payments. Paid B settlement
+requires the execution receipt, complete publication of the
+customer-encrypted result, and a delivery certificate: validators' signed
+agreement that the evidence satisfies delivery rules. Customer
+acknowledgment is unnecessary. Delivery certificates and final benchmark
 judgments require strictly more than two-thirds of frozen eligible
-validator weight, assuming less than one-third is dishonest and each
-signer inspects the evidence.
-This draft specifies the proposed architecture, training data, reward
-rules, and trust assumptions. It also reports the limits of the existing
-prototype. Public A artifacts permit reproducible scoring; their
-accuracy and resistance to behavior that favors allied B models still
-require independent evaluation. Reliable cleanup in the requested writer's
-voice, attested CPU/GPU inference, and live reward settlement remain to be
-demonstrated.
+validator weight, assuming less than one-third is dishonest and every
+signer inspects the evidence. Delivery certification grants no decryption
+access and establishes no editorial quality.
+
+This draft specifies the proposed protocol and the limits of its
+prototype. Detector accuracy, reliable cleanup in the requested voice,
+attested CPU/GPU inference and live reward settlement remain to be
+independently demonstrated.
