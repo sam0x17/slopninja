@@ -184,3 +184,69 @@ this diagnostic changed neither v6 fitting nor its selection or Test protocol.
 
 The capture-audit revision in `c881faf` passed the complete Rust test suite,
 format checks and all-targets Clippy on the Studio at 2026-09-12T22:51:59Z.
+
+## Pangram annotation of hosted captures
+
+`annotation_capture_plan` prepares a complete audited capture cohort for
+evaluation without converting it into commercially admitted `OriginRecord`
+training rows. Supply the SHA256 of the completed audit explicitly. The adapter
+checks the review and source hashes, full source/model matrix, exact text,
+source evaluation rights, source/profile correspondence and generator identity.
+It keeps every capture and its mechanical-check outcome. Unexposed sampling
+settings, immutable model revisions and model licenses remain null.
+
+The resulting `slop_ninja_pangram_cli_annotation_plan_v1` preserves the complete
+review archive and emits the same Pangram request format as the original
+planner. Each annotation keeps the observed model-only workflow label and its
+generator attribution independently of the returned detector fractions.
+Provider-output training and redistribution rights remain unresolved.
+
+```sh
+annotation_capture_plan --capture-review complete-v1 \
+  --expected-audit-sha256 AUDIT_SHA256 --output-dir hosted-plan-v1
+pangram_bulk validate --plan-dir hosted-plan-v1
+```
+
+Both commands are offline. The existing `pangram_bulk submit` command accepts
+the new plan after independently checking its text, provenance and complete
+capture coverage. Use the existing cumulative spending ledger; its durable
+reservations and refusal to repeat existing or uncertain submissions apply to
+both input formats. A new plan does not create a new budget. Keep the declared
+$30 allowance available for the separate fresh v6 comparison.
+
+The first hosted batch completed all 96 annotations with Pangram 4.0. Its
+estimate is $9.44, with $11.80 reserved. Cumulative estimates are $80.36 and
+reservations $104.05 within the $150 cap; actual billing remains unverified.
+The collector accepted 35 exact text echoes and recorded 61 whitespace-only
+echoes. No submitted text was changed, and there were no failed items.
+
+The [paired aggregate](results/pangram-frontier-v1.json) uses the existing
+Pangram flag rule, combined AI and AI-assisted fraction at least 10%. V5 uses
+its original thresholds. These rules are not matched at a common population
+false-positive rate, and this cohort contains no human controls.
+
+| Generator | Pangram flags | V5 stricter flags | V5 looser flags |
+| --- | ---: | ---: | ---: |
+| GPT-6 | 23/24 | 23/24 | 23/24 |
+| GPT-5.6 | 21/24 | 21/24 | 21/24 |
+| Claude Opus | 20/24 | 11/24 | 13/24 |
+| Claude Sonnet | 21/24 | 17/24 | 19/24 |
+| All | 85/96 | 72/96 | 76/96 |
+
+At v5's stricter setting, both detectors flag 65 texts, Pangram alone flags 20,
+v5 alone flags seven, and neither flags four. Equal totals for a generator do
+not imply agreement on individual texts. These are Train-source diagnostics;
+they do not establish fresh-source accuracy or general superiority.
+
+The combined Pangram fractions include 22 texts below 60%, two from 60-70%, six
+from 70-80%, eleven from 80-90%, none from 90% to below 100%, and 55 at 100%.
+All outcomes remain in the corpus. Pangram assigns much of the detected content
+to its AI-assisted category; the average AI fraction is 9.8% and assisted
+fraction 67.5%. The archived workflows remain model-only. Detector categories
+and content fractions do not replace the independently recorded origin labels.
+
+The adapter and submission changes passed the full Rust tests, format checks,
+and all-targets Clippy on the Studio. Offline checks accepted both input formats
+and rejected altered origin labels, omitted captures, changed text even with an
+updated payload hash, and false commercial-training admission. No additional
+model generation or fitting was part of this annotation batch.

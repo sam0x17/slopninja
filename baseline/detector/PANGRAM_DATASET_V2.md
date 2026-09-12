@@ -238,3 +238,18 @@ of squared weights. That number does not account for within-family correlation.
 The sparse bins still need additional examples; weighting them more heavily
 does not supply new evidence. No detector has been fitted on these weights,
 and the frozen v6 experiment remains unchanged.
+
+The [matched GPT/Claude batch](GENERATOR_ATTRIBUTION.md#pangram-annotation-of-hosted-captures)
+now adds 96 validated annotations under a separate evaluation-only capture
+schema. It retains unknown hosted settings and unresolved commercial-training
+rights instead of manufacturing admitted origin records. Nineteen new texts
+fall between 60% and 100% exclusive, 22 below 60%, and 55 at 100%. All are
+preserved with their recorded model-only workflow labels, including cases
+Pangram describes as AI-assisted or does not flag.
+
+This batch costs an estimated $9.44 with $11.80 reserved. Cumulative estimates
+are $80.36 and reservations $104.05. The $30 allocation for a fresh v6 comparison
+remains available, leaving $15.95 for further Train reservations before that
+comparison is planned. Billing and redistribution of individual provider
+annotations remain unverified. The new observations do not alter v6 fitting,
+selection, calibration or Test decisions.

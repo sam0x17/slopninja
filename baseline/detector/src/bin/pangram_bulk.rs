@@ -1,4 +1,6 @@
 //! Budgeted Pangram bulk submission and resumable, exact-input collection.
+#[path = "support/annotation_captures.rs"]
+mod annotation_captures;
 use anyhow::{Context, Result, ensure};
 use clap::{Parser, Subcommand};
 use reqwest::blocking::Client;
@@ -21,6 +23,13 @@ struct Args {
 }
 #[derive(Subcommand)]
 enum Command {
+    /// Validate a prepared batch offline without reading credentials or spending.
+    Validate {
+        #[arg(long)]
+        plan_dir: PathBuf,
+        #[arg(long, default_value_t = 0)]
+        batch: usize,
+    },
     /// Create a cumulative spending ledger. Does not contact Pangram.
     Init {
         #[arg(long)]
@@ -140,16 +149,80 @@ fn budget_used(directory: &Path) -> Result<u64> {
 fn validate_payload(plan_dir: &Path, batch: usize) -> Result<(Value, Vec<u8>, u64)> {
     let plan = read(&plan_dir.join("plan.json"))?;
     ensure!(
-        plan["schema"] == "slop_ninja_pangram_annotation_plan_v1"
+        (plan["schema"] == "slop_ninja_pangram_annotation_plan_v1"
+            || plan["schema"] == annotation_captures::PLAN_SCHEMA)
             && plan["model_selector"] == "pangram-4",
         "Unsupported plan"
     );
-    let source = plan_dir.join("source-records.jsonl");
-    ensure!(
-        sha256(fs::read(&source)?) == field(&plan, "input_sha256")?,
-        "Corpus hash mismatch"
-    );
-    let records = read_records(&source)?;
+    let hosted = if plan["schema"] == annotation_captures::PLAN_SCHEMA {
+        ensure!(
+            plan["commercial_training_admitted"] == false
+                && plan["source_kind"] == "hosted_cli_capture",
+            "Hosted evaluation cannot imply training admission"
+        );
+        annotation_captures::load(
+            &plan_dir.join("capture-review"),
+            field(&plan, "capture_audit_sha256")?,
+        )?
+    } else {
+        Vec::new()
+    };
+    let hosted: BTreeMap<_, _> = hosted
+        .iter()
+        .map(|r| (r.reference["record_id"].as_str().unwrap(), r))
+        .collect();
+    if plan["schema"] == annotation_captures::PLAN_SCHEMA {
+        ensure!(
+            plan["repeats"] == 1
+                && plan["repeat_start"] == 0
+                && plan["record_count"] == hosted.len(),
+            "Hosted plan must retain one observation per audited capture"
+        );
+        let mut covered = BTreeSet::new();
+        let mut text_hashes = BTreeSet::new();
+        let all_members = plan["members"]
+            .as_array()
+            .context("Missing hosted members")?;
+        for member in all_members {
+            let hash = field(member, "text_sha256")?;
+            ensure!(
+                text_hashes.insert(hash)
+                    && member["repeat_index"] == 0
+                    && member["request_id"] == format!("{hash}:0"),
+                "Duplicate or repeated hosted text"
+            );
+            let references = member["records"]
+                .as_array()
+                .context("Missing hosted provenance")?;
+            ensure!(!references.is_empty(), "Empty hosted member");
+            for reference in references {
+                let id = field(reference, "record_id")?;
+                let record = hosted.get(id).context("Unknown hosted member")?;
+                ensure!(
+                    covered.insert(id)
+                        && record.reference == *reference
+                        && sha256(&record.text) == hash,
+                    "Hosted coverage or provenance differs"
+                );
+            }
+        }
+        ensure!(
+            covered.len() == hosted.len()
+                && plan["unique_texts"] == text_hashes.len()
+                && plan["request_items"] == all_members.len(),
+            "Hosted plan omitted captures"
+        );
+    }
+    let records = if plan["schema"] == "slop_ninja_pangram_annotation_plan_v1" {
+        let source = plan_dir.join("source-records.jsonl");
+        ensure!(
+            sha256(fs::read(&source)?) == field(&plan, "input_sha256")?,
+            "Corpus hash mismatch"
+        );
+        read_records(&source)?
+    } else {
+        Vec::new()
+    };
     let records: BTreeMap<_, _> = records.iter().map(|r| (r.id.as_str(), r)).collect();
     let path = format!("requests/batch-{batch:04}.json");
     let payload = fs::read(plan_dir.join(&path))?;
@@ -186,6 +259,16 @@ fn validate_payload(plan_dir: &Path, batch: usize) -> Result<(Value, Vec<u8>, u6
         let provenance = member["records"].as_array().context("Missing provenance")?;
         ensure!(!provenance.is_empty(), "Empty provenance");
         for reference in provenance {
+            if plan["schema"] == annotation_captures::PLAN_SCHEMA {
+                let record = hosted
+                    .get(field(reference, "record_id")?)
+                    .context("Unknown hosted capture")?;
+                ensure!(
+                    record.text == text && record.reference == *reference,
+                    "Hosted text or provenance differs"
+                );
+                continue;
+            }
             let record = records
                 .get(field(reference, "record_id")?)
                 .context("Unknown origin record")?;
@@ -528,6 +611,12 @@ fn collect(job: &Path, allow_whitespace: bool, allow_soft_hyphen: bool) -> Resul
 
 fn main() -> Result<()> {
     let result = match Args::parse().command {
+        Command::Validate { plan_dir, batch } => {
+            let (plan, payload, units) = validate_payload(&plan_dir, batch)?;
+            json!({"status":"validated_offline","schema":plan["schema"],"batch":batch,
+                "payload_sha256":sha256(&payload),"estimated_units":units,
+                "estimated_bulk_usd_cents":units*4,"reserve_at_least_usd_cents":units*5})
+        }
         Command::Init {
             budget_dir,
             cap_cents,
