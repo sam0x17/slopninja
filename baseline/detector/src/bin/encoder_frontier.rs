@@ -2,7 +2,10 @@
 use anyhow::{Context, Result, ensure};
 use clap::Parser;
 use serde_json::{Value, json};
-use slop_ninja_detector::dataset::sha256;
+use slop_ninja_detector::{
+    dataset::{Split, sha256},
+    evaluation_view,
+};
 use std::{fs, path::PathBuf, process::Command};
 
 #[derive(Parser)]
@@ -15,6 +18,12 @@ struct Args {
     checkpoint: PathBuf,
     #[arg(long)]
     shards: PathBuf,
+    /// Frozen Development observations over the complete ancestry shard.
+    #[arg(long, requires = "calibration_view")]
+    development_view: Option<PathBuf>,
+    /// Frozen Calibration observations; both view flags must be declared together.
+    #[arg(long, requires = "development_view")]
+    calibration_view: Option<PathBuf>,
     #[arg(long)]
     whitespace_train: PathBuf,
     #[arg(long)]
@@ -28,8 +37,64 @@ struct Args {
     learning_rates: Vec<f64>,
     #[arg(long, default_value_t = 5, value_parser = clap::value_parser!(u32).range(1..=20))]
     epochs: u32,
+    #[arg(long, default_value_t = 1024, value_parser = clap::value_parser!(u32).range(1..=8192))]
+    max_tokens: u32,
     #[arg(long, default_value = "three_class", value_parser = ["three_class", "human_model"])]
     selection_objective: String,
+}
+
+fn freeze_evaluation_views(
+    args: &Args,
+    hashes: &serde_json::Map<String, Value>,
+) -> Result<Option<Value>> {
+    match (&args.development_view, &args.calibration_view) {
+        (None, None) => Ok(None),
+        (Some(development), Some(calibration)) => {
+            let mut bindings = serde_json::Map::new();
+            for (name, split, path) in [
+                ("development", Split::Development, development),
+                ("calibration", Split::Calibration, calibration),
+            ] {
+                let loaded = evaluation_view::load_view(
+                    path,
+                    &args.shards.join(format!("{name}.jsonl")),
+                    split,
+                )?;
+                ensure!(
+                    hashes[name] == loaded.view.records_sha256,
+                    "Evaluation view archive differs from the audited shard"
+                );
+                bindings.insert(name.into(), serde_json::to_value(loaded.binding())?);
+            }
+            Ok(Some(Value::Object(bindings)))
+        }
+        _ => anyhow::bail!("Development and Calibration views must be supplied together"),
+    }
+}
+
+fn check_training_views(training: &Value, frozen: Option<&Value>) -> Result<()> {
+    ensure!(
+        training.get("evaluation_views") == frozen,
+        "Training evaluation views differ from the frozen frontier"
+    );
+    Ok(())
+}
+
+fn append_training_partitions(command: &mut Command, args: &Args) {
+    // Test remains an audit-only input, never a trainer argument.
+    for split in ["train", "development", "calibration"] {
+        command
+            .arg(format!("--{split}-jsonl"))
+            .arg(args.shards.join(format!("{split}.jsonl")));
+    }
+    if let (Some(development), Some(calibration)) = (&args.development_view, &args.calibration_view)
+    {
+        command
+            .arg("--development-view")
+            .arg(development)
+            .arg("--calibration-view")
+            .arg(calibration);
+    }
 }
 
 fn main() -> Result<()> {
@@ -53,10 +118,10 @@ fn main() -> Result<()> {
     let audit: Value = serde_json::from_slice(&fs::read(&args.token_audit)?)?;
     ensure!(
         audit["fits_configured_token_limit"] == true
-            && audit["max_tokens"] == 1024
+            && audit["max_tokens"] == args.max_tokens
             && audit["model_executed"] == false
             && audit["records_dropped"] == 0,
-        "Require a passing 1024-token audit without filtering or predictions"
+        "Require a passing audit at the declared token limit without filtering or predictions"
     );
     let mut hashes = serde_json::Map::new();
     for split in ["train", "development", "calibration", "test"] {
@@ -72,10 +137,12 @@ fn main() -> Result<()> {
         audit["checkpoint_pin_sha256"] == checkpoint_hash,
         "Checkpoint audit mismatch"
     );
+    let evaluation_views = freeze_evaluation_views(&args, &hashes)?;
     let train_path = args.runner_dir.join("train.py");
-    let protocol = json!({
+    let mut protocol = json!({
         "schema":"slop_ninja_encoder_frontier_v1",
         "learning_rates":args.learning_rates,"epochs":args.epochs,"batch_size":4,"seed":17,
+        "max_tokens":args.max_tokens,
         "sample_weighting":"source_origin","class_weights":"none",
         "selection_objective":args.selection_objective,
         "selection":"positive Development recall for each class in the selected objective, then minimum uncalibrated Development objective log loss; earlier epoch and lower learning rate break exact ties",
@@ -88,6 +155,9 @@ fn main() -> Result<()> {
         "python":args.python,"device":args.device,"final_test_opened":false,
         "test_access":"count/length/hash audit only; no Test argument is passed to the trainer"
     });
+    if let Some(views) = &evaluation_views {
+        protocol["evaluation_views"] = views.clone();
+    }
     fs::create_dir_all(&args.output_dir)?;
     fs::write(
         args.output_dir.join("protocol.json"),
@@ -96,6 +166,21 @@ fn main() -> Result<()> {
     let mut candidates = Vec::new();
     let mut selected: Option<(f64, f64, PathBuf, String)> = None;
     for &rate in &args.learning_rates {
+        if let Some(views) = &evaluation_views {
+            for (name, path) in [
+                ("development", &args.development_view),
+                ("calibration", &args.calibration_view),
+            ] {
+                ensure!(
+                    sha256(fs::read(
+                        path.as_ref().context("Missing frozen view path")?
+                    )?) == views[name]["sha256"]
+                        && sha256(fs::read(args.shards.join(format!("{name}.jsonl")))?)
+                            == views[name]["records_sha256"],
+                    "Evaluation view or archive changed before fitting"
+                );
+            }
+        }
         let name = format!("lr-{rate}");
         let output = args.output_dir.join(&name);
         let log_path = args.output_dir.join(format!("{name}.log"));
@@ -113,9 +198,9 @@ fn main() -> Result<()> {
             .arg(&output)
             .arg("--device")
             .arg(&args.device)
+            .arg("--max-tokens")
+            .arg(args.max_tokens.to_string())
             .args([
-                "--max-tokens",
-                "1024",
                 "--batch-size",
                 "4",
                 "--seed",
@@ -141,11 +226,7 @@ fn main() -> Result<()> {
                 .arg("--selection-objective")
                 .arg(&args.selection_objective);
         }
-        for split in ["train", "development", "calibration"] {
-            command
-                .arg(format!("--{split}-jsonl"))
-                .arg(args.shards.join(format!("{split}.jsonl")));
-        }
+        append_training_partitions(&mut command, &args);
         fs::write(
             args.output_dir.join(format!("{name}-invocation.json")),
             serde_json::to_vec_pretty(&json!({
@@ -175,6 +256,18 @@ fn main() -> Result<()> {
         }
         let training: Value = serde_json::from_slice(&fs::read(output.join("training.json"))?)?;
         let manifest: Value = serde_json::from_slice(&fs::read(output.join("manifest.json"))?)?;
+        ensure!(
+            manifest["max_tokens"] == args.max_tokens,
+            "Artifact token limit differs from the frozen frontier"
+        );
+        check_training_views(&training, evaluation_views.as_ref())?;
+        if evaluation_views.is_some() {
+            ensure!(
+                manifest["files"]["training.json"]
+                    == sha256(fs::read(output.join("training.json"))?),
+                "Artifact training metadata is not bound by its manifest"
+            );
+        }
         let coverage_key = if args.selection_objective == "human_model" {
             "requires_nonzero_development_binary_recall"
         } else {
@@ -253,4 +346,96 @@ fn main() -> Result<()> {
     )?;
     println!("{}", serde_json::to_string_pretty(&report)?);
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn arguments(extra: &[&str]) -> Result<Args, clap::Error> {
+        Args::try_parse_from(
+            [
+                "encoder_frontier",
+                "--python",
+                "fixture-python",
+                "--runner-dir",
+                "runner",
+                "--checkpoint",
+                "checkpoint",
+                "--shards",
+                "shards",
+                "--whitespace-train",
+                "whitespace.jsonl",
+                "--token-audit",
+                "audit.json",
+                "--output-dir",
+                "new-output",
+            ]
+            .into_iter()
+            .chain(extra.iter().copied()),
+        )
+    }
+
+    #[test]
+    fn views_are_an_explicit_pair_and_no_test_argument_reaches_training() {
+        assert!(arguments(&["--development-view", "dev.json"]).is_err());
+        assert!(arguments(&["--calibration-view", "cal.json"]).is_err());
+        for extra in [
+            &[][..],
+            &[
+                "--development-view",
+                "dev.json",
+                "--calibration-view",
+                "cal.json",
+            ][..],
+        ] {
+            let args = arguments(extra).unwrap();
+            let mut command = Command::new("never-executed");
+            append_training_partitions(&mut command, &args);
+            let values: Vec<_> = command
+                .get_args()
+                .map(|arg| arg.to_string_lossy().into_owned())
+                .collect();
+            assert_eq!(
+                &values[..6],
+                [
+                    "--train-jsonl",
+                    "shards/train.jsonl",
+                    "--development-jsonl",
+                    "shards/development.jsonl",
+                    "--calibration-jsonl",
+                    "shards/calibration.jsonl"
+                ]
+            );
+            assert!(!values.iter().any(|value| value.contains("test")));
+            assert_eq!(values.len(), 6 + extra.len());
+            if !extra.is_empty() {
+                assert_eq!(&values[6..], extra);
+            }
+        }
+    }
+
+    #[test]
+    fn returned_artifact_must_keep_exact_frozen_view_bindings() {
+        let frozen = json!({"development":{"sha256":sha256("development-view")},"calibration":{"sha256":sha256("calibration-view")}});
+        assert!(check_training_views(&json!({}), None).is_ok());
+        assert!(check_training_views(&json!({}), Some(&frozen)).is_err());
+        let mut training = json!({"evaluation_views":frozen});
+        assert!(check_training_views(&training, Some(&frozen)).is_ok());
+        assert!(check_training_views(&training, None).is_err());
+        training["evaluation_views"]["development"]["sha256"] = json!(sha256("changed"));
+        assert!(check_training_views(&training, Some(&frozen)).is_err());
+        assert!(check_training_views(&json!({"evaluation_views":null}), None).is_err());
+    }
+
+    #[test]
+    fn token_limit_defaults_to_legacy_value_and_is_bounded() {
+        assert_eq!(arguments(&[]).unwrap().max_tokens, 1024);
+        assert_eq!(
+            arguments(&["--max-tokens", "2048"]).unwrap().max_tokens,
+            2048
+        );
+        assert!(arguments(&["--max-tokens", "0"]).is_err());
+        assert!(arguments(&["--max-tokens", "8193"]).is_err());
+    }
 }

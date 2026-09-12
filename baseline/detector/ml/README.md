@@ -123,6 +123,24 @@ Development or Test. The paired-report comparison requires the same archive
 and view for both detectors. Omitting both training view flags retains the
 existing behavior for corpora with one draft/edit pair per family.
 
+The Rust `encoder_frontier` accepts the same paired view flags. It checks
+their full archives before fitting, pins the view hashes, and verifies the
+returned training metadata. Its `--max-tokens` defaults to 1024; pass 2048
+for the [v6 protocol](../ENCODER_REVISION_V6.md), with a token audit at that
+same limit. The frontier passes only Train, Development and Calibration to
+the trainer. Test access remains limited to the declared metadata audit.
+
+Use `encoder_evaluation evaluate --human-roots-only` for the separate
+human-source diagnostic, supplying an archive containing every assigned human
+root, including those without successful model generations. This mode selects
+exactly one documented or historical human root per family, retains full
+archive admission and calibration-overlap checks, and reports collection slices.
+Model sensitivity is null because this diagnostic contains no model examples.
+It cannot be combined with `--evaluation-view`. The report comparer requires
+both inputs to carry the same human-root policy and exact paired observations.
+Keep length exclusions explicit when an older detector cannot accept every
+assigned root; this flag does not authorize silent filtering or truncation.
+
 The token cap includes special tokens. A shard containing a longer record fails
 with its token count; no text is truncated, dropped or split into undocumented
 windows. This first runtime supports rejection only. A separate trained and

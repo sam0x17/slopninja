@@ -3,7 +3,7 @@ use anyhow::{Context, Result, ensure};
 use clap::{Parser, Subcommand, ValueEnum};
 use serde_json::{Value, json};
 use slop_ninja_detector::{
-    dataset::{OriginRecord, Split, sha256},
+    dataset::{Evidence, Origin, OriginRecord, Split, sha256},
     evaluation_view::{self, Binding, Family},
     metrics::{self, OperatingPoint, ProbabilityRow},
     model::CLASS_NAMES,
@@ -50,6 +50,9 @@ enum Task {
         /// Frozen trio selection over the complete validated ancestry archive.
         #[arg(long)]
         evaluation_view: Option<PathBuf>,
+        /// Diagnose FPR on every human root, regardless of model-generation completion.
+        #[arg(long, conflicts_with = "evaluation_view")]
+        human_roots_only: bool,
     },
 }
 
@@ -253,6 +256,39 @@ fn check_calibration_overlap(archive: &[OriginRecord], content: &Value) -> Resul
     Ok(())
 }
 
+fn select_human_roots(archive: &[OriginRecord]) -> Result<Vec<OriginRecord>> {
+    let groups: BTreeSet<_> = archive
+        .iter()
+        .map(|record| record.source_group.as_str())
+        .collect();
+    let mut roots = BTreeMap::new();
+    for record in archive
+        .iter()
+        .filter(|record| record.origin == Origin::HumanOnly)
+    {
+        ensure!(
+            record.parent_id.is_none()
+                && record.generation.is_none()
+                && matches!(
+                    record.evidence,
+                    Evidence::HistoricalProxy | Evidence::DocumentedHuman
+                ),
+            "Human-root diagnostics require historical or documented human roots without generation metadata"
+        );
+        ensure!(
+            roots
+                .insert(record.source_group.as_str(), record.clone())
+                .is_none(),
+            "Human-root diagnostics require exactly one human root per source family"
+        );
+    }
+    ensure!(
+        !groups.is_empty() && roots.keys().copied().collect::<BTreeSet<_>>() == groups,
+        "Human-root diagnostics require one human root for every family in the archive partition"
+    );
+    Ok(roots.into_values().collect())
+}
+
 fn view_slice_keys(family: &Family, collection: &str) -> Result<Vec<String>> {
     let chain = &family.chain;
     let composer = &chain.composer.model_revision;
@@ -382,11 +418,14 @@ fn main() -> Result<()> {
             thresholds,
             split,
             evaluation_view: view_path,
+            human_roots_only,
             ..
         } => {
             ensure!(
-                training.get("evaluation_views").is_none() || view_path.is_some(),
-                "View-trained artifacts require an explicit --evaluation-view"
+                training.get("evaluation_views").is_none()
+                    || view_path.is_some()
+                    || *human_roots_only,
+                "View-trained artifacts require --evaluation-view or the explicit --human-roots-only diagnostic"
             );
             let frozen = object(thresholds)?;
             let content = &frozen["content"];
@@ -438,9 +477,13 @@ fn main() -> Result<()> {
                 .as_ref()
                 .map(|v| serde_json::to_value(v.binding()))
                 .transpose()?;
-            let selected = view
-                .as_ref()
-                .map_or(archive.as_slice(), |v| v.selected.as_slice());
+            let human_roots = human_roots_only
+                .then(|| select_human_roots(&archive))
+                .transpose()?;
+            let selected = human_roots.as_deref().unwrap_or_else(|| {
+                view.as_ref()
+                    .map_or(archive.as_slice(), |v| v.selected.as_slice())
+            });
             let mut providers = BTreeMap::<String, BTreeSet<String>>::new();
             let mut profiles = BTreeMap::<String, BTreeSet<String>>::new();
             for record in selected {
@@ -462,7 +505,8 @@ fn main() -> Result<()> {
                 }
             }
             ensure!(
-                view.is_some()
+                *human_roots_only
+                    || view.is_some()
                     || selected.iter().all(|r| providers
                         .get(&r.source_group)
                         .is_some_and(|p| p.len() == 1)
@@ -477,6 +521,9 @@ fn main() -> Result<()> {
             if let Some(binding) = &view_binding {
                 inputs["evaluation_view"] = binding.clone();
             }
+            if *human_roots_only {
+                inputs["observation_policy"] = json!("all_human_roots_v1");
+            }
             save(&args.output_dir.join("inputs.json"), &inputs)?;
             let rows = infer(&args, selected, artifact_id)?;
             let by_id: BTreeMap<_, _> = selected.iter().map(|r| (r.id.as_str(), r)).collect();
@@ -488,7 +535,9 @@ fn main() -> Result<()> {
             let mut slices = BTreeMap::<String, Vec<ProbabilityRow>>::new();
             for row in &rows {
                 let record = by_id[row.id.as_str()];
-                let keys = if let Some(family) = view_families.get(record.source_group.as_str()) {
+                let keys = if *human_roots_only {
+                    vec![format!("collection:{}", record.source.collection)]
+                } else if let Some(family) = view_families.get(record.source_group.as_str()) {
                     view_slice_keys(family, &record.source.collection)?
                 } else {
                     let provider = providers[&record.source_group].iter().next().unwrap();
@@ -550,6 +599,15 @@ fn main() -> Result<()> {
                 );
                 output_report["notes"][2] = json!(
                     "Human/model metrics exclude mixed-origin rows and use P(model_only)+P(mixed); accuracy_at_half is diagnostic. Initial-profile slices use only the original composer's recorded profile, with an explicit unprofiled category; no revision style is inferred. Revision mode compares exact pinned model revisions along the ordered ancestry path."
+                );
+            }
+            if *human_roots_only {
+                output_report["observation_policy"] = json!("all_human_roots_v1");
+                output_report["notes"][1] = json!(
+                    "Human-only diagnostic: every historical or documented human root in the declared archive partition is included, independent of model-generation completion. Full archive ancestry and Calibration overlap checks precede selection; slices are by source collection only."
+                );
+                output_report["notes"][2] = json!(
+                    "No model or mixed-origin observations are scored in this diagnostic. Sensitivity has a zero denominator and no estimate; human false-positive rates use the existing frozen thresholds. Human/model log loss and Brier score describe only human examples here."
                 );
             }
             save(&args.output_dir.join("report.json"), &output_report)?;
@@ -635,5 +693,120 @@ mod tests {
         assert!(keys.contains(&"initial-profile:legacy-unprofiled".into()));
         assert!(keys.contains(&"revision-path:[\"composer@pinned\"]".into()));
         assert!(!keys.iter().any(|key| key.starts_with("revision-style:")));
+    }
+
+    fn human_fixture(id: &str) -> OriginRecord {
+        serde_json::from_value(json!({
+            "schema":dataset::RECORD_SCHEMA,"id":id,"source_group":id,"split":"development",
+            "origin":"human_only","evidence":"historical_proxy","evidence_notes":"Invented diagnostic fixture; not authorship evidence.",
+            "text":format!("A paper moon marks fixture {id}."),"text_sha256":sha256(format!("A paper moon marks fixture {id}.")),
+            "source":{"collection":"fixture","url":"fixture://root","version":"v1","published_at":null,"author_ids":[],"raw_path":"","raw_sha256":sha256("raw"),"extraction":"fixture"},
+            "rights":{"license":"Synthetic-Original","evidence_url":"fixture://rights","evidence_sha256":sha256("rights"),"attribution":"Synthetic fixture","commercial_training":true,"model_release":true,"external_evaluation":false,"redistribute_text":true},
+            "parent_id":null,"generation":null
+        })).unwrap()
+    }
+
+    #[test]
+    fn human_root_diagnostic_keeps_families_without_completed_model_branches() {
+        let successful = human_fixture("successful-generation");
+        let failed = human_fixture("failed-generation");
+        let mut model = successful.clone();
+        model.id = "synthetic-model-child".into();
+        model.parent_id = Some(successful.id.clone());
+        model.origin = Origin::ModelOnly;
+        model.evidence = Evidence::SyntheticFixture;
+        let archive = vec![successful, model, failed];
+        dataset::validate_records(&archive).unwrap();
+        let selected = select_human_roots(&archive).unwrap();
+        assert_eq!(
+            selected.iter().map(|r| r.id.as_str()).collect::<Vec<_>>(),
+            ["failed-generation", "successful-generation"]
+        );
+        assert!(selected.iter().all(|r| r.origin == Origin::HumanOnly));
+        let mut duplicate = archive.clone();
+        let mut second_root = duplicate[0].clone();
+        second_root.id = "second-root-same-family".into();
+        duplicate.push(second_root);
+        assert!(select_human_roots(&duplicate).is_err());
+        assert!(select_human_roots(&archive[1..]).is_err());
+        let mut synthetic = archive;
+        synthetic[0].evidence = Evidence::SyntheticFixture;
+        assert!(select_human_roots(&synthetic).is_err());
+    }
+
+    #[test]
+    fn human_only_operating_points_have_no_sensitivity_estimate() {
+        let rows = vec![
+            ProbabilityRow {
+                id: "one".into(),
+                group: "one".into(),
+                label: 0,
+                probabilities: [0.8, 0.1, 0.1],
+            },
+            ProbabilityRow {
+                id: "two".into(),
+                group: "two".into(),
+                label: 0,
+                probabilities: [0.3, 0.4, 0.3],
+            },
+        ];
+        let point = OperatingPoint {
+            target_human_false_positive_rate: 0.01,
+            threshold: 0.5,
+            comparison: "strictly_greater_than".into(),
+            calibration_human_rows: 100,
+            calibration_human_groups: 100,
+            calibration_false_positives: 1,
+        };
+        let report =
+            metrics::evaluate_probability_rows("fixture", &rows, [1.0 / 3.0; 3], &[point]).unwrap();
+        let result = &report.operating_points[0];
+        assert_eq!(result.human_false_positive_rate.rate, Some(0.5));
+        for rate in [
+            &result.model_only_sensitivity,
+            &result.mixed_sensitivity,
+            &result.model_or_mixed_sensitivity,
+        ] {
+            assert_eq!(rate.rows, 0);
+            assert!(rate.rate.is_none());
+            assert!(rate.group_bootstrap_percentile_95.is_none());
+        }
+    }
+
+    #[test]
+    fn human_root_flag_is_explicit_and_conflicts_with_trio_views() {
+        let base = [
+            "encoder_evaluation",
+            "--artifact",
+            "fixture-artifact",
+            "--python",
+            "fixture-python",
+            "--output-dir",
+            "fixture-output",
+            "evaluate",
+            "--records",
+            "fixture-records",
+            "--thresholds",
+            "fixture-thresholds",
+            "--split",
+            "development",
+        ];
+        let parse =
+            |extra: &[&str]| Args::try_parse_from(base.into_iter().chain(extra.iter().copied()));
+        assert!(matches!(
+            parse(&[]).unwrap().task,
+            Task::Evaluate {
+                human_roots_only: false,
+                ..
+            }
+        ));
+        assert!(matches!(
+            parse(&["--human-roots-only"]).unwrap().task,
+            Task::Evaluate {
+                human_roots_only: true,
+                ..
+            }
+        ));
+        assert!(parse(&["--human-roots-only", "--evaluation-view", "fixture-view"]).is_err());
     }
 }

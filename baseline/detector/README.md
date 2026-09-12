@@ -56,10 +56,14 @@ directly, retaining every ancestor and a model-only label through successive
 rewrites by the same or different models.
 The [next revision collection](ENCODER_REVISION_DATA_V6.md) declares Qwen and
 Mistral passes over 471 existing Train drafts. A separate
-[source review](SOURCE_REVIEW_V6.md) admitted 351 previously unused works;
-their fitting and confirmation assignments remain unfrozen. The evaluator
-now supports [explicit family views](ml/README.md) over complete revision
-archives, so intermediate texts do not become extra calibration observations.
+[source review](SOURCE_REVIEW_V6.md) admitted 351 previously unused works.
+The [frozen v6 comparison](ENCODER_REVISION_V6.md) reserves 117 each for
+Development, Calibration and Test, with no fresh sources used for gradients.
+It compares drafts and two successive revisions on the same completed families,
+plus a separate check on all assigned human Test roots. The evaluator supports
+[explicit family views](ml/README.md) over complete revision archives, so
+intermediate texts do not become extra calibration observations. Generation is
+underway; no v6 fit or detector result is available yet.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,

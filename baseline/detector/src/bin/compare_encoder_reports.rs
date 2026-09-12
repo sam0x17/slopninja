@@ -200,6 +200,41 @@ fn paired_evaluation_view(
     Ok(Some(first.clone()))
 }
 
+fn paired_observation_policy(
+    a: &Value,
+    b: &Value,
+    before: &[ProbabilityRow],
+    after: &[ProbabilityRow],
+) -> Result<Option<Value>> {
+    let (first, second) = match (a.get("observation_policy"), b.get("observation_policy")) {
+        (None, None) => return Ok(None),
+        (Some(first), Some(second)) => (first, second),
+        _ => anyhow::bail!("Both reports must use the same observation policy"),
+    };
+    ensure!(
+        first.as_str() == Some("all_human_roots_v1") && first == second,
+        "Unknown or unequal observation policies"
+    );
+    ensure!(
+        a.get("evaluation_view").is_none() && b.get("evaluation_view").is_none(),
+        "Human-root observations cannot also bind an evaluation view"
+    );
+    for rows in [before, after] {
+        ensure!(!rows.is_empty(), "Human-root observations are empty");
+        let mut ids = BTreeSet::new();
+        let mut groups = BTreeSet::new();
+        ensure!(
+            rows.iter().all(|row| row.label == 0
+                && !row.id.is_empty()
+                && !row.group.is_empty()
+                && ids.insert(row.id.as_str())
+                && groups.insert(row.group.as_str())),
+            "Human-root observations require one unique human prediction per source family"
+        );
+    }
+    Ok(Some(first.clone()))
+}
+
 fn compare_reports(
     a: &Value,
     b: &Value,
@@ -231,6 +266,7 @@ fn compare_reports(
     );
     let before: Vec<ProbabilityRow> = serde_json::from_value(a["report"]["predictions"].clone())?;
     let after: Vec<ProbabilityRow> = serde_json::from_value(b["report"]["predictions"].clone())?;
+    let observation_policy = paired_observation_policy(a, b, &before, &after)?;
     let evaluation_view = paired_evaluation_view(a, b, &before, &after)?;
     let comparison = paired(&before, &after)?;
     let human_model = paired_objective(&before, &after, true)?;
@@ -244,6 +280,9 @@ fn compare_reports(
         "baseline_near_cutoffs":a["near_cutoffs"],"candidate_near_cutoffs":b["near_cutoffs"]});
     if let Some(view) = evaluation_view {
         report["evaluation_view"] = view;
+    }
+    if let Some(policy) = observation_policy {
+        report["observation_policy"] = policy;
     }
     Ok(report)
 }
@@ -298,11 +337,136 @@ mod tests {
         compare_reports(a, b, sha256("baseline report"), sha256("candidate report"))
     }
 
+    fn human_root_reports() -> (Value, Value) {
+        let (mut baseline, mut candidate, _) = evaluation_reports();
+        for (report, human_probability) in [(&mut baseline, 0.6), (&mut candidate, 0.8)] {
+            let rows: Vec<ProbabilityRow> =
+                serde_json::from_value(report["report"]["predictions"].clone()).unwrap();
+            let rows: Vec<_> = rows
+                .into_iter()
+                .filter(|row| row.label == 0)
+                .map(|row| ProbabilityRow {
+                    probabilities: [
+                        human_probability,
+                        (1.0 - human_probability) / 2.0,
+                        (1.0 - human_probability) / 2.0,
+                    ],
+                    ..row
+                })
+                .collect();
+            let points = metrics::select_operating_points(&rows, &[0.01, 0.05]).unwrap();
+            report["report"] = serde_json::to_value(
+                metrics::evaluate_probability_rows(
+                    report["artifact_id"].as_str().unwrap(),
+                    &rows,
+                    [1.0 / 3.0; 3],
+                    &points,
+                )
+                .unwrap(),
+            )
+            .unwrap();
+            report["observation_policy"] = json!("all_human_roots_v1");
+        }
+        (baseline, candidate)
+    }
+
+    #[test]
+    fn human_root_policy_is_bound_without_inventing_sensitivity_estimates() {
+        let (mut baseline, mut candidate) = human_root_reports();
+        let mut report = compare_fixture(&baseline, &candidate).unwrap();
+        assert_eq!(report["observation_policy"], "all_human_roots_v1");
+        assert!(report.get("evaluation_view").is_none());
+        assert_eq!(report["comparison"]["rows"], 2);
+        assert_eq!(report["human_model_comparison"]["rows"], 2);
+        assert_eq!(report["human_model_comparison"]["source_groups"], 2);
+        assert!(
+            (report["human_model_comparison"]["deltas"]["log_loss"]["candidate_minus_baseline"]
+                .as_f64()
+                .unwrap()
+                - (0.6_f64 / 0.8).ln())
+            .abs()
+                < 1e-12
+        );
+        for detector in ["baseline_operating_points", "candidate_operating_points"] {
+            for point in report[detector].as_array().unwrap() {
+                for sensitivity in [
+                    "model_or_mixed_sensitivity",
+                    "model_only_sensitivity",
+                    "mixed_sensitivity",
+                ] {
+                    assert_eq!(point[sensitivity]["rows"], 0);
+                    assert_eq!(point[sensitivity]["rate"], Value::Null);
+                    assert_eq!(
+                        point[sensitivity]["group_bootstrap_percentile_95"],
+                        Value::Null
+                    );
+                }
+            }
+        }
+        for value in [&mut baseline, &mut candidate, &mut report] {
+            value.as_object_mut().unwrap().remove("observation_policy");
+        }
+        assert_eq!(report, compare_fixture(&baseline, &candidate).unwrap());
+    }
+
+    #[test]
+    fn rejects_mixed_unknown_or_view_bound_human_observation_policies() {
+        let (baseline, candidate) = human_root_reports();
+        let mut ordinary = candidate.clone();
+        ordinary
+            .as_object_mut()
+            .unwrap()
+            .remove("observation_policy");
+        assert!(compare_fixture(&baseline, &ordinary).is_err());
+        assert!(compare_fixture(&ordinary, &baseline).is_err());
+        let (_, trio, view) = evaluation_reports();
+        assert!(compare_fixture(&baseline, &trio).is_err());
+        for policy in [Value::Null, json!("unknown-policy"), json!({})] {
+            let mut a = baseline.clone();
+            let mut b = candidate.clone();
+            a["observation_policy"] = policy.clone();
+            b["observation_policy"] = policy;
+            assert!(compare_fixture(&a, &b).is_err());
+        }
+        for binding in [Value::Null, view] {
+            let mut a = baseline.clone();
+            let mut b = candidate.clone();
+            a["evaluation_view"] = binding.clone();
+            b["evaluation_view"] = binding;
+            assert!(compare_fixture(&a, &b).is_err());
+        }
+    }
+
+    #[test]
+    fn rejects_non_human_duplicate_or_empty_root_observations() {
+        let (baseline, candidate) = human_root_reports();
+        for (field, value) in [
+            ("label", json!(1)),
+            ("label", json!(2)),
+            ("group", json!("")),
+            ("group", json!("synthetic-view-family-1")),
+            ("id", json!("")),
+            ("id", json!("synthetic-view-3")),
+        ] {
+            let mut a = baseline.clone();
+            let mut b = candidate.clone();
+            a["report"]["predictions"][0][field] = value.clone();
+            b["report"]["predictions"][0][field] = value;
+            assert!(compare_fixture(&a, &b).is_err());
+        }
+        let mut a = baseline;
+        let mut b = candidate;
+        a["report"]["predictions"] = json!([]);
+        b["report"]["predictions"] = json!([]);
+        assert!(compare_fixture(&a, &b).is_err());
+    }
+
     #[test]
     fn preserves_legacy_output_and_binds_identical_evaluation_views() {
         let (mut baseline, mut candidate, view) = evaluation_reports();
         let legacy = compare_fixture(&baseline, &candidate).unwrap();
         assert!(legacy.get("evaluation_view").is_none());
+        assert!(legacy.get("observation_policy").is_none());
         baseline["evaluation_view"] = view.clone();
         candidate["evaluation_view"] = view.clone();
         let mut bound = compare_fixture(&baseline, &candidate).unwrap();
