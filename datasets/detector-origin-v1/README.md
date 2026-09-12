@@ -40,8 +40,9 @@ The sources cover PLOS abstracts, Wikinews reporting, historically matched
 Wikipedia answers from HC3, and CMU Book Summaries. The latter are Wikipedia
 plot summaries, with collective contributor attribution. These four registers
 provide limited coverage of writing styles. Generation provenance in this
-snapshot covers OLMo, Qwen and Mistral; the new GPT/Claude collection will be
-published separately after admission.
+snapshot covers OLMo, Qwen and Mistral; the
+[GPT/Claude collection](../detector-hosted-v1/README.md) is published separately
+for research and has not been admitted for commercial training.
 
 The Train collection was selected adaptively after earlier Pangram results.
 Its [collection protocol](../../baseline/detector/PANGRAM_DATASET_V2.md)

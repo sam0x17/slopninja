@@ -179,8 +179,8 @@ Fix Slop drafts and 10/16 plain drafts. The encyclopedia collection supplied
 11 of the 24 misses. Different profiles use different source families, so these
 observations do not isolate a causal effect of the style instructions. Retain
 the full collection rather than selecting only explicit evasion prompts for
-later work. There are no Pangram observations for these 96 captures yet, and
-this diagnostic changed neither v6 fitting nor its selection or Test protocol.
+later work. The Pangram comparison follows below. This diagnostic changed
+neither v6 fitting nor its selection or Test protocol.
 
 The capture-audit revision in `c881faf` passed the complete Rust test suite,
 format checks and all-targets Clippy on the Studio at 2026-09-12T22:51:59Z.
@@ -199,7 +199,11 @@ The resulting `slop_ninja_pangram_cli_annotation_plan_v1` preserves the complete
 review archive and emits the same Pangram request format as the original
 planner. Each annotation keeps the observed model-only workflow label and its
 generator attribution independently of the returned detector fractions.
-Provider-output training and redistribution rights remain unresolved.
+Commercial hosted-output training admission and redistribution of individual
+Pangram annotations remain unresolved. The
+[96-text research snapshot](../../datasets/detector-hosted-v1/README.md) now
+publishes the generated prose, prompts and source provenance under the reviewed
+output-ownership provisions. It preserves the original capture flags.
 
 ```sh
 annotation_capture_plan --capture-review complete-v1 \

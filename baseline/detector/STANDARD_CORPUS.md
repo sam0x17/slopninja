@@ -10,6 +10,9 @@ The [first public text snapshot](../../datasets/detector-origin-v1/README.md)
 now contains 432 admitted records with their source attribution, exact prompts,
 generator provenance and frozen Train/Development assignments. Individual
 provider annotations remain local while their redistribution terms are unresolved.
+The [hosted research snapshot](../../datasets/detector-hosted-v1/README.md)
+adds 96 GPT/Claude texts with complete prompts and 24 supporting source roots.
+Publication does not establish commercial training admission for these outputs.
 
 ## Dataset priorities
 
