@@ -1,9 +1,10 @@
 # Narrative corpus generation
 
 Generation is complete for all four declared providers: Qwen, Mistral, OLMo
-and the held-out Phi-4 Test cohort. The v5 detector comparison is pending.
-Test predictions remain sealed. The saved v4 Development diagnostics for all
-three training providers are reported below.
+and the held-out Phi-4 Test cohort. The
+[completed v5 detector comparison](ENCODER_NARRATIVE_RESULTS.md) reports both
+Test views after selection was frozen. The saved v4 Development diagnostics
+for all three training providers are reported below.
 The [target amendment](ENCODER_NARRATIVE_V5_TARGET.md) prioritizes fully
 model-written drafts under style steering. Copyedits remain auxiliary examples.
 
@@ -26,7 +27,7 @@ of fully model-written text available for evaluation.
 | Train | 192 | 576 | 807 |
 | Development | 26 | 78 | 595 |
 | Calibration | 33 | 99 | 676 |
-| Test, unopened | 22 | 66 | 717 |
+| Test | 22 | 66 | 717 |
 
 Every row fits the 1,024-token contract, including special tokens. Nothing was
 truncated or removed by the tokenizer audit. All six profiles remain represented
@@ -51,7 +52,7 @@ successful sibling remains archived. No detector score affected admission.
 | Train | 178 | 534 | 643 |
 | Development | 24 | 72 | 584 |
 | Calibration | 32 | 96 | 676 |
-| Test, unopened | 22 | 66 | 587 |
+| Test | 22 | 66 | 587 |
 
 All 768 rows fit the 1,024-token contract without truncation or filtering. All
 six profiles remain represented in each partition, but only two of the four
@@ -75,7 +76,7 @@ and successful sibling remains archived. No detector score affected admission.
 | Train | 178 | 534 | 942 |
 | Development | 23 | 69 | 674 |
 | Calibration | 29 | 87 | 696 |
-| Test, unopened | 19 | 57 | 643 |
+| Test | 19 | 57 | 643 |
 
 All 747 rows fit the 1,024-token contract without truncation or filtering. All
 six profiles remain represented in each partition, but only one of the four
@@ -110,22 +111,22 @@ maximum is 616 tokens including special tokens. The
 [Phi-4 cohort report](results/narrative-phi4-cohort-v1.json) contains the Test
 generation denominators, exclusions and corpus bindings. Its planned counts
 cover only the Test assignments used for these calls. Phi-4 remains held out
-from fitting, Development and Calibration, and its Test predictions remain
-sealed. Inspection has been limited to generation metadata, admission counts
-and token lengths.
+from fitting, Development and Calibration. Inspection before candidate selection
+was limited to generation metadata, admission counts and token lengths. The
+linked detector comparison now reports its opened Test results.
 
 ## Development diagnostics
 
-As each training provider finishes, evaluate immutable v4 on that provider's full
-Development cohort. This comparison is declared before the first such prediction.
-Use its existing calibration and thresholds, preserve every score, and report
-the human/model metric plus each writing profile. These are Development
+The provider comparisons evaluated immutable v4 on each completed provider's full
+Development cohort. This comparison was declared before the first such prediction.
+Each evaluation used its existing calibration and thresholds, preserved every
+score, and reported the human/model metric plus each writing profile. These are Development
 diagnostics on the completed provider cohort, which may include variants not
 selected for the final primary corpus. They do not replace the declared primary
 comparison and cannot justify changing v5's frozen fit recipe or Test selection.
 
-No new Pangram calls are required. Test inspection remains limited to corpus
-counts, metadata and token lengths until final checkpoint selection.
+These comparisons required no new Pangram calls. Before final checkpoint
+selection, Test inspection was limited to corpus counts, metadata and token lengths.
 
 ## V4 on Qwen narrative Development
 
@@ -133,7 +134,8 @@ The [completed Development report](results/narrative-v4-qwen-development-v1.json
 evaluates v4's original weights, temperature and operating thresholds on all
 26 admitted Qwen Development families. It includes 26 historical human sources
 and 26 fully model-written drafts in the primary binary metric; the 26 edits
-remain in auxiliary diagnostics. No v5 weights or Test records were evaluated.
+remain in auxiliary diagnostics. That provider diagnostic evaluated no v5
+weights or Test records.
 
 V4 detected all 26 model drafts at both original operating thresholds, while
 falsely flagging nine of the 26 human sources (34.6%). The observed human false
@@ -157,9 +159,9 @@ drafts per profile also cannot establish reliable resistance to that writing
 strategy. In this cohort, the observed failure is excessive human false positives;
 the attempted steering did not evade either frozen operating threshold.
 
-The result supplies a baseline for the planned narrative training. It changes
-neither the fit recipe nor the unopened Test assignments. A revised detector
-must improve human discrimination as well as recognize fully model-written prose.
+The result supplies a baseline for the narrative comparison. The fit recipe and
+Test assignments stayed frozen. Human discrimination remains a measured objective
+alongside recognition of fully model-written prose.
 
 ## V4 on Mistral narrative Development
 

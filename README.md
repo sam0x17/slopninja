@@ -35,18 +35,20 @@ tonal intent remain hard acceptance requirements.
 Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
 
-The first experimental reference detector is trained and available under
-`baseline/detector/`. Read the [measured results](baseline/detector/PILOT_RESULTS.md)
-and download the [model bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-pilot-v0.1.0).
-Generator transfer and formatting sensitivity remain substantial weaknesses.
-Its [commands](baseline/detector/README.md),
+The experimental origin detector is trained under `baseline/detector/`.
+The [v5 comparison](baseline/detector/ENCODER_NARRATIVE_RESULTS.md) reduced
+primary-Test binary log loss from 0.6970 to 0.1430, with human false positives
+falling from 5/25 to 1/25 while detecting all 25 model-written drafts. On the
+unseen Phi-4 generator, it reduced false positives but missed two of 21 drafts
+at the stricter threshold. Those misses used Anti-AI and Fix Slop instructions.
+Its [commands and earlier releases](baseline/detector/README.md),
 [implementation plan](baseline/detector/PLAN.md) and
 [commercial-use source register](baseline/detector/SOURCES.md) cover acquisition,
 training, evaluation and release. The [pilot protocol](baseline/detector/PILOT_PROTOCOL.md)
-fixes the initial comparison and its evidence limits before training.
+records the initial comparison and its evidence limits before training.
 New corpora can use [recorded style profiles](baseline/detector/PROMPT_PROFILES.md),
-including anti-AI instructions and a pinned Fix Slop pass. These profiles were
-added after the first pilot and have not yet been evaluated in a fitted detector.
+including anti-AI instructions and a pinned Fix Slop pass. The v5 report includes
+their results and small denominators; it does not establish Pangram parity.
 The whitepaper surveys related work and defines public A detector artifacts,
 private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices

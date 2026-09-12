@@ -26,19 +26,24 @@ experimental and still trails Pangram on the previously scored Development texts
 Download the [v4 weights and inference bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-corpus-v0.4.0).
 
 The [v5 narrative experiment](ENCODER_NARRATIVE_V5.md) adds 289 admitted historical
-plot summaries and reserves Phi-4 for an unseen-generator Test. Its generation,
-selection and comparison rules are frozen before fitting; v4 remains the latest
-measured and published detector.
+plot summaries and reserves Phi-4 for an unseen-generator Test. Its
+[completed comparison](ENCODER_NARRATIVE_RESULTS.md) reduced primary-Test binary
+log loss from 0.6970 to 0.1430 and human false positives from 5/25 to 1/25, while
+detecting all 25 model-written drafts. Phi-4 log loss also improved, but detection
+fell from 21/21 to 19/21 at the stricter threshold. The missed drafts used Anti-AI
+and Fix Slop instructions. V5 is the next experimental binary detector; v4 remains
+available for the reported sensitivity comparison.
 An early [Train-only overlap audit](NARRATIVE_GENERATION_QA.md) found substantial
 rewriting in Qwen's requested copyedits. The [clarified main target](ENCODER_NARRATIVE_V5_TARGET.md)
 is fully model-written prose deliberately steered away from the model's usual
 voice. Selection now prioritizes human-versus-model-draft detection, with explicit
-writing-profile slices. No v5 detector has been evaluated yet.
+writing-profile slices. Selection was frozen before either Test opened.
 The [narrative corpus report](NARRATIVE_CORPUS_RESULTS.md) records completed
-provider cohorts and all exclusions as generation proceeds.
+provider cohorts and all exclusions.
 Its first Development comparison found that v4 flags nine of 26 historical human
-narrative sources, despite detecting all 26 model-written drafts. Human false
-positives on this new register remain an unresolved limitation.
+narrative sources, despite detecting all 26 model-written drafts. V5 reduces
+this register's observed false positives, but these small historical samples
+cannot establish a population false-positive bound or Pangram parity.
 
 The [model-only revision probe](MODEL_ONLY_REVISION_PROBE.md) records strong
 DeepSeek style steering, a Fix Slop pass and a DeepSeek-to-Qwen rewrite. V4
