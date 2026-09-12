@@ -25,6 +25,9 @@ REVISION = "8949b909ec900327062f0ebf497f51aef5e6f0c8"
 SCHEMA = "slop_ninja.encoder.v1"
 RUNTIME_PACKAGES = ["torch", "transformers", "tokenizers", "safetensors", "numpy"]
 CPU_PROBABILITY_TOLERANCE = 1e-6
+PACKAGE_RUNNER_FILES = ("common.py", "infer.py", "evaluate.py", "train.py", "audit.py",
+                        "fetch_checkpoint.py", "smoke.py", "requirements.lock")
+PACKAGE_CHECKPOINT_FILES = ("LICENSE", "UPSTREAM_README.md", "checkpoint.json")
 
 
 def canonical(value):
@@ -194,19 +197,29 @@ def fit_temperature(logits, labels):
             "class_priors": [float((labels == i).double().mean()) for i in range(3)]}
 
 
+def check_package_sources(checkpoint):
+    """Reject incomplete runner snapshots and checkpoint notices before fitting."""
+    paths = [Path(__file__).parent / name for name in PACKAGE_RUNNER_FILES]
+    paths.extend(Path(checkpoint) / name for name in PACKAGE_CHECKPOINT_FILES)
+    missing = [str(path) for path in paths if not path.is_file()]
+    if missing:
+        raise FileNotFoundError("missing artifact package files: " + ", ".join(missing))
+
+
 def package_artifact(output, tokenizer, model, calibration, training, max_tokens, checkpoint, data_rights=None):
+    check_package_sources(checkpoint)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     model.cpu().eval().save_pretrained(output / "classifier", safe_serialization=True)
     tokenizer.save_pretrained(output / "classifier")
-    runner = output / "runner"
-    runner.mkdir()
-    for name in ["common.py", "infer.py", "evaluate.py", "train.py", "audit.py", "fetch_checkpoint.py", "smoke.py", "requirements.lock"]:
-        shutil.copyfile(Path(__file__).parent / name, runner / name)
     write_json(output / "calibration.json", calibration)
     write_json(output / "training.json", training)
     if data_rights is not None:
         write_json(output / "DATA_RIGHTS.json", data_rights)
+    runner = output / "runner"
+    runner.mkdir()
+    for name in PACKAGE_RUNNER_FILES:
+        shutil.copyfile(Path(__file__).parent / name, runner / name)
     if torch.get_num_threads() != 1:
         raise ValueError("package reference vectors using the single-threaded CPU runtime")
     reference_vectors = []
@@ -233,7 +246,7 @@ def package_artifact(output, tokenizer, model, calibration, training, max_tokens
     })
     # Include upstream notices shipped by the fetch step without assuming corpus licenses.
     checkpoint = Path(checkpoint)
-    for name in ["LICENSE", "UPSTREAM_README.md", "checkpoint.json"]:
+    for name in PACKAGE_CHECKPOINT_FILES:
         shutil.copyfile(checkpoint / name, output / name)
     if data_rights and data_rights["content"]["model_release_license"] == "CC-BY-SA-4.0":
         (output / "LICENSE").rename(output / "UPSTREAM_LICENSE")

@@ -13,7 +13,7 @@ import time
 import torch
 from safetensors.torch import load_model, save_model
 
-from common import (LABELS, batch_tensors, check_partition_separation, class_counts,
+from common import (LABELS, batch_tensors, check_package_sources, check_partition_separation, class_counts,
                     configure_cpu, fit_temperature, load_checkpoint, load_partition,
                     logits_for, metrics, package_artifact, sha256, software)
 
@@ -133,6 +133,7 @@ def main():
         p.error("choose source-origin sample weights or class weights, not both")
     if args.device == "mps" and not torch.backends.mps.is_available():
         p.error("MPS is unavailable")
+    check_package_sources(args.checkpoint)
     configure_cpu()
     torch.manual_seed(args.seed)
     rng = random.Random(args.seed)
