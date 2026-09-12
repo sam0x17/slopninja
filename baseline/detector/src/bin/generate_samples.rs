@@ -3,7 +3,7 @@ use anyhow::{Context, Result, ensure};
 use clap::Parser;
 use serde_json::{Value, json};
 use slop_ninja_detector::dataset::{self, Evidence, Generation, Origin, OriginRecord, Split};
-use slop_ninja_detector::generation::{self, ModelSpec, RevisionStyle};
+use slop_ninja_detector::generation::{self, ModelSpec, RevisionStyle, revision_parents};
 use slop_ninja_detector::prompt_profiles::{self, Provenance, Selection};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs::{self, OpenOptions};
@@ -122,37 +122,6 @@ fn make_task(
         request,
         profile: profile.cloned(),
     })
-}
-
-/// The input must include the complete ancestry. A second invocation therefore
-/// advances each model-only branch once instead of revising all earlier stages.
-fn revision_parents(records: &[OriginRecord]) -> Result<Vec<OriginRecord>> {
-    dataset::validate_records(records)?;
-    ensure!(
-        records.iter().all(|r| r.split.is_some()),
-        "Model revision input requires frozen source-family splits"
-    );
-    let non_leaves: BTreeSet<_> = records
-        .iter()
-        .filter_map(|r| r.parent_id.as_ref())
-        .collect();
-    let parents: Vec<_> = records
-        .iter()
-        .filter(|r| {
-            !non_leaves.contains(&r.id)
-                && r.origin == Origin::ModelOnly
-                && matches!(
-                    r.evidence,
-                    Evidence::RecordedModelGeneration | Evidence::RecordedModelRevision
-                )
-        })
-        .cloned()
-        .collect();
-    ensure!(
-        !parents.is_empty(),
-        "No recorded model-only leaves to revise"
-    );
-    Ok(parents)
 }
 
 fn make_revision_task(

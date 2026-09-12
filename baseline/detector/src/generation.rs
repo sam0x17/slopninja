@@ -5,8 +5,9 @@ use anyhow::{Context, Result, ensure};
 use clap::ValueEnum;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
+use std::collections::BTreeSet;
 
-#[derive(Clone, Copy, Debug, Serialize, ValueEnum)]
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, ValueEnum)]
 #[serde(rename_all = "kebab-case")]
 pub enum RevisionStyle {
     AntiAi,
@@ -25,6 +26,36 @@ pub struct ModelSpec {
     pub runtime: String,
     pub temperature: f64,
     pub max_tokens: usize,
+}
+
+/// Advance each recorded model-only branch once, retaining its full ancestry.
+pub fn revision_parents(records: &[OriginRecord]) -> Result<Vec<OriginRecord>> {
+    dataset::validate_records(records)?;
+    ensure!(
+        records.iter().all(|r| r.split.is_some()),
+        "Model revision input requires frozen source-family splits"
+    );
+    let non_leaves: BTreeSet<_> = records
+        .iter()
+        .filter_map(|r| r.parent_id.as_ref())
+        .collect();
+    let parents: Vec<_> = records
+        .iter()
+        .filter(|r| {
+            !non_leaves.contains(&r.id)
+                && r.origin == Origin::ModelOnly
+                && matches!(
+                    r.evidence,
+                    Evidence::RecordedModelGeneration | Evidence::RecordedModelRevision
+                )
+        })
+        .cloned()
+        .collect();
+    ensure!(
+        !parents.is_empty(),
+        "No recorded model-only leaves to revise"
+    );
+    Ok(parents)
 }
 
 /// Build the existing revision cache key and request without making a call.

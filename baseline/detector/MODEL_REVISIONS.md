@@ -28,6 +28,17 @@ and intended tone as constraints. It does not apply the light-copyedit wording
 requirement from the original style mix. The legacy `--prompt-profile-set` and
 revision mode are mutually exclusive.
 
+For a local MLX endpoint, `generation_campaign` can own the server and run the
+same revision command. In its frozen plan, set `profile_ids` to `[]` and give
+each case `"revision_style": "anti-ai"` or `"fix-slop"`. Set `max_calls` to the
+exact number of recorded model-only leaves in the selected partition. The
+runner validates this count before starting its server, pins the input and
+runtime files, and keeps the invocation and logs. A case without
+`revision_style` retains the initial draft/edit mode and its two calls per root.
+Each revision stage needs a new plan and output directory, using the preceding
+stage's closed complete export. Keep the controller and generator binaries
+frozen for running campaigns.
+
 Exports preserve every input ancestor and accepted new passage. Each new record
 links to its immediate parent; that link must resolve to recorded model-only
 prose in the same source family and partition. The cache identity binds the full
@@ -88,6 +99,19 @@ same pure helper used by generation. It checks the declared model, style,
 source allocation and initial profile, while the master archive retains raw
 response hashes and attempt counts. Complete-only exports cannot establish
 failure rates; the assembly report leaves those counts explicitly absent.
+
+Before opening v6 Test predictions, run `ml/audit.py --record-token-counts
+--max-tokens 2048` on each full route's Test archive and on the exact original
+117 Test roots. The audit loads only the pinned tokenizer and reports every
+record's ID, text hash and uncapped token length. `freeze_revision_coverage`
+checks those reports against the frozen audit sources and checkpoint, then
+creates a common family cohort for the v5/v6 comparison: exclude a whole family
+if any R0, R1 or R2 observation exceeds v5's 1,024-token limit. Its three views
+retain the same families and every ancestor. The full v6 route must fit 2,048
+tokens; the command refuses an overlength route instead of truncating it.
+Independent human-root diagnostics include generation failures and report
+unsupported lengths separately. Run this freeze separately for primary and
+Phi-4; the repeated human roots are the same observations in both routes.
 
 The [first writing probe](MODEL_ONLY_REVISION_PROBE.md) showed why this category
 matters: a detector may mistake wholly model-written revisions for mixed origin,
