@@ -54,8 +54,10 @@ target/debug/examples/compare_revision_anchor \
 Copy the complete provider job archive to the Studio, including its binding,
 plan, request and terminal collection. Use new output directories. A failure
 preserves partial output and requires inspection before another invocation.
-The commands above illustrate the declared artifact layout; they have not yet
-produced real v6 comparison results while fitting remains active.
+The commands above use the declared artifact layout. The completed v6 run
+produced all twelve subset reports and six paired comparisons, then joined all
+162 successful Pangram annotations. Repeated exports of shared text had
+identical encoder probabilities and no threshold disagreements.
 
 Both output directories contain a `summary.json` suitable for aggregate
 publication. Keep per-record predictions, failed provider responses, input
@@ -64,3 +66,9 @@ composer, initial-profile and origin slices along with the full denominators.
 The small paired cohort cannot establish rare population false-positive rates
 or superiority at a matched population FPR. Pangram content fractions and the
 detectors' document-origin probabilities measure different quantities.
+
+The published [subset comparisons](results/pangram-revision-v6-subsets.json),
+[Pangram comparison](results/pangram-revision-v6-comparison.json) and
+[results assessment](releases/v0.6.0/RESULTS.md) retain the completed evidence
+and its limits. No additional inference or provider calls were needed for
+these reporting steps.

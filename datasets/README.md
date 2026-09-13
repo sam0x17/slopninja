@@ -23,16 +23,15 @@ the earlier collection. Repeated scans do not increase these counts.
 All 162 fresh Pangram requests succeeded. The [collection report](../baseline/detector/results/pangram-revision-v6-collection.json)
 records the score histograms and budget. Scores remain concentrated
 at 100%: 106 of 108 model-only texts fall in that bin, and only eight nonhuman
-texts fall between 60% and 100%. The v5/v6 detector comparison is still running.
+texts fall between 60% and 100%. The [completed v5/v6 comparison](../baseline/detector/releases/v0.6.0/RESULTS.md)
+includes the fresh Pangram check and both models' frozen operating points.
 These Test observations remain outside fitting; individual annotations stay
 in ignored storage.
 
 The published v6 primary corpus contains 5,463 records from 797 families:
 3,833 Train, 530 Development, 540 Calibration and 560 Test. Its four JSONL files
 total 52,335,071 bytes (52.34 MB), with another 7,988,644 bytes of rights metadata.
-V6 training and calibration are complete, and the declared final evaluation is
-running on its frozen inputs. Publishing these exact copies does not change
-the selected model, thresholds or evaluation. The v5 model remains the released
-reference pending that comparison. The v6 corpus overlaps v5; it is not an
-additional disjoint collection. Published Test inputs must be retired from
-future hidden benchmarks.
+V6 training, calibration and the declared final evaluation are complete.
+Publishing these exact copies did not change the selected model, thresholds
+or evaluation. The v6 corpus overlaps v5; it is not an additional disjoint
+collection. Published Test inputs must be retired from future hidden benchmarks.

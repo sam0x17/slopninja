@@ -1,5 +1,29 @@
 # Reference detector
 
+V6 is the latest experimental binary detector. Download the
+[weights and CPU inference bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-revision-v0.6.0)
+and read the [complete results](releases/v0.6.0/RESULTS.md),
+[usage instructions](releases/v0.6.0/README.md) and
+[component notices](releases/v0.6.0/NOTICE.md).
+Its declared primary binary log loss improves from 0.2653 to 0.1007 after
+two model revisions, with a paired 95% difference interval of
+[-0.2229, -0.1075]. Across all 117 assigned human roots, stricter-cutoff
+false positives fall from 7 to 3; looser-cutoff false positives rise from 9
+to 12. Mixed-origin classification and several source/profile slices remain
+weak. V5 remains available for these sensitivity and three-class comparisons.
+
+All fourteen evaluations and seven full-cohort paired comparisons are in the
+[aggregate evidence](results/encoder-revision-v6.json), with its
+[assembly verification](results/encoder-revision-v6-verification.json).
+The [fresh Pangram comparison](results/pangram-revision-v6-comparison.json)
+covers 162 texts from 18 families. Pangram detects 108/108 model-only texts,
+compared with 98/108 for V6 at its stricter cutoff and 102/108 at its looser
+cutoff. The [six paired subset comparisons](results/pangram-revision-v6-subsets.json)
+retain the uncertainty from this small cohort. The artifact remains an
+unqualified research candidate; Pangram is still the external quality anchor.
+
+## Earlier experiments
+
 The first trained candidate is a ModernBERT origin classifier. Read the
 [pilot results](PILOT_RESULTS.md) and download the
 [experimental release](https://github.com/sam0x17/slopninja/releases/tag/detector-pilot-v0.1.0).
@@ -78,10 +102,11 @@ It compares drafts and two successive revisions on the same completed families,
 plus a separate check on all assigned human Test roots. The evaluator supports
 [explicit family views](ml/README.md) over complete revision archives, so
 intermediate texts do not become extra calibration observations. Generation has
-closed, and the two-rate fit is running on the Studio with 3,833 Train records.
+closed, and the two-rate fit completed on the Studio with 3,833 Train records.
 The [evaluation handoff](ENCODER_REVISION_V6_EXECUTION.md) checks the completed
-frontier, freezes thresholds and runs the declared comparisons. No final v6
-comparison is available yet.
+frontier, freezes thresholds and runs the declared comparisons. The
+[completed v6 report](releases/v0.6.0/RESULTS.md) records all stages and the
+all-human diagnostic; Test results did not trigger another fit or model switch.
 The separate [fresh Pangram comparison](PANGRAM_REVISION_V6.md) samples paired
 primary/Phi-4 Test families without scores, balancing source collection and
 original composer within the reserved $30. It preserves both routes' drafts,
@@ -93,13 +118,16 @@ composer (Mistral, OLMo and Qwen) contributes six; every collection/composer
 combination contributes two. Both routes cover all six initial writing profiles.
 The batch estimates $17.64 with a $22.05 conservative reservation. A third
 balanced round would require $33.75 of reservation, so the sampler stopped
-after two. Payload validation passed offline; submission waits for the selected
-v6 artifact and thresholds to be frozen. No new Pangram score is available yet.
+after two. All 162 requests succeeded after the selected artifact and thresholds
+were frozen. The [collection report](results/pangram-revision-v6-collection.json)
+records the limited score diversity: 106/108 model-only texts score in the 100%
+bin, with only eight nonhuman texts between 60% and 100% exclusive.
 The [reporting tools](PANGRAM_REVISION_V6_REPORTING.md) reuse saved Test
 predictions, recompute subset metrics and join the completed Pangram annotations.
 They retain failed requests and numerical differences between repeated exports.
-The [release attribution extractor](V6_RELEASE_PREPARATION.md) prepares source
-credits from the frozen fitting corpus while model selection is pending.
+The [release attribution extractor](V6_RELEASE_PREPARATION.md) produced credits
+for 4,903 fitting, Development and Calibration records from 685 source families,
+including complete ancestry. These credits accompany the immutable encoder.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,

@@ -36,24 +36,28 @@ Read the subnet **[whitepaper (PDF)](whitepaper/slop_ninja.pdf)**, with editable
 **[LaTeX source](whitepaper/main.tex)**.
 
 The experimental origin detector is trained under `baseline/detector/`.
-The [published datasets](datasets/README.md) include the full v5 primary corpus:
-3,384 texts with source attribution, generation prompts and model provenance
-(2,925 Train; 32.88 MB of JSONL). A separate, overlapping 432-text snapshot
-contains the initial Pangram inputs. Individual Pangram reports remain local.
-The [v5 comparison](baseline/detector/ENCODER_NARRATIVE_RESULTS.md) reduced
-primary-Test binary log loss from 0.6970 to 0.1430, with human false positives
-falling from 5/25 to 1/25 while detecting all 25 model-written drafts. On the
-unseen Phi-4 generator, it reduced false positives but missed two of 21 drafts
-at the stricter threshold. Those misses used Anti-AI and Fix Slop instructions.
-Download the [experimental v5 model bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-narrative-v0.5.0).
+The [published datasets](datasets/README.md) include the full v6 primary corpus:
+5,463 texts from 797 source families with attribution, generation prompts and
+model provenance (3,833 Train; 52.34 MB of JSONL plus 7.99 MB of rights metadata).
+Earlier snapshots overlap this corpus. Individual Pangram reports remain local.
+The [v6 comparison](baseline/detector/releases/v0.6.0/RESULTS.md) reduces primary
+binary log loss after two revision passes from 0.2653 to 0.1007. The paired
+95% interval for the change is [-0.2229, -0.1075]. Across all 117 assigned
+human sources, false positives at the stricter cutoff fall from 7 to 3;
+the looser cutoff worsens from 9 to 12. Mixed-origin classification and some
+profile-specific results also worsen. The report retains these tradeoffs.
+Download the [experimental v6 model bundle](https://github.com/sam0x17/slopninja/releases/tag/detector-revision-v0.6.0).
+The fresh Pangram comparison covers 162 texts from 18 families. Pangram detects
+108/108 model-only texts; v6 detects 98/108 at its stricter cutoff and 102/108
+at its looser cutoff. Pangram remains the external quality anchor.
 Its [commands and earlier releases](baseline/detector/README.md),
 [implementation plan](baseline/detector/PLAN.md) and
 [commercial-use source register](baseline/detector/SOURCES.md) cover acquisition,
 training, evaluation and release. The [pilot protocol](baseline/detector/PILOT_PROTOCOL.md)
 records the initial comparison and its evidence limits before training.
 New corpora can use [recorded style profiles](baseline/detector/PROMPT_PROFILES.md),
-including anti-AI instructions and a pinned Fix Slop pass. The v5 report includes
-their results and small denominators; it does not establish Pangram parity.
+including anti-AI instructions and a pinned Fix Slop pass. The reports retain
+their results and small denominators; they do not establish Pangram parity.
 The whitepaper surveys related work and defines public A detector artifacts,
 private B transformation models, training data,
 two benchmark task interfaces, and paid asynchronous inference at market prices

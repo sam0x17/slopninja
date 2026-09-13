@@ -1,0 +1,10 @@
+{
+  "evaluation_commands_checked": 22,
+  "model_calls": 0,
+  "overall_metrics_recomputed_from_saved_probabilities": true,
+  "paired_comparisons": 7,
+  "pangram_calls": 0,
+  "report_sha256": "d64808c4bce6d86b1129fe0ac62b78efb87fc8aae9977d697d3837553cda3fcf",
+  "reports": 14,
+  "status": "requires_scientific_review"
+}

@@ -82,9 +82,13 @@ outer archive packager will bind these completed reports to the selected encoder
 and source credits; preparing this helper does not make that release complete.
 
 The helper compiled and passed the required crate checks on the Studio on
-2026-09-13. A live preflight confirmed that it rejects the still-incomplete
-evaluation without creating output. Full report assembly remains pending until
-the original evaluator finishes.
+2026-09-13. Its initial preflight rejected the incomplete evaluation without
+creating output. After the original evaluator completed successfully, report
+assembly checked all 22 commands and produced fourteen aggregate evaluations
+and seven paired comparisons. The [report](results/encoder-revision-v6.json)
+and [verification](results/encoder-revision-v6-verification.json) preserve that
+evidence. Its report SHA256 is
+`d64808c4bce6d86b1129fe0ac62b78efb87fc8aae9977d697d3837553cda3fcf`.
 
 ## Research bundle
 
@@ -131,8 +135,8 @@ a new directory for a corrected attempt.
 
 The initial packager passed formatting, the detector crate's existing tests,
 all-targets Clippy and compilation on the Studio on 2026-09-13. Its preflight
-rejected the incomplete original evaluation without creating output. Complete
-packaging remains unexecuted until the actual final evidence is available.
+rejected the incomplete original evaluation without creating output. The final
+packaging step requires the completed evidence and reviewed results prose.
 
 Inspection of the selected artifact confirmed that its model card is
 `MODEL_CARD.json`. The packager now requires that filename, matching the
