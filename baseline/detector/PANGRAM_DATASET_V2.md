@@ -253,3 +253,29 @@ remains available, leaving $15.95 for further Train reservations before that
 comparison is planned. Billing and redistribution of individual provider
 annotations remain unverified. The new observations do not alter v6 fitting,
 selection, calibration or Test decisions.
+
+After completing that hosted batch, the fifth cohort adds 110 Train texts
+from 22 previously unannotated source families. It uses the existing closed
+revision chains and covers the remaining collection/profile cells, with one
+family per available cell. Two PLOS cells had no remaining family. All 110
+results validated: 52 exact echoes and 58 whitespace-only echoes. The complete
+inputs are published in the [revision snapshot](../../datasets/detector-revisions-v1/README.md).
+
+The [fifth-cohort aggregate](results/pangram-dataset-v2-fifth-cohort.json) shows
+limited progress toward filling the interior score range. Of 88 nonhuman
+texts, 78 score 100%, eight score between 60% and 100%, and two score below
+60%. All 22 human proxies score zero. Of the 66 model-only texts, 63 score
+100%; all 22 second revisions are in that bin. The 100% bin allows the
+existing tolerance for floating-point sums of AI and assisted fractions.
+Retain every observation. These results do not establish that revision improves
+detector evasion or that high weights for sparse bins supply more evidence.
+
+The collection now covers 581 distinct Train texts from 155 families, including
+the 96 hosted captures under their separate research schema. Another 57
+Development texts remain separate. The fifth batch costs an estimated $10.16,
+with $12.70 reserved. Cumulative estimates are $90.52 and reservations $116.75
+across eight jobs. Keep the full $30 allocation for the fresh v6 comparison;
+that leaves $3.25 unallocated within the $150 ceiling. Actual billing remains
+unverified. No further expansion limited to the original three composers is
+planned with that remainder. These annotations and their prepared weighting
+view do not change v6 fitting, selection, calibration or Test decisions.
