@@ -98,6 +98,8 @@ v6 artifact and thresholds to be frozen. No new Pangram score is available yet.
 The [reporting tools](PANGRAM_REVISION_V6_REPORTING.md) reuse saved Test
 predictions, recompute subset metrics and join the completed Pangram annotations.
 They retain failed requests and numerical differences between repeated exports.
+The [release attribution extractor](V6_RELEASE_PREPARATION.md) prepares source
+credits from the frozen fitting corpus while model selection is pending.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
