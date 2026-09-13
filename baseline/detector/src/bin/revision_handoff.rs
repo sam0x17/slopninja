@@ -420,13 +420,24 @@ fn run(args: &Args) -> Result<()> {
                     path.display()
                 );
             }
+            let checksum_path = output.join("pre-test-bindings.sha256");
+            let mut checksums = fs::File::create_new(&checksum_path)?;
+            for (path, hash) in &bindings {
+                let path = path.to_str().context("Non-UTF-8 checksum path")?;
+                ensure!(
+                    !path.contains(['\n', '\r', '\\']),
+                    "Unsupported checksum path"
+                );
+                writeln!(checksums, "{hash}  {path}")?;
+            }
+            checksums.sync_all()?;
             save(
                 &output.join("pre-test-bindings.json"),
                 &json!({"schema":"slop_ninja_v6_final_test_bindings_v1","at_unix":now()?,"bindings":bindings,"candidate_artifact":candidate,"v5_artifact":v5,"plan_sha256":PLAN_SHA,"test_predictions_opened":false}),
             )?;
             save(
                 &output.join("opening-receipt.json"),
-                &json!({"at_unix":now()?,"pre_test_bindings_sha256":sha256(fs::read(output.join("pre-test-bindings.json"))?),"first_command":command["id"],"policy":"All commands retain the frozen selected candidate; no Test-based refit, candidate switch or automatic retry."}),
+                &json!({"at_unix":now()?,"pre_test_bindings_sha256":sha256(fs::read(output.join("pre-test-bindings.json"))?),"checksum_file_sha256":sha256(fs::read(checksum_path)?),"first_command":command["id"],"policy":"All commands retain the frozen selected candidate; no Test-based refit, candidate switch or automatic retry."}),
             )?;
             opened = true;
         }

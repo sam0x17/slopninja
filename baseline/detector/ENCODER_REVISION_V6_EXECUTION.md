@@ -29,7 +29,8 @@ The selected artifact's original Calibration archive and terminal view supply
 its thresholds. Its fitted temperature remains unchanged. Before any Test
 command, the coordinator records both artifact file sets, thresholds, input
 views, tool hashes, selection, command manifest and execution-host attribution
-in `pre-test-bindings.json`. It records opening intent separately and verifies
+in `pre-test-bindings.json` and `pre-test-bindings.sha256`. It records opening
+intent and both binding-file hashes separately and verifies
 those bindings again after all comparisons. Each command retains its exact
 arguments, stdout, stderr and exit status. Failures retain partial outputs and
 require inspection; the coordinator never retries an evaluation automatically.
@@ -52,9 +53,9 @@ a portable dataset download. A different experiment requires its own declared
 plan and review.
 
 The coordinator passed the Rust test suite, format checks and all-targets
-Clippy on the Studio at 2026-09-13T00:10:36Z. Its check-only run then passed
+Clippy on the Studio at 2026-09-13T00:17:57Z. Its check-only run then passed
 against the original live supervisor and the frozen archive. The detached
-handoff was started at 00:12:31Z and initially reported
+handoff was started at 00:19:56Z and initially reported
 `waiting_for_original_frontier`; this is a launch observation, not evidence
 that calibration or Test evaluation has completed.
 

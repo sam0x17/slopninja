@@ -80,8 +80,8 @@ plus a separate check on all assigned human Test roots. The evaluator supports
 intermediate texts do not become extra calibration observations. Generation has
 closed, and the two-rate fit is running on the Studio with 3,833 Train records.
 The [evaluation handoff](ENCODER_REVISION_V6_EXECUTION.md) checks the completed
-frontier, freezes thresholds and runs the declared comparisons. No v6 detector
-result is available yet.
+frontier, freezes thresholds and runs the declared comparisons. No final v6
+comparison is available yet.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
