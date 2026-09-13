@@ -466,7 +466,7 @@ fn main() -> Result<()> {
         "LICENSE",
         "UPSTREAM_LICENSE",
         "DATA_RIGHTS.json",
-        "MODEL_CARD.md",
+        "MODEL_CARD.json",
         "runner/infer.py",
         "runner/requirements.lock",
     ] {

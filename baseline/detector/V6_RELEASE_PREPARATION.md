@@ -133,3 +133,10 @@ The initial packager passed formatting, the detector crate's existing tests,
 all-targets Clippy and compilation on the Studio on 2026-09-13. Its preflight
 rejected the incomplete original evaluation without creating output. Complete
 packaging remains unexecuted until the actual final evidence is available.
+
+Inspection of the selected artifact confirmed that its model card is
+`MODEL_CARD.json`. The packager now requires that filename, matching the
+manifest, instead of `MODEL_CARD.md`. The corrected helper passed formatting,
+the existing tests, all-targets Clippy and compilation on the Studio; its
+frozen binary is in `release-package-tools-v2`. Use that corrected helper for
+the final bundle.
