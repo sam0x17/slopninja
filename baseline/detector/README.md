@@ -95,6 +95,9 @@ The batch estimates $17.64 with a $22.05 conservative reservation. A third
 balanced round would require $33.75 of reservation, so the sampler stopped
 after two. Payload validation passed offline; submission waits for the selected
 v6 artifact and thresholds to be frozen. No new Pangram score is available yet.
+The [reporting tools](PANGRAM_REVISION_V6_REPORTING.md) reuse saved Test
+predictions, recompute subset metrics and join the completed Pangram annotations.
+They retain failed requests and numerical differences between repeated exports.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
