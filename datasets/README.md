@@ -2,6 +2,7 @@
 
 | Snapshot | Texts | JSONL size | Contents |
 | --- | ---: | ---: | --- |
+| [Revision detector v6](detector-v6/README.md) | 5,463 | 52.34 MB | Frozen primary corpus, including repeated model revisions and complete ancestry |
 | [Reference detector v5](detector-v5/README.md) | 3,384 | 32.88 MB | Frozen Train, Development, Calibration and opened Test corpus |
 | [Pangram inputs, snapshot 1](detector-origin-v1/README.md) | 432 | 4.05 MB | Inputs to the initial annotation campaigns, including later model revisions |
 | [GPT/Claude captures, snapshot 1](detector-hosted-v1/README.md) | 96 generated + 24 supporting roots | 1.99 MB including audit | Four hosted generators, complete prompts, provenance and source attribution |
@@ -26,9 +27,12 @@ texts fall between 60% and 100%. The v5/v6 detector comparison is still running.
 These Test observations remain outside fitting; individual annotations stay
 in ignored storage.
 
-The frozen v6 primary corpus currently contains 5,463 records from 797 families:
+The published v6 primary corpus contains 5,463 records from 797 families:
 3,833 Train, 530 Development, 540 Calibration and 560 Test. Its four JSONL files
 total 52,335,071 bytes (52.34 MB), with another 7,988,644 bytes of rights metadata.
-V6 training and calibration are complete. The prepared corpus snapshot remains
-in ignored storage until the declared final evaluation finishes. It overlaps
-v5 and is not an additional disjoint collection.
+V6 training and calibration are complete, and the declared final evaluation is
+running on its frozen inputs. Publishing these exact copies does not change
+the selected model, thresholds or evaluation. The v5 model remains the released
+reference pending that comparison. The v6 corpus overlaps v5; it is not an
+additional disjoint collection. Published Test inputs must be retired from
+future hidden benchmarks.
