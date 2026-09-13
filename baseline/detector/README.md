@@ -77,8 +77,11 @@ Development, Calibration and Test, with no fresh sources used for gradients.
 It compares drafts and two successive revisions on the same completed families,
 plus a separate check on all assigned human Test roots. The evaluator supports
 [explicit family views](ml/README.md) over complete revision archives, so
-intermediate texts do not become extra calibration observations. Generation is
-underway; no v6 fit or detector result is available yet.
+intermediate texts do not become extra calibration observations. Generation has
+closed, and the two-rate fit is running on the Studio with 3,833 Train records.
+The [evaluation handoff](ENCODER_REVISION_V6_EXECUTION.md) checks the completed
+frontier, freezes thresholds and runs the declared comparisons. No v6 detector
+result is available yet.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
