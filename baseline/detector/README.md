@@ -82,6 +82,19 @@ closed, and the two-rate fit is running on the Studio with 3,833 Train records.
 The [evaluation handoff](ENCODER_REVISION_V6_EXECUTION.md) checks the completed
 frontier, freezes thresholds and runs the declared comparisons. No final v6
 comparison is available yet.
+The separate [fresh Pangram comparison](PANGRAM_REVISION_V6.md) samples paired
+primary/Phi-4 Test families without scores, balancing source collection and
+original composer within the reserved $30. It preserves both routes' drafts,
+revisions and human edits, with shared human roots counted once for billing.
+The [prepared sample](results/pangram-revision-v6-preparation.json) contains 162
+texts from 18 of the 103 families completed by both routes. Each collection
+(PLOS, Wikinews and CMU summaries) contributes six families, and each primary
+composer (Mistral, OLMo and Qwen) contributes six; every collection/composer
+combination contributes two. Both routes cover all six initial writing profiles.
+The batch estimates $17.64 with a $22.05 conservative reservation. A third
+balanced round would require $33.75 of reservation, so the sampler stopped
+after two. Payload validation passed offline; submission waits for the selected
+v6 artifact and thresholds to be frozen. No new Pangram score is available yet.
 
 The first reference candidate estimates three document-origin classes:
 `human_only`, `model_only`, and `mixed`. Rust handles corpus admission,
