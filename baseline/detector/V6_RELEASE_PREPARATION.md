@@ -42,3 +42,46 @@ records from 685 source families and checks 3,618 ShareAlike notices. The saved
 Formatting, the detector crate's tests, all-targets Clippy and the example build
 passed before extraction. The full attribution file remains in release staging
 until the model and its evaluation are ready.
+
+## Evaluation report
+
+After the original evaluator completes, assemble its saved evidence on the
+Studio with a new output directory:
+
+```sh
+cargo run --example report_v6_release -- \
+  --run-root /Users/sam/slop_ninja_runs/revision_expansion_v6/detector_v6_v1 \
+  --output-dir /path/to/new/release-report
+```
+
+The helper requires the original successful completion, pre-Test bindings and
+opening receipt. It checks the exact programs, arguments and success receipts
+for all 22 declared commands, then verifies the frozen artifacts, thresholds and
+source coverage. It stops before reading Test reports or creating output if the
+original evaluation is incomplete.
+
+The resulting `report.json` retains fourteen evaluations and seven paired
+comparisons: R0, R1 and R2 for both routes, plus the all-human-root diagnostic.
+It recomputes overall three-class and human/model metrics from saved probability
+rows and checks their denominators and operating-point bindings. It reuses the
+original paired bootstrap outputs, checking their source report hashes and loss
+deltas. All slices and comparison outcomes are retained. No model inference,
+threshold fitting or Pangram calls occur during report assembly.
+
+Public projections omit per-record probability rows and cutoff/calibration
+identifiers. Declared run-root paths become `${RUN_ROOT}` references. Other raw
+text fields or private paths cause failure. File hashes refer to the unchanged
+source files; `original_content_sha256` binds the complete original threshold
+content, including identifiers omitted from `content_projection`.
+
+The separate `verification.json` identifies the output and the checks performed.
+Report assembly leaves the result marked for scientific review. The fresh
+[Pangram comparison](PANGRAM_REVISION_V6_REPORTING.md) must still be reviewed and
+included alongside this evidence before the research bundle is published. The
+outer archive packager will bind these completed reports to the selected encoder
+and source credits; preparing this helper does not make that release complete.
+
+The helper compiled and passed the required crate checks on the Studio on
+2026-09-13. A live preflight confirmed that it rejects the still-incomplete
+evaluation without creating output. Full report assembly remains pending until
+the original evaluator finishes.
