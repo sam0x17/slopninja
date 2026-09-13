@@ -85,3 +85,51 @@ The helper compiled and passed the required crate checks on the Studio on
 2026-09-13. A live preflight confirmed that it rejects the still-incomplete
 evaluation without creating output. Full report assembly remains pending until
 the original evaluator finishes.
+
+## Research bundle
+
+After reviewing the completed evaluation and fresh Pangram comparison, write
+`README.md`, `NOTICE.md` and `RESULTS.md` in a release-notes directory. Include
+the observed tradeoffs, failed-observation denominators, source overlap and
+limits on transfer. Retain the component notices required above. Commit the
+public results and prose so the bundle can identify their full source commit.
+
+The Rust packager expects the completed outputs in `release-report-v1`,
+`pangram-confirmation-v1/encoder-subsets-v1` and
+`pangram-confirmation-v1/comparison-v1` under the declared run root:
+
+```sh
+cargo run --example package_v6_release -- \
+  --run-root /Users/sam/slop_ninja_runs/revision_expansion_v6/detector_v6_v1 \
+  --runtime-verification /path/to/selected-runtime/verification.json \
+  --notes-dir /path/to/completed-release-notes \
+  --source-commit FULL_40_CHARACTER_COMMIT \
+  --output-dir /path/to/new/slop_ninja_detector_revision_v0.6.0
+```
+
+Use the selected encoder's successful synthetic-only CPU replay receipt. A
+receipt for the other learning-rate candidate will be rejected. The packager
+checks the completed evaluation, verified aggregate hash, original selection,
+manifest, runtime receipt, all 162 assigned Pangram texts, six stage views and
+six paired subset comparisons. It requires the same artifact and operating
+points in the full evaluation and Pangram comparison. Failed Pangram results
+remain in the aggregate; packaging does not require a favorable result.
+
+The output preserves every manifest-bound encoder byte and adds the full
+evaluation, Pangram aggregates, standalone operating points, source credits,
+component notices, protocols, runtime receipt and release prose. JSON projections
+replace paths under the declared run root with `${RUN_ROOT}`. Unexpected text,
+individual score fields and private paths cause failure. Original input hashes
+and output checksums remain separate. Corpus passages and individual Pangram
+reports are not read by this step.
+
+Verify `SHA256SUMS` on the Studio before archiving. Packaging creates a research
+bundle; it performs no model/API calls and does not publish, promote the model
+or assess whether the results prose is accurate. Review the complete bundle
+before the GitHub release. An interrupted attempt retains partial output; use
+a new directory for a corrected attempt.
+
+The initial packager passed formatting, the detector crate's existing tests,
+all-targets Clippy and compilation on the Studio on 2026-09-13. Its preflight
+rejected the incomplete original evaluation without creating output. Complete
+packaging remains unexecuted until the actual final evidence is available.
